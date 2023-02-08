@@ -7,7 +7,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
-public class Lesson2Test {
+public class Lesson02Test {
     /*
     для прохождения тестов создайте JUnit-конфигурацию на свой пакет:
     Поля:
@@ -18,7 +18,7 @@ public class Lesson2Test {
     */
 
 
-    @Test
+    @Test(timeout = 2000)
     public void A_VideoRegistrator() {
         A_VideoRegistrator instance=new A_VideoRegistrator();
         double[] events=new double[]{1, 1.1, 1.6, 2.2, 2.4, 2.7, 3.9, 8.1, 9.1, 5.5, 3.7};
@@ -27,7 +27,7 @@ public class Lesson2Test {
         assertTrue("slowA failed", ok);
     }
 
-    @Test
+    @Test(timeout = 2000)
     public void B_Sheduler() {
         B_Sheduler instance = new B_Sheduler();
         B_Sheduler.Event[] events = {new B_Sheduler.Event(0, 3), new B_Sheduler.Event(0, 1), new B_Sheduler.Event(1, 2), new B_Sheduler.Event(3, 5),
@@ -42,11 +42,11 @@ public class Lesson2Test {
         boolean ok=starts.toString().equals("[(0:1), (1:2), (2:3), (3:5), (6:7), (7:9)]");
         assertTrue("B_Sheduler failed", ok);
     }
-    @Test
+    @Test(timeout = 2000)
     public void C_GreedyKnapsack() throws Exception {
         String root=System.getProperty("user.dir")+"/src/";
-        File f=new File(root+"by/it/a_khmelev/lesson02/greedyKnapsack.txt");
-        double costFinal=new C_GreedyKnapsack().calc(f);
+        File file=new File(root+"by/it/a_khmelev/lesson02/greedyKnapsack.txt");
+        double costFinal=new C_GreedyKnapsack().calc(file);
         boolean ok=costFinal==200;
         assertTrue("B_Sheduler failed", ok);
     }
