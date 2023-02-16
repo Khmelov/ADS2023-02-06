@@ -15,11 +15,8 @@ package by.it.group251002.sazonov.lesson02;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Scanner;
-
-import static java.util.Arrays.sort;
 
 public class C_GreedyKnapsack {
     private static class Item implements Comparable<Item> {
@@ -48,7 +45,7 @@ public class C_GreedyKnapsack {
         }
     }
 
-    class Sortbyroll implements Comparator<Item> {
+    static class Sortbyroll implements Comparator<Item> {
         // Used for sorting in ascending order of
         // roll number
         public int compare(Item a, Item b) {
