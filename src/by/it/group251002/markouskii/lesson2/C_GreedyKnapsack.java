@@ -14,7 +14,10 @@ package by.it.group251002.markouskii.lesson2;
  */
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Scanner;
+import java.util.Comparator;
+import java.util.Collections;
 
 public class C_GreedyKnapsack {
     private static class Item implements Comparable<Item> {
@@ -43,6 +46,12 @@ public class C_GreedyKnapsack {
         }
     }
 
+    static class CostSort implements Comparator<Item> {
+        public int compare(Item a,Item b){
+            return b.cost-a.cost;
+        }
+    }
+
     double calc(File source) throws FileNotFoundException {
         Scanner input = new Scanner(source);
         int n = input.nextInt();      //сколько предметов в файле
@@ -50,6 +59,7 @@ public class C_GreedyKnapsack {
         Item[] items = new Item[n];   //получим список предметов
         for (int i = 0; i < n; i++) { //создавая каждый конструктором
             items[i] = new Item(input.nextInt(), input.nextInt());
+            items[i].cost/=items[i].weight;
         }
         //покажем предметы
         for (Item item:items) {
@@ -66,7 +76,22 @@ public class C_GreedyKnapsack {
         //кроме того, можете описать свой компаратор в классе Item
 
         //ваше решение.
+        Arrays.sort(items, new CostSort());
 
+        boolean NotFull=true;
+        int i=0;
+        while (i < n && NotFull) {
+            if (items[i].weight<W) {
+                W -= items[i].weight;
+                result += items[i].weight*items[i].cost;
+            }
+            else
+            {
+                result+= W*items[i].cost;
+                NotFull=false;
+            }
+            i++;
+        }
 
 
 
