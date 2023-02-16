@@ -39,29 +39,29 @@ public class FiboC {
         *    return 0;
         */
 
-        ArrayList<Integer> Remainder = new ArrayList<>(100);
+        ArrayList<Integer> Remainders = new ArrayList<>(100);
 
-        int PredFib = 0;
-        Remainder.add(PredFib);
-        int CurrFib = 1;
-        Remainder.add(CurrFib);
+        int PrevFibRem = 0;
+        Remainders.add(PrevFibRem);
+        int CurrFibRem = 1;
+        Remainders.add(CurrFibRem);
 
-        for (int i = 2, OldFib; i <= n; i++){
+        for (int i = 2, OldFibRem; i <= n; i++){
 
-            OldFib = CurrFib;
-            CurrFib = (CurrFib + PredFib) % m;
-            PredFib = OldFib;
+            OldFibRem = CurrFibRem;
+            CurrFibRem = (CurrFibRem + PrevFibRem) % m;
+            PrevFibRem = OldFibRem;
 
-            Remainder.add(CurrFib);
+            Remainders.add(CurrFibRem);
 
-            //Если найден период - выводим результат
-            if ((PredFib == 0) && (CurrFib == 1))
-                return(Remainder.get( (int)( n % (i-1))) );
+            //Если найден период, то выводим результат
+            if ((PrevFibRem == 0) && (CurrFibRem == 1))
+                return(Remainders.get( (int)( n % (i-1))) );
 
         }
 
         //Если нет, то выводим последний посчитанный остаток
-        return CurrFib;
+        return CurrFibRem;
     }
 
 }
