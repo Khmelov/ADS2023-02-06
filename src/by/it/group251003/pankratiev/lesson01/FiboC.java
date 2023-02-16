@@ -33,20 +33,18 @@ public class FiboC {
         //см. период Пизано
 
         /*
-        if (m == 0)
-            throw new ArithmeticException("/ by zero");
-        if (m == 1)
-            return 0;
-         */
+        * if (m == 0)
+        *    throw new ArithmeticException("/ by zero");
+        * if (m == 1)
+        *    return 0;
+        */
 
-        ArrayList<Integer> list = new ArrayList<>(100);
+        ArrayList<Integer> Remainder = new ArrayList<>(100);
 
         int PredFib = 0;
-        list.add(PredFib);
+        Remainder.add(PredFib);
         int CurrFib = 1;
-        list.add(CurrFib);
-
-        int index = 1;
+        Remainder.add(CurrFib);
 
         for (int i = 2, OldFib; i <= n; i++){
 
@@ -54,17 +52,16 @@ public class FiboC {
             CurrFib = (CurrFib + PredFib) % m;
             PredFib = OldFib;
 
-            list.add(CurrFib);
+            Remainder.add(CurrFib);
 
-            if ((PredFib == 0) && (CurrFib == 1)) {
-                index = (int)( n % (i-1) );
-                break;
-            }
+            //Если найден период - выводим результат
+            if ((PredFib == 0) && (CurrFib == 1))
+                return(Remainder.get( (int)( n % (i-1))) );
 
         }
 
-        return list.get(index);
-
+        //Если нет, то выводим последний посчитанный остаток
+        return CurrFib;
     }
 
 }
