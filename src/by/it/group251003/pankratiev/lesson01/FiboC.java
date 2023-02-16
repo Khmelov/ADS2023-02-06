@@ -6,11 +6,7 @@ package by.it.group251003.pankratiev.lesson01;
  * время расчета должно быть не более 2 секунд
  */
 
-import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
 
 public class FiboC {
 
@@ -41,27 +37,21 @@ public class FiboC {
 
         ArrayList<Integer> Remainders = new ArrayList<>(100);
 
-        int PrevFibRem = 0;
-        Remainders.add(PrevFibRem);
-        int CurrFibRem = 1;
-        Remainders.add(CurrFibRem);
+        Remainders.add(0);
+        Remainders.add(1);
 
-        for (int i = 2, OldFibRem; i <= n; i++){
+        for (int i = 2; i <= n; i++){
 
-            OldFibRem = CurrFibRem;
-            CurrFibRem = (CurrFibRem + PrevFibRem) % m;
-            PrevFibRem = OldFibRem;
-
-            Remainders.add(CurrFibRem);
+            Remainders.add( (Remainders.get(i-1) + Remainders.get(i-2)) % m );
 
             //Если найден период, то выводим результат
-            if ((PrevFibRem == 0) && (CurrFibRem == 1))
-                return(Remainders.get( (int)( n % (i-1))) );
+            if ((Remainders.get(i - 1) == 0) && (Remainders.get(i) == 1))
+                return Remainders.get( (int) (n % (i - 1)) ) ;
 
         }
 
-        //Если нет, то выводим последний посчитанный остаток
-        return CurrFibRem;
+        //Если не найден период, то выводим последний элемент
+        return Remainders.get( Remainders.size() - 1 );
     }
 
 }
