@@ -25,22 +25,19 @@ public class FiboC {
         //Решение сложно найти интуитивно
         //возможно потребуется дополнительный поиск информации
         //см. период Пизано
-        long period=2,remain1;
-        ArrayList<Long> remains = new ArrayList<>();
-        long[] fib = {0, 1, 1};
-        remains.add((long)0);
-        remains.add((long)1);
+        int period=1,remain1=1,tmp,remain2=1;
+        ArrayList<Integer> remains = new ArrayList<>();
+        remains.add(0);
+        remains.add(1);
 
         do {
-            remain1=(int)fib[2]%m;
             remains.add(remain1);
             period++;
-            fib[0]=fib[1];
-            fib[1]=fib[2];
-            fib[2]=fib[0]+fib[1];
+            tmp=remain1;
+            remain1=remain2;
+            remain2=(remain1+tmp)%m;
 
-
-        } while (remain1!=0 && period<n-1);
+        } while (remain1!=0);
 
         return remains.get((int)(n%period));
     }
