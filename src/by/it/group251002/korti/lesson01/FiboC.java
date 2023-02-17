@@ -26,7 +26,9 @@ public class FiboC {
         //возможно потребуется дополнительный поиск информации
         //см. период Пизано
         int i = 2;
-        long[] nums = {0, 1};
+        long[] nums = new long[(int)(n-1)] ;
+        nums[0] = 0;
+        nums[1] = 1;
         do {
             nums[i] = ((nums[i-2] + nums[i-1]) % m);
             i++;
