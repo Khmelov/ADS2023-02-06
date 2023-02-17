@@ -22,10 +22,35 @@ public class FiboC {
     }
 
     long fasterC(long n, int m) {
-        //Решение сложно найти интуитивно
-        //возможно потребуется дополнительный поиск информации
-        //см. период Пизано
-        return 0L;
+
+        int[][] fibonacciMatrix = new int[][]{{1, 1},
+                {1, 0}};
+        return matrixPower(fibonacciMatrix, n , m)[0][1];
+    }
+
+    private static int[][] matrixPower(int[][] matrix, long n, int m) {
+
+        if (n == 0) {
+            return new int[][] {{1, 0},
+                    {0, 1}};
+        }
+
+        if (n % 2 == 1) {
+            int[][] temp = matrixPower(matrix, n - 1, m);
+            return multiplyMatrix(temp, matrix, m);
+        }
+        else {
+            int[][] temp = matrixPower(matrix, n / 2, m);
+            return multiplyMatrix(temp, temp, m);
+        }
+    }
+    private static int[][] multiplyMatrix(int[][] matrix1, int[][] matrix2, int m) {
+        return new int[][] {
+                {(matrix1[0][0] * matrix2[0][0] + matrix1[0][1] * matrix2[1][0]) % m,
+                        (matrix1[0][0] * matrix2[0][1] + matrix1[0][1] * matrix2[1][1]) % m},
+                {(matrix1[1][0] * matrix2[0][0] + matrix1[1][1] * matrix2[1][0]) % m,
+                        (matrix1[1][0] * matrix2[0][1] + matrix1[1][1] * matrix2[1][1]) % m}
+        };
     }
 
 
