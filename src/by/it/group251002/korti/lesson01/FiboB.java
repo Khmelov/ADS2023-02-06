@@ -30,6 +30,7 @@ public class FiboB {
         if (n == 0) return BigInteger.ZERO;
         if (n == 1) return BigInteger.ONE;
         BigInteger buf;
+
         for (int i = 2; i < n; i++) {
             buf = first;
             first = first.add(zero);
