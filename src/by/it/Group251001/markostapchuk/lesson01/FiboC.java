@@ -25,9 +25,31 @@ public class FiboC {
         //Решение сложно найти интуитивно
         //возможно потребуется дополнительный поиск информации
         //см. период Пизано
-        return 0L;
+        int[][] result = new int[][] {{1,1}, {1,0}};
+        return pow(result, m, n)[1][0];
     }
 
+    private static int[][] pow(int[][] matrix,int m, long n) {
+        if (n == 0) {
+            return new int[][]{{1,0},{0,1}};
+        }
+        if (n % 2 == 1) {
+            int[][] tempMatrix = pow(matrix, m, n-1);
+            return mul(tempMatrix, matrix, m);
+        } else {
+            int[][] tempMatrix =  pow(matrix, m, n/2);
+            return mul(tempMatrix, tempMatrix, m);
+        }
 
+    }
+
+    private static int[][] mul(int[][] matrix1, int[][] matrix2,int m) {
+        return new int[][] {
+                {(matrix1[0][0] * matrix2[0][0] + matrix1[0][1] * matrix2[1][0]) % m,
+                        (matrix1[0][0] * matrix2[0][1] + matrix1[0][1] * matrix2[1][1]) % m},
+                {(matrix1[1][0] * matrix2[0][0] + matrix1[1][1] * matrix2[1][0]) % m,
+                        (matrix1[1][0] * matrix2[0][1] + matrix1[1][1] * matrix2[1][1]) % m}
+        };
+    }
 }
 
