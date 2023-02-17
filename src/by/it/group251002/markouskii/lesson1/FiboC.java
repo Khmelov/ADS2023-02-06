@@ -16,8 +16,8 @@ public class FiboC {
 
     public static void main(String[] args) {
         FiboC fibo = new FiboC();
-        int n = 10;
-        int m = 2;
+        int n = 999999999;
+        int m = 321;
         System.out.printf("fasterC(%d)=%d \n\t time=%d \n\n", n, fibo.fasterC(n, m), fibo.time());
     }
 
@@ -28,7 +28,6 @@ public class FiboC {
         int period=1,remain1=1,tmp,remain2=1;
         ArrayList<Integer> remains = new ArrayList<>();
         remains.add(0);
-        remains.add(1);
 
         do {
             remains.add(remain1);
@@ -37,11 +36,10 @@ public class FiboC {
             remain1=remain2;
             remain2=(remain1+tmp)%m;
 
-        } while (remain1!=0);
+        } while (((remain2!=1) ||(remain1!=0)) && (period<n-1));
 
-        return remains.get((int)(n%period));
+        return remains.get((int)((n)%period));
     }
-
 
 }
 
