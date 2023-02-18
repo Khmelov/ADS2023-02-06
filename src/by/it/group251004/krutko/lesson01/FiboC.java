@@ -6,6 +6,8 @@ package by.it.group251004.krutko.lesson01;
  * время расчета должно быть не более 2 секунд
  */
 
+import java.math.BigInteger;
+
 public class FiboC {
 
     private long startTime = System.currentTimeMillis();
@@ -16,16 +18,51 @@ public class FiboC {
 
     public static void main(String[] args) {
         FiboC fibo = new FiboC();
-        int n = 10;
-        int m = 2;
+        int n = 6;
+        int m = 3;
         System.out.printf("fasterC(%d)=%d \n\t time=%d \n\n", n, fibo.fasterC(n, m), fibo.time());
     }
 
+    public static long PisanoPeriod(int m)
+    {
+        long prev = 0;
+        long curr = 1;
+        long res = 0;
+
+        for(int i = 0; i < m * m; i++)
+        {
+            long temp = curr;
+            curr = (prev + curr) % m;
+            prev = temp;
+
+            res = (prev == 0 && curr == 1) ? i + 1 : res;
+        }
+        return res;
+    }
+public static long FindMOD(long n, int m)
+{
+    long prev = 0;
+    long curr = 1;
+    for(int i = 0; i < n; i++)
+    {
+        long temp = curr;
+        curr = (prev + curr) % m;
+        prev = temp;
+    }
+    return prev % m;
+}
     long fasterC(long n, int m) {
         //Решение сложно найти интуитивно
         //возможно потребуется дополнительный поиск информации
         //см. период Пизано
-        return 0L;
+        //Находит период Пизано
+        long pisano = PisanoPeriod(m);
+
+        n %= pisano;
+
+        if (n == 0L || n == 1L)
+            return n;
+        return FindMOD(n, m);
     }
 
 
