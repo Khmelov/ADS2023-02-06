@@ -1,4 +1,4 @@
-package by.it.a_khmelev.zkmlrabotaem.lesson01;
+package by.it.group251003.zkmlrabotaem.lesson01;
 
 import java.math.BigInteger;
 
