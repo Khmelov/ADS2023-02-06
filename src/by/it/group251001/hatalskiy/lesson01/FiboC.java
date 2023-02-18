@@ -1,4 +1,4 @@
-package group251001.Hatalskiy.lesson01;
+package by.it.group251001.hatalskiy.lesson01;
 
 /*
  * Даны целые числа 1<=n<=1E18 и 2<=m<=1E5,
@@ -6,9 +6,7 @@ package group251001.Hatalskiy.lesson01;
  * время расчета должно быть не более 2 секунд
  */
 
-import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class FiboC {
 

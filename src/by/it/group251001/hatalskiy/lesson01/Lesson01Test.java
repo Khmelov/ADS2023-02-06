@@ -1,4 +1,4 @@
-package group251001.Hatalskiy.lesson01;
+package by.it.group251001.hatalskiy.lesson01;
 
 import org.junit.Test;
 
