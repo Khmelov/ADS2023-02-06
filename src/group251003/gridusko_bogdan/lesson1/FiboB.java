@@ -1,9 +1,7 @@
 package group251003.gridusko_bogdan.lesson1;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 
-//import static java.lang.StringUTF16.compareTo;
 
 /*
  * Вам необходимо выполнить способ вычисления чисел Фибоначчи с вспомогательным массивом
@@ -31,7 +29,7 @@ public class FiboB {
         if (n == 1)
             return BigInteger.ONE;
 
-        BigInteger prev1 = new BigInteger("1");
+/*        BigInteger prev1 = new BigInteger("1");
         BigInteger prev2 = new BigInteger("0");
         BigInteger res = new BigInteger("0");
 
@@ -41,7 +39,14 @@ public class FiboB {
             prev1 = res;
         }
 
-        return res;
+        return res;*/
+        BigInteger[] fibNums = new BigInteger[n];
+        fibNums[0] = BigInteger.ONE;
+        fibNums[1] = BigInteger.ONE;
+        for (int i = 2; i < n; i++)
+            fibNums[i] = fibNums[i - 1].add(fibNums[i - 2]);
+        return fibNums[n - 1];
+
     }
 
 }
