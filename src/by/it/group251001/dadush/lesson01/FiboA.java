@@ -1,4 +1,4 @@
-package by.it.g251001.dadush.lesson01;
+package by.it.group251001.dadush.lesson01;
 
 import java.math.BigInteger;
 
@@ -32,19 +32,13 @@ public class FiboA {
         //здесь простейший вариант, в котором код совпадает
         //с математическим определением чисел Фибоначчи
         //время O(2^n)
-        int k;
-
-        if (n == 0) {
-            k = 0;
-        }
-        else if (n == 1) {
-            k = 1;
+        if (n <= 1) {
+            return n;
         }
         else {
-            k = calc(n - 1) + calc(n - 2);
+            return calc(n - 1) + calc(n - 2);
         }
 
-        return k;
     }
 
 
@@ -57,10 +51,10 @@ public class FiboA {
         BigInteger k;
 
         if (n == 0) {
-            k = new BigInteger("0");
+            k = BigInteger.ZERO;
         }
         else if (n == 1) {
-            k = new BigInteger("1");
+            k = BigInteger.ONE;
         }
         else {
             k = slowA(n - 1).add(slowA(n - 2));

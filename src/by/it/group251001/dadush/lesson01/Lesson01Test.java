@@ -1,4 +1,4 @@
-package by.it.g251001.dadush.lesson01;
+package by.it.group251001.dadush.lesson01;
 
 import org.junit.Test;
 
