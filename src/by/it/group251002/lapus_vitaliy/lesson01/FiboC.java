@@ -27,7 +27,7 @@ public class FiboC {
         //Решение сложно найти интуитивно
         //возможно потребуется дополнительный поиск информации
         //см. период Пизано
-        BigInteger mm = new BigInteger(Integer.toString(m));
+
         int a = 1;
         int b = 1;
         int count=1;
@@ -41,17 +41,19 @@ public class FiboC {
         }
         n=(n) % count;
 
-        BigInteger c = BigInteger.ZERO;
-        BigInteger d = BigInteger.ONE;
+        a = 0;
+        b = 1;
 
         for (int i=1;i<=n;i++)
         {
-            d = c.add(d) ;
-            c = d.subtract(c) ;
+            b = a+b ;
+            a = b-a ;
+            b= b % m;
+            a= a % m;
 
         }
 
-        return (c.mod(mm)).longValue();
+        return a;
     }
 
 
