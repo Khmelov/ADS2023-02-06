@@ -1,4 +1,4 @@
-package group251001.sevamisiul.lesson01;
+package by.it.group251001.sevamisiul.lesson01;
 
 import org.junit.Test;
 
