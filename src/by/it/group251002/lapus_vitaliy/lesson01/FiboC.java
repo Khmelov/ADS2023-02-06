@@ -39,10 +39,8 @@ public class FiboC {
             b= b % m;
             a= a % m;
         }
-        n=(n) % count;
 
-        a = 0;
-        b = 1;
+        n=(n) % count;
 
         for (int i=1;i<=n;i++)
         {
