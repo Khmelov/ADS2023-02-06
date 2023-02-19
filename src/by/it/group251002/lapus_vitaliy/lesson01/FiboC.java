@@ -28,28 +28,30 @@ public class FiboC {
         //возможно потребуется дополнительный поиск информации
         //см. период Пизано
         BigInteger mm = new BigInteger(Integer.toString(m));
-        BigInteger a = BigInteger.ONE;
-        BigInteger b = BigInteger.ONE;
+        int a = 1;
+        int b = 1;
         int count=1;
-        while ((0!=((a.mod(mm)).compareTo(BigInteger.ZERO))) ||  (0!=((b.mod(mm)).compareTo(BigInteger.ONE))))
+        while ((0!=(a)) ||  (1!=(b)))
         {
             count +=1;
-            b = a.add(b) ;
-            a = b.subtract(a) ;
+            b = a+b ;
+            a = b-a ;
+            b= b % m;
+            a= a % m;
         }
         n=(n) % count;
 
-        a = BigInteger.ZERO;
-        b = BigInteger.ONE;
+        BigInteger c = BigInteger.ZERO;
+        BigInteger d = BigInteger.ONE;
 
         for (int i=1;i<=n;i++)
         {
-            b = a.add(b) ;
-            a = b.subtract(a) ;
+            d = c.add(d) ;
+            c = d.subtract(c) ;
 
         }
 
-        return (a.mod(mm)).longValue();
+        return (c.mod(mm)).longValue();
     }
 
 
