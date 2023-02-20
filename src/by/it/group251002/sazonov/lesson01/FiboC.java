@@ -18,8 +18,8 @@ public class FiboC {
 
     public static void main(String[] args) {
         FiboC fibo = new FiboC();
-        int n = 10;
-        int m = 2;
+        int n = 2;
+        int m = 10;
         System.out.printf("fasterC(%d)=%d \n\t time=%d \n\n", n, fibo.fasterC(n, m), fibo.time());
     }
 
@@ -34,7 +34,7 @@ public class FiboC {
         int cur = 1;
         int nxt = 1;
 
-        ArrayList<Integer> periodFib = new ArrayList<>();
+        ArrayList<Integer> periodFib = new ArrayList<>(6 * 100000);
         periodFib.add(0);
 
         int i = 2;
