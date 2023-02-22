@@ -1,8 +1,7 @@
-package by.it.a_khmelev.lesson02;
+package group251003.Trukhan_Yagor.lesson01.lesson02;
 
 import java.util.ArrayList;
 import java.util.List;
-
 /*
 Даны интервальные события events
 реализуйте метод calcStartTimes, так, чтобы число принятых к выполнению
