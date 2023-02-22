@@ -51,14 +51,12 @@ public class FiboC {
             for (int i = 0; i < Period; i++) {
                 if (arr[i] != arr[i + Period]) {
                     isThat = false;
-                    break;
                 }
             }
             if (isThat) {
                 isFind = true;
-                break;
             }
-            Period++;
+            else Period++;
         }
 
         return arr[((int)(n % Period)) - 1];
