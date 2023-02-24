@@ -6,6 +6,8 @@ package by.it.group251001.churavskiy.lesson01;
  * время расчета должно быть не более 2 секунд
  */
 
+import java.util.ArrayList;
+
 public class FiboC {
 
     private long startTime = System.currentTimeMillis();
@@ -25,6 +27,18 @@ public class FiboC {
         //Решение сложно найти интуитивно
         //возможно потребуется дополнительный поиск информации
         //см. период Пизано
+
+        int[] mas_fib = {0, 1};
+        int currentFibNumber = 0;
+
+        ArrayList<Integer> mas_sequence = new ArrayList<Integer>();
+
+        for (int i = 0; i < n; i++) {
+            currentFibNumber = mas_fib[0] + mas_fib[1];
+            mas_fib[0] = mas_fib[1];
+            mas_fib[1] = currentFibNumber;
+        }
+
         return 0L;
     }
 
