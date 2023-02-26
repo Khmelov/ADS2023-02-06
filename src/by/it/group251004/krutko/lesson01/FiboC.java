@@ -35,7 +35,8 @@ public class FiboC {
             curr = (prev + curr) % m;
             prev = temp;
 
-            res = (prev == 0 && curr == 1) ? i + 1 : res;
+            if (prev == 0 && curr == 1)
+                return i + 1;
         }
         return res;
     }
