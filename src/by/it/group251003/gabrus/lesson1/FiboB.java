@@ -1,4 +1,4 @@
-package by.it.group251003.gabrus;
+package by.it.group251003.gabrus.lesson1;
 
 import java.math.BigInteger;
 
