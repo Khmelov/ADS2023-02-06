@@ -25,9 +25,33 @@ public class FiboC {
         //Решение сложно найти интуитивно
         //возможно потребуется дополнительный поиск информации
         //см. период Пизано
-        return 0L;
+
+        long prev=0;
+       long curr=1;
+       long temp =0;
+       long period=0;
+       for (int i=0;i<6*m;i++) {
+           temp = curr;
+           curr = (prev + curr) % m;
+           prev = temp;
+           if (prev == 0 && curr == 1)
+               period = i + 1;
+       }
+
+       n=n%period;
+       prev=0;
+       curr=1;
+        if(n==0) return 0;
+        else if (n==1) return 1;
+       for(int i=2;i<=n;i++){
+           temp = curr;
+           curr = (prev + curr) % m;
+           prev = temp;
+        }
+
+        return curr%m;
+
+
     }
-
-
 }
 
