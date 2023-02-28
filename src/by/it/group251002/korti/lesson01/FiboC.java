@@ -34,7 +34,7 @@ public class FiboC {
             i++;
         } while (!(nums[i-2] == 0 && nums[i-1] == 1) && i < n );
 
-        return nums[(int) (n % (i - 2))];
+        return nums[(int) ((n-1) % (i - 2))];
     }
 
 
