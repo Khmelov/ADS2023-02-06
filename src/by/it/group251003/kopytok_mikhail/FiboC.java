@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson01;
+package by.it.group251003.kopytok_mikhail;
 
 /*
  * Даны целые числа 1<=n<=1E18 и 2<=m<=1E5,
@@ -28,31 +28,15 @@ public class FiboC {
         //Решение сложно найти интуитивно
         //возможно потребуется дополнительный поиск информации
         //см. период Пизано
-        ArrayList<Integer> Arr = new ArrayList<>(100);
-
-        int PredFib = 0;
-        Arr.add(PredFib);
-        int CurrFib = 1;
-        Arr.add(CurrFib);
-
-        int number = 1;
-
-        for (int i = 2, OldFib; i <= n; i++){
-
-            OldFib = CurrFib;
-            CurrFib = (CurrFib + PredFib) % m;
-            PredFib = OldFib;
-
-            Arr.add(CurrFib);
-
-            if ((PredFib == 0) && (CurrFib == 1)) {
-                number = (int)( n % (i-1) );
-                break;
-            }
-
+        List<Long> o = new ArrayList<>();
+        o.add(0L);
+        o.add(1L);
+        int i = 2;
+        while (!(o.get(i - 2) == 0 && o.get(i - 1) == 1) || i <= 2) {
+            o.add((o.get(i - 2) + o.get(i - 1)) % m);
+            i++;
         }
-
-        return Arr.get(number);
+        return o.get((int) (n % (i - 2)));
     }
 
 
