@@ -24,12 +24,11 @@ public class FiboB {
     }
 
     BigInteger fastB(Integer n) {
-        //здесь нужно реализовать вариант с временем O(n) и памятью O(n)
-        BigInteger Fib[] = new BigInteger[n+1];     // initializing the array Fib like squib in Harry Potter:)))
+        BigInteger Fib[] = new BigInteger[n + 1];
         Fib[0] = BigInteger.ZERO;
         Fib[1] = BigInteger.ONE;
-        for (Integer i =2; i<=n ; i++){
-            Fib[i]= Fib[i-1].add(Fib[i-2]);
+        for (Integer i = 2; i <= n ; i ++) {
+            Fib[i] = Fib[i - 1].add(Fib[i - 2]);
         }
         return Fib[n];
     }
