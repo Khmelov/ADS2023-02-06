@@ -1,4 +1,4 @@
-package by.it.Group251001.markostapchuk.lesson02;
+package by.it.group251001.markostapchuk.lesson02;
 
 import java.util.ArrayList;
 import java.util.List;

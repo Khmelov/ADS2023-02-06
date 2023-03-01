@@ -1,4 +1,4 @@
-package by.it.Group251001.markostapchuk.lesson02;
+package by.it.group251001.markostapchuk.lesson02;
 /*
 Даны
 1) объем рюкзака 4
