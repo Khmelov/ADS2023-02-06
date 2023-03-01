@@ -1,4 +1,4 @@
-package by.it.korotkaya.lesson01;
+package by.it.group251001.korotkaya.lesson01;
 
 import java.math.BigInteger;
 
