@@ -29,14 +29,14 @@ public class FiboC {
 
         long PiSequence[] = new long[m * 6 + 1];
         PiSequence[0] = 0;
-        PiSequence[1] = 1;
+        PiSequence[1] = 1;  // я шиз и пишу сам для себя ))) кароче, с определенной периодичностью остаток повторяется, фактически , нам надо знать только номер члена последовательности Фибыча)
 
 
         int i = 2;
 
         while (true)
         {
-            PiSequence[i] = (PiSequence[i-1]+PiSequence[i-2]) % m;
+            PiSequence[i] = (PiSequence[i - 1]+PiSequence[i - 2]) % m;
 
             if ((PiSequence[i] == 1)&& PiSequence[i-1]==0)
             {
