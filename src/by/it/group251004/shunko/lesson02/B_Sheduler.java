@@ -47,19 +47,22 @@ public class B_Sheduler {
         //Начало и конец событий могут совпадать.
         List<Event> result;
         result = new ArrayList<>();
-        boolean isIncorrect = false;
         int rightBorder = to;
-        for (int i = 0; i <= events.length; i++) {
-
+        boolean isNtPassed;
+        while (from <= to) {
+            isNtPassed = false;
+            for (int i = 0; i <= events.length; i++) {
+                if ((events[i].start == from) && (events[i].stop - events[i].start < (rightBorder - from))) {
+                    isNtPassed = true;
+                    rightBorder = events[i].stop;
+                    result.add(new Event(from, rightBorder));
+                    from = rightBorder;
+                }
+                if (isNtPassed) {
+                    from++;
+                }
+            }
         }
-
-
-
-
-
-
-
-
         return result;          //вернем итог
     }
 }
