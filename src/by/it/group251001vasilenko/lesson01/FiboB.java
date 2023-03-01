@@ -1,7 +1,6 @@
-package by.it.a_khmelev.lesson01;
+package by.it.group251001vasilenko.lesson01;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 
 /*
  * Вам необходимо выполнить способ вычисления чисел Фибоначчи с вспомогательным массивом
@@ -21,22 +20,31 @@ public class FiboB {
         //вычисление чисел простым быстрым методом
         FiboB fibo = new FiboB();
         int n = 55555;
+
         System.out.printf("fastB(%d)=%d \n\t time=%d \n\n", n, fibo.fastB(n), fibo.time());
     }
 
     BigInteger fastB(Integer n) {
-        ArrayList<BigInteger> nums = new ArrayList<>(n);
-        nums.add(BigInteger.ZERO);
-        nums.add(BigInteger.ONE);
-        int i = 2;
-        while (i <= n){
-            BigInteger f = nums.get(i - 2).add(nums.get(i - 1));
-            nums.add(f);
-            i++;
-        }
-        //здесь нужно реализовать вариант с временем O(n) и памятью O(n)
-        return nums.get(n);
+
+        BigInteger[] fibonacciArr = new BigInteger[n + 1];
+
+        return countFibonacci(n, fibonacciArr);
     }
 
+    private static BigInteger countFibonacci(int n, BigInteger[] fibonacciArr) {
+
+        if (n < 2) {
+            return BigInteger.valueOf(n);
+        }
+
+        fibonacciArr[0] = BigInteger.ZERO;
+        fibonacciArr[1] = BigInteger.ONE;
+
+        for (int i = 2; i < fibonacciArr.length; i++) {
+            fibonacciArr[i] = fibonacciArr[i - 1].add(fibonacciArr[i - 2]);
+        }
+
+        return fibonacciArr[n];
+    }
 }
 

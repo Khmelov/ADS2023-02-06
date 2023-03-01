@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson01;
+package by.it.group251001.krivitsky.lesson01;
 
 /*
  * Даны целые числа 1<=n<=1E18 и 2<=m<=1E5,
@@ -6,8 +6,7 @@ package by.it.a_khmelev.lesson01;
  * время расчета должно быть не более 2 секунд
  */
 
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigInteger;
 
 public class FiboC {
 
@@ -19,24 +18,29 @@ public class FiboC {
 
     public static void main(String[] args) {
         FiboC fibo = new FiboC();
-        int n = 55555;
-        int m = 1000;
+        long n = 999999999;
+        int m = 321;
         System.out.printf("fasterC(%d)=%d \n\t time=%d \n\n", n, fibo.fasterC(n, m), fibo.time());
     }
 
     long fasterC(long n, int m) {
-        //Решение сложно найти интуитивно
-        //возможно потребуется дополнительный поиск информации
-        //см. период Пизано
-        List<Long> o = new ArrayList<>();
-        o.add(0L);
-        o.add(1L);
-        int i = 2;
-        while (!(o.get(i - 2) == 0 && o.get(i - 1) == 1) || i <= 2) {
-            o.add((o.get(i - 2) + o.get(i - 1)) % m);
-            i++;
+        long[] Arr = new long[10*m];
+        Arr[0] = 0L;
+        Arr[1] = 1L;
+        Arr[2] = 1L;
+        int i = 3;
+        boolean f = true;
+        while (f) {
+            Arr[i] = (Arr[i-1]+Arr[i-2]) % m;
+            if ((Arr[i-1] == Arr[0]) && (Arr[i] == Arr[1]))
+            {
+                f = false;
         }
-        return o.get((int) (n % (i - 2)));
+            else{
+                i++;
+            }
+        }
+        return Arr[(int)(n % i)];
     }
 
 

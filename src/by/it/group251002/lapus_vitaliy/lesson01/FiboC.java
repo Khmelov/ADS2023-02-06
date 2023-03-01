@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson01;
+package by.it.group251002.lapus_vitaliy.lesson01;
 
 /*
  * Даны целые числа 1<=n<=1E18 и 2<=m<=1E5,
@@ -6,8 +6,7 @@ package by.it.a_khmelev.lesson01;
  * время расчета должно быть не более 2 секунд
  */
 
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigInteger;
 
 public class FiboC {
 
@@ -19,8 +18,8 @@ public class FiboC {
 
     public static void main(String[] args) {
         FiboC fibo = new FiboC();
-        int n = 55555;
-        int m = 1000;
+        int n = 10;
+        int m = 2;
         System.out.printf("fasterC(%d)=%d \n\t time=%d \n\n", n, fibo.fasterC(n, m), fibo.time());
     }
 
@@ -28,15 +27,31 @@ public class FiboC {
         //Решение сложно найти интуитивно
         //возможно потребуется дополнительный поиск информации
         //см. период Пизано
-        List<Long> o = new ArrayList<>();
-        o.add(0L);
-        o.add(1L);
-        int i = 2;
-        while (!(o.get(i - 2) == 0 && o.get(i - 1) == 1) || i <= 2) {
-            o.add((o.get(i - 2) + o.get(i - 1)) % m);
-            i++;
+
+        int a = 1;
+        int b = 1;
+        int count=1;
+        while ((0!=(a)) ||  (1!=(b)))
+        {
+            count +=1;
+            b = a+b ;
+            a = b-a ;
+            b= b % m;
+            a= a % m;
         }
-        return o.get((int) (n % (i - 2)));
+
+        n=(n) % count;
+
+        for (int i=1;i<=n;i++)
+        {
+            b = a+b ;
+            a = b-a ;
+            b= b % m;
+            a= a % m;
+
+        }
+
+        return a;
     }
 
 

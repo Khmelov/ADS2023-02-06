@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson01;
+package by.it.group251003.gabrus.lesson1;
 
 /*
  * Даны целые числа 1<=n<=1E18 и 2<=m<=1E5,
@@ -7,7 +7,6 @@ package by.it.a_khmelev.lesson01;
  */
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FiboC {
 
@@ -19,24 +18,26 @@ public class FiboC {
 
     public static void main(String[] args) {
         FiboC fibo = new FiboC();
-        int n = 55555;
-        int m = 1000;
+        int n = 10;
+        int m = 2;
         System.out.printf("fasterC(%d)=%d \n\t time=%d \n\n", n, fibo.fasterC(n, m), fibo.time());
     }
 
     long fasterC(long n, int m) {
-        //Решение сложно найти интуитивно
-        //возможно потребуется дополнительный поиск информации
-        //см. период Пизано
-        List<Long> o = new ArrayList<>();
-        o.add(0L);
-        o.add(1L);
-        int i = 2;
-        while (!(o.get(i - 2) == 0 && o.get(i - 1) == 1) || i <= 2) {
-            o.add((o.get(i - 2) + o.get(i - 1)) % m);
+        ArrayList<Integer> listOfMods = new ArrayList<>(1000);
+
+        listOfMods.add(1);
+        listOfMods.add(1);
+
+        int i = 1;
+
+        do
+        {
             i++;
-        }
-        return o.get((int) (n % (i - 2)));
+            listOfMods.add((listOfMods.get(i - 1) + listOfMods.get(i - 2)) % m);
+        } while ( !((listOfMods.get(i) == 0) && (listOfMods.get(i - 1) == 1)) );
+
+        return listOfMods.get((int)(n % listOfMods.size()) - 1);
     }
 
 
