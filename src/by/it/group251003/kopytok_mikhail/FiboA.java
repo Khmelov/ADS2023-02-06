@@ -1,4 +1,4 @@
-package by.it.group251003.Kopytok.lesson01;
+package by.it.group251003.kopytok_mikhail;
 
 import java.math.BigInteger;
 
