@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson01;
+package by.it.incorrect_group_data.makarov.lesson01;
 
 /*
  * Даны целые числа 1<=n<=1E18 и 2<=m<=1E5,
@@ -7,7 +7,6 @@ package by.it.a_khmelev.lesson01;
  */
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FiboC {
 
@@ -19,8 +18,8 @@ public class FiboC {
 
     public static void main(String[] args) {
         FiboC fibo = new FiboC();
-        int n = 55555;
-        int m = 1000;
+        int n = 10;
+        int m = 2;
         System.out.printf("fasterC(%d)=%d \n\t time=%d \n\n", n, fibo.fasterC(n, m), fibo.time());
     }
 
@@ -28,17 +27,22 @@ public class FiboC {
         //Решение сложно найти интуитивно
         //возможно потребуется дополнительный поиск информации
         //см. период Пизано
-        List<Long> o = new ArrayList<>();
-        o.add(0L);
-        o.add(1L);
-        int i = 2;
-        while (!(o.get(i - 2) == 0 && o.get(i - 1) == 1) || i <= 2) {
-            o.add((o.get(i - 2) + o.get(i - 1)) % m);
-            i++;
+        ArrayList<Integer> rem = new ArrayList<>();
+        int rem1, rem2, per,temp;/*rem1, rem2- остатки от деления
+                                   per - количество членов поседовательности
+                                   temp - aux variable*/
+        rem1 = 1;
+        rem2 = 1;
+        per=1;
+        rem.add(0);
+        do {
+            rem.add(rem1);//добавить в список
+            temp=rem1;//сохранить значение
+            rem1=rem2;
+            rem2=(rem1+temp)%m;//вычислить новый член
+            per++;
+        }while ((rem1 !=0)&&(rem2 != 1));
+
+        return rem.get((int)(n)%per);
         }
-        return o.get((int) (n % (i - 2)));
-    }
-
-
 }
-

@@ -1,7 +1,7 @@
-package by.it.a_khmelev.lesson01;
+package by.it.group251003.gridusko_bogdan.lesson1;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
+
 
 /*
  * Вам необходимо выполнить способ вычисления чисел Фибоначчи с вспомогательным массивом
@@ -23,19 +23,30 @@ public class FiboB {
         int n = 55555;
         System.out.printf("fastB(%d)=%d \n\t time=%d \n\n", n, fibo.fastB(n), fibo.time());
     }
-
     BigInteger fastB(Integer n) {
-        ArrayList<BigInteger> nums = new ArrayList<>(n);
-        nums.add(BigInteger.ZERO);
-        nums.add(BigInteger.ONE);
-        int i = 2;
-        while (i <= n){
-            BigInteger f = nums.get(i - 2).add(nums.get(i - 1));
-            nums.add(f);
-            i++;
+        if (n == 0)
+            return BigInteger.ZERO;
+        if (n == 1)
+            return BigInteger.ONE;
+
+/*        BigInteger prev1 = new BigInteger("1");
+        BigInteger prev2 = new BigInteger("0");
+        BigInteger res = new BigInteger("0");
+
+        for (int i = 1; i < n; ++i) {
+            res = prev1.add(prev2);
+            prev2 = prev1;
+            prev1 = res;
         }
-        //здесь нужно реализовать вариант с временем O(n) и памятью O(n)
-        return nums.get(n);
+
+        return res;*/
+        BigInteger[] fibNums = new BigInteger[n];
+        fibNums[0] = BigInteger.ONE;
+        fibNums[1] = BigInteger.ONE;
+        for (int i = 2; i < n; i++)
+            fibNums[i] = fibNums[i - 1].add(fibNums[i - 2]);
+        return fibNums[n - 1];
+
     }
 
 }
