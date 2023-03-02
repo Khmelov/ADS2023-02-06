@@ -14,6 +14,8 @@ package by.it.group251002.punko.lesson02;
  */
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class C_GreedyKnapsack {
@@ -51,16 +53,24 @@ public class C_GreedyKnapsack {
         for (int i = 0; i < n; i++) { //создавая каждый конструктором
             items[i] = new Item(input.nextInt(), input.nextInt());
         }
+        Arrays.sort(items, Comparator.comparingDouble(item -> -item.cost / item.weight));
         //покажем предметы
+        double result = 0;
         for (Item item:items) {
-            System.out.println(item);
+            if (W == 0) break;
+            if (item.weight <= W) {
+                result += item.cost;
+                W -= item.weight;
+            } else {
+                result += W * item.cost / item.weight;
+                W = 0;
+            }
         }
         System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
 
         //тут необходимо реализовать решение задачи
         //итогом является максимально воможная стоимость вещей в рюкзаке
         //вещи можно резать на кусочки (непрерывный рюкзак)
-        double result = 0;
         //тут реализуйте алгоритм сбора рюкзака
         //будет особенно хорошо, если с собственной сортировкой
         //кроме того, можете описать свой компаратор в классе Item

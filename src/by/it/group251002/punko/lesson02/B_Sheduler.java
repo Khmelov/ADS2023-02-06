@@ -1,5 +1,6 @@
 package by.it.group251002.punko.lesson02;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 /*
@@ -45,15 +46,18 @@ public class B_Sheduler {
         //в период [from, int] (включительно).
         //оптимизация проводится по наибольшему числу непересекающихся событий.
         //Начало и конец событий могут совпадать.
-        List<Event> result;
-        result = new ArrayList<>();
+        Arrays.sort(events, (a, b) -> a.stop - b.stop);
+        List<Event> result = new ArrayList<>();
+        int lasttime = from;
+        int i;
+        for (i=0;i<events.length;i++){
+           // for (Event event : events){
+            if (events[i].start>=lasttime && events[i].stop<=to){
+                result.add(events[i]);
+                lasttime = events[i].stop;
+            }
+        }
         //ваше решение.
-
-
-
-
-
-
         return result;          //вернем итог
     }
 }
