@@ -43,7 +43,7 @@ public class C_HeapMax {
         //Будет мало? Ну тогда можете его собрать как Generic и/или использовать в варианте B
         private List<Long> heap = new ArrayList<>();
 
-        void siftDown(int i) { //просеивание вверх
+        private void siftDown(int i) { //просеивание вверх
             int left = 2 * i + 1;
             int right = 2 * i + 2;
             int indexMax = i;
@@ -58,7 +58,7 @@ public class C_HeapMax {
 
         }
 
-        void siftUp(int i) { //просеивание вниз
+        private void siftUp(int i) { //просеивание вниз
             int parent = (i - 1) / 2;
 
             if (parent >= 0 && heap.get(parent) < heap.get(i)) {
@@ -68,7 +68,7 @@ public class C_HeapMax {
 
         }
 
-        void swap(int x, int y) {
+        private void swap(int x, int y) {
             long element = heap.get(x);
             heap.set(x, heap.get(y));
             heap.set(y, element);
