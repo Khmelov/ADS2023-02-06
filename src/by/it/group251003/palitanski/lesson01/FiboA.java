@@ -1,4 +1,4 @@
-package by.it.g251003.palitanski.lesson01;
+package by.it.group251003.palitanski.lesson01;
 
 import java.math.BigInteger;
 

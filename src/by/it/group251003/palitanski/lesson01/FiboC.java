@@ -1,10 +1,12 @@
-package by.it.g251003.palitanski.lesson01;
+package by.it.group251003.palitanski.lesson01;
 
 /*
  * Даны целые числа 1<=n<=1E18 и 2<=m<=1E5,
  * необходимо найти остаток от деления n-го числа Фибоначчи на m.
  * время расчета должно быть не более 2 секунд
  */
+
+import java.util.ArrayList;
 
 public class FiboC {
 
@@ -26,7 +28,19 @@ public class FiboC {
         //возможно потребуется дополнительный поиск информации
         //см. период Пизано
 
-        return 0L;
+        ArrayList<Integer> TermArray = new ArrayList<>(15);
+        TermArray.add(0);
+        TermArray.add(1);
+        long a = 2;
+        for (int i = 2; i < n; i++) {
+            TermArray.add( (TermArray.get(i-1) + TermArray.get(i-2)) % m ) ;
+            if ( (TermArray.get(i) == 1) && (TermArray.get(i-1) == 0) ) {
+                a = i - 1;
+                break;
+            }
+        }
+        n %= a ;
+        return TermArray.get((int) n );
     }
 
 

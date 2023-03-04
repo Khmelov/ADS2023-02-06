@@ -1,4 +1,4 @@
-package by.it.g251003.palitanski.lesson02;
+package by.it.group251003.palitanski.lesson02;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +38,19 @@ public class A_VideoRegistrator {
         //вычислим момент окончания работы видеокамеры
         //и теперь пропустим все покрываемые события
         //за время до конца работы, увеличивая индекс
+
+        result.add(events[0]);
+        int resnum = 1;
+        for (i = 1; i < events.length;) {
+            if (events [i] <= (result.get(resnum - 1) + workDuration) ) {
+                i += 1;
+            }
+            else  {
+                result.add(events[i]);
+                resnum += 1;
+                i += 1;
+            }
+        }
 
 
 

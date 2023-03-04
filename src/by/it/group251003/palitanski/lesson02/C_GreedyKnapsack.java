@@ -1,4 +1,4 @@
-package by.it.g251003.palitanski.lesson02;
+package by.it.group251003.palitanski.lesson02;
 /*
 Даны
 1) объем рюкзака 4
