@@ -25,15 +25,14 @@ public class A_VideoRegistrator {
         //timeWorkDuration время работы видеокамеры после старта
         List<Double> result;
         result = new ArrayList<>();
-        int i=0;                              //i - это индекс события events[i]
+        //i - это индекс события events[i]
         Arrays.sort(events);
         double lastMoment = events[0]-1;
-        while(i<=events.length-1) {
+        for (int i=0;i<=events.length-1;i++) {
             if (events[i]>lastMoment){
                 result.add(events[i]);
                 lastMoment = events[i]+workDuration;
             }
-            i++;
         }
         //Комментарии от проверочного решения сохранены для подсказки, но вы можете их удалить.
         //Подготовка к жадному поглощению массива событий

@@ -56,11 +56,13 @@ public class B_Sheduler {
         result = new ArrayList<>();
         //ваше решение.
         Arrays.sort(events, new SortByRight());
-
-
-
-
-
+        int lastEventFinish = from-1;
+        for(int i=0; i<=events.length-1;i++){
+            if ((events[i].start>=lastEventFinish)&&(events[i].start>=from)&&(events[i].stop<=to)){
+                result.add(events[i]);
+                lastEventFinish = events[i].stop;
+            }
+        }
 
         return result;          //вернем итог
     }
