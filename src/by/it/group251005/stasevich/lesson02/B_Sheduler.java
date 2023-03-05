@@ -12,6 +12,7 @@ import java.util.Collections;
 
 public class B_Sheduler {
     //событие у аудитории(два поля: начало и конец)
+
     static class Event {
         int start;
         int stop;
