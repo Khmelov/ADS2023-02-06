@@ -59,6 +59,7 @@ public class B_Sheduler {
         Arrays.sort(events, StopComporator);
 
 
+
         double TempStop = 0;
         int i = 0;
         while(events[i].stop < from) i++;

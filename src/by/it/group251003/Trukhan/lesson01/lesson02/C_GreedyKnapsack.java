@@ -79,6 +79,7 @@ public class C_GreedyKnapsack {
 
         //ваше решение.
 
+
         boolean isSorted = false;
         Item buf;
         while(!isSorted) {

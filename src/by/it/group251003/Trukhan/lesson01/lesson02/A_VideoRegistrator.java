@@ -28,6 +28,7 @@ public class A_VideoRegistrator {
 
         Arrays.sort(events);
 
+
         double CurrentTime;
         int i=0;
         result.add(events[0]);
