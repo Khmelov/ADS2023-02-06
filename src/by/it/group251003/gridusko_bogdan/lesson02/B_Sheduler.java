@@ -1,7 +1,6 @@
-package group251003.gridusko_bogdan.lesson2;
+package by.it.group251003.gridusko_bogdan.lesson02;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 /*
 Даны интервальные события events

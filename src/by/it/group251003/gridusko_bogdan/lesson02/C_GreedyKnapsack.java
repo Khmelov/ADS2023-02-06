@@ -1,4 +1,4 @@
-package group251003.gridusko_bogdan.lesson2;
+package by.it.group251003.gridusko_bogdan.lesson02;
 /*
 Даны
 1) объем рюкзака 4

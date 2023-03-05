@@ -1,4 +1,4 @@
-package group251003.gridusko_bogdan.lesson1;
+package by.it.group251003.gridusko_bogdan.lesson01;
 
 /*
  * Даны целые числа 1<=n<=1E18 и 2<=m<=1E5,

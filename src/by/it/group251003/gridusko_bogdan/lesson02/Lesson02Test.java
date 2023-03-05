@@ -1,4 +1,4 @@
-package group251003.gridusko_bogdan.lesson2;
+package by.it.group251003.gridusko_bogdan.lesson02;
 
 import org.junit.Test;
 
