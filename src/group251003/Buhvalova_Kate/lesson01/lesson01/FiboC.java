@@ -38,7 +38,6 @@ public class FiboC {
             LastElem2 = CurElem;
             arr[i] = (CurElem.mod(bigInteger)).longValue();
         }
-
         int Period = 2;
         boolean indicator = true;
         boolean isThat;

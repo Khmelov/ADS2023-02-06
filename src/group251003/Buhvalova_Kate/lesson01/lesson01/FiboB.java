@@ -6,7 +6,6 @@ import java.math.BigInteger;
  * Вам необходимо выполнить способ вычисления чисел Фибоначчи с вспомогательным массивом
  * без ограничений на размер результата (BigInteger)
  */
-
 public class FiboB {
 
     private long startTime = System.currentTimeMillis();
