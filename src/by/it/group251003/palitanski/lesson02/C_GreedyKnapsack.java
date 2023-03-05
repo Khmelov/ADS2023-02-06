@@ -14,6 +14,7 @@ package by.it.group251003.palitanski.lesson02;
  */
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class C_GreedyKnapsack {
@@ -53,9 +54,9 @@ public class C_GreedyKnapsack {
         }
         //покажем предметы
         for (Item item:items) {
-            System.out.println(item);
+            //System.out.println(item);
         }
-        System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
+       // System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
 
         //тут необходимо реализовать решение задачи
         //итогом является максимально воможная стоимость вещей в рюкзаке
@@ -66,11 +67,41 @@ public class C_GreedyKnapsack {
         //кроме того, можете описать свой компаратор в классе Item
 
         //ваше решение.
+        Integer[] Worth = new Integer[n];
+        for (int i = 0; i < n; i++) {
+            Worth[i] = (items[i].cost / items[i].weight);
+        }
+
+        int j;
+
+        for (int i = 1; i < Worth.length; i++) {
+            Item temp = items[i];
+            int swap = Worth[i];
+            for (j = i; j > 0 && swap > Worth[j - 1]; j--) {
+                items[j] = items[j-1];
+                Worth[j] = Worth[j - 1];
+            }
+            Worth[j] = swap;
+            items[j] = temp;
+        }
 
 
 
-
-
+        result = 0;
+        int freeWeight = W;
+        int i = 0;
+        while (i < n) {
+            if (freeWeight >= items[i].weight) {
+                result = result + items[i].cost;
+                freeWeight -= items[i].weight;
+                i++;
+            }
+            if ( (freeWeight > 0) & (freeWeight < items[i].weight) ) {
+                result = result + items[i].cost * freeWeight / items[i].weight;
+                freeWeight = freeWeight - items[i].weight;
+                break;
+            }
+        }
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
         return result;
     }
