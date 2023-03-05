@@ -15,7 +15,8 @@ package by.it.group251002.lapus_vitaliy.lesson02;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-
+import java.util.Arrays;
+import java.util.Comparator;
 public class C_GreedyKnapsack {
     private static class Item implements Comparable<Item> {
         int cost;
@@ -43,6 +44,33 @@ public class C_GreedyKnapsack {
         }
     }
 
+    Item[] sort(Item[] arr, int large, int max) {
+        int now=large;
+        int left=now*2+1;
+        int right=2*now+2;
+
+        if ((left<max) && (arr[left].cost/arr[left].weight<arr[now].cost/arr[now].weight))
+        {
+            now=left;
+        }
+        if ((right<max) && (arr[right].cost/arr[right].weight<arr[now].cost/arr[now].weight))
+        {
+            now=right;
+        }
+
+        if (now!=large)
+        {
+            Item buf=arr[now];
+            arr[now]=arr[large];
+            arr[large]=buf;
+            arr=sort(arr,now,max);
+        }
+
+        return arr;
+    }
+
+
+
     double calc(File source) throws FileNotFoundException {
         Scanner input = new Scanner(source);
         int n = input.nextInt();      //сколько предметов в файле
@@ -66,10 +94,35 @@ public class C_GreedyKnapsack {
         //кроме того, можете описать свой компаратор в классе Item
 
         //ваше решение.
+        for(int i= items.length / 2 - 1;i>=0;i--)
+        {
+            items=sort(items,i,items.length);
+        }
+
+        for(int i= items.length-1;i>=1;i--)
+        {
+            Item buf=items[0];
+            items[0]=items[i];
+            items[i]=buf;
+
+            items=sort(items,0,i);
+        }
 
 
 
-
+        for (int i=0;i<n;i++)
+        {
+            if (items[i].weight<=W)
+            {
+                result=result+items[i].cost;
+                W=W-items[i].weight;
+            }
+            else
+            {
+                result=result+items[i].cost/items[i].weight*W;
+                break;
+            }
+        }
 
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
         return result;
