@@ -1,4 +1,4 @@
-package group251003.Trukhan_Yagor.lesson01.lesson01;
+package by.it.group251003.Trukhan.lesson01.lesson01;
 
 import java.math.BigInteger;
 

@@ -1,4 +1,4 @@
-package group251003.Trukhan_Yagor.lesson01.lesson02;
+package by.it.group251003.Trukhan.lesson01.lesson02;
 /*
 Даны
 1) объем рюкзака 4
@@ -24,6 +24,18 @@ public class C_GreedyKnapsack {
         Item(int cost, int weight) {
             this.cost = cost;
             this.weight = weight;
+
+            /*
+            *         Comparator<Event> StopComporator = new Comparator<Event>() {
+            @Override
+            public int compare(Event e1, Event e2) {
+                if (e1.stop < e2.stop) return -1;
+                if (e1.stop > e2.stop) return 1;
+                else return 0;
+            }
+        };
+            *
+            * */
         }
 
         @Override
@@ -67,8 +79,31 @@ public class C_GreedyKnapsack {
 
         //ваше решение.
 
-
-
+        boolean isSorted = false;
+        Item buf;
+        while(!isSorted) {
+            isSorted = true;
+            for (int i = 0; i < items.length-1; i++) {
+                if((items[i].cost / items[i].weight) < (items[i + 1].cost / items[i + 1].weight)){
+                    isSorted = false;
+                    buf = items[i];
+                    items[i] = items[i+1];
+                    items[i+1] = buf;
+                }
+            }
+        }
+        double fullWeight = 0;
+        for (int i = 0; i < items.length; i++) {
+            if (fullWeight + items[i].weight <= W) {
+                result += items[i].cost;
+                fullWeight += items[i].weight;
+            }
+            else {
+                double parts = items[i].weight / (W - fullWeight);
+                result += items[i].cost / parts;
+                return result;
+            }
+        }
 
 
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
