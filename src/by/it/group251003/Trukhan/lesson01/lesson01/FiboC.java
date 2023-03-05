@@ -23,6 +23,7 @@ public class FiboC {
         System.out.printf("fasterC(%d)=%d \n\t time=%d \n\n", n, fibo.fasterC(n, m), fibo.time());
     }
 
+
     long fasterC(long n, int m) {
         //Решение сложно найти интуитивно
         //возможно потребуется дополнительный поиск информации

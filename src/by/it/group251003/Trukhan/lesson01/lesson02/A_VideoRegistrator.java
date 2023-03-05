@@ -20,6 +20,7 @@ public class A_VideoRegistrator {
         System.out.println(starts);                            //покажем моменты старта
     }
     //модификаторы доступа опущены для возможности тестирования
+
     List<Double> calcStartTimes(double[] events, double workDuration){
         //events - события которые нужно зарегистрировать
         //timeWorkDuration время работы видеокамеры после старта

@@ -23,6 +23,7 @@ public class FiboB {
         System.out.printf("fastB(%d)=%d \n\t time=%d \n\n", n, fibo.fastB(n), fibo.time());
     }
 
+
     BigInteger fastB(Integer n) {
         BigInteger[] arr = new BigInteger[n];
         arr[0] = BigInteger.ONE;
