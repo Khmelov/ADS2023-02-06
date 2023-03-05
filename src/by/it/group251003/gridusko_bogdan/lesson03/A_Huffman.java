@@ -116,6 +116,7 @@ public class A_Huffman {
     String encode(File file) throws FileNotFoundException {
         Scanner scanner = new Scanner(file);
         String s = scanner.next();
+        scanner.close();
 
         Map<Character, Integer> count = new HashMap<>();
         for (int i = 0; i < s.length(); i++) {

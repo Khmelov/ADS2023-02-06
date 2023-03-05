@@ -2,6 +2,8 @@ package by.it.group251003.gridusko_bogdan.lesson03;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 // Lesson 3. B_Huffman.
@@ -41,21 +43,47 @@ import java.util.Scanner;
 //        abacabad
 
 public class B_Huffman {
+    private String stringFromLeftChar(String str, Character ch) {
+        StringBuilder res = new StringBuilder("");
+        int i = 0;
+        while ((i < str.length()) && (str.charAt(i) != ' '))
+            i++;
 
+        ++i;
+        while ((i < str.length())) {
+            res.append(str.charAt(i));
+            i++;
+        }
+        return res.toString();
+    }
     String decode(File file) throws FileNotFoundException {
-        StringBuilder result=new StringBuilder();
-        //прочитаем строку для кодирования из тестового файла
         Scanner scanner = new Scanner(file);
         Integer count = scanner.nextInt();
-        Integer length = scanner.nextInt();
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-        //тут запишите ваше решение
+        Integer lengthEncodedString = scanner.nextInt();
 
+        Map<String, Character> codes = new HashMap<>();
+        scanner.nextLine();
+        for (int i = 0; i < count; i++) {
+            String str = scanner.nextLine();
+            Character ch = str.charAt(0);
+            codes.put(stringFromLeftChar(str, ' '), str.charAt(0));
+        }
 
+        String encodedString = scanner.nextLine();
+        scanner.close();
 
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-        return result.toString(); //01001100100111
+        StringBuilder currCode = new StringBuilder("");
+        StringBuilder originalString = new StringBuilder("");
+        int i = 0;
+        while ((i < lengthEncodedString)) {
+            currCode.append(encodedString.charAt(i));
+            if (codes.containsKey(currCode.toString())) {
+                originalString.append(codes.get(currCode.toString()));
+                currCode.setLength(0);
+            }
+            i++;
+        }
+        return originalString.toString(); //01001100100111
     }
 
     public static void main(String[] args) throws FileNotFoundException {
