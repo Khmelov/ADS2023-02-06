@@ -1,4 +1,5 @@
 package by.it.a_khmelev.lesson01;
+import java.util.ArrayList;
 
 /*
  * Даны целые числа 1<=n<=1E18 и 2<=m<=1E5,
@@ -22,10 +23,18 @@ public class FiboC {
     }
 
     long fasterC(long n, int m) {
+        ArrayList<Integer> lst = new ArrayList<>();
+        lst.add(0);
+        lst.add(1);
+        for (int i = 2; i < m * 5; i++) {
+            lst.add((lst.get(i - 1) + lst.get(i - 2)) % m);
+            if (lst.get(i) == 1 && lst.get(i - 1) == 0)
+                break;
+        }
+        return lst.get((int) (n % (lst.size() - 2)));
         //Решение сложно найти интуитивно
         //возможно потребуется дополнительный поиск информации
         //см. период Пизано
-        return 0L;
     }
 
 
