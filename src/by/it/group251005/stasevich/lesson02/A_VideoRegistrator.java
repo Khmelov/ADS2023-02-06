@@ -1,7 +1,8 @@
-package by.it.a_khmelev.lesson02;
+package by.it.group251005.stasevich.lesson02;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 /*
 Даны события events
 реализуйте метод calcStartTimes, так, чтобы число включений регистратора на
@@ -22,9 +23,24 @@ public class A_VideoRegistrator {
     List<Double> calcStartTimes(double[] events, double workDuration){
         //events - события которые нужно зарегистрировать
         //timeWorkDuration время работы видеокамеры после старта
+        Arrays.sort(events);
         List<Double> result;
         result = new ArrayList<>();
-        int i=0;                              //i - это индекс события events[i]
+        int i=0;
+        result.add(events[i]);
+        while (i < events.length) {
+            double sum = 0;
+            while (sum <= workDuration && i < events.length - 1) {
+                sum += (events[i+1]-events[i]);
+                i++;
+            }
+            if (i != events.length - 1) {
+                result.add(events[i]);
+            } else {
+                result.add(events[i-1]);
+            }
+            i++;
+        }                              //i - это индекс события events[i]
         //Комментарии от проверочного решения сохранены для подсказки, но вы можете их удалить.
         //Подготовка к жадному поглощению массива событий
         //hint: сортировка Arrays.sort обеспечит скорость алгоритма

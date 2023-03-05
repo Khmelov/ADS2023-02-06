@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson02;
+package by.it.group251005.stasevich.lesson02;
 /*
 Даны
 1) объем рюкзака 4
@@ -42,7 +42,21 @@ public class C_GreedyKnapsack {
             return 0;
         }
     }
-
+    void sorting(Item[] array, int low, int high) {
+        if (array.length == 0 )
+            return;
+        if (low >= high)
+            return;
+        for (int i = 0; i < high; i++) {
+            for (int j = i; j < high; j++) {
+                if (array[j].cost/array[j].weight > array[i].cost/array[i].weight) {
+                    Item temp = array[j];
+                    array[j] = array[i];
+                    array[i] = temp;
+                }
+            }
+        }
+    }
     double calc(File source) throws FileNotFoundException {
         Scanner input = new Scanner(source);
         int n = input.nextInt();      //сколько предметов в файле
@@ -66,7 +80,23 @@ public class C_GreedyKnapsack {
         //кроме того, можете описать свой компаратор в классе Item
 
         //ваше решение.
+        int low = 0;
+        int high = items.length;
+        int max_size = 60;
+        int i = 0;
+        sorting(items, low, high);
 
+        while (max_size > 0) {
+            if (max_size >= items[i].weight) {
+                result += items[i].cost;
+                max_size -= items[i].weight;
+            } else {
+                int weightCost = items[i].cost / items[i].weight;
+                result += weightCost * max_size;
+                max_size = 0;
+            }
+            i++;
+        }
 
 
 
