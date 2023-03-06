@@ -28,7 +28,7 @@ public class A_VideoRegistrator {
         List<Double> result;
         result = new ArrayList<>();
         double theFirst = 0;
-        Arrays.sort(events);
+        Arrays.sort(events); // очевидно , сортирую массив) таким образом можно сильно упростить дальнейший алгос, хотя не исключаю, что можно и без этого
         theFirst = events[0];
         for (byte i = 0; i < events.length; i++) {
             if (events[i] - theFirst > workDuration) {
