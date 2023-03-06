@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class FiboB {
 
-    private long startTime = System.currentTimeMillis();
+    private long  startTime = System.currentTimeMillis();
 
     private long time() {
         return System.currentTimeMillis() - startTime;
