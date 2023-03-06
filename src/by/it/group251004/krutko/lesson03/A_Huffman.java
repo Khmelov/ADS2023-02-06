@@ -109,33 +109,38 @@ public class A_Huffman {
     //индекс данных из листьев
     static private Map<Character, String> codes = new TreeMap<>();
 
-
     //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
     String encode(File file) throws FileNotFoundException {
         //прочитаем строку для кодирования из тестового файла
         Scanner scanner = new Scanner(file);
         String s = scanner.next();
-
         //все комментарии от тестового решения были оставлены т.к. это задание A.
         //если они вам мешают их можно удалить
-
-        Map<Character, Integer> count = new HashMap<>();
         //1. переберем все символы по очереди и рассчитаем их частоту в Map count
-            //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
-
+        //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
+        Map<Character, Integer> count = new HashMap<>();
+        for (int i = 0; i < s.length(); i++)
+            count.put(s.charAt(i), count.get(s.charAt(i)) != null ? count.get(s.charAt(i)) + 1 : 1);
         //2. перенесем все символы в приоритетную очередь в виде листьев
-        PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
-
+        PriorityQueue<Node> priorityQueue = new PriorityQueue<>(); //И есть Array List?
+        for (char c: count.keySet())
+            priorityQueue.add(new LeafNode(count.get(c), c)); //В очередь занесли листы нашего будущего дерева, первое – частота элемента, 2 — сама буква
         //3. вынимая по два узла из очереди (для сборки родителя)
         //и возвращая этого родителя обратно в очередь
         //построим дерево кодирования Хаффмана.
         //У родителя частоты детей складываются.
+        //У priorityQueue уже все отсортировано внутри по frequency
 
+        while (priorityQueue.size() > 1) {
+            InternalNode parent = new InternalNode(priorityQueue.remove(), priorityQueue.remove());
+            priorityQueue.add(parent);
+        }
         //4. последний из родителей будет корнем этого дерева
         //это будет последний и единственный элемент оставшийся в очереди priorityQueue.
+        priorityQueue.element().fillCodes("");
         StringBuilder sb = new StringBuilder();
-        //.....
-
+        for (int i = 0; i < s.length(); i++)
+            sb.append(codes.get(s.charAt(i)));
         return sb.toString();
         //01001100100111
         //01001100100111
