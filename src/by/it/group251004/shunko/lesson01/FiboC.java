@@ -16,8 +16,8 @@ public class FiboC {
 
     public static void main(String[] args) {
         FiboC fibo = new FiboC();
-        int n = 10;
-        int m = 2;
+        int n = 1000;
+        int m = 200;
         System.out.printf("fasterC(%d)=%d \n\t time=%d \n\n", n, fibo.fasterC(n, m), fibo.time());
     }
 
@@ -36,16 +36,16 @@ public class FiboC {
 
         while (!isIncorrect)
         {
-            PiSequence[i] = (PiSequence[i - 1]+PiSequence[i - 2]) % m;
+            PiSequence[i] = (PiSequence[i - 1] + PiSequence[i - 2]) % m;
 
-            if ((PiSequence[i] == 1)&& PiSequence[i-1]==0)
+            if ((PiSequence[i] == 1) && PiSequence[i - 1] == 0)
             {
                 periodlen = i;
                 isIncorrect = true;
             }
 
             i++;
-        }
+        } //таким методом определяю ближайший член последовательности, у которого остаток от деления на m такой же , как и у искомого
 
 
         return PiSequence[(int) (n % periodlen)];
