@@ -58,11 +58,12 @@ public class B_Huffman {
         //тут запишите ваше решение
         Node node = getNode(count, scanner);
         String input = scanner.nextLine();
-        Node tempNode = node;
-        String temp = "";
+        //Node tempNode = node;
+        //String temp = "";
         int i = 0;
-        while (i < input.length()) {
-            if (tempNode.content != null && tempNode.content.equals(temp)) {
+        while (i < input.length())
+            i = node.getEncode(result, node, "", input, i);
+            /*if (tempNode.content != null && tempNode.content.equals(temp)) {
                 result.append(tempNode.letter);
                 temp = "";
                 tempNode = node;
@@ -71,9 +72,7 @@ public class B_Huffman {
                 temp += input.charAt(i);
                 i++;
                 result.append((i == input.length()) ? tempNode.letter : "");
-            }
-        }
-
+            }*/
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         return result.toString(); //01001100100111
     }
@@ -91,7 +90,7 @@ public class B_Huffman {
         return list.get(0);
     }
 
-    private class Node implements Comparable<Node> {
+    private class Node {
         String content;
         char letter;
         Node left;
@@ -104,9 +103,13 @@ public class B_Huffman {
             this.left = left;
             this.right = right;
         }
-        @Override
-        public int compareTo(Node o) {
-            return 0;
+        int getEncode (StringBuilder result, Node node, String temp, String input, int i) {
+            if (node.content != null && node.content.equals(temp)) {
+                result.append(node.letter);
+                return i;
+            } else
+                i = (input.charAt(i) == '1') ? node.right.getEncode(result, node.right, temp + input.charAt(i), input, ++i) : node.left.getEncode(result, node.left,temp + input.charAt(i), input, ++i);
+            return i;
         }
     }
 

@@ -43,21 +43,70 @@ public class C_HeapMax {
         //Будет мало? Ну тогда можете его собрать как Generic и/или использовать в варианте B
         private List<Long> heap = new ArrayList<>();
 
-        int siftDown(int i) { //просеивание вверх
+        int siftDown(int i) { //просеивание вниз
 
             return i;
         }
 
-        int siftUp(int i) { //просеивание вниз
+        int siftUp(int i, Long[] tempArr) { //просеивание вверх
+            if (tempArr[i] > tempArr[(i - 1) / 2]) {
+                swap(i, (i - 1) / 2, tempArr);
+                i = (i - 1) / 2;
+                siftUp(i, tempArr);
+            }
+            return i; //мб и void?
+        }
 
-            return i;
+        private void swap(int firstpos, int secondpos, Long[] tempArr)
+        {
+            Long tmp = tempArr[firstpos];
+            tempArr[firstpos] = tempArr[secondpos];
+            tempArr[secondpos] = tmp;
         }
 
         void insert(Long value) { //вставка
+            heap.add(value);
+            Long[] tempArr = new Long[heap.size()];
+            for (int i = 0; i < heap.size(); i++)
+                tempArr[i] = heap.get(i);
+
+            heap.clear();
+
+            int current = tempArr.length - 1;
+            siftUp(current, tempArr);
+            for (int i = 0; i < tempArr.length; i++)
+                heap.add(tempArr[i]);
+            /*while (tempArr[current] > tempArr[(current - 1) / 2]) {
+                swap(current, (current - 1) / 2, tempArr);
+                current = (current - 1) / 2;
+            }*/
+
+            //Можно убрать лист-глист и просто
+            /*Heap[size] = element;
+
+            int current = size;
+            while (Heap[current] > Heap[parent(current)]) {
+                swap(current, parent(current));
+                current = parent(current);
+            }
+            size++;*/
+            // Однако для этого надо сразу знать максимальное значение элементов + хранить в конструкторе size данного массива, показывающий кол-во заполненных элементов
         }
 
         Long extractMax() { //извлечение и удаление максимума
             Long result = null;
+            Long[] tempArr = new Long[heap.size()];
+            for (int i = 0; i < heap.size(); i++)
+                tempArr[i] = heap.get(i);
+
+            result = tempArr[0];
+            tempArr[0] = tempArr[tempArr.length - 1];
+
+            heap.clear();
+
+            for (int i = 0; i < tempArr.length - 1; i++) {
+                heap.add(tempArr[i]);
+            }
 
             return result;
         }
@@ -67,15 +116,15 @@ public class C_HeapMax {
     //эта процедура читает данные из файла, ее можно не менять.
     Long findMaxValue(InputStream stream) {
         Long maxValue=0L;
-        MaxHeap heap = new MaxHeap();
         //прочитаем строку для кодирования из тестового файла
         Scanner scanner = new Scanner(stream);
         Integer count = scanner.nextInt();
+        MaxHeap heap = new MaxHeap();
         for (int i = 0; i < count; ) {
             String s = scanner.nextLine();
             if (s.equalsIgnoreCase("extractMax")) {
                 Long res=heap.extractMax();
-                if (res!=null && res>maxValue) maxValue=res;
+                if (res != null && res > maxValue) maxValue = res;
                 System.out.println();
                 i++;
             }
