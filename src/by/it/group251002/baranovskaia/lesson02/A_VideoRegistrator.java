@@ -2,6 +2,7 @@ package by.it.group251002.baranovskaia.lesson02;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 /*
 Даны события events
 реализуйте метод calcStartTimes, так, чтобы число включений регистратора на
@@ -29,6 +30,17 @@ public class A_VideoRegistrator {
         //Подготовка к жадному поглощению массива событий
         //hint: сортировка Arrays.sort обеспечит скорость алгоритма
         //C*(n log n) + C1*n = O(n log n)
+        Arrays.sort(events);
+        while (i <= events.length - 1) {
+            result.add(events[i]);
+            double shutdown = events[i] + workDuration;
+            i++;
+            while (i<=events.length-1 && events[i]<= shutdown){
+                i++;
+            }
+        }
+        return result;
+
 
         //пока есть незарегистрированные события
         //получим одно событие по левому краю
@@ -36,9 +48,6 @@ public class A_VideoRegistrator {
         //вычислим момент окончания работы видеокамеры
         //и теперь пропустим все покрываемые события
         //за время до конца работы, увеличивая индекс
-
-
-
-        return result;                        //вернем итог
+                    //вернем итог
     }
 }
