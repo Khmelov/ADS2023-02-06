@@ -14,6 +14,8 @@ package by.it.group251001.karpekov.lesson02;
  */
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class C_GreedyKnapsack {
@@ -35,12 +37,17 @@ public class C_GreedyKnapsack {
         }
 
         @Override
-        public int compareTo(Item o) {
+        public int compareTo(Item other) {
             //тут может быть ваш компаратор
+            double unitcostThis = (double)cost / weight;
+            double unitcostOther = (double)other.cost / other.weight;
 
-
-            return 0;
+            return Double.compare(unitcostThis, unitcostOther);
         }
+
+
+
+
     }
 
     double calc(File source) throws FileNotFoundException {
@@ -51,6 +58,10 @@ public class C_GreedyKnapsack {
         for (int i = 0; i < n; i++) { //создавая каждый конструктором
             items[i] = new Item(input.nextInt(), input.nextInt());
         }
+
+        //Отсортируем предметы
+        ItemSort(items);
+
         //покажем предметы
         for (Item item:items) {
             System.out.println(item);
@@ -64,6 +75,24 @@ public class C_GreedyKnapsack {
         //тут реализуйте алгоритм сбора рюкзака
         //будет особенно хорошо, если с собственной сортировкой
         //кроме того, можете описать свой компаратор в классе Item
+        int leftweight = W,
+            accumweight = 0;
+        for (int itemcheck = items.length - 1; itemcheck >=0; itemcheck--) {
+            Item bestitem = items[itemcheck];
+
+            if (bestitem.weight > leftweight) {
+                result += (bestitem.cost * ((double)leftweight / bestitem.weight));
+                itemcheck = -1;
+            }
+            else {
+                result += bestitem.cost;
+                leftweight -= bestitem.weight;
+
+                if (leftweight == 0) {
+                    itemcheck = -1;
+                }
+            }
+        }
 
         //ваше решение.
 
@@ -83,4 +112,32 @@ public class C_GreedyKnapsack {
         long finishTime = System.currentTimeMillis();
         System.out.printf("Общая стоимость %f (время %d)",costFinal,finishTime - startTime);
     }
+
+    //Мои штуки с itemами, которые странно работают
+
+    public static Item[] ItemSort(Item[] ItemMass) {
+        Item[] result = ItemMass;
+
+        for (int i = 0; i < result.length; i++) {
+
+            int min = i;
+            boolean newmin = false;
+
+            for (int j = i + 1; j < result.length; j++) {
+                if ( result[j].compareTo(result[min]) < 0)   {
+                    min = j;
+                    newmin = true;
+                }
+
+                if (newmin) {
+                    Item TempItem = result[i];
+                    result[i] = result[min];
+                    result[min] = TempItem;
+                }
+            }
+        }
+
+        return result;
+    }
+
 }

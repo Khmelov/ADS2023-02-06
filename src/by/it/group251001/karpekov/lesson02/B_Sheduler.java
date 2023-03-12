@@ -1,8 +1,6 @@
 package by.it.group251001.karpekov.lesson02;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 /*
 Даны интервальные события events
 реализуйте метод calcStartTimes, так, чтобы число принятых к выполнению
@@ -50,14 +48,42 @@ public class B_Sheduler {
         result = new ArrayList<>();
         //ваше решение.
 
-        //Sort by start, exclude out of bounds
+        //Event[] eventsBetween = new Event[events.length-1];     //удовлетворяющие промежутку
+        List<Event> eventsBetween;
+        eventsBetween = new ArrayList<>();
+        int border = 0;
+        for (int i = 0; i < events.length; i++){
+            if (events[i].start >= from && events[i].stop <= to){
+                eventsBetween.add(events[i]);
+                border++;
+            }
+        }
+        eventsBetween.sort(Comparator.comparingInt(Event -> Event.start));
+      // result = eventsBetween;
 
+       int ind = 0,
+                start, stop;
 
+        do {
 
+            start = eventsBetween.get(ind).start;
+            int checking = ind;
+            do {
+                if (eventsBetween.get(checking).stop < eventsBetween.get(ind).stop)
+                    ind = checking;
+                checking++;
+            } while (checking < border && eventsBetween.get(checking).start == start);
+            stop = eventsBetween.get(ind).stop;
+            result.add(eventsBetween.get(ind));
 
+            do {
+                ind++;
+            } while(ind < border && eventsBetween.get(ind).start < stop);
 
+        } while (ind < border);
 
 
         return result;          //вернем итог
     }
+    //public static boolean startIsLess
 }
