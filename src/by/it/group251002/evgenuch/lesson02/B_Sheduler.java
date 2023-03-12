@@ -47,12 +47,23 @@ public class B_Sheduler {
         //Начало и конец событий могут совпадать.
         List<Event> result;
         result = new ArrayList<>();
-        //ваше решение.
+        int start=from;
+        while (start<=to) {
+            boolean New=false;
+            int end = to;
+            for (int j=0;j<events.length;j++) {
+                if (start==events[j].start && ((events[j].stop-events[j].start)<(end-start))) {
+                    New=true;
+                    end=events[j].stop;
+                }
+            }
+            if (New) {
 
-
-
-
-
+                result.add( new Event(start,end));
+                start=end;
+            }
+            else start++;
+        }
 
         return result;          //вернем итог
     }

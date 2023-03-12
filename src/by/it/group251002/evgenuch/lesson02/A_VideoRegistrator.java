@@ -1,6 +1,7 @@
 package by.it.group251002.evgenuch.lesson02;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 /*
 Даны события events
@@ -23,8 +24,18 @@ public class A_VideoRegistrator {
         //events - события которые нужно зарегистрировать
         //timeWorkDuration время работы видеокамеры после старта
         List<Double> result;
+        Arrays.sort(events);
         result = new ArrayList<>();
-        int i=0;                              //i - это индекс события events[i]
+        double Nachalo = events[0];
+        int amount=events.length;
+        result.add(Nachalo);
+        for (int i = 0;i<amount;i++){
+            if (Nachalo + workDuration<events[i]){
+                Nachalo=events[i];
+                result.add(events[i]);
+            }
+        }
+                                     //i - это индекс события events[i]
         //Комментарии от проверочного решения сохранены для подсказки, но вы можете их удалить.
         //Подготовка к жадному поглощению массива событий
         //hint: сортировка Arrays.sort обеспечит скорость алгоритма
