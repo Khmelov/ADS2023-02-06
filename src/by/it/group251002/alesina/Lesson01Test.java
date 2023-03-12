@@ -1,4 +1,4 @@
-package by.it.group251002.alesina.lesson01;
+package by.it.group251002.alesina;
 
 import org.junit.Test;
 
