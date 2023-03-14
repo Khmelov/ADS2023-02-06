@@ -47,13 +47,12 @@ public class B_Sheduler {
         //Начало и конец событий могут совпадать.
         List<Event> result;
         result = new ArrayList<>();
-        //ваше решение.
 
 
 
 
 
 
-        return result;          //вернем итог
+        return result;
     }
 }

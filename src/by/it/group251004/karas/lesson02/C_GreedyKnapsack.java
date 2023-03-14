@@ -1,17 +1,5 @@
 package by.it.group251004.karas.lesson02;
-/*
-Даны
-1) объем рюкзака 4
-2) число возможных предметов 60
-3) сам набор предметов
-    100 50
-    120 30
-    100 50
-Все это указано в файле (by/it/a_khmelev/lesson02/greedyKnapsack.txt)
 
-Необходимо собрать наиболее дорогой вариант рюкзака для этого объема
-Предметы можно резать на кусочки (т.е. алгоритм будет жадным)
- */
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -36,7 +24,7 @@ public class C_GreedyKnapsack {
 
         @Override
         public int compareTo(Item o) {
-            //тут может быть ваш компаратор
+
 
 
             return 0;
