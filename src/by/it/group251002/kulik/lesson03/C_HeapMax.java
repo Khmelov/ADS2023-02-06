@@ -38,7 +38,7 @@ import java.util.Scanner;
 public class C_HeapMax {
 
     private class MaxHeap {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         //тут запишите ваше решение.
         //Будет мало? Ну тогда можете его собрать как Generic и/или использовать в варианте B
         private List<Long> heap = new ArrayList<>();
@@ -70,7 +70,7 @@ public class C_HeapMax {
                 heap.set((i - 1) / 2, temp);
             }
         }
-        void insert(Long value) { //вставка
+        void insert(Long value) {  // вставка
             heap.add(value);
             siftUp(heap.size() - 1);
         }
