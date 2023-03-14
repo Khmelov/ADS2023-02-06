@@ -59,9 +59,9 @@ public class B_Sheduler {
 
         int i = 0;
         while (i < events.length) {
-            int end = events[i].stop;
+            int endEvent = events[i].stop;
             result.add(events[i]);
-            while (i < events.length && end > events[i].start)
+            while (i < events.length && endEvent > events[i].start)
                 i++;
         }
 
