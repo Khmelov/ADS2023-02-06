@@ -2,15 +2,8 @@ package by.it.group251004.karas.lesson02;
 
 import java.util.ArrayList;
 import java.util.List;
-/*
-Даны интервальные события events
-реализуйте метод calcStartTimes, так, чтобы число принятых к выполнению
-непересекающихся событий было максимально.
-Алгоритм жадный. Для реализации обдумайте надежный шаг.
-*/
 
 public class B_Sheduler {
-    //событие у аудитории(два поля: начало и конец)
     static class Event {
         int start;
         int stop;
@@ -36,21 +29,41 @@ public class B_Sheduler {
                 new Event(8, 9),  new Event(4, 6), new Event(8, 10), new Event(7, 10)
         };
 
-        List<Event> starts = instance.calcStartTimes(events,0,10);  //рассчитаем оптимальное заполнение аудитории
-        System.out.println(starts);                                 //покажем рассчитанный график занятий
+        List<Event> starts = instance.calcStartTimes(events,0,10);
+        System.out.println(starts);
     }
 
     List<Event> calcStartTimes(Event[] events, int from, int to) {
-        //Events - события которые нужно распределить в аудитории
-        //в период [from, int] (включительно).
-        //оптимизация проводится по наибольшему числу непересекающихся событий.
-        //Начало и конец событий могут совпадать.
         List<Event> result;
         result = new ArrayList<>();
 
+        //sort
+        int space = events.length / 2;
+        while (space > 0) {
+            for (int i = 0; i < events.length - space; i++) {
+                int j = i;
+                Event temp = events[j + space];
+                while (j >= 0
+                        && (events[j].stop > temp.stop
+                        || (events[j].stop
+                        == temp.stop
+                        && events[j].start > temp.start))) {
+                    events[j + space] = events[j];
+                    events[j] = temp;
+                    j -= space;
+                }
+            }
 
+            space /= 2;
+        }
 
-
+        int i = 0;
+        while (i < events.length) {
+            int end = events[i].stop;
+            result.add(events[i]);
+            while (i < events.length && end > events[i].start)
+                i++;
+        }
 
 
         return result;
