@@ -43,71 +43,47 @@ public class C_HeapMax {
         //Будет мало? Ну тогда можете его собрать как Generic и/или использовать в варианте B
         private List<Long> heap = new ArrayList<>();
 
-        int siftDown(int i) { //просеивание вниз
+        void siftDown(int i) { //просеивание вниз
+            int leftChild = 2 * i + 1;
+            int rightChild = leftChild + 1; //2 * i + 2
+            int largest = i;
 
-            return i;
-        }
+            if (leftChild < heap.size() && heap.get(leftChild) > heap.get(largest))
+                largest = leftChild;
 
-        int siftUp(int i, Long[] tempArr) { //просеивание вверх
-            if (tempArr[i] > tempArr[(i - 1) / 2]) {
-                swap(i, (i - 1) / 2, tempArr);
-                i = (i - 1) / 2;
-                siftUp(i, tempArr);
+            if (rightChild < heap.size() && heap.get(rightChild) > heap.get(largest))
+                largest = rightChild;
+            if (largest != i) {
+                Swap(largest, i);
+                siftDown(largest);
             }
-            return i; //мб и void?
         }
 
-        private void swap(int firstpos, int secondpos, Long[] tempArr)
-        {
-            Long tmp = tempArr[firstpos];
-            tempArr[firstpos] = tempArr[secondpos];
-            tempArr[secondpos] = tmp;
+        private void Swap(int parent, int i) {
+            Long tmp = heap.get(parent);
+            heap.set(parent, heap.get(i));
+            heap.set(i, tmp);
+        }
+
+        void siftUp(int i) { //просеивание вверх
+            if (i < 1) return;
+            int parent = (i - 1) / 2;
+            if (heap.get(parent) < heap.get(i))
+                Swap(parent, i);
+            //Можно i = parent в if, и затем опять внести i в след метод
+            siftUp(parent);
         }
 
         void insert(Long value) { //вставка
             heap.add(value);
-            Long[] tempArr = new Long[heap.size()];
-            for (int i = 0; i < heap.size(); i++)
-                tempArr[i] = heap.get(i);
-
-            heap.clear();
-
-            int current = tempArr.length - 1;
-            siftUp(current, tempArr);
-            for (int i = 0; i < tempArr.length; i++)
-                heap.add(tempArr[i]);
-            /*while (tempArr[current] > tempArr[(current - 1) / 2]) {
-                swap(current, (current - 1) / 2, tempArr);
-                current = (current - 1) / 2;
-            }*/
-
-            //Можно убрать лист-глист и просто
-            /*Heap[size] = element;
-
-            int current = size;
-            while (Heap[current] > Heap[parent(current)]) {
-                swap(current, parent(current));
-                current = parent(current);
-            }
-            size++;*/
-            // Однако для этого надо сразу знать максимальное значение элементов + хранить в конструкторе size данного массива, показывающий кол-во заполненных элементов
+            siftUp(heap.size()-1);
         }
 
         Long extractMax() { //извлечение и удаление максимума
-            Long result = null;
-            Long[] tempArr = new Long[heap.size()];
-            for (int i = 0; i < heap.size(); i++)
-                tempArr[i] = heap.get(i);
-
-            result = tempArr[0];
-            tempArr[0] = tempArr[tempArr.length - 1];
-
-            heap.clear();
-
-            for (int i = 0; i < tempArr.length - 1; i++) {
-                heap.add(tempArr[i]);
-            }
-
+            if (heap.size() == 0)
+                return 0L;
+            Long result = heap.remove(0);
+            siftDown(0);
             return result;
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
@@ -133,7 +109,7 @@ public class C_HeapMax {
                 if (p[0].equalsIgnoreCase("insert"))
                     heap.insert(Long.parseLong(p[1]));
                 i++;
-            //System.out.println(heap); //debug
+                //System.out.println(heap); //debug
             }
         }
         return maxValue;
