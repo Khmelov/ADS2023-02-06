@@ -61,12 +61,11 @@ public class B_Sheduler {
 
         Arrays.sort(events, SortAscendingStop);
 
-        for (int i = 0, stop = 0; i < events.length; i++){
+        for (int i = 0, stop = 0; i < events.length; i++)
             if (events[i].start >= stop){
                 stop = events[i].stop;
                 result.add(events[i]);
             }
-        }
 
         return result;          //вернем итог
     }
