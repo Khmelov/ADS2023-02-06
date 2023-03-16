@@ -62,7 +62,9 @@ public class B_Sheduler {
         Comparator<Event> sorting=new sorting();
         Arrays.sort(events,sorting);
         int i=0;
-        while (i< events.length){
+        while(events[i].start<from)
+            i++;
+        while ((i< events.length) && (events[i].stop<=to)){
             result.add(events[i]);
             int x=i;
             while ((i<events.length) &&(events[i].start<events[x].stop) ){
