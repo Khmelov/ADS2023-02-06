@@ -1,4 +1,4 @@
-package artiomkiseliov.lesson01.lesson01;
+package by.it.group251002.voevoda.lesson01;
 
 import org.junit.Test;
 
