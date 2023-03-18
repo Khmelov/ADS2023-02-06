@@ -13,7 +13,7 @@ public class Lesson02Test {
     Поля:
     Name:               Test Zhavrid (тут ваша фамилия)
     Test kind:          All in package
-    Package:            by.it.zhavrid (тут ваша фамилия)
+    Package:            by.it.Zhavrid (тут ваша фамилия)
     Search for test:    In whole project
     */
 
