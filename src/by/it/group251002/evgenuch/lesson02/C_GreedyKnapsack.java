@@ -14,6 +14,8 @@ package by.it.group251002.evgenuch.lesson02;
  */
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class C_GreedyKnapsack {
@@ -42,7 +44,11 @@ public class C_GreedyKnapsack {
             return 0;
         }
     }
-
+    static class Sort implements Comparator<Item> {
+        public int compare (Item a,Item b){
+            return b.cost-a.cost;
+        }
+    }
     double calc(File source) throws FileNotFoundException {
         Scanner input = new Scanner(source);
         int n = input.nextInt();      //сколько предметов в файле
@@ -66,7 +72,21 @@ public class C_GreedyKnapsack {
         //кроме того, можете описать свой компаратор в классе Item
 
         //ваше решение.
-
+        Arrays.sort(items, new Sort());
+        boolean NotFull=true;
+        int i=0;
+        while (i < n && NotFull) {
+            if (items[i].weight<W) {
+                W -= items[i].weight;
+                result += items[i].weight*items[i].cost;
+            }
+            else
+            {
+                result+= W*items[i].cost;
+                NotFull=false;
+            }
+            i++;
+        }
 
 
 
