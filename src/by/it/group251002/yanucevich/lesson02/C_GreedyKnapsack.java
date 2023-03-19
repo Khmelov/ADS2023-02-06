@@ -1,4 +1,4 @@
-package by.it.group251003.pankratiev.lesson02;
+package by.it.group251002.yanucevich.lesson02;
 /*
 Даны
 1) объем рюкзака 4
@@ -15,7 +15,6 @@ package by.it.group251003.pankratiev.lesson02;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Scanner;
 
 public class C_GreedyKnapsack {
@@ -23,12 +22,9 @@ public class C_GreedyKnapsack {
         int cost;
         int weight;
 
-        double PricePerWeight;
-
         Item(int cost, int weight) {
             this.cost = cost;
             this.weight = weight;
-            PricePerWeight = (double) cost / weight;
         }
 
         @Override
@@ -40,9 +36,13 @@ public class C_GreedyKnapsack {
         }
 
         @Override
-        public int compareTo(Item item) {
-            //тут может быть ваш компаратор
-            return Double.compare(this.PricePerWeight, item.PricePerWeight);
+        public int compareTo(Item o) {  // works??
+            if ((this.cost/this.weight<o.cost/o.weight)){
+                return 1;
+            } else if ((this.cost/this.weight>o.cost/o.weight)) {
+                return -1;
+            }
+            return 0;
         }
     }
 
@@ -61,24 +61,43 @@ public class C_GreedyKnapsack {
         System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
 
         //тут необходимо реализовать решение задачи
-        //итогом является максимально возможная стоимость вещей в рюкзаке
+        //итогом является максимально воможная стоимость вещей в рюкзаке
         //вещи можно резать на кусочки (непрерывный рюкзак)
         double result = 0;
         //тут реализуйте алгоритм сбора рюкзака
+        //будет особенно хорошо, если с собственной сортировкой
+        //кроме того, можете описать свой компаратор в классе Item
 
         //ваше решение.
 
-        Arrays.sort(items, Comparator.reverseOrder());
+        Arrays.sort(items);
+/*
+        for(int i =1;i<=n-1;i++){
+            for (int j=n-1;j>=i;j--) {
+                if (items[j].cost/items[j].weight>items[j-1].cost/items[j-1].weight){
+                    Item temp = items[j];
+                    items[j] = items[j-1];
+                    items[j-1] = temp;
+                }
+            }
+        }
 
-        for (int i = 0, CurrW = 0; (i < items.length) && (CurrW < W); i++)
-            if (CurrW + items[i].weight > W) {
-                result += items[i].PricePerWeight * (W - CurrW);
-                CurrW = W;
+ */
+
+        int i=0;
+        int freeW=W;
+        int WAdd;
+        while ((freeW>0)&&(i<=items.length)){
+            if (freeW>items[i].weight){
+                WAdd=items[i].weight;
             }
             else {
-                result += items[i].cost;
-                CurrW += items[i].weight;
+                WAdd=freeW;
             }
+            result += items[i].cost / (items[i].weight/ WAdd);
+            freeW -= WAdd;
+            i++;
+        }
 
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
         return result;

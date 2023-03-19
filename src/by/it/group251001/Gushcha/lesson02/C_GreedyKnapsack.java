@@ -1,4 +1,4 @@
-package by.it.group251003.pankratiev.lesson02;
+package by.it.group251001.Gushcha.lesson02;
 /*
 Даны
 1) объем рюкзака 4
@@ -14,8 +14,6 @@ package by.it.group251003.pankratiev.lesson02;
  */
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Scanner;
 
 public class C_GreedyKnapsack {
@@ -23,12 +21,9 @@ public class C_GreedyKnapsack {
         int cost;
         int weight;
 
-        double PricePerWeight;
-
         Item(int cost, int weight) {
             this.cost = cost;
             this.weight = weight;
-            PricePerWeight = (double) cost / weight;
         }
 
         @Override
@@ -40,9 +35,11 @@ public class C_GreedyKnapsack {
         }
 
         @Override
-        public int compareTo(Item item) {
+        public int compareTo(Item o) {
             //тут может быть ваш компаратор
-            return Double.compare(this.PricePerWeight, item.PricePerWeight);
+
+
+            return 0;
         }
     }
 
@@ -61,24 +58,18 @@ public class C_GreedyKnapsack {
         System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
 
         //тут необходимо реализовать решение задачи
-        //итогом является максимально возможная стоимость вещей в рюкзаке
+        //итогом является максимально воможная стоимость вещей в рюкзаке
         //вещи можно резать на кусочки (непрерывный рюкзак)
         double result = 0;
         //тут реализуйте алгоритм сбора рюкзака
+        //будет особенно хорошо, если с собственной сортировкой
+        //кроме того, можете описать свой компаратор в классе Item
 
         //ваше решение.
 
-        Arrays.sort(items, Comparator.reverseOrder());
 
-        for (int i = 0, CurrW = 0; (i < items.length) && (CurrW < W); i++)
-            if (CurrW + items[i].weight > W) {
-                result += items[i].PricePerWeight * (W - CurrW);
-                CurrW = W;
-            }
-            else {
-                result += items[i].cost;
-                CurrW += items[i].weight;
-            }
+
+
 
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
         return result;
