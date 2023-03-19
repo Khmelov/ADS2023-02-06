@@ -14,10 +14,7 @@ package by.it.group251001.markostapchuk.lesson02;
  */
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.Scanner;
-
-import static java.lang.Math.min;
 
 public class C_GreedyKnapsack {
     private static class Item implements Comparable<Item> {
