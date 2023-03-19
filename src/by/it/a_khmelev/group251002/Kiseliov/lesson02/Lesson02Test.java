@@ -1,4 +1,4 @@
-package artiomkiseliov.lesson01.lesson02;
+package by.it.a_khmelev.group251002.Kiseliov.lesson02;
 
 import org.junit.Test;
 

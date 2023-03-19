@@ -1,4 +1,4 @@
-package artiomkiseliov.lesson01.lesson02;
+package by.it.group251002.Kiseliov.lesson02;
 
 import java.util.ArrayList;
 import java.util.Arrays;
