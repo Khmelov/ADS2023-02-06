@@ -25,6 +25,7 @@ public class Lesson02Test {
         List<Double> starts=instance.calcStartTimes(events,1); //рассчитаем моменты старта, с длинной сеанса 1
         boolean ok=starts.toString().equals("[1.0, 2.2, 3.7, 5.5, 8.1]");
         assertTrue("slowA failed", ok);
+
     }
 
     @Test(timeout = 2000)
