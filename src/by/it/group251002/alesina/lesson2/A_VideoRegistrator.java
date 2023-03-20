@@ -26,13 +26,13 @@ public class A_VideoRegistrator {
         List<Double> result;
         Arrays.sort(events);
         result = new ArrayList<>();
-        double StartEv = events[0];
-        result.add(StartEv);
+        double StartEvent = events[0];
+        result.add(StartEvent);
         for (int i=1;i<events.length;i++)
         {
-            if (StartEv+workDuration<events[i])
+            if (StartEvent+workDuration<events[i])
             {
-                StartEv = events[i];
+                StartEvent = events[i];
                 result.add(events[i]);
             }
         }                         //i - это индекс события events[i]

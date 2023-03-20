@@ -52,17 +52,17 @@ public class B_Sheduler {
         int i = from;
         while (i<=to) {
             boolean NewEvent=false; //like christmas eve;
-            int EndEv = to;
+            int EndEvent = to;
             for (int j=0;j<events.length;j++) {
-                if (i==events[j].start && ((events[j].stop-events[j].start)<(EndEv-i))) {
+                if (i==events[j].start && ((events[j].stop-events[j].start)<(EndEvent-i))) {
                     NewEvent=true;
-                    EndEv=events[j].stop;
+                    EndEvent=events[j].stop;
                 }
             }
             if (NewEvent) {
 
-                result.add( new Event(i,EndEv));
-                i=EndEv;
+                result.add( new Event(i,EndEvent));
+                i=EndEvent;
             }
             else i++;
         }

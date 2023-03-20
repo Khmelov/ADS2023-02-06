@@ -54,7 +54,7 @@ public class C_GreedyKnapsack {
     double calc(File source) throws FileNotFoundException {
         Scanner input = new Scanner(source);
         int n = input.nextInt();      //сколько предметов в файле
-        int W = input.nextInt();      //какой вес у рюкзака
+        int w = input.nextInt();      //какой вес у рюкзака
         Item[] items = new Item[n];   //получим список предметов
         for (int i = 0; i < n; i++) { //создавая каждый конструктором
             items[i] = new Item(input.nextInt(), input.nextInt());
@@ -63,7 +63,7 @@ public class C_GreedyKnapsack {
         for (Item item:items) {
             System.out.println(item);
         }
-        System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
+        System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,w);
 
         //тут необходимо реализовать решение задачи
         //итогом является максимально воможная стоимость вещей в рюкзаке
@@ -72,20 +72,20 @@ public class C_GreedyKnapsack {
         for (Item item:items) {
             System.out.println(item);
         }
-        System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
+        System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,w);
         double result = 0;
         int i = 0;
         boolean NotFull = true;
         while (i < n && NotFull)
         {
-            if (items[i].weight < W)
+            if (items[i].weight < w)
             {
-                W -= items[i].weight;
+                w -= items[i].weight;
                 result += items[i].cost * items[i].weight;
             }
             else
             {
-                result += items[i].cost * W;
+                result += items[i].cost * w;
                 NotFull = false;
             }
             i++;
