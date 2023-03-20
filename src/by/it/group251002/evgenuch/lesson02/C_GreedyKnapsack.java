@@ -56,6 +56,7 @@ public class C_GreedyKnapsack {
         Item[] items = new Item[n];   //получим список предметов
         for (int i = 0; i < n; i++) { //создавая каждый конструктором
             items[i] = new Item(input.nextInt(), input.nextInt());
+            items[i].cost/=items[i].weight;
         }
         //покажем предметы
         for (Item item:items) {
@@ -70,12 +71,11 @@ public class C_GreedyKnapsack {
         //тут реализуйте алгоритм сбора рюкзака
         //будет особенно хорошо, если с собственной сортировкой
         //кроме того, можете описать свой компаратор в классе Item
-
         //ваше решение.
-        Arrays.sort(items, new Sort());
+        Arrays.sort(items, new Sort()); //Sort po konc
         boolean NotFull=true;
         int i=0;
-        while (i < n && NotFull) {
+        while (i < n && NotFull) {     //Propusk sob
             if (items[i].weight<W) {
                 W -= items[i].weight;
                 result += items[i].weight*items[i].cost;
@@ -85,7 +85,7 @@ public class C_GreedyKnapsack {
                 result+= W*items[i].cost;
                 NotFull=false;
             }
-            i++;
+            i++;    //Take eshe sob
         }
 
 
