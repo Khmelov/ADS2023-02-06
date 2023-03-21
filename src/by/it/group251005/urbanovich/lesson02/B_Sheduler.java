@@ -1,9 +1,7 @@
-package by.it.group251003.pankratiev.lesson02;
+package by.it.group251005.urbanovich.lesson02;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Arrays;
-import java.util.Comparator;
 /*
 Даны интервальные события events
 реализуйте метод calcStartTimes, так, чтобы число принятых к выполнению
@@ -41,7 +39,16 @@ public class B_Sheduler {
         List<Event> starts = instance.calcStartTimes(events,0,10);  //рассчитаем оптимальное заполнение аудитории
         System.out.println(starts);                                 //покажем рассчитанный график занятий
     }
-
+    void sortArr(Event[] events){
+        Event temp;
+        for(int i=1;i<events.length;i++) {
+            for (int j = i; j > 0 && (events[j - 1].start >= events[j].start) && (events[j - 1].stop >=events[j].stop); j--) {
+                temp = events[j - 1];
+                events[j - 1] = events[j];
+                events[j] = temp;
+            }
+        }
+    }
     List<Event> calcStartTimes(Event[] events, int from, int to) {
         //Events - события которые нужно распределить в аудитории
         //в период [from, int] (включительно).
@@ -49,23 +56,20 @@ public class B_Sheduler {
         //Начало и конец событий могут совпадать.
         List<Event> result;
         result = new ArrayList<>();
+        sortArr(events);
         //ваше решение.
-
-        Comparator<Event> SortAscendingStop = new Comparator<Event>() {
-            @Override
-            public int compare(Event first, Event second) {
-                return Integer.compare(first.stop, second.stop);
+        int i=0;
+        int stop;
+        while(i<events.length){
+           stop = events[i].stop;
+            result.add(events[i]);
+            while((i<events.length)&&(events[i].start<stop)){
+                i++;
             }
+        }
 
-        };
 
-        Arrays.sort(events, SortAscendingStop);
 
-        for (int i = 0, stop = 0; i < events.length; i++)
-            if (events[i].start >= stop){
-                stop = events[i].stop;
-                result.add(events[i]);
-            }
 
         return result;          //вернем итог
     }
