@@ -1,4 +1,4 @@
-package by.it.group251003.buhvalova.lesson01;
+package group251003.Buhvalova_Kate.lesson01.lesson01;
 
 import java.math.BigInteger;
 
