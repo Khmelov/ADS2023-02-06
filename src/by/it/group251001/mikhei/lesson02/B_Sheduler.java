@@ -34,7 +34,6 @@ public class B_Sheduler {
                 .sorted(Comparator.comparingInt(event -> event.stop))
                 .toList();
 
-
         result.add(eventList.get(0));
         for (int i = 1; i < eventList.size(); i++) {
             if (eventList.get(i).start < result.get(result.size() - 1).stop) continue;
