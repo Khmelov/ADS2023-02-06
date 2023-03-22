@@ -1,4 +1,4 @@
-package by.it.group251003.evt.lesson2;
+package by.it.group251003.evt.lesson02;
 /*
 Даны
 1) объем рюкзака 4
@@ -14,6 +14,8 @@ package by.it.group251003.evt.lesson2;
  */
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class C_GreedyKnapsack {
@@ -21,9 +23,12 @@ public class C_GreedyKnapsack {
         int cost;
         int weight;
 
+        double PricePerWeight;
+
         Item(int cost, int weight) {
             this.cost = cost;
             this.weight = weight;
+            PricePerWeight = (double) cost / weight;
         }
 
         @Override
@@ -35,52 +40,9 @@ public class C_GreedyKnapsack {
         }
 
         @Override
-        public int compareTo(Item o) {
+        public int compareTo(Item item) {
             //тут может быть ваш компаратор
-            if ((double)this.cost / this.weight == (double)o.cost / o.weight)
-                return 0;
-            if ((double)this.cost / this.weight > (double)o.cost / o.weight)
-                return 1;
-            return -1;
-        }
-
-    }
-    public void myMergeSort(Item[] items) {
-        int n = items.length;
-        if (n == 1)
-            return;
-        int mid = n / 2;
-        Item[] left = new Item[mid];
-        Item[] right = new Item[n - mid];
-        for (int i = 0; i < mid; i++) left[i] = items[i];
-        for (int i = 0; i < n - mid; i++) right[i] = items[mid + i];
-        myMergeSort(left);
-        myMergeSort(right);
-        merge(items, left, right);
-    }
-    private void merge(Item[] items, Item[] left, Item[] right) {
-        int leftInd = 0, rightInd = 0, itemInd = 0;
-
-        while (leftInd < left.length && rightInd < right.length) {
-            if (left[leftInd].compareTo(right[rightInd]) == 1) {
-                items[itemInd] = left[leftInd];
-                ++leftInd;
-            } else {
-                items[itemInd] = right[rightInd];
-                ++rightInd;
-            }
-            ++itemInd;
-
-        }
-        while (leftInd < left.length) {
-            items[itemInd] = left[leftInd];
-            ++leftInd;
-            ++itemInd;
-        }
-        while (rightInd < right.length) {
-            items[itemInd] = right[rightInd];
-            ++rightInd;
-            ++itemInd;
+            return Double.compare(this.PricePerWeight, item.PricePerWeight);
         }
     }
 
@@ -99,27 +61,25 @@ public class C_GreedyKnapsack {
         System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
 
         //тут необходимо реализовать решение задачи
-        //итогом является максимально воможная стоимость вещей в рюкзаке
+        //итогом является максимально возможная стоимость вещей в рюкзаке
         //вещи можно резать на кусочки (непрерывный рюкзак)
         double result = 0;
-        myMergeSort(items);
-        int currWeight = W;
-        int i = 0;
-        while (currWeight != 0 && i < items.length) {
-            if (currWeight >= items[i].weight) {
-                currWeight -= items[i].weight;
-                result += items[i].cost;
-            } else { // currWeight < items[i].weight
-              result += ((double)currWeight / items[i].weight) * items[i].cost;
-              currWeight = 0;
-            }
-            i++;
-        }
         //тут реализуйте алгоритм сбора рюкзака
-        //будет особенно хорошо, если с собственной сортировкой
-        //кроме того, можете описать свой компаратор в классе Item
 
         //ваше решение.
+
+        Arrays.sort(items, Comparator.reverseOrder());
+
+        for (int i = 0, CurrW = 0; (i < items.length) && (CurrW < W); i++ ){
+            if (CurrW + items[i].weight > W) {
+                result += items[i].PricePerWeight * (W - CurrW);
+                CurrW = W;
+            }
+            else {
+                result += items[i].cost;
+                CurrW += items[i].weight;
+            }
+        };
 
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
         return result;

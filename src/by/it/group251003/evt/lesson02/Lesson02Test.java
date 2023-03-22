@@ -1,4 +1,4 @@
-package by.it.group251003.evt.lesson2;
+package by.it.group251003.evt.lesson02;
 
 import org.junit.Test;
 

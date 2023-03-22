@@ -1,4 +1,4 @@
-package by.it.group251003.evt.lesson2;
+package by.it.group251003.evt.lesson02;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,33 +21,24 @@ public class A_VideoRegistrator {
     }
     //модификаторы доступа опущены для возможности тестирования
     List<Double> calcStartTimes(double[] events, double workDuration){
+
         //events - события которые нужно зарегистрировать
         //timeWorkDuration время работы видеокамеры после старта
-        //i - это индекс события events[i]
-        //Комментарии от проверочного решения сохранены для подсказки, но вы можете их удалить.
-        //Подготовка к жадному поглощению массива событий
-        //hint: сортировка Arrays.sort обеспечит скорость алгоритма
-        //C*(n log n) + C1*n = O(n log n)
-
-        //пока есть незарегистрированные события
-        //получим одно событие по левому краю
-        //и запомним время старта видеокамеры
-        //вычислим момент окончания работы видеокамеры
-        //и теперь пропустим все покрываемые события
-        //за время до конца работы, увеличивая индекс
-
-        List<Double> result;
-        result = new ArrayList<>();
+        List<Double> result = new ArrayList<>();
 
         Arrays.sort(events);
-        for (int i = 0, n = events.length; i < n; ) {
-            double timeStart = events[i];
-            result.add(timeStart);
-            while ((i < n) && (events[i] - timeStart <= workDuration))
-                i++;
+
+        double StartOfEventDuration = events[0];
+        result.add(StartOfEventDuration);
+
+        for (int i = 1; i < events.length; i++) {
+            if (StartOfEventDuration + workDuration < events[i]){
+                StartOfEventDuration = events[i];
+                result.add(StartOfEventDuration);
+            }
         }
 
-
-        return result;                        //вернем итог
+        //вернем итог
+        return result;
     }
 }
