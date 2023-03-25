@@ -78,6 +78,11 @@ public class A_Huffman {
             this.left = left;
             this.right = right;
         }
+        InternalNode(){
+            super(0);
+            this.left = null;
+            this.right = null;
+        }
 
         @Override
         void fillCodes(String code) {
@@ -121,20 +126,43 @@ public class A_Huffman {
 
         Map<Character, Integer> count = new HashMap<>();
         //1. переберем все символы по очереди и рассчитаем их частоту в Map count
-            //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
+        //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
+        for (int i = 0; i < s.length(); i++){
+            char currChar = s.charAt(i);
+
+            if (!count.containsKey(currChar))
+                count.put(currChar, 1);
+            else
+                count.put(currChar, count.get(currChar) + 1);
+        }
 
         //2. перенесем все символы в приоритетную очередь в виде листьев
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
+        for (Map.Entry<Character, Integer> tmp: count.entrySet() ){
+            Node node = new LeafNode(tmp.getValue(), tmp.getKey());
+            priorityQueue.add(node);
+        }
 
         //3. вынимая по два узла из очереди (для сборки родителя)
         //и возвращая этого родителя обратно в очередь
         //построим дерево кодирования Хаффмана.
         //У родителя частоты детей складываются.
 
+        Node head = new InternalNode();
+        while (priorityQueue.size() != 1) {
+            Node leftNode = priorityQueue.poll();
+            Node rightNode = priorityQueue.poll();
+            head = new InternalNode(leftNode, rightNode);
+            priorityQueue.add(head);
+        }
+
         //4. последний из родителей будет корнем этого дерева
         //это будет последний и единственный элемент оставшийся в очереди priorityQueue.
         StringBuilder sb = new StringBuilder();
-        //.....
+        head.fillCodes("");
+
+        for (int i = 0; i < s.length(); i++)
+            sb.append(codes.get(s.charAt(i)));
 
         return sb.toString();
         //01001100100111
