@@ -7,7 +7,7 @@ import java.math.BigInteger;
  * без ограничений на размер результата (BigInteger)
  */
 
-public class FiboB {
+public class  FiboB {
 
     private long startTime = System.currentTimeMillis();
 
@@ -25,7 +25,16 @@ public class FiboB {
 
     BigInteger fastB(Integer n) {
         //здесь нужно реализовать вариант с временем O(n) и памятью O(n)
-        return BigInteger.ZERO;
+        BigInteger[] FibNumbers = new BigInteger[n];
+
+        FibNumbers[0] = BigInteger.ONE;
+        FibNumbers[1] = BigInteger.ONE;
+
+        for (int i = 2; i < FibNumbers.length; i++) {
+            FibNumbers[i] = FibNumbers[i-1].add(FibNumbers[i-2]);
+        }
+
+        return FibNumbers[n-1];
     }
 
 }
