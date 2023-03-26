@@ -1,9 +1,8 @@
-package by.it.group251003.pankratiev.lesson02;
+package by.it.group251004.ustsinovich.lesson02;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Arrays;
-import java.util.Comparator;
+import java.util.List;
 /*
 Даны интервальные события events
 реализуйте метод calcStartTimes, так, чтобы число принятых к выполнению
@@ -42,6 +41,23 @@ public class B_Sheduler {
         System.out.println(starts);                                 //покажем рассчитанный график занятий
     }
 
+    Event[] sortEvents(Event[] events) {
+        int gap = events.length / 2;
+        while (gap > 0) {
+            for (int i = 0; i < events.length - gap; i++) {
+                int j = i;
+                Event temp = events[j + gap];
+                while (j >= 0 && (events[j].stop > temp.stop || (events[j].stop == temp.stop && events[j].start > temp.start))) {
+                    events[j + gap] = events[j];
+                    events[j] = temp;
+                    j -= gap;
+                }
+            }
+            gap /= 2;
+        }
+        return events;
+    }
+
     List<Event> calcStartTimes(Event[] events, int from, int to) {
         //Events - события которые нужно распределить в аудитории
         //в период [from, int] (включительно).
@@ -50,23 +66,13 @@ public class B_Sheduler {
         List<Event> result;
         result = new ArrayList<>();
         //ваше решение.
-
-        Comparator<Event> SortAscendingStop = new Comparator<Event>() {
-            @Override
-            public int compare(Event first, Event second) {
-                return Integer.compare(first.stop, second.stop);
-            }
-
-        };
-
-        Arrays.sort(events, SortAscendingStop);
-
-        for (int i = 0, stop = 0; i < events.length; i++)
-            if (events[i].start >= stop){
-                stop = events[i].stop;
-                result.add(events[i]);
-            }
-
+        events = sortEvents(events);
+        for (int i = 0; i < events.length;) { //while i < events.length
+            int end = events[i].stop;
+            result.add(events[i]);
+            while (i < events.length && end > events[i].start)
+                i++;
+        }
         return result;          //вернем итог
     }
 }
