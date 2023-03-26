@@ -14,8 +14,6 @@ package by.it.group251001.politykina.lesson02;
  */
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Scanner;
 
 public class C_GreedyKnapsack {
@@ -44,13 +42,22 @@ public class C_GreedyKnapsack {
             return 0;
         }
     }
-
-    static class Mysort implements Comparator<Item> {
-        public int compare(Item a, Item b) {
-            return b.cost - a.cost;
+    void sorting(Item[] array, int low, int high) {
+        if (array.length == 0 )
+            return;
+        if (low >= high)
+            return;
+        for (int i = 0; i < high; i++) {
+            for (int j = i; j < high; j++) {
+                if (array[j].cost/array[j].weight > array[i].cost/array[i].weight) {
+                    Item temp = array[j];
+                    array[j] = array[i];
+                    array[i] = temp;
+                }
+            }
         }
-
     }
+
     double calc(File source) throws FileNotFoundException {
         Scanner input = new Scanner(source);
         int n = input.nextInt();      //сколько предметов в файле
@@ -68,34 +75,29 @@ public class C_GreedyKnapsack {
         //тут необходимо реализовать решение задачи
         //итогом является максимально воможная стоимость вещей в рюкзаке
         //вещи можно резать на кусочки (непрерывный рюкзак)
-        Arrays.sort(items, new Mysort());
-        for (Item item:items) {
-            System.out.println(item);
-        }
-        System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
         double result = 0;
-        int i = 0;
-        boolean NotEnough = true;
-        while (i < n && NotEnough)
-        {
-            if (items[i].weight < W)
-            {
-                W -= items[i].weight;
-                result += items[i].cost * items[i].weight;
-            }
-            else
-            {
-                result += items[i].cost * W;
-                NotEnough = false;
-            }
-            i++;
-        }
         //тут реализуйте алгоритм сбора рюкзака
         //будет особенно хорошо, если с собственной сортировкой
         //кроме того, можете описать свой компаратор в классе Item
 
         //ваше решение.
+        int min = 0;
+        int high = items.length;
+        int max_size = 60;
+        int i = 0;
+        sorting(items, min, high);
 
+        while (max_size > 0) {
+            if (max_size >= items[i].weight) {
+                result += items[i].cost;
+                max_size -= items[i].weight;
+            } else {
+                int weightCost = items[i].cost / items[i].weight;
+                result += weightCost * max_size;
+                max_size = 0;
+            }
+            i++;
+        }
 
 
 
@@ -103,6 +105,7 @@ public class C_GreedyKnapsack {
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
         return result;
     }
+
 
     public static void main(String[] args) throws FileNotFoundException {
         long startTime = System.currentTimeMillis();
