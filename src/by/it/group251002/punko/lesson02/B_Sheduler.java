@@ -1,9 +1,8 @@
-package by.it.group251003.pankratiev.lesson02;
+package by.it.group251002.punko.lesson02;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Arrays;
-import java.util.Comparator;
 /*
 Даны интервальные события events
 реализуйте метод calcStartTimes, так, чтобы число принятых к выполнению
@@ -47,26 +46,18 @@ public class B_Sheduler {
         //в период [from, int] (включительно).
         //оптимизация проводится по наибольшему числу непересекающихся событий.
         //Начало и конец событий могут совпадать.
-        List<Event> result;
-        result = new ArrayList<>();
-        //ваше решение.
-
-        Comparator<Event> SortAscendingStop = new Comparator<Event>() {
-            @Override
-            public int compare(Event first, Event second) {
-                return Integer.compare(first.stop, second.stop);
-            }
-
-        };
-
-        Arrays.sort(events, SortAscendingStop);
-
-        for (int i = 0, stop = 0; i < events.length; i++)
-            if (events[i].start >= stop){
-                stop = events[i].stop;
+        Arrays.sort(events, (a, b) -> a.stop - b.stop);
+        List<Event> result = new ArrayList<>();
+        int lasttime = from;
+        int i;
+        for (i=0;i<events.length;i++){
+           // for (Event event : events){
+            if (events[i].start>=lasttime && events[i].stop<=to){
                 result.add(events[i]);
+                lasttime = events[i].stop;
             }
-
+        }
+        //ваше решение.
         return result;          //вернем итог
     }
 }

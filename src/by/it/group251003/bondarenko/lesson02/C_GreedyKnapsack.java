@@ -1,4 +1,4 @@
-package by.it.group251003.pankratiev.lesson02;
+package by.it.group251003.bondarenko.lesson02;
 /*
 Даны
 1) объем рюкзака 4
@@ -23,12 +23,12 @@ public class C_GreedyKnapsack {
         int cost;
         int weight;
 
-        double PricePerWeight;
+        double pricePerWeight;
 
         Item(int cost, int weight) {
             this.cost = cost;
             this.weight = weight;
-            PricePerWeight = (double) cost / weight;
+            pricePerWeight = (double) cost / weight;
         }
 
         @Override
@@ -40,9 +40,9 @@ public class C_GreedyKnapsack {
         }
 
         @Override
-        public int compareTo(Item item) {
+        public int compareTo(Item o) {
             //тут может быть ваш компаратор
-            return Double.compare(this.PricePerWeight, item.PricePerWeight);
+            return Double.compare(this.pricePerWeight, o.pricePerWeight);
         }
     }
 
@@ -61,25 +61,29 @@ public class C_GreedyKnapsack {
         System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
 
         //тут необходимо реализовать решение задачи
-        //итогом является максимально возможная стоимость вещей в рюкзаке
+        //итогом является максимально воможная стоимость вещей в рюкзаке
         //вещи можно резать на кусочки (непрерывный рюкзак)
         double result = 0;
         //тут реализуйте алгоритм сбора рюкзака
-
+        //будет особенно хорошо, если с собственной сортировкой
+        //кроме того, можете описать свой компаратор в классе Item
         //ваше решение.
 
         Arrays.sort(items, Comparator.reverseOrder());
 
-        for (int i = 0, CurrW = 0; (i < items.length) && (CurrW < W); i++)
-            if (CurrW + items[i].weight > W) {
-                result += items[i].PricePerWeight * (W - CurrW);
-                CurrW = W;
-            }
-            else {
-                result += items[i].cost;
-                CurrW += items[i].weight;
-            }
+        int currWeight = 0;
+        int currItem = 0;
 
+        while (currItem < n && currWeight != W){
+            if (currWeight + items[currItem].weight < W){
+                result += items[currItem].cost;
+                currWeight += items[currItem].weight;
+                currItem++;
+            } else {
+                result += ((W-currWeight) / (double) items[currItem].weight)*items[currItem].cost;
+                currWeight = W;
+            }
+        }
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
         return result;
     }

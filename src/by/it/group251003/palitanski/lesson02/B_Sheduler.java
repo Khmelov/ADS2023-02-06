@@ -1,9 +1,8 @@
-package by.it.group251003.pankratiev.lesson02;
+package by.it.group251003.palitanski.lesson02;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Arrays;
-import java.util.Comparator;
+import java.util.List;
 /*
 Даны интервальные события events
 реализуйте метод calcStartTimes, так, чтобы число принятых к выполнению
@@ -44,28 +43,43 @@ public class B_Sheduler {
 
     List<Event> calcStartTimes(Event[] events, int from, int to) {
         //Events - события которые нужно распределить в аудитории
-        //в период [from, int] (включительно).
+        //в период [from, to] (включительно).
         //оптимизация проводится по наибольшему числу непересекающихся событий.
         //Начало и конец событий могут совпадать.
         List<Event> result;
         result = new ArrayList<>();
         //ваше решение.
+        Event temp;
 
-        Comparator<Event> SortAscendingStop = new Comparator<Event>() {
-            @Override
-            public int compare(Event first, Event second) {
-                return Integer.compare(first.stop, second.stop);
+        for ( int i = 0; i <= events.length - 1; i++) {
+            for ( int j = 0; j < events.length - i - 1; j++) {
+                if ( events[j].stop > events[j+1].stop ) {
+                    temp = events[j];
+                    events[j] = events[j+1];
+                    events[j + 1] = temp;
+                }
             }
+        }
 
-        };
-
-        Arrays.sort(events, SortAscendingStop);
-
-        for (int i = 0, stop = 0; i < events.length; i++)
-            if (events[i].start >= stop){
-                stop = events[i].stop;
+        int i = 0;
+        while  (i < events.length) {
+            if (from >= events[i].start) {
                 result.add(events[i]);
+                break;
             }
+            else i++;
+        }
+
+        int a =0;
+        while (i < events.length) {
+            if ( (events[i].start >= result.get(a).stop) & (events[i].stop <= to) ) {
+                result.add(events[i]);
+                a++;
+                i++;
+            }
+            else i++;
+        }
+
 
         return result;          //вернем итог
     }

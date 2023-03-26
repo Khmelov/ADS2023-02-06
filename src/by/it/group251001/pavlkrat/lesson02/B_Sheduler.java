@@ -1,9 +1,8 @@
-package by.it.group251003.pankratiev.lesson02;
+package by.it.group251001.pavlkrat.lesson02;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Arrays;
-import java.util.Comparator;
+import java.util.List;
 /*
 Даны интервальные события events
 реализуйте метод calcStartTimes, так, чтобы число принятых к выполнению
@@ -13,7 +12,7 @@ import java.util.Comparator;
 
 public class B_Sheduler {
     //событие у аудитории(два поля: начало и конец)
-    static class Event {
+    public static class Event implements Comparable<B_Sheduler.Event>{
         int start;
         int stop;
 
@@ -25,6 +24,12 @@ public class B_Sheduler {
         @Override
         public String toString() {
             return "("+ start +":" + stop + ")";
+        }
+
+        //@Override
+        public int compareTo(B_Sheduler.Event o) {
+
+            return ((this.start == o.start)?this.stop-o.stop:this.start-o.start);
         }
     }
 
@@ -49,23 +54,19 @@ public class B_Sheduler {
         //Начало и конец событий могут совпадать.
         List<Event> result;
         result = new ArrayList<>();
+        int lst = from;
         //ваше решение.
 
-        Comparator<Event> SortAscendingStop = new Comparator<Event>() {
-            @Override
-            public int compare(Event first, Event second) {
-                return Integer.compare(first.stop, second.stop);
+        Arrays.sort(events);
+
+        for (Event event : events) {
+            if (event.start >= lst) {
+                result.add(event);
+                lst = event.stop;
             }
+        }
 
-        };
 
-        Arrays.sort(events, SortAscendingStop);
-
-        for (int i = 0, stop = 0; i < events.length; i++)
-            if (events[i].start >= stop){
-                stop = events[i].stop;
-                result.add(events[i]);
-            }
 
         return result;          //вернем итог
     }
