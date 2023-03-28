@@ -62,18 +62,18 @@ public class B_Huffman {
         }
 
         String Code = scanner.next();
-        String answer = new String();
+        result = new StringBuilder();
         String buffer =new String();
         for(int i=0;i<length;i++)
         {
             buffer=buffer+Code.charAt(i);
-            if (Code.charAt(i)=='0' || i==length-1)
+            if (Code.charAt(i)=='0' || buffer.length()==count-1)
             {
-                answer+=text.get(buffer);
+                result.append(text.get(buffer));
                 buffer="";
             }
         }
-        result = new StringBuilder(answer);
+
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         return result.toString(); //01001100100111
     }
