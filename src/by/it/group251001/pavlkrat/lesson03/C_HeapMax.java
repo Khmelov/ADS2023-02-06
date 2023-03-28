@@ -87,6 +87,7 @@ public class C_HeapMax {
                 result = heap.get(0);
                 heap.set(0,heap.get(heap.size()-1));
                 heap.remove(heap.size()-1);
+                siftUp(0);
             }
             System.out.print(result);
             return result;
