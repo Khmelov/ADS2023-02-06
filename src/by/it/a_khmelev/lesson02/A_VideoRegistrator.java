@@ -1,7 +1,6 @@
 package by.it.a_khmelev.lesson02;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 /*
 Даны события events
@@ -25,8 +24,7 @@ public class A_VideoRegistrator {
         //timeWorkDuration время работы видеокамеры после старта
         List<Double> result;
         result = new ArrayList<>();
-        int i=0;  //i - это индекс события events[i]
-
+        int i=0;                              //i - это индекс события events[i]
         //Комментарии от проверочного решения сохранены для подсказки, но вы можете их удалить.
         //Подготовка к жадному поглощению массива событий
         //hint: сортировка Arrays.sort обеспечит скорость алгоритма
