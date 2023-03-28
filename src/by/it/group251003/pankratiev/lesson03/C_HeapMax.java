@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Collections;
 
 // Lesson 3. C_Heap.
 // Задача: построить max-кучу = пирамиду = бинарное сбалансированное дерево на массиве.
@@ -45,20 +46,53 @@ public class C_HeapMax {
 
         int siftDown(int i) { //просеивание вверх
 
+            int largest = i;
+
+            int left = 2 * i + 1;
+            if (left < heap.size() && heap.get(left) > heap.get(largest))
+                largest = left;
+
+            else {
+                int right = 2 * i + 2;
+                if (right < heap.size() && heap.get(right) > heap.get(largest))
+                    largest = right;
+            }
+
+            if (largest != i) {
+                Collections.swap(heap, i, largest);
+                return siftDown(largest);
+            }
+
             return i;
         }
 
         int siftUp(int i) { //просеивание вниз
 
+            int parent = (i - 1) / 2;
+
+            if (parent >= 0 && heap.get(i) > heap.get(parent)) {
+                Collections.swap(heap, i, parent);
+                return siftUp(parent);
+            }
+
             return i;
         }
 
         void insert(Long value) { //вставка
+            heap.add(value);
+            siftUp(heap.size() - 1);
+
         }
 
         Long extractMax() { //извлечение и удаление максимума
-            Long result = null;
 
+            if (heap.isEmpty())
+                return null;
+
+            Long result = heap.get(0);
+
+            heap.set(0, heap.remove(heap.size() - 1));
+            siftDown(0);
             return result;
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
