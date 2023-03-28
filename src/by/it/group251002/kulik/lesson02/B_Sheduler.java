@@ -1,9 +1,9 @@
-package by.it.group251003.pankratiev.lesson02;
+package by.it.group251002.kulik.lesson02;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Arrays;
 /*
 Даны интервальные события events
 реализуйте метод calcStartTimes, так, чтобы число принятых к выполнению
@@ -27,7 +27,6 @@ public class B_Sheduler {
             return "("+ start +":" + stop + ")";
         }
     }
-
     public static void main(String[] args) {
         B_Sheduler instance = new B_Sheduler();
         Event[] events = {  new Event(0, 3),  new Event(0, 1), new Event(1, 2), new Event(3, 5),
@@ -43,30 +42,17 @@ public class B_Sheduler {
     }
 
     List<Event> calcStartTimes(Event[] events, int from, int to) {
-        //Events - события которые нужно распределить в аудитории
-        //в период [from, int] (включительно).
-        //оптимизация проводится по наибольшему числу непересекающихся событий.
-        //Начало и конец событий могут совпадать.
-        List<Event> result;
-        result = new ArrayList<>();
-        //ваше решение.
+        List<Event> result = new ArrayList<>();
+        Arrays.sort(events, Comparator.comparingInt((Event event) -> event.stop));
 
-        Comparator<Event> SortAscendingStop = new Comparator<Event>() {
-            @Override
-            public int compare(Event first, Event second) {
-                return Integer.compare(first.stop, second.stop);
-            }
+        int i = 0;
+        while (i < events.length) { // go through sorted events
+            Event curr = events[i];
+            result.add(curr);
+            i += 1;
+            while (i < events.length && events[i].start < curr.stop) i += 1; // skip overlaps
+        }
 
-        };
-
-        Arrays.sort(events, SortAscendingStop);
-
-        for (int i = 0, stop = 0; i < events.length; i++)
-            if (events[i].start >= stop){
-                stop = events[i].stop;
-                result.add(events[i]);
-            }
-
-        return result;          //вернем итог
+        return result;
     }
 }
