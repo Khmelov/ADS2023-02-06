@@ -50,7 +50,7 @@ public class FiboC {
             curr = (prev + curr) % m;
             prev = temp;
         }
-        return prev % m;
+        return prev;
     }
     long fasterC(long n, int m) {
         //Решение сложно найти интуитивно
@@ -58,7 +58,7 @@ public class FiboC {
         //см. период Пизано
         long pisano = PisanoPeriod(m);
 
-        n %= pisano;
+        n %= pisano;//n = n % pisano
 
         if (n == 0L || n == 1L)
             return n;
