@@ -52,7 +52,7 @@ public class B_Sheduler {
             boolean New=false;
             int end = to;
             for (int j=0;j<events.length;j++) {
-                if (start==events[j].start && ((events[j].stop-events[j].start)<(end-start))) {
+                if (start==events[j].start && ((events[j].stop-events[j].start)<(end-start))) { //Condition for optimization
                     New=true;
                     end=events[j].stop;
                 }
