@@ -3,7 +3,8 @@ package by.it.group251005.ubozhenko.lesson03;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-
+import java.util.Map;
+import java.util.HashMap;
 // Lesson 3. B_Huffman.
 // Восстановите строку по её коду и беспрефиксному коду символов.
 
@@ -50,7 +51,23 @@ public class B_Huffman {
         Integer length = scanner.nextInt();
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         //тут запишите ваше решение
-
+        Map<String, Character> codes = new HashMap<>();
+        for (int i = 0; i < count; i++) {
+            Character ch = scanner.next().toCharArray()[0];
+            String temp = scanner.next();
+            codes.put(temp, ch);
+        }
+        String toEncode = scanner.next();
+        int i = 0;
+        String temp = "";
+        while (i < toEncode.length()){
+            temp += toEncode.charAt(i);
+            if (codes.containsKey(temp)){
+                result.append(codes.get(temp));
+                temp = "";
+            }
+            i++;
+        }
 
 
 
