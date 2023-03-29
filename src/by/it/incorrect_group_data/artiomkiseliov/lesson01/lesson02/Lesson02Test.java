@@ -1,4 +1,4 @@
-package by.it.a_khmelev.group251003.kapinskiy.lesson02;
+package by.it.incorrect_group_data.artiomkiseliov.lesson01.lesson02;
 
 import org.junit.Test;
 

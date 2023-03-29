@@ -1,4 +1,4 @@
-package artiomkiseliov.lesson01.lesson02;
+package by.it.incorrect_group_data.artiomkiseliov.lesson01.lesson02;
 
 import java.util.ArrayList;
 import java.util.Arrays;
