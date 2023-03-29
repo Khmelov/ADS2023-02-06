@@ -108,40 +108,57 @@ public class A_Huffman {
 
     //индекс данных из листьев
     static private Map<Character, String> codes = new TreeMap<>();
-
-
-    //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
     String encode(File file) throws FileNotFoundException {
-        //прочитаем строку для кодирования из тестового файла
         Scanner scanner = new Scanner(file);
         String s = scanner.next();
 
-        //все комментарии от тестового решения были оставлены т.к. это задание A.
-        //если они вам мешают их можно удалить
-
         Map<Character, Integer> count = new HashMap<>();
-        //1. переберем все символы по очереди и рассчитаем их частоту в Map count
-            //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
 
-        //2. перенесем все символы в приоритетную очередь в виде листьев
+        for (int i = 0; i < s.length(); i++) {
+            char currChar = s.charAt(i);
+            if (count.containsKey(currChar)) {
+                count.put(currChar, count.get(currChar) + 1);
+            }
+            else {
+                count.put(currChar, 1);
+            }
+        }
+
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
 
-        //3. вынимая по два узла из очереди (для сборки родителя)
-        //и возвращая этого родителя обратно в очередь
-        //построим дерево кодирования Хаффмана.
-        //У родителя частоты детей складываются.
+        for (char key : count.keySet()) {
+            priorityQueue.add(new LeafNode(count.get(key), key));
+        }
 
-        //4. последний из родителей будет корнем этого дерева
-        //это будет последний и единственный элемент оставшийся в очереди priorityQueue.
+        while (priorityQueue.size() > 1) {
+            priorityQueue.add(new InternalNode(priorityQueue.poll(), priorityQueue.poll()));
+        }
+
+        recursivelyFillCodes(priorityQueue.poll(), "");
+
         StringBuilder sb = new StringBuilder();
-        //.....
+        for (int i = 0; i < s.length(); i++) {
+            sb.append(codes.get(s.charAt(i)));
+        }
 
         return sb.toString();
-        //01001100100111
-        //01001100100111
     }
-    //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
 
+    private static void recursivelyFillCodes(Node root, String code) {
+
+        if (root == null) {
+            return;
+        }
+
+        if (root instanceof LeafNode) {
+            root.fillCodes(code);
+        }
+        else if (root instanceof InternalNode){
+            recursivelyFillCodes(((InternalNode) root).left, code + "0");
+            recursivelyFillCodes(((InternalNode) root).right, code + "1");
+        }
+
+    }
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
