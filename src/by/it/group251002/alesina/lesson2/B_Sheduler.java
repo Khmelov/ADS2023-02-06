@@ -59,6 +59,7 @@ public class B_Sheduler {
                     EndEvent=events[j].stop;
                 }
             }
+
             if (NewEvent) {
 
                 result.add( new Event(i,EndEvent));
