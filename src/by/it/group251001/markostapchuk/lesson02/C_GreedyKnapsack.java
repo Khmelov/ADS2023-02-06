@@ -36,8 +36,10 @@ public class C_GreedyKnapsack {
 
         @Override
         public int compareTo(Item o) {
-            //тут может быть ваш компаратор
 
+            if (this.cost / this.weight > o.cost / o.weight) {
+                return 1;
+            }
 
             return 0;
         }
@@ -56,20 +58,20 @@ public class C_GreedyKnapsack {
             System.out.println(item);
         }
         System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
-
-        //тут необходимо реализовать решение задачи
-        //итогом является максимально воможная стоимость вещей в рюкзаке
-        //вещи можно резать на кусочки (непрерывный рюкзак)
         double result = 0;
-        //тут реализуйте алгоритм сбора рюкзака
-        //будет особенно хорошо, если с собственной сортировкой
-        //кроме того, можете описать свой компаратор в классе Item
 
-        //ваше решение.
+        sort(items, 0, items.length - 1);
 
+        int i = 0;
+        while (items[i].weight <= W) {
+            result += items[i].cost;
+            W -= items[i].weight;
+            i++;
+        }
 
-
-
+        if (W > 0) {
+            result += W * 1.0 / items[i].weight * items[i].cost;
+        }
 
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
         return result;
@@ -83,4 +85,40 @@ public class C_GreedyKnapsack {
         long finishTime = System.currentTimeMillis();
         System.out.printf("Общая стоимость %f (время %d)",costFinal,finishTime - startTime);
     }
+
+    private static void sort(Item[] items, int low, int high) {
+
+        if (low > high) {
+            return;
+        }
+
+        int leftIndex = low;
+        int rightIndex = high - 1;
+        Item pivot = items[high];
+
+        while (leftIndex < rightIndex) {
+
+            while (items[leftIndex].compareTo(pivot) > 0 && leftIndex < rightIndex) {
+                leftIndex++;
+            }
+
+            while (items[rightIndex].compareTo(pivot) == 0 && leftIndex < rightIndex) {
+                rightIndex--;
+            }
+
+            swap(items, rightIndex, leftIndex);
+        }
+
+        swap(items, leftIndex, high);
+
+        sort(items, low, leftIndex - 1);
+        sort(items, leftIndex + 1, high);
+    }
+
+    private static void swap(Item[] items, int index1, int index2) {
+        Item temp = items[index1];
+        items[index1] = items[index2];
+        items[index2] = temp;
+    }
+
 }

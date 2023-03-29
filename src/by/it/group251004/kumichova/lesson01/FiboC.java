@@ -30,12 +30,12 @@ public class FiboC {
         long k = 0;
 
         mas[0] = 0;
-        mas[1] = 1%m;
-        mas[2] = 1%m;
+        mas[1] = 1 % m;
+        mas[2] = 1 % m;
 
         for(int i = 3; i < mas.length ; i++){
             mas[i] = (mas[i - 1] + mas[i - 2]) % m;
-            if ((mas[0]==mas[i-1]) && (mas[1]==mas[i])){
+            if ((mas[0] == mas[i-1]) && (mas[1] == mas[i])){
                 k = i-1;
                 break;
             }
