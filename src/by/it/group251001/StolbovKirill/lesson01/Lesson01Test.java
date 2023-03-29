@@ -42,3 +42,5 @@ public class Lesson01Test {
         assertTrue("fasterC failed 3", fibo.fasterC(999999999,321)==34L);
     }
 }
+
+

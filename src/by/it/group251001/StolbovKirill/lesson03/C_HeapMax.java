@@ -131,3 +131,4 @@ public class C_HeapMax {
     // "В реальном бою" все существенно иначе. Изучите и используйте коллекции
     // TreeSet, TreeMap, PriorityQueue и т.д. с нужным CompareTo() для объекта внутри.
 }
+

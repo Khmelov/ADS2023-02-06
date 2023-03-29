@@ -37,3 +37,4 @@ public class A_VideoRegistrator {
     }
 
 }
+
