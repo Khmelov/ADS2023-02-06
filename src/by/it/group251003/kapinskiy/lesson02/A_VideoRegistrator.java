@@ -1,4 +1,4 @@
-package by.it.a_khmelev.group251003.kapinskiy.lesson02;
+package by.it.group251003.kapinskiy.lesson02;
 
 import java.util.ArrayList;
 import java.util.Arrays;
