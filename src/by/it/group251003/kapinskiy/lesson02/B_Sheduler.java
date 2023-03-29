@@ -1,7 +1,10 @@
-package artiomkiseliov.lesson01.lesson02;
+package by.it.group251003.kapinskiy.lesson02;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+
 /*
 Даны интервальные события events
 реализуйте метод calcStartTimes, так, чтобы число принятых к выполнению
@@ -45,31 +48,33 @@ public class B_Sheduler {
         //в период [from, int] (включительно).
         //оптимизация проводится по наибольшему числу непересекающихся событий.
         //Начало и конец событий могут совпадать.
-
         List<Event> result;
         result = new ArrayList<>();
         //ваше решение.
-        int i=from;
-        while (i<=to) {
-            boolean NewEve=false; //like christmas eve;
-            int end = to;
-            for (int j=0;j<events.length;j++) {
-                if (i==events[j].start && ((events[j].stop-events[j].start)<(end-i))) {
-                    NewEve=true;
-                    end=events[j].stop;
+        int j = 0;
+        int mem = j;
+        int i = from;
+        Arrays.sort(events, Comparator.comparing(event -> event.start));
+        while(i<to) {
+            while ((events[j].start<i) && (j != events.length-1)){
+                j = j + 1;
+            }
+            while((events[j].start>i) && (i!=to)){
+                i = i + 1;
+            }
+            mem = j;
+            while (events[j].start == i) {
+                if (events[j].stop <= events[mem].stop) {
+                    mem = j;
                 }
+                j = j + 1;
             }
-            if (NewEve) {
+            if(events[mem].start>=i) {
+                result.add(events[mem]);
+            }
+            i = events[mem].stop;
 
-                result.add( new Event(i,end));
-                i=end;
-            }
-            else i++;
         }
-
-
-
-
 
         return result;          //вернем итог
     }

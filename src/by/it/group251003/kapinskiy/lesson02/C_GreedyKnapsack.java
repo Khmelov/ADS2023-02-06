@@ -1,4 +1,4 @@
-package by.it.a_khmelev.group251003.kapinskiy.lesson02;
+package by.it.group251003.kapinskiy.lesson02;
 /*
 Даны
 1) объем рюкзака 4
@@ -18,7 +18,6 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Scanner;
-import java.util.Comparator;
 
 public class C_GreedyKnapsack {
     private static class Item implements Comparable<Item> {
