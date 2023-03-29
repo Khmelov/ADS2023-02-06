@@ -122,7 +122,6 @@ public class A_Huffman {
         Map<Character, Integer> count = new HashMap<>();
         //1. переберем все символы по очереди и рассчитаем их частоту в Map count
             //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
-        char k;
         for (int i=0;i<s.length();i++)
         {
             Character sim = s.charAt(i);
