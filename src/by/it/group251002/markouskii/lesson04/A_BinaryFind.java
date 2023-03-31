@@ -50,11 +50,8 @@ public class A_BinaryFind {
             int C=-1;
             while (A<B) {
                 C=(A+B)/2;
-                if (C==A || C==B)
-                    break;
-                else
                 if (a[C]<value) {
-                    A=C;
+                    A=C+1;
                 } else if (a[C]>value) {
                     B=C;
                 } else {

@@ -3,6 +3,7 @@ package by.it.group251002.markouskii.lesson04;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /*
@@ -34,7 +35,30 @@ Sample Output:
 
 
 public class C_GetInversions {
+    int mergeSort(int[] a){
+        int res=0;
+        if (a.length==1) return 0;
+        int mid=a.length/2;
+        int[] lArray = Arrays.copyOfRange(a, 0, mid);
+        int[] rArray = Arrays.copyOfRange(a, mid, a.length);
+        res+=mergeSort(lArray);
+        res+=mergeSort(rArray);
 
+        int k = 0, i = 0, j = 0;
+        while(i < lArray.length && j < rArray.length) {
+            if (lArray[i] <= rArray[j]) {
+                a[k++] = lArray[i++];
+            }
+            else {
+                res+=j+1;
+                a[k++] = rArray[j++];
+
+            }
+        }
+        while(i < lArray.length) a[k++] = lArray[i++];
+        while(j < rArray.length) a[k++] = rArray[j++];
+        return res;
+    }
     int calc(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
@@ -46,7 +70,7 @@ public class C_GetInversions {
         for (int i = 0; i < n; i++) {
             a[i] = scanner.nextInt();
         }
-        int result = 0;
+        int result = mergeSort(a);
         //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
 
 
