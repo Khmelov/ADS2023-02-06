@@ -38,9 +38,6 @@ import java.util.Scanner;
 public class C_HeapMax {
 
     private class MaxHeap {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-        //тут запишите ваше решение.
-        //Будет мало? Ну тогда можете его собрать как Generic и/или использовать в варианте B
         private List<Long> heap = new ArrayList<>();
 
         int siftDown(int i) { //просеивание вверх
@@ -54,14 +51,30 @@ public class C_HeapMax {
         }
 
         void insert(Long value) { //вставка
+
+            heap.add(value);
+            int childIndex = heap.size() - 1;
+            int parentIndex = (childIndex - 1) / 2;
+
+            while (childIndex > 0 && heap.get(parentIndex) > heap.get(childIndex)) {
+                swap(heap, childIndex, parentIndex);
+                childIndex = parentIndex;
+                parentIndex = (childIndex - 1) / 2;
+            }
+
         }
 
         Long extractMax() { //извлечение и удаление максимума
-            Long result = null;
+            long result = 0L;
 
             return result;
         }
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+
+        private static void swap(List<Long> list, int index1, int index2) {
+            long temp = list.get(index1);
+            list.set(index2, list.get(index2));
+            list.set(index1, temp);
+        }
     }
 
     //эта процедура читает данные из файла, ее можно не менять.
@@ -97,8 +110,4 @@ public class C_HeapMax {
         System.out.println("MAX="+instance.findMaxValue(stream));
     }
 
-    // РЕМАРКА. Это задание исключительно учебное.
-    // Свои собственные кучи нужны довольно редко.
-    // "В реальном бою" все существенно иначе. Изучите и используйте коллекции
-    // TreeSet, TreeMap, PriorityQueue и т.д. с нужным CompareTo() для объекта внутри.
 }
