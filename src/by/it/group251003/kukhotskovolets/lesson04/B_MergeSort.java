@@ -48,6 +48,7 @@ public class B_MergeSort {
                 a[k++] = l[i++];
             }
             else {
+
                 a[k++] = r[j++];
             }
         }

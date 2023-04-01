@@ -34,7 +34,46 @@ Sample Output:
 
 
 public class C_GetInversions {
+    static int count = 0;
+    public static void MergeSort (int[] a, int n){
+        if (n < 2){
+            return;
+        }
 
+        int mid = n / 2;
+        int[] left_array = new int[mid];
+        int[] right_array = new int[n - mid];
+
+        for (int i = 0; i < mid; i++) {
+            left_array[i] = a[i];
+        }
+        for (int i = mid; i < n; i++) {
+            right_array[i - mid] = a[i];
+        }
+
+        MergeSort(left_array, mid);
+        MergeSort(right_array, n - mid);
+        Merge(a, left_array, right_array, mid, n-mid);
+    }
+
+    public static void Merge(int[] a, int[] l, int[] r, int left, int right){
+        int i = 0, j = 0, k = 0;
+        while(i < left && j < right){
+            if (l[i] < r[j]){
+                a[k++] = l[i++];
+            }
+            else {
+                count = left - i;
+                a[k++] = r[j++];
+            }
+        }
+        while (i < left){
+            a[k++] = l[i++];
+        }
+        while (j < right){
+            a[k++] = r[j++];
+        }
+    }
     int calc(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
@@ -46,17 +85,10 @@ public class C_GetInversions {
         for (int i = 0; i < n; i++) {
             a[i] = scanner.nextInt();
         }
-        int result = 0;
+        int result;
         //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
-
-
-
-
-
-
-
-
-
+        MergeSort(a, n);
+        result = count;
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
