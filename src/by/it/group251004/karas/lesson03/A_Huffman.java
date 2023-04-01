@@ -63,12 +63,12 @@ public class A_Huffman {
         for (int i = 0; i < str.length(); i++)
             count.put(str.charAt(i), count.get(str.charAt(i)) != null ? count.get(str.charAt(i)) + 1 : 1);
 
-        PriorityQueue<by.it.group251004.karas.lesson03.A_Huffman.Node> priorityQueue = new PriorityQueue<>();
+        PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
         for (char ch: count.keySet())
-            priorityQueue.add(new by.it.group251004.karas.lesson03.A_Huffman.LeafNode(count.get(ch), ch));
+            priorityQueue.add(new LeafNode(count.get(ch), ch));
 
         while (priorityQueue.size() > 1) {
-            by.it.group251004.karas.lesson03.A_Huffman.InternalNode parentNode = new by.it.group251004.karas.lesson03.A_Huffman.InternalNode(priorityQueue.remove(), priorityQueue.remove());
+            InternalNode parentNode = new InternalNode(priorityQueue.remove(), priorityQueue.remove());
             priorityQueue.add(parentNode);
         }
 
