@@ -40,40 +40,64 @@ public class C_HeapMax {
     private class MaxHeap {
         private List<Long> heap = new ArrayList<>();
 
-        int siftDown(int i) { //просеивание вверх
-
-            return i;
-        }
-
-        int siftUp(int i) { //просеивание вниз
-
-            return i;
-        }
-
-        void insert(Long value) { //вставка
-
-            heap.add(value);
-            int childIndex = heap.size() - 1;
-            int parentIndex = (childIndex - 1) / 2;
-
-            while (childIndex > 0 && heap.get(parentIndex) > heap.get(childIndex)) {
-                swap(heap, childIndex, parentIndex);
-                childIndex = parentIndex;
-                parentIndex = (childIndex - 1) / 2;
+        int siftDown(int i) {
+            int parentIndex = (i - 1) / 2;
+            while (i > 0 && heap.get(i) > heap.get(parentIndex)) {
+                swap(heap, parentIndex, i);
+                i = parentIndex;
+                parentIndex = (i - 1) / 2;
             }
 
+            return i;
         }
 
-        Long extractMax() { //извлечение и удаление максимума
-            long result = 0L;
+        int siftUp(int i) {
+
+            int leftChild = 2 * i + 1;
+            int rightChild = 2 * i + 2;
+            int largestChild = i;
+
+            while (true) {
+
+                if (leftChild < heap.size() && heap.get(leftChild) > heap.get(largestChild)) {
+                    largestChild = leftChild;
+                }
+
+                if (rightChild < heap.size() && heap.get(rightChild) > heap.get(largestChild)) {
+                    largestChild = rightChild;
+                }
+
+                if (largestChild == i) {
+                    break;
+                }
+
+                swap(heap, largestChild, i);
+
+                i = largestChild;
+                leftChild = 2 * i + 1;
+                rightChild = 2 * i + 2;
+            }
+
+            return i;
+        }
+
+        void insert(Long value) {
+            heap.add(value);
+            siftDown(heap.size() - 1);
+        }
+
+        Long extractMax() {
+            long result = heap.get(0);
+            heap.set(0, heap.remove(heap.size() - 1));
+            siftUp(0);
 
             return result;
         }
 
         private static void swap(List<Long> list, int index1, int index2) {
             long temp = list.get(index1);
-            list.set(index2, list.get(index2));
-            list.set(index1, temp);
+            list.set(index1, list.get(index2));
+            list.set(index2, temp);
         }
     }
 
