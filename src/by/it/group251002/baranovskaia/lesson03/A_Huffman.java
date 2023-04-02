@@ -122,19 +122,55 @@ public class A_Huffman {
         Map<Character, Integer> count = new HashMap<>();
         //1. переберем все символы по очереди и рассчитаем их частоту в Map count
             //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
+        for(int i=0;i<s.length();i++) {
+            char key = s.charAt(i);
+            count.merge(key, 1, Integer::sum);
+        }
 
         //2. перенесем все символы в приоритетную очередь в виде листьев
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
+        LeafNode leaf;
+        for(char key : count.keySet())
+        {
+            leaf = new LeafNode(count.get(key),key);
+            priorityQueue.add(leaf);
+        }
 
         //3. вынимая по два узла из очереди (для сборки родителя)
         //и возвращая этого родителя обратно в очередь
         //построим дерево кодирования Хаффмана.
         //У родителя частоты детей складываются.
+        Node first,second;
+        InternalNode next;
+        while(priorityQueue.size() > 1)
+        {
+            first = priorityQueue.peek();
+            priorityQueue.remove();
+            second = priorityQueue.peek();
+            priorityQueue.remove();
+            next = new InternalNode(first,second);
+            priorityQueue.add(next);
+        }
 
         //4. последний из родителей будет корнем этого дерева
         //это будет последний и единственный элемент оставшийся в очереди priorityQueue.
         StringBuilder sb = new StringBuilder();
+        String bfcod = "";
         //.....
+        first = priorityQueue.peek();
+        first.fillCodes(bfcod);
+        for(int i=0;i<s.length();i++)
+            sb.append(codes.get(s.charAt(i)));
+        System.out.print(codes.size());
+        System.out.print(' ');
+        System.out.println(sb.length());
+        for(char key : codes.keySet())
+        {
+            System.out.print(key);
+            System.out.print(": ");
+            System.out.println(codes.get(key));
+        }
+        System.out.println(sb);
 
         return sb.toString();
         //01001100100111
