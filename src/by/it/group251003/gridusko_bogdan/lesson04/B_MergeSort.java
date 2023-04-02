@@ -31,20 +31,23 @@ public class B_MergeSort {
         return;
     }
     private void merge(int[] nums, int left, int mid, int right){
-        int leftArrInd = 0;
-        int rightArrInd = mid;
+        int[] sorted = new int[right+1];
+        int leftArrInd = left;
+        int rightArrInd = mid+1;
         int numsArrInd = 0;
 
-        while ((leftArrInd < left) && (rightArrInd < right)){
-            if (nums[leftArrInd] < nums[rightArrInd])
-                nums[numsArrInd++] = nums[leftArrInd++];
+        while ((leftArrInd <= mid) && (rightArrInd <= right)){
+            if (nums[leftArrInd] <= nums[rightArrInd])
+                sorted[numsArrInd++] = nums[leftArrInd++];
             else
-                nums[numsArrInd++] = nums[rightArrInd++];
+                sorted[numsArrInd++] = nums[rightArrInd++];
         }
-        while (leftArrInd < left)
-            nums[numsArrInd++] = nums[leftArrInd++];
-        while (rightArrInd < right)
-            nums[numsArrInd++] = nums[rightArrInd++];
+        while (leftArrInd <= mid)
+            sorted[numsArrInd++] = nums[leftArrInd++];
+        while (rightArrInd <= right)
+            sorted[numsArrInd++] = nums[rightArrInd++];
+        for (int i = left; i <= right; i++)
+            nums[i] = sorted[i - left];
         return;
     }
     int[] getMergeSort(InputStream stream) throws FileNotFoundException {
@@ -57,8 +60,6 @@ public class B_MergeSort {
             System.out.println(nums[i]);
         }
         mergeSort(nums, 0, nums.length-1);
-
-
         return nums;
     }
     public static void main(String[] args) throws FileNotFoundException {

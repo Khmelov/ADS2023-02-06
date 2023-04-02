@@ -34,31 +34,52 @@ Sample Output:
 
 
 public class C_GetInversions {
+    private int numberInversions = 0;
+    private void mergeSort(int[] nums, int left, int right){
+        if (left == right)
+            return;
 
-    int calc(InputStream stream) throws FileNotFoundException {
-        //подготовка к чтению данных
-        Scanner scanner = new Scanner(stream);
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!
-        //размер массива
-        int n = scanner.nextInt();
-        //сам массив
-        int[] a = new int[n];
-        for (int i = 0; i < n; i++) {
-            a[i] = scanner.nextInt();
+        int mid = left + (right - left) / 2;
+        mergeSort(nums, left, mid);
+        mergeSort(nums, mid + 1, right);
+        merge(nums, left, mid, right);
+        return;
+    }
+    private void merge(int[] nums, int left, int mid, int right){
+        int[] sorted = new int[right+1];
+        int leftArrInd = left;
+        int rightArrInd = mid + 1;
+        int numsArrInd = 0;
+
+        while ((leftArrInd <= mid) && (rightArrInd <= right)){
+            if (nums[leftArrInd] <= nums[rightArrInd]) {
+                sorted[numsArrInd++] = nums[leftArrInd++];
+                numberInversions += rightArrInd - mid - 1;
+            }
+            else
+                sorted[numsArrInd++] = nums[rightArrInd++];
         }
-        int result = 0;
-        //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
+        while (leftArrInd <= mid) {
+            sorted[numsArrInd++] = nums[leftArrInd++];
+            numberInversions += rightArrInd - mid - 1;
+        }
+        while (rightArrInd <= right)
+            sorted[numsArrInd++] = nums[rightArrInd++];
 
+        for (int i = left; i <= right; i++)
+            nums[i] = sorted[i - left];
+        return;
+    }
+    int calc(InputStream stream) throws FileNotFoundException {
+        Scanner scanner = new Scanner(stream);
 
-
-
-
-
-
-
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        int n = scanner.nextInt();
+        int[] nums = new int[n];
+        for (int i = 0; i < n; i++) {
+            nums[i] = scanner.nextInt();
+        }
+        mergeSort(nums, 0, nums.length-1);
+        return numberInversions;
     }
 
 
