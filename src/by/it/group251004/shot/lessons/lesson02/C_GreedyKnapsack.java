@@ -53,10 +53,10 @@ public class C_GreedyKnapsack {
 
         int i = low, j = high;
         while (i <= j) {
-            while (items[i].cost / items[i].weight < border.cost / border.weight) {
+            while (items[i].cost / items[i].weight > border.cost / border.weight) {
                 i++;
             }
-            while (items[j].cost / items[j].weight > border.cost / border.weight) {
+            while (items[j].cost / items[j].weight < border.cost / border.weight) {
                 j--;
             }
             if (i <= j) {
@@ -89,6 +89,19 @@ public class C_GreedyKnapsack {
         //итогом является максимально возможная стоимость вещей в рюкзаке
         //вещи можно резать на кусочки (непрерывный рюкзак)
         quickSort(items, 0, n - 1);
+        /*int gap = items.length / 2;
+        while (gap > 0) {
+            for (int i = 0; i < items.length - gap; i++) {
+                int j = i;
+                Item temp = items[j + gap];
+                while (j >= 0 && temp.cost / temp.weight > items[j].cost / items[j].weight) {
+                    items[j + gap] = items[j];
+                    items[j] = temp;
+                    j -= gap;
+                }
+            }
+            gap /= 2;
+        }*/
         double result = 0;
         //тут реализуйте алгоритм сбора рюкзака
         //будет особенно хорошо, если с собственной сортировкой
