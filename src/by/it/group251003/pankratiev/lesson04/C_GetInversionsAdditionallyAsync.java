@@ -22,12 +22,12 @@ public class C_GetInversionsAdditionallyAsync {
         //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
 
         MergeSortTask task = new MergeSortTask(a.clone(), 0, n - 1);
-        return task.invoke();
+        return task.compute();
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
-    private class MergeSortTask extends RecursiveTask<Integer> {
+    private static class MergeSortTask extends RecursiveTask<Integer> {
         private final int[] array;
         private final int left;
         private final int right;
@@ -48,8 +48,10 @@ public class C_GetInversionsAdditionallyAsync {
                 MergeSortTask rightTask = new MergeSortTask(array, mid + 1, right);
 
                 leftTask.fork();
-                result += rightTask.compute();
+                rightTask.fork();
+
                 result += leftTask.join();
+                result += rightTask.join();
 
                 result += merge(array, left, mid, right);
             }
