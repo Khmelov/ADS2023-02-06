@@ -42,17 +42,59 @@ public class B_Sheduler {
 
     List<Event> calcStartTimes(Event[] events, int from, int to) {
         //Events - события которые нужно распределить в аудитории
-        //в период [from, int] (включительно).
+        //в период [from, to] (включительно).
         //оптимизация проводится по наибольшему числу непересекающихся событий.
         //Начало и конец событий могут совпадать.
         List<Event> result;
         result = new ArrayList<>();
-
-
-
-
-
-
+        int i = 0, j;
+        Event temp = events[0];
+        int tempStart = from;
+        int eventLength;
+        while (i < events.length) {
+            eventLength = temp.stop - temp.start;
+            j = 0;
+            while (j < events.length) {
+                if ((events[j].start == tempStart) && (events[j].stop - events[j].start < eventLength)) {
+                    eventLength = events[j].stop - events[j].start;
+                    temp = events[j];
+                }
+                j++;
+            }
+            result.add(temp);
+            tempStart = temp.stop;
+            j = 0;
+            int minStart = to;
+            Event curr, newTemp = temp;
+            boolean thereIsNext = false;
+            while (j < events.length && !thereIsNext) {
+                if (events[j] != temp) {
+                    if (events[j].start == tempStart) {
+                        newTemp = events[j];
+                        thereIsNext = true;
+                    } else if (events[j].start > tempStart) {
+                        curr = events[j];
+                        if (curr.start <= minStart) {
+                            minStart = curr.start;
+                            newTemp = curr;
+                        }
+                    }
+                }
+                j++;
+            }
+            if (!thereIsNext) {
+                if (newTemp == temp) {
+                    i = j;
+                } else {
+                    temp = newTemp;
+                    tempStart = temp.start;
+                }
+            } else {
+                temp = newTemp;
+                tempStart = temp.start;
+            }
+            i++;
+        }
         return result;          //вернем итог
     }
 }
