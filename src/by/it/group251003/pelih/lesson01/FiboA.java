@@ -29,14 +29,23 @@ public class FiboA {
     }
 
     private int calc(int n) {
+        if (n == 1) {
+            return 0;
+        }
+
+        int Result = 1;
+        int LastRes = 0;
+        for (int i = 0; i < n; i++) {
+            Result = Result + LastRes;
+            LastRes = Result;
+        }
+        System.out.println(Result);
         //здесь простейший вариант, в котором код совпадает
         //с математическим определением чисел Фибоначчи
         //время O(2^n)
-        if ((n == 0) || (n == 1))
-            return n;
-        else
-            return calc(n - 1) + calc(n - 2);
+        return Result;
     }
+
 
 
     BigInteger slowA(int n) {
@@ -44,13 +53,17 @@ public class FiboA {
         //здесь нужно реализовать вариант без ограничения на размер числа,
         //в котором код совпадает с математическим определением чисел Фибоначчи
         //время O(2^n)
-        if (n == 0 || n == 1) {
-            return BigInteger.valueOf(n);
+        if (n == 0) {
+            return BigInteger.ZERO;
+        }
+
+        if (n < 3) {
+            return BigInteger.ONE;
         } else {
             return slowA(n - 1).add(slowA(n - 2));
         }
+
     }
-
-
 }
+
 

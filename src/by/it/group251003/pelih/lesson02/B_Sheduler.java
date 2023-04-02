@@ -1,6 +1,7 @@
 package by.it.group251003.pelih.lesson02;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 /*
 Даны интервальные события events
@@ -41,6 +42,29 @@ public class B_Sheduler {
         System.out.println(starts);                                 //покажем рассчитанный график занятий
     }
 
+    Event[] QuickSort(Event[] arr, int left, int right){
+        if (right > left) {
+            Event ideal = arr[(left + right) / 2];
+            int i = left, j = right;
+            while (i < j) {
+                while ((arr[i].stop < ideal.stop) && (i < right)){
+                    i++;
+                }
+                while ((arr[j].stop > ideal.stop) && (j > left)) {
+                    j--;
+                }
+                if (i < j) {
+                    Event bank = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = bank;
+                    j--;
+                }
+            }
+            arr = QuickSort(arr, left, j);
+            arr = QuickSort(arr, j + 1, right);
+        }
+        return arr;
+    }
     List<Event> calcStartTimes(Event[] events, int from, int to) {
         //Events - события которые нужно распределить в аудитории
         //в период [from, int] (включительно).
@@ -49,9 +73,15 @@ public class B_Sheduler {
         List<Event> result;
         result = new ArrayList<>();
         //ваше решение.
+        events = QuickSort(events, 0, events.length - 1);
 
-
-
+        int last = -1;
+        for (int i = 0; i < events.length; i++){
+            if (events[i].start >= last) {
+                last = events[i].stop;
+                result.add(events[i]);
+            }
+        }
 
 
 
