@@ -78,9 +78,10 @@ public class C_GreedyKnapsack {
             }
         }
 
-        int i=0;
+
         int freeW=W;
         int WAdd;
+        int i=0;
         while ((freeW>0)&&(i<=items.length)){
             if (freeW>items[i].weight){
                 WAdd=items[i].weight;

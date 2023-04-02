@@ -60,8 +60,9 @@ public class B_Sheduler {
 
         Arrays.sort(events, comp);
 
-            int j = 0;
-            int i=0;
+        int i=0;
+        int j = 0;
+
 
         result.add(events[0]);
            while(i<=events.length){

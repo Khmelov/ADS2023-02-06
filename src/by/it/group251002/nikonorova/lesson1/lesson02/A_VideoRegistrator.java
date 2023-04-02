@@ -29,10 +29,10 @@ public class A_VideoRegistrator {
         Arrays.sort(events);
 
 
-        int i = 0;
+
         int j = 0;
         boolean n;
-
+        int i = 0;
         while (i < events.length) {
             n = true;
             result.add(events[i]);
