@@ -20,31 +20,46 @@ Sample Output:
 2 2 3 9 9
 */
 public class B_MergeSort {
+    private void mergeSort(int[] nums, int left, int right){
+        if (right == left)
+            return;
 
-    int[] getMergeSort(InputStream stream) throws FileNotFoundException {
-        //подготовка к чтению данных
-        Scanner scanner = new Scanner(stream);
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int mid = left + (right - left) / 2;
+        mergeSort(nums, left, mid);
+        mergeSort(nums, mid + 1, right);
+        merge(nums, left, mid, right);
+        return;
+    }
+    private void merge(int[] nums, int left, int mid, int right){
+        int leftArrInd = 0;
+        int rightArrInd = mid;
+        int numsArrInd = 0;
 
-        //размер массива
-        int n = scanner.nextInt();
-        //сам массив
-        int[] a=new int[n];
-        for (int i = 0; i < n; i++) {
-            a[i] = scanner.nextInt();
-            System.out.println(a[i]);
+        while ((leftArrInd < left) && (rightArrInd < right)){
+            if (nums[leftArrInd] < nums[rightArrInd])
+                nums[numsArrInd++] = nums[leftArrInd++];
+            else
+                nums[numsArrInd++] = nums[rightArrInd++];
         }
+        while (leftArrInd < left)
+            nums[numsArrInd++] = nums[leftArrInd++];
+        while (rightArrInd < right)
+            nums[numsArrInd++] = nums[rightArrInd++];
+        return;
+    }
+    int[] getMergeSort(InputStream stream) throws FileNotFoundException {
+        Scanner scanner = new Scanner(stream);
 
-        // тут ваше решение (реализуйте сортировку слиянием)
-        // https://ru.wikipedia.org/wiki/Сортировка_слиянием
+        int n = scanner.nextInt();
+        int[] nums = new int[n];
+        for (int i = 0; i < n; i++) {
+            nums[i] = scanner.nextInt();
+            System.out.println(nums[i]);
+        }
+        mergeSort(nums, 0, nums.length-1);
 
 
-
-
-
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return a;
+        return nums;
     }
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
