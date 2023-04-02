@@ -19,19 +19,18 @@ public class C_GetInversionsAdditionallyAsync {
         for (int i = 0; i < n; i++) {
             a[i] = scanner.nextInt();
         }
-        int result = 0;
         //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
 
-        result = mergeSort(a.clone(), 0, n - 1);
+        MergeSortTask task = new MergeSortTask(a.clone(), 0, n - 1);
+        return task.invoke();
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
     }
 
     private class MergeSortTask extends RecursiveTask<Integer> {
-        private int[] array;
-        private int left;
-        private int right;
+        private final int[] array;
+        private final int left;
+        private final int right;
 
         public MergeSortTask(int[] array, int left, int right) {
             this.array = array;
@@ -41,48 +40,50 @@ public class C_GetInversionsAdditionallyAsync {
 
         @Override
         protected Integer compute() {
-            return mergeSort(array, left, right);
-        }
-    }
+            int result = 0;
+            if (right > left) {
+                int mid = left + (right - left) / 2;
 
-    private int mergeSort(int[] array, int left, int right) {
-        int result = 0;
-        if (right > left) {
-            int mid = left + (right - left) / 2;
-            result += mergeSort(array, left, mid);
-            result += mergeSort(array, mid + 1, right);
+                MergeSortTask leftTask = new MergeSortTask(array, left, mid);
+                MergeSortTask rightTask = new MergeSortTask(array, mid + 1, right);
 
-            result += merge(array, left, mid, right);
-        }
-        return result;
-    }
+                leftTask.fork();
+                result += rightTask.compute();
+                result += leftTask.join();
 
-    private int merge(int[] array, int left, int mid, int right) {
-
-        int result = 0;
-
-        int[] temp = new int[right - left + 1];
-
-        int i = left;
-        int j = mid + 1;
-        int k = 0;
-        while (i <= mid && j <= right)
-            if (array[i] > array[j]) {
-                temp[k++] = array[j++];
-                result += mid - i + 1;
+                result += merge(array, left, mid, right);
             }
-            else
+            return result;
+        }
+
+        private int merge(int[] array, int left, int mid, int right) {
+
+            int result = 0;
+
+            int[] temp = new int[right - left + 1];
+
+            int i = left;
+            int j = mid + 1;
+            int k = 0;
+            while (i <= mid && j <= right)
+                if (array[i] > array[j]) {
+                    temp[k++] = array[j++];
+                    result += mid - i + 1;
+                }
+                else
+                    temp[k++] = array[i++];
+
+            while (i <= mid)
                 temp[k++] = array[i++];
 
-        while (i <= mid)
-            temp[k++] = array[i++];
+            while (j <= right)
+                temp[k++] = array[j++];
 
-        while (j <= right)
-            temp[k++] = array[j++];
+            System.arraycopy(temp, 0, array, left, temp.length);
 
-        System.arraycopy(temp, 0, array, left, temp.length);
+            return result;
+        }
 
-        return result;
     }
 
 
