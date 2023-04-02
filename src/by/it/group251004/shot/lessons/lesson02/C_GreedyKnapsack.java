@@ -14,6 +14,7 @@ package by.it.group251004.shot.lessons.lesson02;
  */
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class C_GreedyKnapsack {
@@ -38,9 +39,37 @@ public class C_GreedyKnapsack {
         public int compareTo(Item o) {
             //тут может быть ваш компаратор
 
-
             return 0;
         }
+    }
+
+    public static void quickSort(Item[] items, int low, int high) {
+        if (items.length == 0 || low >= high) {
+            return;
+        }
+
+        int middle = low + (high - low) / 2;
+        Item border = items[middle];
+
+        int i = low, j = high;
+        while (i <= j) {
+            while (items[i].cost / items[i].weight < border.cost / border.weight) {
+                i++;
+            }
+            while (items[j].cost / items[j].weight > border.cost / border.weight) {
+                j--;
+            }
+            if (i <= j) {
+                Item swap = items[i];
+                items[i] = items[j];
+                items[j] = swap;
+                i++;
+                j--;
+            }
+        }
+
+        if (low < j) quickSort(items, low, j);
+        if (high > i) quickSort(items, i, high);
     }
 
     double calc(File source) throws FileNotFoundException {
@@ -56,21 +85,26 @@ public class C_GreedyKnapsack {
             System.out.println(item);
         }
         System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
-
         //тут необходимо реализовать решение задачи
         //итогом является максимально возможная стоимость вещей в рюкзаке
         //вещи можно резать на кусочки (непрерывный рюкзак)
+        quickSort(items, 0, n - 1);
         double result = 0;
         //тут реализуйте алгоритм сбора рюкзака
         //будет особенно хорошо, если с собственной сортировкой
         //кроме того, можете описать свой компаратор в классе Item
-
-        //ваше решение.
-
-
-
-
-
+        int i = 0;
+        double tempW = 0;
+        while (i < items.length && tempW < W) {
+            if (tempW + items[i].weight < W) {
+                result += items[i].cost;
+                tempW += items[i].weight;
+            } else {
+                result += items[i].cost * ((W - tempW) / items[i].weight);
+                tempW = W;
+            }
+            i++;
+        }
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
         return result;
     }
