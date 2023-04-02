@@ -93,9 +93,6 @@ public class C_GreedyKnapsack {
             i++;
         }
 
-
-
-
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
         return result;
     }
