@@ -1,4 +1,4 @@
-package by.it.incorrect_group_data.makarov.lesson01;
+package by.it.group251002.makarov.lesson01;
 
 import org.junit.Test;
 
