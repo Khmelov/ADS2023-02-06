@@ -1,4 +1,4 @@
-package by.it.group251005.ubozhenko.lesson03;
+package by.it.group251004.ryabchikov.lesson03;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -44,33 +44,26 @@ public class C_HeapMax {
         private List<Long> heap = new ArrayList<>();
 
         int siftDown(int i) { //просеивание вверх
-            while ( 2 * i + 1 < heap.size()) {
-                int left = 2 * i + 1;
-                int right = 2 * i + 2;
-                int j = left;
-                if (right < heap.size() && heap.get(right) > heap.get(left)) {
-                    j = right;
-                }
-                if (heap.get(i) >= heap.get(j))
-                    break;
-                long tmp = heap.get(i);
-                heap.set(i, heap.get(j));
-                heap.set(j, tmp);
-                i = j;
+            while (heap.get(i) > heap.get((i - 1) / 2)) {
+                swap(i, (i - 1) / 2);
             }
             return i;
         }
 
+        void swap(int index1, int index2) {
+            Long buf = heap.get(index1);
+            heap.set(index1, heap.get(index2));
+            heap.set(index2, buf);
+        }
         int siftUp(int i) { //просеивание вниз
-            while (heap.get(i) > heap.get((i - 1)/2)) {
-                long tmp = heap.get(i);
-                heap.set(i, heap.get((i-1)/2));
-                heap.set((i-1)/2, tmp);
-                i = (i-1)/2;
+            while(heap.get(i) > heap.get((i - 1) / 2)) {
+                swap(i, (i - 1) / 2);
+                siftDown((i - 1) / 2);
             }
+
+            
             return i;
         }
-
         void insert(Long value) { //вставка
             heap.add(value);
             siftUp(heap.size() - 1);
@@ -78,9 +71,7 @@ public class C_HeapMax {
 
         Long extractMax() { //извлечение и удаление максимума
             Long result = heap.get(0);
-            heap.set(0, heap.get(heap.size()-1));
-            heap.remove(heap.size()-1);
-            siftDown(0);
+            heap.remove(0);
             return result;
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1

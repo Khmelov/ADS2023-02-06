@@ -1,4 +1,4 @@
-package by.it.group251005.ubozhenko.lesson03;
+package by.it.group251004.ustsinovich.lesson03;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -109,7 +109,6 @@ public class A_Huffman {
     //индекс данных из листьев
     static private Map<Character, String> codes = new TreeMap<>();
 
-
     //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
     String encode(File file) throws FileNotFoundException {
         //прочитаем строку для кодирования из тестового файла
@@ -121,9 +120,8 @@ public class A_Huffman {
 
         Map<Character, Integer> count = new HashMap<>();
         //1. переберем все символы по очереди и рассчитаем их частоту в Map count
-            //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
+        //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
         int repeats = 0 ;
-        //2. перенесем все символы в приоритетную очередь в виде листьев
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
         for (int i = 0; i < s.length(); i++) {
             for (int j = i; j < s.length(); j++) {
@@ -139,15 +137,7 @@ public class A_Huffman {
             }
             repeats = 0;
         }
-        //3. вынимая по два узла из очереди (для сборки родителя)
-        //и возвращая этого родителя обратно в очередь
-        //построим дерево кодирования Хаффмана.
-        //У родителя частоты детей складываются.
-
-        //4. последний из родителей будет корнем этого дерева
-        //это будет последний и единственный элемент оставшийся в очереди priorityQueue.
         StringBuilder sb = new StringBuilder();
-        //.....
         if (priorityQueue.size() > 1) {
             while (priorityQueue.size() > 1) {
                 Node leftChild = priorityQueue.poll();
@@ -165,6 +155,14 @@ public class A_Huffman {
                 sb.append(codes.get(s.charAt(i)));
             }
         }
+        //3. вынимая по два узла из очереди (для сборки родителя)
+
+        //и возвращая этого родителя обратно в очередь
+        //построим дерево кодирования Хаффмана.
+        //У родителя частоты детей складываются.
+
+        //4. последний из родителей будет корнем этого дерева
+        //это будет последний и единственный элемент оставшийся в очереди priorityQueue.
         return sb.toString();
         //01001100100111
         //01001100100111
@@ -174,7 +172,7 @@ public class A_Huffman {
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
-        File f = new File(root + "by/it/a_khmelev/lesson03/dataHuffman.txt");
+        File f = new File(root + "by/it/group151004/prokopchuk/lesson03/dataHuffman.txt");
         A_Huffman instance = new A_Huffman();
         long startTime = System.currentTimeMillis();
         String result = instance.encode(f);

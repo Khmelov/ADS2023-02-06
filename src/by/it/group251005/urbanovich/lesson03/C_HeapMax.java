@@ -1,4 +1,4 @@
-package by.it.group251005.ubozhenko.lesson03;
+package by.it.group251005.urbanovich.lesson03;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -43,43 +43,46 @@ public class C_HeapMax {
         //Будет мало? Ну тогда можете его собрать как Generic и/или использовать в варианте B
         private List<Long> heap = new ArrayList<>();
 
-        int siftDown(int i) { //просеивание вверх
-            while ( 2 * i + 1 < heap.size()) {
-                int left = 2 * i + 1;
-                int right = 2 * i + 2;
-                int j = left;
-                if (right < heap.size() && heap.get(right) > heap.get(left)) {
-                    j = right;
-                }
-                if (heap.get(i) >= heap.get(j))
-                    break;
-                long tmp = heap.get(i);
-                heap.set(i, heap.get(j));
-                heap.set(j, tmp);
-                i = j;
+        void siftDown(int i) { //просеивание вниз
+            int leftChild = 2 * i + 1;
+            int rightChild = leftChild + 1; //2 * i + 2
+            int largest = i;
+
+            if (leftChild < heap.size() && heap.get(leftChild) > heap.get(largest))
+                largest = leftChild;
+
+            if (rightChild < heap.size() && heap.get(rightChild) > heap.get(largest))
+                largest = rightChild;
+            if (largest != i) {
+                Swap(largest, i);
+                siftDown(largest);
             }
-            return i;
         }
 
-        int siftUp(int i) { //просеивание вниз
-            while (heap.get(i) > heap.get((i - 1)/2)) {
-                long tmp = heap.get(i);
-                heap.set(i, heap.get((i-1)/2));
-                heap.set((i-1)/2, tmp);
-                i = (i-1)/2;
-            }
-            return i;
+        private void Swap(int parent, int i) {
+            Long tmp = heap.get(parent);
+            heap.set(parent, heap.get(i));
+            heap.set(i, tmp);
+        }
+
+        void siftUp(int i) { //просеивание вверх
+            if (i < 1) return;
+            int parent = (i - 1) / 2;
+            if (heap.get(parent) < heap.get(i))
+                Swap(parent, i);
+            //Можно i = parent в if, и затем опять внести i в след метод
+            siftUp(parent);
         }
 
         void insert(Long value) { //вставка
             heap.add(value);
-            siftUp(heap.size() - 1);
+            siftUp(heap.size()-1);
         }
 
         Long extractMax() { //извлечение и удаление максимума
-            Long result = heap.get(0);
-            heap.set(0, heap.get(heap.size()-1));
-            heap.remove(heap.size()-1);
+            if (heap.size() == 0)
+                return 0L;
+            Long result = heap.remove(0);
             siftDown(0);
             return result;
         }
