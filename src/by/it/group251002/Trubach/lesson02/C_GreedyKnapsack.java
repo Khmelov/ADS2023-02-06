@@ -1,4 +1,4 @@
-package by.it.group251002.Trubach.lesson02;
+package by.it.group251002.trubach.lesson02;
 /*
 Даны
 1) объем рюкзака 4

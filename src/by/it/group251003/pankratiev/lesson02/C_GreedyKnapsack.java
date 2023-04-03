@@ -70,7 +70,7 @@ public class C_GreedyKnapsack {
 
         Arrays.sort(items, Comparator.reverseOrder());
 
-        for (int i = 0, CurrW = 0; (i < items.length) && (CurrW < W); i++ ){
+        for (int i = 0, CurrW = 0; (i < items.length) && (CurrW < W); i++)
             if (CurrW + items[i].weight > W) {
                 result += items[i].PricePerWeight * (W - CurrW);
                 CurrW = W;
@@ -79,7 +79,6 @@ public class C_GreedyKnapsack {
                 result += items[i].cost;
                 CurrW += items[i].weight;
             }
-        };
 
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
         return result;
