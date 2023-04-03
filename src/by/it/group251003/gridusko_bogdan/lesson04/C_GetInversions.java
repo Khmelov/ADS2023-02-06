@@ -87,9 +87,9 @@ public class C_GetInversions {
         String root = System.getProperty("user.dir") + "/src/";
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson04/dataC.txt");
         C_GetInversions instance = new C_GetInversions();
-        //long startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         int result = instance.calc(stream);
-        //long finishTime = System.currentTimeMillis();
+        long finishTime = System.currentTimeMillis();
         System.out.print(result);
     }
 }
