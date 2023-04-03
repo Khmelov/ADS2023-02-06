@@ -22,29 +22,63 @@ Sample Output:
 public class B_MergeSort {
 
     int[] getMergeSort(InputStream stream) throws FileNotFoundException {
-        //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-
-        //размер массива
         int n = scanner.nextInt();
-        //сам массив
         int[] a=new int[n];
         for (int i = 0; i < n; i++) {
             a[i] = scanner.nextInt();
             System.out.println(a[i]);
         }
 
-        // тут ваше решение (реализуйте сортировку слиянием)
-        // https://ru.wikipedia.org/wiki/Сортировка_слиянием
+        mergeSort(a);
 
-
-
-
-
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return a;
+    }
+
+    public static void mergeSort(int[] array) {
+
+        if (array.length == 1) {
+            return;
+        }
+
+        int[] leftPart = new int[array.length / 2];
+        int[] rightPart = new int[array.length - leftPart .length];
+
+        for (int i = 0; i < leftPart.length; i++) {
+            leftPart[i] = array[i];
+        }
+        for (int i = leftPart.length; i < array.length; i++) {
+            rightPart[i - leftPart.length] = array[i];
+        }
+
+        mergeSort(leftPart);
+        mergeSort(rightPart);
+
+        int i = 0;
+        int j = 0;
+
+        while (i < leftPart.length && j < rightPart.length) {
+
+            if (leftPart[i] > rightPart[j]) {
+                array[i + j] = rightPart[j];
+                j++;
+            }
+            else {
+                array[i + j] = leftPart[i];
+                i++;
+            }
+        }
+
+        while (i < leftPart.length) {
+            array[i + j] = leftPart[i];
+            i++;
+        }
+
+        while (j < rightPart.length) {
+            array[i + j] = rightPart[j];
+            j++;
+        }
+
     }
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
