@@ -33,8 +33,7 @@ public class FiboC {
         do {
             i++;
             PiArray[i] = (PiArray[i-1]+PiArray[i-2])%m;
-            if (PiArray[i]==1&&PiArray[i-1]==0) Correct = false;
-
+            if (PiArray[i]==1 && PiArray[i-1]==0) Correct = false;
         }
         while (Correct && i !=n);
         if (!Correct) {
