@@ -31,7 +31,6 @@ public class B_MergeSort {
         }
 
         mergeSort(a);
-
         return a;
     }
 
