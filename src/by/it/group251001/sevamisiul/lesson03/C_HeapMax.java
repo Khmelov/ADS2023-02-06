@@ -1,4 +1,4 @@
-package by.it.group251005.ubozhenko.lesson03;
+package by.it.group251001.sevamisiul.lesson03;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import static java.lang.Math.max;
 
 // Lesson 3. C_Heap.
 // Задача: построить max-кучу = пирамиду = бинарное сбалансированное дерево на массиве.
@@ -44,43 +46,48 @@ public class C_HeapMax {
         private List<Long> heap = new ArrayList<>();
 
         int siftDown(int i) { //просеивание вверх
-            while ( 2 * i + 1 < heap.size()) {
-                int left = 2 * i + 1;
-                int right = 2 * i + 2;
-                int j = left;
-                if (right < heap.size() && heap.get(right) > heap.get(left)) {
-                    j = right;
-                }
-                if (heap.get(i) >= heap.get(j))
-                    break;
-                long tmp = heap.get(i);
-                heap.set(i, heap.get(j));
-                heap.set(j, tmp);
-                i = j;
+            int parent = (i - 1) / 2;
+            while (i > 0 && heap.get(parent) < heap.get(i)){
+                Long tmp = heap.get(i);
+                heap.set(i, heap.get(parent));
+                heap.set(parent, tmp);
+                i = parent;
+                parent = (i - 1)/2;
             }
             return i;
         }
 
         int siftUp(int i) { //просеивание вниз
-            while (heap.get(i) > heap.get((i - 1)/2)) {
-                long tmp = heap.get(i);
-                heap.set(i, heap.get((i-1)/2));
-                heap.set((i-1)/2, tmp);
-                i = (i-1)/2;
-            }
+            int leftChild;
+            int rightChild;
+            int maxChild = 0;
+            boolean check = false;
+            do{
+                leftChild = i*2 + 1;
+                rightChild = i*2 + 2;
+                if (max(leftChild, rightChild) < heap.size() && heap.get(leftChild) < heap.get(rightChild))
+                    maxChild = rightChild;
+                if (max(leftChild, rightChild) < heap.size() && heap.get(leftChild) > heap.get(rightChild))
+                    maxChild = leftChild;
+                Long tmp = heap.get(maxChild);
+                heap.set(i, heap.get(maxChild));
+                heap.set(maxChild, tmp);
+                check = (i == maxChild);
+                i = maxChild;
+            }while (!check);
             return i;
         }
 
         void insert(Long value) { //вставка
-            heap.add(value);
-            siftUp(heap.size() - 1);
+            heap.add(heap.size(), value);
+            siftDown(heap.size() - 1);
         }
 
         Long extractMax() { //извлечение и удаление максимума
             Long result = heap.get(0);
-            heap.set(0, heap.get(heap.size()-1));
-            heap.remove(heap.size()-1);
-            siftDown(0);
+            heap.set(0, heap.get(heap.size() - 1));
+            heap.remove(heap.size() - 1);
+            siftUp(0);
             return result;
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
