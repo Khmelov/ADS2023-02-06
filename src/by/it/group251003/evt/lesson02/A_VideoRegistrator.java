@@ -31,9 +31,9 @@ public class A_VideoRegistrator {
         double StartOfEventDuration = events[0];
         result.add(StartOfEventDuration);
 
-        for (int i = 1; i < events.length; i++) {
-            if (StartOfEventDuration + workDuration < events[i]){
-                StartOfEventDuration = events[i];
+        for (int j = 1; j < events.length; j++) {
+            if (StartOfEventDuration + workDuration < events[j]){
+                StartOfEventDuration = events[j];
                 result.add(StartOfEventDuration);
             }
         }
