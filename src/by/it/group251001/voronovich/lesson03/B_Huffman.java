@@ -1,10 +1,8 @@
-package by.it.group251002.lapus_vitaliy.lesson03;
+package by.it.group251001.voronovich.lesson03;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 // Lesson 3. B_Huffman.
 // Восстановите строку по её коду и беспрефиксному коду символов.
@@ -52,25 +50,24 @@ public class B_Huffman {
         Integer length = scanner.nextInt();
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         //тут запишите ваше решение
-        Map<String,Character> text =  new HashMap<>();
-        for (int i=0;i<count;i++)
-        {
-            String stroka = scanner.next();
-            Character sim = stroka.charAt(0);
-            String obozn = scanner.next();
-            text.put(obozn, sim);
+        List<String> input = new ArrayList<>();
+        Map<String, String> decodingTable = new HashMap<>();
+        while (scanner.hasNext()) {
+            input.add(scanner.nextLine());
         }
-
-        String Code = scanner.next();
-        result = new StringBuilder();
-        String buffer =new String();
-        for(int i=0;i<length;i++)
-        {
-            buffer=buffer+Code.charAt(i);
-            if (Code.charAt(i)=='0' || buffer.length()==count-1)
-            {
-                result.append(text.get(buffer));
-                buffer="";
+        for (int i = 1; i < input.size() - 1; i++) {
+            String[] split = input.get(i).split(": ");
+            decodingTable.put(split[1],split[0]);
+        }
+        String huffmanCode = input.get(5);
+        char[] chars = huffmanCode.toCharArray();
+        int reference = 0;
+        String code = "";
+        for (int i = 0; i < chars.length; i++) {
+            code=code+chars[i];
+            if(decodingTable.containsKey(code)){
+                result.append(decodingTable.get(code));
+                code = "";
             }
         }
 
@@ -79,7 +76,7 @@ public class B_Huffman {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        String root = System.getProperty("user.dir") + "/src/";
+        String root = System.getProperty("user.dir") + "/ADS2023-02-06/src/";
         File f = new File(root + "by/it/a_khmelev/lesson03/encodeHuffman.txt");
         B_Huffman instance = new B_Huffman();
         String result = instance.decode(f);

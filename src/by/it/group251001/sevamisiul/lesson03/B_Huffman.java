@@ -1,10 +1,11 @@
-package by.it.group251002.lapus_vitaliy.lesson03;
+package by.it.group251001.sevamisiul.lesson03;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 // Lesson 3. B_Huffman.
 // Восстановите строку по её коду и беспрефиксному коду символов.
@@ -50,31 +51,22 @@ public class B_Huffman {
         Scanner scanner = new Scanner(file);
         Integer count = scanner.nextInt();
         Integer length = scanner.nextInt();
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-        //тут запишите ваше решение
-        Map<String,Character> text =  new HashMap<>();
-        for (int i=0;i<count;i++)
-        {
-            String stroka = scanner.next();
-            Character sim = stroka.charAt(0);
-            String obozn = scanner.next();
-            text.put(obozn, sim);
+        Map<String, Character> codes = new HashMap<>();
+        for (int i = 0; i < count; i++) {
+            String ch = scanner.next();
+            String code = scanner.next();
+            codes.put(code, ch.charAt(0));
         }
-
-        String Code = scanner.next();
-        result = new StringBuilder();
-        String buffer =new String();
-        for(int i=0;i<length;i++)
-        {
-            buffer=buffer+Code.charAt(i);
-            if (Code.charAt(i)=='0' || buffer.length()==count-1)
-            {
-                result.append(text.get(buffer));
-                buffer="";
+        String code = scanner.next();
+        StringBuilder key = new StringBuilder();
+        for (int i = 0; i < code.length(); i++) {
+            key.append(code.charAt(i));
+            if (codes.containsKey(key.toString())){
+                result.append(codes.get(key.toString()));
+                key.setLength(0);
             }
         }
 
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         return result.toString(); //01001100100111
     }
 
