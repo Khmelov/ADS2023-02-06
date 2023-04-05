@@ -52,7 +52,7 @@ public class B_Huffman {
         Integer length = scanner.nextInt();
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         //тут запишите ваше решение
-        Map<String,Character> codes = new TreeMap<>();
+        Map<String,Character> codes = new TreeMap<>() ;
         for (int i = 0; i < count; i++)
         {
             String s = scanner.next();
