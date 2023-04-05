@@ -43,22 +43,47 @@ public class C_HeapMax {
         //Будет мало? Ну тогда можете его собрать как Generic и/или использовать в варианте B
         private List<Long> heap = new ArrayList<>();
 
-        int siftDown(int i) { //просеивание вверх
-
-            return i;
+//        void siftDown(int i) { //просеивание вверх
+//            int leftChild = 2 * i + 1;
+//            int rightChild = leftChild + 1; //2 * i + 2
+//            int largest = i;
+//            int temp = 0;
+//
+//            if (leftChild < heap.size() && heap.get(leftChild) > heap.get(largest))
+//                largest = leftChild;
+//
+//            if (rightChild < heap.size() && heap.get(rightChild) > heap.get(largest))
+//                largest = rightChild;
+//            if (largest != i) {
+//                temp = largest;
+//                largest = i;
+//                i = largest;
+//                siftDown(largest);
+//            }
+//        }
+        private void Swap(int parent, int i) {
+            Long tmp = heap.get(parent);
+            heap.set(parent, heap.get(i));
+            heap.set(i, tmp);
         }
-
-        int siftUp(int i) { //просеивание вниз
-
-            return i;
+        void siftUp(int i) { //просеивание вниз
+            if (i < 1) return;
+            int parent = (i - 1) / 2;
+            if (heap.get(parent) < heap.get(i))
+                Swap(parent, i);
+            siftUp(parent);
         }
 
         void insert(Long value) { //вставка
+            heap.add(value);
+            siftUp(heap.size()-1);
         }
 
-        Long extractMax() { //извлечение и удаление максимума
-            Long result = null;
-
+        Long extractMax() {
+            if (heap.size() == 0)
+                return null;
+            Long result = heap.remove(0);
+            heap.remove(0);
             return result;
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
@@ -101,4 +126,7 @@ public class C_HeapMax {
     // Свои собственные кучи нужны довольно редко.
     // "В реальном бою" все существенно иначе. Изучите и используйте коллекции
     // TreeSet, TreeMap, PriorityQueue и т.д. с нужным CompareTo() для объекта внутри.
+//    Значение в любой вершине не меньше, чем значения её потомков[К 1].
+//    Глубина всех листьев (расстояние до корня) различается не более чем на 1 слой.
+//    Последний слой заполняется слева направо без «дырок».
 }
