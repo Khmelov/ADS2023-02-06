@@ -1,7 +1,9 @@
-package by.it.a_khmelev.lesson03;
+package by.it.group251004.mukhtasarov.lesson03;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 // Lesson 3. B_Huffman.
@@ -41,7 +43,6 @@ import java.util.Scanner;
 //        abacabad
 
 public class B_Huffman {
-
     String decode(File file) throws FileNotFoundException {
         StringBuilder result=new StringBuilder();
         //прочитаем строку для кодирования из тестового файла
@@ -50,10 +51,21 @@ public class B_Huffman {
         Integer length = scanner.nextInt();
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         //тут запишите ваше решение
-
-
-
-
+        Map<String, Character> codes = new HashMap<>();
+        for (int i = 0; i < count; i++) {
+            String ch = scanner.next();
+            String code = scanner.next();
+            codes.put(code, ch.charAt(0));
+        }
+        String code = scanner.next();
+        StringBuilder key = new StringBuilder();
+        for (int i = 0; i < code.length(); i++) {
+            key.append(code.charAt(i));
+            if (codes.containsKey(key.toString())){
+                result.append(codes.get(key.toString()));
+                key.setLength(0);
+            }
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         return result.toString(); //01001100100111
     }

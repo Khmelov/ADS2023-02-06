@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson03;
+package by.it.group251004.mukhtasarov.lesson03;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -121,20 +121,40 @@ public class A_Huffman {
 
         Map<Character, Integer> count = new HashMap<>();
         //1. переберем все символы по очереди и рассчитаем их частоту в Map count
-            //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
-
+        //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
+        for (int i = 0; i < s.length(); i++) {
+            count.putIfAbsent(s.charAt(i), 1);
+            count.put(s.charAt(i), count.get(s.charAt(i)) + 1);
+        }
         //2. перенесем все символы в приоритетную очередь в виде листьев
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
+        ArrayList<Integer> values = new ArrayList<>(count.values());
+        ArrayList<Character> keys = new ArrayList<>(count.keySet());
 
+        for (int i = 0; i < values.size(); i++) {
+            LeafNode el = new LeafNode(values.get(i), keys.get(i));
+            priorityQueue.add(el);
+        }
         //3. вынимая по два узла из очереди (для сборки родителя)
         //и возвращая этого родителя обратно в очередь
         //построим дерево кодирования Хаффмана.
         //У родителя частоты детей складываются.
 
+        while(priorityQueue.size() != 1){
+            Node son1 = priorityQueue.poll();
+            Node son2 = priorityQueue.poll();
+            InternalNode el = new InternalNode(son1, son2);
+            priorityQueue.add(el);
+        }
+
         //4. последний из родителей будет корнем этого дерева
         //это будет последний и единственный элемент оставшийся в очереди priorityQueue.
         StringBuilder sb = new StringBuilder();
-        //.....
+        priorityQueue.peek().fillCodes("");
+
+        for (int i = 0; i < s.length(); i++) {
+            sb.append(codes.get(s.charAt(i)));
+        }
 
         return sb.toString();
         //01001100100111
