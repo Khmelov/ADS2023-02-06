@@ -44,7 +44,7 @@ import java.util.TreeMap;
 
 public class B_Huffman {
 
-    String decode(File file) throws FileNotFoundException {
+    String decode(File file) throws FileNotFoundException  {
         StringBuilder result=new StringBuilder();
         //прочитаем строку для кодирования из тестового файла
         Scanner scanner = new Scanner(file);

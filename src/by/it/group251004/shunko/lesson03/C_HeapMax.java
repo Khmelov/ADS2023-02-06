@@ -90,7 +90,7 @@ public class C_HeapMax {
     }
 
     //эта процедура читает данные из файла, ее можно не менять.
-    Long findMaxValue(InputStream stream) {
+    Long findMaxValue(InputStream stream)  {
         Long maxValue=0L;
         MaxHeap heap = new MaxHeap();
         //прочитаем строку для кодирования из тестового файла
