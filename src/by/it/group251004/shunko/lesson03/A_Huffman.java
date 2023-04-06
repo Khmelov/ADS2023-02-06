@@ -99,7 +99,7 @@ public class A_Huffman {
         }
 
         @Override
-        void fillCodes(String code) {
+        void fillCodes(String code)  {
             //добрались до листа, значит рекурсия закончена, код уже готов
             //и можно запомнить его в индексе для поиска кода по символу.
             codes.put(this.symbol, code);
