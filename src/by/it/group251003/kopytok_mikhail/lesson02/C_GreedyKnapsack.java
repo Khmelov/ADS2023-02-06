@@ -15,6 +15,7 @@ package by.it.group251003.kopytok_mikhail.lesson02;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class C_GreedyKnapsack {
@@ -69,10 +70,11 @@ public class C_GreedyKnapsack {
         //кроме того, можете описать свой компаратор в классе Item
 
         //ваше решение.
-        Arrays.sort(items);
+        Arrays.sort(items, Comparator.reverseOrder());
+
         for (int i = 0, CurrW = 0; (i < items.length) && (CurrW < W); i++ ){
             if (CurrW + items[i].weight > W) {
-                result += (int) items[i].PricePW * CurrW;
+                result += items[i].PricePW * (W-CurrW);
                 CurrW = W;
             }
             else {
