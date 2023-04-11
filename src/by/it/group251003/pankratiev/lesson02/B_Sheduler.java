@@ -53,20 +53,19 @@ public class B_Sheduler {
 
         Comparator<Event> SortAscendingStop = new Comparator<Event>() {
             @Override
-            public int compare(Event first, Event second){
+            public int compare(Event first, Event second) {
                 return Integer.compare(first.stop, second.stop);
             }
 
         };
+
         Arrays.sort(events, SortAscendingStop);
 
-        int i = 0;
-        while (i < events.length){
-            int stop = events[i].stop;
-            result.add(events[i]);
-            while((i < events.length) && (events[i].start < stop))
-                i++;
-        }
+        for (int i = 0, stop = 0; i < events.length; i++)
+            if (events[i].start >= stop){
+                stop = events[i].stop;
+                result.add(events[i]);
+            }
 
         return result;          //вернем итог
     }
