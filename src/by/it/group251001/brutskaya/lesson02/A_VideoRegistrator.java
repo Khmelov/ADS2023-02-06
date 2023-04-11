@@ -1,4 +1,4 @@
-package by.it.group251001.brutskaya.lesson01.lesson02;
+package by.it.group251001.brutskaya.lesson02;
 
 import java.util.ArrayList;
 import java.util.Arrays;
