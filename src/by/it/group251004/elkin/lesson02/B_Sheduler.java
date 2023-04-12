@@ -1,4 +1,4 @@
-package artiomkiseliov.lesson01.lesson02;
+package by.it.group251004.elkin.lesson02;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,37 +40,26 @@ public class B_Sheduler {
         System.out.println(starts);                                 //покажем рассчитанный график занятий
     }
 
-    List<Event> calcStartTimes(Event[] events, int from, int to) {
-        //Events - события которые нужно распределить в аудитории
-        //в период [from, int] (включительно).
-        //оптимизация проводится по наибольшему числу непересекающихся событий.
-        //Начало и конец событий могут совпадать.
 
+    List<Event> calcStartTimes(Event[] events, int from, int to) {
         List<Event> result;
         result = new ArrayList<>();
-        //ваше решение.
-        int i=from;
-        while (i<=to) {
-            boolean NewEve=false; //like christmas eve;
+        boolean isCorrect;
+        while (from <= to) {
+            isCorrect = false;
             int end = to;
-            for (int j=0;j<events.length;j++) {
-                if (i==events[j].start && ((events[j].stop-events[j].start)<(end-i))) {
-                    NewEve=true;
-                    end=events[j].stop;
+            for (int i = 0; i < events.length; i++) {
+                if (from == events[i].start && ((events[i].stop - events[i].start) < (end - from))) {
+                    isCorrect = true;
+                    end = events[i].stop;
                 }
             }
-            if (NewEve) {
-
-                result.add( new Event(i,end));
-                i=end;
+            if (isCorrect) {
+                result.add(new Event(from,end));
+                from = end;
             }
-            else i++;
+            else from++;
         }
-
-
-
-
-
         return result;          //вернем итог
     }
 }

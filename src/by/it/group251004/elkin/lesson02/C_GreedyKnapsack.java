@@ -1,4 +1,4 @@
-package artiomkiseliov.lesson01.lesson02;
+package by.it.group251004.elkin.lesson02;
 /*
 Даны
 1) объем рюкзака 4
@@ -14,8 +14,6 @@ package artiomkiseliov.lesson01.lesson02;
  */
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Scanner;
 
 public class C_GreedyKnapsack {
@@ -45,12 +43,40 @@ public class C_GreedyKnapsack {
         }
     }
 
-    static class Mysort implements Comparator<Item> {
-        public int compare(Item a, Item b) {
-            return b.cost - a.cost;
+    Item[] shellsSort(Item[] items) {
+        int gap = items.length / 2;
+        while (gap > 0) {
+            for (int i = 0; i < items.length - gap; i++) {
+                int j = i;
+                Item temp = items[j + gap];
+                while (j >= 0 && temp.cost / temp.weight > items[j].cost / items[j].weight) {
+                    items[j + gap] = items[j];
+                    items[j] = temp;
+                    j -= gap;
+                }
+            }
+            gap /= 2;
         }
-
+        return items;
     }
+
+    double getMaximumPackage(Item[] items, int W) {
+        double result = 0;
+        int i = 0;
+        double tempWeight = 0;
+        while (i < items.length && tempWeight < W) {
+            if (tempWeight + items[i].weight < W) {
+                result += items[i].cost;
+                tempWeight += items[i].weight;
+            } else {
+                result += items[i].cost * ((W - tempWeight) / items[i].weight);
+                tempWeight = W;
+            }
+            i++;
+        }
+        return result;
+    }
+
     double calc(File source) throws FileNotFoundException {
         Scanner input = new Scanner(source);
         int n = input.nextInt();      //сколько предметов в файле
@@ -60,46 +86,19 @@ public class C_GreedyKnapsack {
             items[i] = new Item(input.nextInt(), input.nextInt());
         }
         //покажем предметы
-        for (Item item:items) {
+        for (Item item : items) {
             System.out.println(item);
         }
         System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
-
         //тут необходимо реализовать решение задачи
         //итогом является максимально воможная стоимость вещей в рюкзаке
         //вещи можно резать на кусочки (непрерывный рюкзак)
-        Arrays.sort(items, new Mysort());
-        for (Item item:items) {
-            System.out.println(item);
-        }
-        System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
-        double result = 0;
-        int i = 0;
-        boolean NotEnough = true;
-        while (i < n && NotEnough)
-        {
-            if (items[i].weight < W)
-            {
-                W -= items[i].weight;
-                result += items[i].cost * items[i].weight;
-            }
-            else
-            {
-                result += items[i].cost * W;
-                NotEnough = false;
-            }
-            i++;
-        }
+        items = shellsSort(items);
         //тут реализуйте алгоритм сбора рюкзака
         //будет особенно хорошо, если с собственной сортировкой
         //кроме того, можете описать свой компаратор в классе Item
-
         //ваше решение.
-
-
-
-
-
+        double result = getMaximumPackage(items, W);
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
         return result;
     }
