@@ -1,4 +1,4 @@
-package by.it.group251001.brutskaya.lesson01.lesson03;
+package by.it.group251001.brutskaya.lesson03;
 
 import org.junit.Test;
 
