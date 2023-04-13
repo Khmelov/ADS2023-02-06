@@ -73,6 +73,7 @@ public class B_Huffman {
             if (codes.get(tempCode) != null) {
                 resLine += codes.get(tempCode);
                 tempCode = "";
+
             }
         }
 
