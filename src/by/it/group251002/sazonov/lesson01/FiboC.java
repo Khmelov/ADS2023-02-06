@@ -53,6 +53,5 @@ public class FiboC {
         return periodFib.get((int)(n % period));
     }
 
-
 }
 
