@@ -30,7 +30,8 @@ public class Lesson02Test {
     @Test(timeout = 2000)
     public void B_Sheduler() {
         B_Sheduler instance = new B_Sheduler();
-        B_Sheduler.Event[] events = {new B_Sheduler.Event(0, 3), new B_Sheduler.Event(0, 1), new B_Sheduler.Event(1, 2), new B_Sheduler.Event(3, 5),
+        B_Sheduler.Event[] events = {
+                new B_Sheduler.Event(0, 3), new B_Sheduler.Event(0, 1), new B_Sheduler.Event(1, 2), new B_Sheduler.Event(3, 5),
                 new B_Sheduler.Event(1, 3), new B_Sheduler.Event(1, 3), new B_Sheduler.Event(1, 3), new B_Sheduler.Event(3, 6),
                 new B_Sheduler.Event(2, 7), new B_Sheduler.Event(2, 3), new B_Sheduler.Event(2, 7), new B_Sheduler.Event(7, 9),
                 new B_Sheduler.Event(3, 5), new B_Sheduler.Event(2, 4), new B_Sheduler.Event(2, 3), new B_Sheduler.Event(3, 7),
@@ -44,7 +45,7 @@ public class Lesson02Test {
     }
     @Test(timeout = 2000)
     public void C_GreedyKnapsack() throws Exception {
-        String root=System.getProperty("user.dir")+"/src/";
+        String root=System.getProperty("user.dir")+"/";
         File file=new File(root+"by/it/a_khmelev/lesson02/greedyKnapsack.txt");
         double costFinal=new C_GreedyKnapsack().calc(file);
         boolean ok=costFinal==200;
