@@ -1,4 +1,4 @@
-package by.it.group251003.gabrus.lesson04;
+package by.it.group251003.beskosty.lesson04;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -48,15 +48,19 @@ public class C_GetInversions {
         }
         int result = 0;
         //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
-
-
-
-
-
-
-
-
-
+        for (int i = 0; i < n; i++) {
+            int value = a[i];
+            int left = i+1;
+            int right = 5;
+            while (left<=right){
+                int mid = (left+right)/2;
+                if (a[mid-1]<value){
+                    result++;
+                    break;
+                }
+                else left = mid + 1;
+            }
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
