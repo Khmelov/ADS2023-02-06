@@ -15,11 +15,14 @@ import java.util.Scanner;
         - k натуральных чисел b1,...,bk не превышающих 10E9 (сами числа)
 Для каждого i от 1 до kk необходимо вывести индекс 1<=j<=n,
 для которого A[j]=bi, или -1, если такого j нет.
+
         Sample Input:
         5 1 5 8 12 13
         5 8 1 23 1 11
+
         Sample Output:
         3 1 -1 1 -1
+
 (!) Обратите внимание на смещение начала индекса массивов JAVA относительно условий задачи
 */
 
@@ -43,7 +46,6 @@ public class A_BinaryFind {
         }
         return result;
     }
-
     public static int binarySearch(int[] array, int low, int high, int target) {
 
         int l = low;
@@ -72,7 +74,6 @@ public class A_BinaryFind {
     public static int binarySearch(int[] array, int target) {
         return binarySearch(array, 0, array.length - 1, target);
     }
-
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";

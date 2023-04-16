@@ -1,4 +1,4 @@
-package by.it.group251003.gabrus.lesson04;
+package by.it.group251001.markostapchuk.lesson04;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -39,28 +39,61 @@ public class C_GetInversions {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!
-        //размер массива
         int n = scanner.nextInt();
-        //сам массив
         int[] a = new int[n];
         for (int i = 0; i < n; i++) {
             a[i] = scanner.nextInt();
         }
-        int result = 0;
-        //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
 
-
-
-
-
-
-
-
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return countInversions(a, 0);
     }
+    public static int countInversions(int[] array, int counter) {
 
+        if (array.length == 1) {
+            return 0;
+        }
+
+        int[] leftPart = new int[array.length / 2];
+        int[] rightPart = new int[array.length - leftPart .length];
+
+        for (int i = 0; i < leftPart.length; i++) {
+            leftPart[i] = array[i];
+        }
+        for (int i = leftPart.length; i < array.length; i++) {
+            rightPart[i - leftPart.length] = array[i];
+        }
+
+        counter += countInversions(leftPart, counter);
+        counter += countInversions(rightPart, counter);
+
+        int i = 0;
+        int j = 0;
+
+        while (i < leftPart.length && j < rightPart.length) {
+
+            if (leftPart[i] > rightPart[j]) {
+                counter++;
+                array[i + j] = rightPart[j];
+                j++;
+            }
+            else {
+                array[i + j] = leftPart[i];
+                i++;
+            }
+        }
+
+        while (i < leftPart.length) {
+            array[i + j] = leftPart[i];
+            i++;
+        }
+
+        while (j < rightPart.length) {
+            array[i + j] = rightPart[j];
+            j++;
+        }
+
+        return counter;
+    }
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
