@@ -1,7 +1,6 @@
-package by.it.group251003.gabrus.lesson04;
+package by.it.group251003.kardychka.lesson04;
 
 import org.junit.Test;
-
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Arrays;
