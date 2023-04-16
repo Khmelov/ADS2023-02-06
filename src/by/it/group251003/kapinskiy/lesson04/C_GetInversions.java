@@ -1,4 +1,4 @@
-package by.it.group251003.gabrus.lesson04;
+package by.it.group251003.kapinskiy.lesson04;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -38,7 +38,6 @@ public class C_GetInversions {
     int calc(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!
         //размер массива
         int n = scanner.nextInt();
         //сам массив
@@ -46,20 +45,48 @@ public class C_GetInversions {
         for (int i = 0; i < n; i++) {
             a[i] = scanner.nextInt();
         }
-        int result = 0;
-        //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
-
-
-
-
-
-
-
-
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        //вычисление количества инверсий
+        int result = mergeSort(a, 0, n - 1);
         return result;
     }
+
+    private  int mergeSort(int[] arr, int left, int right) {
+        int result = 0;
+        if (left < right) {
+            int mid =(left + right) / 2;
+            result += mergeSort(arr, left, mid);
+            result += mergeSort(arr, mid + 1, right);
+            result += merge(arr, left, mid, right);
+        }
+        return result;
+    }
+
+    private int merge(int[] arr, int left, int mid, int right) {
+        int result = 0;
+        int[] temp = new int[right - left + 1];
+        int i = left, j = mid + 1, k = 0;
+        while (i <= mid && j <= right) {
+            if (arr[i] > arr[j]) {
+                temp[k++] = arr[j++];
+                result += mid - i + 1;
+            }
+            else
+                temp[k++] = arr[i++];
+        }
+        while (i <= mid) {
+            temp[k++] = arr[i++];
+        }
+        while (j <= right) {
+            temp[k++] = arr[j++];
+        }
+        for (int m = 0; m < temp.length; m++) {
+            arr[left + m] = temp[m];
+        }
+
+        return result;
+    }
+
+
 
 
     public static void main(String[] args) throws FileNotFoundException {
