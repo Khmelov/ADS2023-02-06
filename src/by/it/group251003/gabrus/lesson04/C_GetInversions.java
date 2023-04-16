@@ -49,18 +49,54 @@ public class C_GetInversions {
         int result = 0;
         //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
 
-
-
-
-
-
-
-
+        result = countInversions(a, 0, n - 1);
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
 
+    public static int countInversions(int[] arr, int start, int end) {
+        return mergeSort(arr, start, end);
+    }
+
+    public static int mergeSort(int[] arr, int start, int end) {
+        int count = 0;
+        if (start < end) {
+            int middle = (start + end) / 2;
+            count += mergeSort(arr, start, middle); // рекурсивная сортировка левой части массива
+            count += mergeSort(arr, middle + 1, end); // рекурсивная сортировка правой части массива
+            count += merge(arr, start, middle, end); // слияние отсортированных частей массива
+        }
+        return count;
+    }
+
+    public static int merge(int[] arr, int start, int middle, int end) {
+        int[] tempArr = new int[arr.length];
+        for (int i = start; i <= end; i++) {
+            tempArr[i] = arr[i];
+        }
+        int i = start;
+        int j = middle + 1;
+        int k = start;
+        int count = 0;
+        while (i <= middle && j <= end) {
+            if (tempArr[i] <= tempArr[j]) {
+                arr[k] = tempArr[i];
+                i++;
+            } else {
+                arr[k] = tempArr[j];
+                j++;
+                count += middle - i + 1;
+            }
+            k++;
+        }
+        while (i <= middle) {
+            arr[k] = tempArr[i];
+            k++;
+            i++;
+        }
+        return count;
+    }
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";

@@ -38,14 +38,46 @@ public class B_MergeSort {
         // тут ваше решение (реализуйте сортировку слиянием)
         // https://ru.wikipedia.org/wiki/Сортировка_слиянием
 
-
-
-
-
+        mergeSort(a, 0, n - 1);
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return a;
     }
+
+    public static void mergeSort(int[] arr, int start, int end) {
+        if (start < end) {
+            int middle = (start + end) / 2;
+            mergeSort(arr, start, middle);
+            mergeSort(arr, middle + 1, end);
+            merge(arr, start, middle, end);
+        }
+    }
+
+    public static void merge(int[] arr, int start, int middle, int end) {
+        int[] tempArr = new int[arr.length];
+        for (int i = start; i <= end; i++) {
+            tempArr[i] = arr[i];
+        }
+        int i = start;
+        int j = middle + 1;
+        int k = start;
+        while (i <= middle && j <= end) {
+            if (tempArr[i] <= tempArr[j]) {
+                arr[k] = tempArr[i];
+                i++;
+            } else {
+                arr[k] = tempArr[j];
+                j++;
+            }
+            k++;
+        }
+        while (i <= middle) {
+            arr[k] = tempArr[i];
+            k++;
+            i++;
+        }
+    }
+
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson04/dataB.txt");
