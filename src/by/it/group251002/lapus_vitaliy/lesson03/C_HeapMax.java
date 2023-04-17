@@ -37,6 +37,51 @@ import java.util.Scanner;
 
 public class C_HeapMax {
 
+    List<Long> sortup(List<Long> arr, int large) {
+        int now=large;
+        int high=(now-1) / 2;
+
+        if ((arr.get(high)<arr.get(now)))
+        {
+            now=high;
+        }
+
+        if (now!=large)
+        {
+            long buf=arr.get(now);
+            arr.set(now,arr.get(large));
+            arr.set(large,buf);
+            arr=sortup(arr,now);
+        }
+
+        return arr;
+    }
+
+    List<Long> sortdown(List<Long> arr, int large, int max) {
+        int now=large;
+        int left=now*2+1;
+        int right=2*now+2;
+
+        if ((left<max) && (arr.get(left)>arr.get(now)))
+        {
+            now=left;
+        }
+        if ((right<max) && (arr.get(right)>arr.get(now)))
+        {
+            now=right;
+        }
+
+        if (now!=large)
+        {
+            long buf=arr.get(now);
+            arr.set(now,arr.get(large));
+            arr.set(large,buf);
+            arr=sortdown(arr,now,max);
+        }
+
+        return arr;
+    }
+
     private class MaxHeap {
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         //тут запишите ваше решение.
@@ -44,21 +89,25 @@ public class C_HeapMax {
         private List<Long> heap = new ArrayList<>();
 
         int siftDown(int i) { //просеивание вверх
-
+            heap=sortup(heap,i);
             return i;
         }
 
         int siftUp(int i) { //просеивание вниз
-
+            heap=sortdown(heap,1,i);
             return i;
         }
 
         void insert(Long value) { //вставка
+            heap.add(value);
+            siftDown(heap.size()-1);
         }
 
         Long extractMax() { //извлечение и удаление максимума
             Long result = null;
-
+            result=heap.get(0);
+            heap.set(0,(long)(heap.size()-1));
+            heap.remove(heap.size()-1);
             return result;
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
