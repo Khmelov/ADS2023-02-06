@@ -34,7 +34,6 @@ public class FiboB {
             nums.add(f);
             i++;
         }
-        //здесь нужно реализовать вариант с временем O(n) и памятью O(n)
         return nums.get(n);
     }
 

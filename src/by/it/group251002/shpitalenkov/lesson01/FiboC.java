@@ -25,9 +25,6 @@ public class FiboC {
     }
 
     long fasterC(long n, int m) {
-        //Решение сложно найти интуитивно
-        //возможно потребуется дополнительный поиск информации
-        //см. период Пизано
         List<Long> o = new ArrayList<>();
         o.add(0L);
         o.add(1L);

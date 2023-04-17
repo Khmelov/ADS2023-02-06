@@ -1,4 +1,4 @@
-/*package by.it.group251003.gabrus.lesson04;
+package by.it.group251002.shpitalenkov.lesson04;
 
 import org.junit.Test;
 
@@ -59,4 +59,3 @@ public class Lesson4Test {
     }
 
 }
-*/

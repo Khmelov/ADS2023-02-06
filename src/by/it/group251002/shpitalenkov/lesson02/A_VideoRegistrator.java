@@ -29,6 +29,10 @@ public class A_VideoRegistrator {
 
             // пропускаем все покрываемые события
         while (i < events.length) {
+
+
+
+
             double start = events[i]; // начинаем событие с крайнего левого
             result.add(start); // добавляем его в список начала
             double end = start + workDuration; // вычисляем конец работы
