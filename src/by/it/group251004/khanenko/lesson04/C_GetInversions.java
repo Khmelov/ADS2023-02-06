@@ -22,7 +22,7 @@ public class C_GetInversions {
             MergeSort(arr, middle + 1, right);
             Merge(arr, left, middle, right);
         } else if ((right - left == 1) && (arr[right] > arr[left]))
-                swapELements(arr[right],arr[left]);
+            swapELements(arr[right],arr[left]);
 
         return arr;
     }
