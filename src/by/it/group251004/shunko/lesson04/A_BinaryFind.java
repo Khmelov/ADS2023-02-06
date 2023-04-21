@@ -46,17 +46,25 @@ public class A_BinaryFind {
         for (int i = 0; i < k; i++) {
             int value = scanner.nextInt();
             //тут реализуйте бинарный поиск индекса
-
-
-
-
-            result[i]=0;
+            result[i] = BinarySearch(a,value,0,k - 1);
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
 
-
+    public int BinarySearch(int[] a, int value, int left, int right)
+    {
+        while (left < right) {
+            int mid = (left + right) / 2;
+            if (value < a[mid])
+                return BinarySearch(a, value, left, mid - 1);
+            else if (value > a[mid])
+                return BinarySearch(a, value, mid + 1, right);
+            else if (value == a[mid])
+                return mid + 1;
+        }
+        return -1;
+    }
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson04/dataA.txt");
