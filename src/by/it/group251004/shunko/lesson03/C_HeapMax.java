@@ -76,7 +76,7 @@ public class C_HeapMax {
 
         void insert(Long value) { //вставка
             heap.add(value);
-            siftUp(heap.size()-1);
+            siftUp(heap.size()-1);  //0(log(n))
         }
 
         Long extractMax() {
