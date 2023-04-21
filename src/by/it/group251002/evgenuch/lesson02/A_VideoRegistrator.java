@@ -25,8 +25,8 @@ public class A_VideoRegistrator {
         //timeWorkDuration время работы видеокамеры после старта
         List<Double> result;
         Arrays.sort(events);
-        result = new ArrayList<>();
-        double Nachalo = events[0];
+        result = new ArrayList<>(); //Calc end and skip all covered events while end inc index
+        double Nachalo = events[0]; //While not reg event take on 1 on the left and rem start time
         int amount=events.length;
         result.add(Nachalo);
         for (int i = 0;i<amount;i++){

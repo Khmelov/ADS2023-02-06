@@ -6,6 +6,8 @@ package by.it.group251002.korti.lesson01;
  * время расчета должно быть не более 2 секунд
  */
 
+import java.util.ArrayList;
+
 public class FiboC {
 
     private long startTime = System.currentTimeMillis();
@@ -25,19 +27,20 @@ public class FiboC {
         //Решение сложно найти интуитивно
         //возможно потребуется дополнительный поиск информации
         //см. период Пизано
+        ArrayList<Integer> kek = new ArrayList<>();
+        kek.add(0);
+        kek.add(1);
         int i = 2;
-        if (n==0) return 0;
-        if (n==1) return 1;
-        long[] nums = new long[(int)(n-1)] ;
-        nums[0] = 0;
-        nums[1] = 1;
-        do {
-            nums[i] = ((nums[i-2] + nums[i-1]) % m);
+        while (true) {
+            kek.add((kek.get(i - 1) + kek.get(i - 2)) % m);
+            if ((kek.get(i) == 1) && kek.get(i - 1) == 0) {
+                break;
+            }
             i++;
         }
-        while (!(nums[i-2] == 0 && nums[i-1] == 1) && i < n );
 
-        return nums[(int) (n % (i - 2))];
+
+        return kek.get((int) (n % i));
     }
 
 

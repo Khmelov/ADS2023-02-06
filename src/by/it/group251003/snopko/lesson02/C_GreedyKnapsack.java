@@ -79,10 +79,11 @@ public class C_GreedyKnapsack {
 
         Arrays.sort(items, SortComparator);
         for (int i = 0; i < n; i++){
-            int canget = min(items[i].weight, W);
-            if (canget == 0) {break;}
-            result +=(double) ((items[i].cost/ items[i].weight) * canget);
-            W -= canget;
+            int avaib = min(items[i].weight, W);
+            if (avaib == 0)
+                break;
+            result = result + (double) ((items[i].cost/ items[i].weight) * avaib);
+            W = W - avaib;
         }
 
 
