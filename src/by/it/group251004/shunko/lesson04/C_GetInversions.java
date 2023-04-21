@@ -34,7 +34,7 @@ Sample Output:
 
 
 public class C_GetInversions {
-
+    public byte inversions = 0;
     int calc(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
@@ -46,21 +46,43 @@ public class C_GetInversions {
         for (int i = 0; i < n; i++) {
             a[i] = scanner.nextInt();
         }
-        int result = 0;
         //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
-
-
-
-
-
-
-
-
+        mergeSort(a,0,n - 1);
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return inversions;
     }
 
+    void merge(int[] a, int left, int mid, int right) {
+        int[] leftPart = new int[mid - left + 1];
+        int[] rightPart = new int[right - mid];
+        for (int i = 0; i < leftPart.length; i++)
+            leftPart[i] = a[left + i];
+        for (int i = 0; i < rightPart.length; i++)
+            rightPart[i] = a[mid + 1 + i]; // so центр левый
+        int i = 0, j = 0, k = 0;
+        while ( j < rightPart.length && i < leftPart.length) {
+            if (leftPart[i] <= rightPart[j]){
+                a[k++] = leftPart[i++];
+            } else {
+                a[k++] = rightPart[j++];
+                inversions += j + 1;
+            }
+        }
+        while (i < leftPart.length)
+            a[k++] = leftPart[i++];
+        while (j < rightPart.length)
+            a[k++] = rightPart[j++];
+    }
+
+    void mergeSort(int[] a, int left, int right) {
+        if (left < right) {
+            int mid = (left + right) / 2;
+            mergeSort(a, left, mid);
+            mergeSort(a, mid + 1, right);
+            merge(a, left, mid, right);
+        }
+    }
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
