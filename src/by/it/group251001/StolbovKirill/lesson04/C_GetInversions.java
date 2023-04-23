@@ -35,6 +35,48 @@ Sample Output:
 
 public class C_GetInversions {
 
+    int merge(int[] arr, int left, int mid, int right){
+        int[] result = new int[right-left];
+        int it1 = 0, it2 = 0;
+        int inversions = 0;
+
+        while (left + it1 < mid && mid + it2 < right){
+            if (arr[left + it1] <= arr[mid + it2]){
+                result[it1 + it2] = arr[left + it1];
+                it1++;
+            }
+            else{
+                inversions += mid - (left + it1);
+                result[it1 + it2] = arr[mid + it2];
+                it2++;
+            }
+        }
+        while (left + it1 < mid){
+            result[it1 + it2] = arr[left + it1];
+            it1++;
+        }
+        while (mid + it2 < right){
+            result[it1 + it2] = arr[mid + it2];
+            it2++;
+        }
+
+        if (it1 + it2 >= 0)
+            System.arraycopy(result, 0, arr, left, it1 + it2);
+
+        return inversions;
+    }
+
+    int mergeSort(int[] arr, int left, int right){
+        if (left + 1 >= right)
+            return 0;
+        int inversions = 0;
+        int mid = (left + right)/2;
+        inversions += mergeSort(arr, left, mid);
+        inversions += mergeSort(arr, mid, right);
+        inversions += merge(arr, left, mid, right);
+        return inversions;
+    }
+
     int calc(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
@@ -58,7 +100,7 @@ public class C_GetInversions {
 
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return mergeSort(a, 0, n);
     }
 
 
