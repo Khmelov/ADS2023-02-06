@@ -1,4 +1,4 @@
-package by.it.group251003.gabrus.lesson04;
+package by.it.group251001.litvinovich.lesson04;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -48,7 +48,8 @@ public class C_GetInversions {
         }
         int result = 0;
         //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
-
+        int[] temp = new int[n];
+        return mergeSort(a, temp, 0, n - 1);
 
 
 
@@ -58,9 +59,40 @@ public class C_GetInversions {
 
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+    }
+    private int mergeSort(int[] a, int[] temp, int left, int right) {
+        int inversions = 0;
+        if (left < right) {
+            int mid = left + (right - left) / 2;
+            inversions += mergeSort(a, temp, left, mid);
+            inversions += mergeSort(a, temp, mid + 1, right);
+            inversions += merge(a, temp, left, mid, right);
+        }
+        return inversions;
     }
 
+    private int merge(int[] a, int[] temp, int left, int mid, int right) {
+        int inversions = 0;
+        int i = left;
+        int j = mid + 1;
+        int k = left;
+        while (i <= mid && j <= right) {
+            if (a[i] <= a[j]) {
+                temp[k++] = a[i++];
+            } else {
+                temp[k++] = a[j++];
+                inversions += (mid - i + 1); // Увеличиваем счетчик инверсий на количество инверсий между a[i] и a[j]
+            }
+        }
+        while (i <= mid) {
+            temp[k++] = a[i++];
+        }
+        while (j <= right) {
+            temp[k++] = a[j++];
+        }
+        System.arraycopy(temp, left, a, left, right - left + 1);
+        return inversions;
+    }
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
