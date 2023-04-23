@@ -1,10 +1,9 @@
-package by.it.group251003.gabrus.lesson03;
+package by.it.group251001.litvinovich.lesson03;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -45,34 +44,38 @@ public class C_HeapMax {
         private List<Long> heap = new ArrayList<>();
 
         int siftDown(int i) { //просеивание вниз
-
+            int leftChild = 2 * i + 1;
+            int rightChild = 2 * i + 2;
             int largest = i;
 
-            int left = 2 * i + 1;
-            if (left < heap.size() && heap.get(left) > heap.get(largest))
-                largest = left;
+            if (leftChild < heap.size() && heap.get(leftChild) > heap.get(largest)) {
+                largest = leftChild;
+            }
 
-            else {
-                int right = 2 * i + 2;
-                if (right < heap.size() && heap.get(right) > heap.get(largest))
-                    largest = right;
+            if (rightChild < heap.size() && heap.get(rightChild) > heap.get(largest)) {
+                largest = rightChild;
             }
 
             if (largest != i) {
-                Collections.swap(heap, i, largest);
-                return siftDown(largest);
+                Long temp = heap.get(i);
+                heap.set(i, heap.get(largest));
+                heap.set(largest, temp);
+                siftDown(largest);
             }
 
             return i;
         }
 
-        int siftUp(int i) { //просеивание вниз
-
-            int parent = (i - 1) / 2;
-
-            if (parent >= 0 && heap.get(i) > heap.get(parent)) {
-                Collections.swap(heap, i, parent);
-                return siftUp(parent);
+        int siftUp(int i) { //просеивание вверх
+            while (i > 0) {
+                int parent = (i - 1) / 2;
+                if (heap.get(i) <= heap.get(parent)) {
+                    break;
+                }
+                Long temp = heap.get(i);
+                heap.set(i, heap.get(parent));
+                heap.set(parent, temp);
+                i = parent;
             }
 
             return i;
@@ -80,20 +83,20 @@ public class C_HeapMax {
 
         void insert(Long value) { //вставка
             heap.add(value);
-            siftUp(heap.size() - 1);
-
+            int index = heap.size() - 1;
+            siftUp(index);
         }
 
         Long extractMax() { //извлечение и удаление максимума
-
-            if (heap.isEmpty())
+            if (heap.isEmpty()) {
                 return null;
+            }
 
-            Long result = heap.get(0);
-
-            heap.set(0, heap.remove(heap.size() - 1));
+            Long max = heap.get(0);
+            heap.set(0, heap.get(heap.size() - 1));
+            heap.remove(heap.size() - 1);
             siftDown(0);
-            return result;
+            return max;
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
     }

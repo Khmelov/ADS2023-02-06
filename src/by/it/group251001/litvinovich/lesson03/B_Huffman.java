@@ -1,10 +1,10 @@
-package by.it.group251003.gabrus.lesson03;
+package by.it.group251001.litvinovich.lesson03;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Scanner;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 // Lesson 3. B_Huffman.
 // Восстановите строку по её коду и беспрефиксному коду символов.
@@ -52,25 +52,25 @@ public class B_Huffman {
         Integer length = scanner.nextInt();
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         //тут запишите ваше решение
-
-        HashMap<String, Character> codes = new HashMap<>();
-
-        for (int i = 0; i < count; i++){
-            char value = scanner.next().charAt(0);
+        Map<String, String> codes = new HashMap<>();
+        // парсим коды букв и сохраняем их в HashMap
+        for (int i = 0; i < count; i++) {
+            String letter = scanner.next().replace(":", "");
             String code = scanner.next();
-            codes.put(code, value);
+            codes.put(code, letter);
         }
-
-        String string = scanner.next();
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < length; i++){
-            stringBuilder.append(string.charAt(i));
-            if (string.charAt(i) == '0'){
-                result.append(codes.get(stringBuilder.toString()));
-                stringBuilder.setLength(0);
+        String encodedString = scanner.next();
+        // декодируем закодированную строку
+        String currentCode = "";
+        for (int i = 0; i < length; i++) {
+            currentCode += encodedString.charAt(i);
+            if (codes.containsKey(currentCode)) {
+                result.append(codes.get(currentCode));
+                currentCode = "";
             }
         }
-        result.append(codes.get(stringBuilder.toString()));
+
+
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         return result.toString(); //01001100100111

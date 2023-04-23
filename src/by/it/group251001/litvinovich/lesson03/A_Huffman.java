@@ -1,4 +1,4 @@
-package by.it.group251003.gabrus.lesson03;
+package by.it.group251001.litvinovich.lesson03;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,8 +14,8 @@ import java.util.*;
 // Используйте Алгоритм Хаффмана — жадный алгоритм оптимального
 // безпрефиксного кодирования алфавита с минимальной избыточностью.
 
-// В первой строке выведите количество различных букв kk,
-// встречающихся в строке, и размер получившейся закодированной строки.
+// В оке выведите количество различных букв kk,
+// встречающихпервой стрся в строке, и размер получившейся закодированной строки.
 // В следующих kk строках запишите коды букв в формате "letter: code".
 // В последней строке выведите закодированную строку. Примеры ниже
 
@@ -25,8 +25,8 @@ import java.util.*;
 //        Sample Output 1:
 //        1 1
 //        a: 0
-//        0
 
+//        0
 //        Sample Input 2:
 //        abacabad
 //
@@ -103,7 +103,6 @@ public class A_Huffman {
             //добрались до листа, значит рекурсия закончена, код уже готов
             //и можно запомнить его в индексе для поиска кода по символу.
             codes.put(this.symbol, code);
-
         }
     }
 
@@ -120,46 +119,44 @@ public class A_Huffman {
         //все комментарии от тестового решения были оставлены т.к. это задание A.
         //если они вам мешают их можно удалить
 
+        Map<Character, Integer> count = new HashMap<>();
+        for (char c : s.toCharArray()) {
+            if (count.containsKey(c)) {
+                count.put(c, count.get(c) + 1);
+            } else {
+                count.put(c, 1);
+            }
+        }
         //1. переберем все символы по очереди и рассчитаем их частоту в Map count
         //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
 
-        Map<Character, Integer> count = new HashMap<>();
-        for (int i = 0; i < s.length(); i++) {
-            count.computeIfPresent(s.charAt(i), (w, prev) -> prev + 1);
-            count.putIfAbsent(s.charAt(i), 1);
-        }
-
         //2. перенесем все символы в приоритетную очередь в виде листьев
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
-        for (Map.Entry<Character, Integer> entry: count.entrySet())
-        {
-            Character key = entry.getKey();
-            Integer value = entry.getValue();
-
-            priorityQueue.add(new LeafNode(value,  key));
+        for (Map.Entry<Character, Integer> entry : count.entrySet()) {
+            LeafNode leafNode = new LeafNode(entry.getValue(), entry.getKey());
+            priorityQueue.add(leafNode);
         }
-
 
         //3. вынимая по два узла из очереди (для сборки родителя)
         //и возвращая этого родителя обратно в очередь
         //построим дерево кодирования Хаффмана.
         //У родителя частоты детей складываются.
-
-        Node a, b, c;
-        while (priorityQueue.size() != 1) {
-            a = priorityQueue.poll();
-            b = priorityQueue.poll();
-            c = new InternalNode(a,b);
-            priorityQueue.add(c);
+        InternalNode internalNode = null;
+        while (priorityQueue.size() > 1) {
+            Node left = priorityQueue.poll();
+            Node right = priorityQueue.poll();
+            internalNode = new InternalNode(left, right);
+            priorityQueue.add(internalNode);
         }
-        c = priorityQueue.poll();
 
         //4. последний из родителей будет корнем этого дерева
-        //это будет последний и единственный элемент оставшийся в очереди priorityQueue
+        //это будет последний и единственный элемент оставшийся в очереди priorityQueue.
         StringBuilder sb = new StringBuilder();
-        c.fillCodes(String.valueOf(sb));
-        for (int  i = 0; i < s.length(); i++)
+        internalNode.fillCodes("");
+
+        for (int i = 0; i < s.length(); i++)
             sb.append(codes.get(s.charAt(i)));
+
         return sb.toString();
         //01001100100111
         //01001100100111
