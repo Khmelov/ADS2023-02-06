@@ -34,66 +34,57 @@ Sample Output:
 
 
 public class C_GetInversions {
-
+    int MergeSort(int []a, int l, int r){
+        if(l==r)
+            return 0;
+        int c=(l+r)/2;
+        int res = MergeSort(a,l,c);
+        res += MergeSort(a,c+1,r);
+        int[] b = new int[a.length];
+        for(int i=0;i<a.length;++i)
+            b[i] = a[i];
+        int i = l, j = l, k = c + 1;
+        while(j<=c || k<=r){
+            if((j>c) || ((k<=r) && (a[j]>a[k])) ){
+                b[i] = a[k];
+                ++k;
+                res+=c-j+1;
+            } else {
+                b[i] = a[j];
+                ++j;
+            }
+            ++i;
+        }
+        for(i=0;i<a.length;++i)
+            a[i] = b[i];
+        return res;
+    }
     int calc(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!
+        //размер массива
         int n = scanner.nextInt();
+        //сам массив
         int[] a = new int[n];
         for (int i = 0; i < n; i++) {
             a[i] = scanner.nextInt();
         }
+        int result = 0;
+        //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
 
-        return countInversions(a, 0);
+
+
+
+
+
+
+
+
+        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        return MergeSort(a,0,n-1);
     }
-    public static int countInversions(int[] array, int counter) {
 
-        if (array.length == 1) {
-            return 0;
-        }
-
-        int[] leftPart = new int[array.length / 2];
-        int[] rightPart = new int[array.length - leftPart .length];
-
-        for (int i = 0; i < leftPart.length; i++) {
-            leftPart[i] = array[i];
-        }
-        for (int i = leftPart.length; i < array.length; i++) {
-            rightPart[i - leftPart.length] = array[i];
-        }
-
-        counter += countInversions(leftPart, counter);
-        counter += countInversions(rightPart, counter);
-
-        int i = 0;
-        int j = 0;
-
-        while (i < leftPart.length && j < rightPart.length) {
-
-            if (leftPart[i] > rightPart[j]) {
-                counter++;
-                array[i + j] = rightPart[j];
-                j++;
-            }
-            else {
-                array[i + j] = leftPart[i];
-                i++;
-            }
-        }
-
-        while (i < leftPart.length) {
-            array[i + j] = leftPart[i];
-            i++;
-        }
-
-        while (j < rightPart.length) {
-            array[i + j] = rightPart[j];
-            j++;
-        }
-
-        return counter;
-    }
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";

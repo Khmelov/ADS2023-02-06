@@ -28,10 +28,13 @@ import java.util.Scanner;
 
 public class A_BinaryFind {
     int[] findIndex(InputStream stream) throws FileNotFoundException {
+        //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
+        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
 
+        //размер отсортированного массива
         int n = scanner.nextInt();
-
+        //сам отсортированный массива
         int[] a=new int[n];
         for (int i = 1; i <= n; i++) {
             a[i-1] = scanner.nextInt();
@@ -46,6 +49,7 @@ public class A_BinaryFind {
         }
         return result;
     }
+
     public static int binarySearch(int[] array, int low, int high, int target) {
 
         int l = low;
@@ -74,6 +78,7 @@ public class A_BinaryFind {
     public static int binarySearch(int[] array, int target) {
         return binarySearch(array, 0, array.length - 1, target);
     }
+
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
