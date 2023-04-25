@@ -14,7 +14,6 @@ public class A_BinaryFind {
         for (int i = 0; i < sizeSortedArr; i++) {
             arr[i] = scanner.nextInt();
         }
-
         int sizeArrOfIndexes = scanner.nextInt();
         int[] result = new int[sizeArrOfIndexes];
         for (int i = 0; i < sizeArrOfIndexes; i++) {
@@ -34,7 +33,6 @@ public class A_BinaryFind {
                     left = mid;
                 else
                     right = mid;
-
             } while (right - left > 1);
 
             if (arr[left] == value)
@@ -42,7 +40,6 @@ public class A_BinaryFind {
             else if (arr[right] == value)
                 result[i] = right  + 1;
         }
-
         return result;
     }
 

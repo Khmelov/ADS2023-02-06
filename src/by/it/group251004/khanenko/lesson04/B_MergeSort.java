@@ -45,18 +45,14 @@ public class B_MergeSort {
         }
 
         int[] getMergeSort(InputStream stream) {
-
             Scanner scanner = new Scanner(stream);
-
             int size = scanner.nextInt();
             int[] arr = new int[size];
             for (int i = 0; i < size; i++) {
                 arr[i] = scanner.nextInt();
                 System.out.println(arr[i]);
             }
-
             MergeSort (arr, 0, size - 1);
-
             return arr;
     }
     public static void main(String[] args) throws FileNotFoundException {
