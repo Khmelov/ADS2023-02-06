@@ -1,4 +1,4 @@
-package by.it.group251003.gabrus.lesson04;
+package by.it.group251001.levitskij.lesson04;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -47,14 +47,8 @@ public class C_GetInversions {
             a[i] = scanner.nextInt();
         }
         int result = 0;
-        //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
-
-
-
-
-
-
-
+        //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!
+        result = calcInversions(a, 0, n);
 
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
@@ -62,6 +56,36 @@ public class C_GetInversions {
     }
 
 
+    int calcInversions (int[] a, int start, int end){
+        if (end - 1 <= start)
+            return 0;
+        int middle = start + (end - start) / 2;
+        int n = calcInversions(a, start, middle);
+        n += calcInversions(a, middle, end);
+
+        int[] result = a.clone();
+        int firstindex = start;
+        int secondindex = middle;
+        int i = start;
+        while (firstindex < middle && secondindex < end)
+            if (a[firstindex] <= a[secondindex])
+                result[i++] = a[firstindex++];
+            else {
+                result[i++] = a[secondindex++];
+                n++;
+            }
+        while (firstindex < middle-1) {
+            result[i++] = a[firstindex++];
+            n+=(end - middle);
+        }
+        if (firstindex < middle)
+        result[i++] = a[firstindex];
+        while (secondindex < end)
+            result[i++] = a[secondindex++];
+        for( i = start; i<end; i++)
+            a[i]=result[i];
+        return n;
+    }
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson04/dataC.txt");

@@ -1,4 +1,4 @@
-package by.it.group251003.gabrus.lesson04;
+package by.it.group251001.levitskij.lesson04;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -37,7 +37,7 @@ public class B_MergeSort {
 
         // тут ваше решение (реализуйте сортировку слиянием)
         // https://ru.wikipedia.org/wiki/Сортировка_слиянием
-
+        a = mergeSort(a, 0, n);
 
 
 
@@ -45,6 +45,26 @@ public class B_MergeSort {
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return a;
+    }
+    int[] mergeSort(int[] a, int start, int end) {
+        if (end - 1<=start)
+            return a;
+        int middle = start + (end - start) / 2;
+        int[] firsthalf = mergeSort(a, start, middle);
+        int[] secondhalf = mergeSort(a, middle, end);
+
+        int firstindex = start;
+        int secondindex = middle;
+        int i = start;
+        int[] result = a;
+        while (firstindex < middle && secondindex < end)
+            result[i++] = firsthalf[firstindex] < secondhalf[secondindex]
+                    ? firsthalf[firstindex++] : secondhalf[secondindex++];
+        while (firstindex < middle)
+            result[i++] = firsthalf[firstindex++];
+        while (secondindex < end)
+            result[i++] = secondhalf[secondindex++];
+        return result;
     }
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
