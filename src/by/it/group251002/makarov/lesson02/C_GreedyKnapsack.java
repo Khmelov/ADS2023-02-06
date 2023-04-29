@@ -37,15 +37,7 @@ public class C_GreedyKnapsack {
         }
 
         @Override
-        public int compareTo(Item o) {
-//            //тут может быть ваш компаратор
-//            if (this.cost/this.weight<o.cost/o.weight){
-//                return 1;
-//            } else if (this.cost/this.weight>o.weight){
-//                return -1;
-//            }
-            return 0;
-        }
+        public int compareTo(Item o) {return 0;}
     }
     static class SortbyCost implements Comparator<Item>{
         public int compare(Item a, Item b){
@@ -79,11 +71,11 @@ public class C_GreedyKnapsack {
         boolean full = false;
 
         for (int i = 0;(!full&&(i<n));i++){
-            if (items[i].weight<W) {
-                W = W - items[i].weight;
-                result =result + items[i].cost*items[i].weight;
+            if (items[i].weight<W) {//поместится ли след предмет
+                W = W - items[i].weight;// "добавить в рюкзак"
+                result =result + items[i].cost*items[i].weight;//сумму в результат
             } else {
-                result =result + W*items[i].cost;
+                result =result + W*items[i].cost;//записать остаток
                 full = true;
             }
         }
