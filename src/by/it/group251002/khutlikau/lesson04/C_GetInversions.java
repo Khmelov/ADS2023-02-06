@@ -1,4 +1,4 @@
-package by.it.group251001.StolbovKirill.lesson04;
+package by.it.group251002.khutlikau.lesson04;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -48,13 +48,58 @@ public class C_GetInversions {
         }
         int result = 0;
         //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
+        int[] b = new int[n/2+2];
+        int[] c = new int[n/2];
+        int ib = 0;
+        int ic = 0;
+        int degree = 2;
+        while (degree < 2*n){
+            ib = 0;
+            ic = 0;
+            int i = 0;
+            while (i<n){
+                if(i%degree < degree/2){
+                    b[ib] = a[i];
+                    ib++;
+                } else{
+                    c[ic] = a[i];
+                    ic++;
+                }
+                i++;
+            }
+            int ia = degree / 2;
+            i = 0;
+            int j = 0;
+            while(ia<n) {
+                while (i < ia && j < ia && i < ib && j < ic) {
 
-
-
-
-
-
-
+                    if (b[i] <= c[j]) {
+                        a[i+j] = b[i];
+                        if (i/(degree/2)*degree+i%(degree/2)-(i+j) > 0){
+                            result+=i/(degree/2)*degree+i%(degree/2)-(i+j);
+                        }
+                        i += 1;
+                    }
+                    else {
+                        a[i+j] = c[j];
+                        if (degree/2+j/(degree/2)*degree+j%(degree/2)-(i+j) > 0){
+                            result+=degree/2+j/(degree/2)*degree+j%(degree/2)-(i+j);
+                        }
+                        j += 1;
+                    }
+                }
+                while (i < ia && i < ib) {
+                    a[i+j] = b[i];
+                    i += 1;
+                }
+                while (j < ia && j < ic) {
+                    a[i+j] = c[j];
+                    j += 1;
+                }
+                ia += degree / 2;
+            }
+            degree *= 2;
+        }
 
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
@@ -64,7 +109,7 @@ public class C_GetInversions {
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
-        InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson04/dataC.txt");
+        InputStream stream = new FileInputStream(root + "by/it/group251002/khutlikau/lesson04/dataC.txt");
         C_GetInversions instance = new C_GetInversions();
         //long startTime = System.currentTimeMillis();
         int result = instance.calc(stream);
