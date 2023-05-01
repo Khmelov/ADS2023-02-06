@@ -95,6 +95,7 @@ public class B_MergeSort {
         for (int index:result){
             System.out.print(index+" ");
 
+
         }
     }
 

@@ -80,6 +80,7 @@ public class A_BinaryFind {
         //long finishTime = System.currentTimeMillis();
         for (int index:result){
             System.out.print(index+" ");
+
         }
     }
 

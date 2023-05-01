@@ -55,7 +55,6 @@ public class Lesson4Test {
         //long finishTime = System.currentTimeMillis();
         boolean ok=(2==result);
         assertTrue("C failed", ok);
-
     }
 
 }
