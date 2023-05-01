@@ -37,7 +37,7 @@ import java.util.TreeMap;
 //        b: 10
 //        c: 110
 //        d: 111
-//        01001100100111
+//        00101100100111
 
 //        Sample Output 2:
 //        abacabad
