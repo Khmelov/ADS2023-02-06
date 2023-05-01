@@ -35,12 +35,11 @@ public class A_BinaryFind {
         //размер отсортированного массива
         int n = scanner.nextInt();
         //сам отсортированный массива
-        int[] a = new int[n];
+        int[] a=new int[n];
         for (int i = 1; i <= n; i++) {
             a[i-1] = scanner.nextInt();
         }
 
-        //размер массива индексов
         int k = scanner.nextInt();
         int[] result=new int[k];
         for (int i = 0; i < k; i++)
@@ -48,21 +47,6 @@ public class A_BinaryFind {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
-
-
-    /*int item = -1;
-        if (left > right)
-            return item;
-        else {
-        int middle = (left + right) / 2;
-        if (value < a[middle])
-            item = BinarySearch(a, value, left, middle - 1);
-        else if (value > a[middle])
-            item = BinarySearch(a, value, middle + 1, right);
-        else if (value == a[middle])
-            item = value;
-        return item;
-        }*/ //код, чтобы возвращать сразу элемент
 
     public int BinarySearch(int[] a, int value, int left, int right)
     {
@@ -78,10 +62,11 @@ public class A_BinaryFind {
         return -1;
     }
 
+
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson04/dataA.txt");
-        by.it.group251004.krutko.lesson04.A_BinaryFind instance = new by.it.group251004.krutko.lesson04.A_BinaryFind();
+        A_BinaryFind instance = new A_BinaryFind();
         //long startTime = System.currentTimeMillis();
         int[] result=instance.findIndex(stream);
         //long finishTime = System.currentTimeMillis();
