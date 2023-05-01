@@ -1,6 +1,5 @@
-package by.it.group251003.gabrus.lesson04;
+package by.it.group251004.savenok.lesson04;
 
-import by.it.group251004.savenok.lesson04.A_BinaryFind;
 import org.junit.Test;
 
 import java.io.FileInputStream;
