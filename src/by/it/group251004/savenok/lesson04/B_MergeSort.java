@@ -21,7 +21,7 @@ Sample Output:
 */
 public class B_MergeSort {
 
-    int[] getMergeSort(InputStream stream) {
+    int[] getMergeSort(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
@@ -35,6 +35,14 @@ public class B_MergeSort {
             System.out.println(a[i]);
         }
         mergeSort(a, 0,a.length - 1);
+        // тут ваше решение (реализуйте сортировку слиянием)
+        // https://ru.wikipedia.org/wiki/Сортировка_слиянием
+
+
+
+
+
+
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return a;
     }
@@ -42,7 +50,8 @@ public class B_MergeSort {
     void merge(int[] a, int left, int middle, int right) {
         int[] LArray = new int[middle - left + 1];
         int[] RArray = new int[right - middle];
-        System.arraycopy(a, left, LArray, 0, LArray.length);
+        for (int i = 0; i < LArray.length; i++)
+            LArray[i] = a[left + i];
         for (int i = 0; i < RArray.length; i++)
             RArray[i] = a[middle + 1 + i];
         int i = 0, j = 0, k = left;
@@ -65,7 +74,7 @@ public class B_MergeSort {
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson04/dataB.txt");
-        by.it.group251004.krutko.lesson04.B_MergeSort instance = new by.it.group251004.krutko.lesson04.B_MergeSort();
+        B_MergeSort instance = new B_MergeSort();
         //long startTime = System.currentTimeMillis();
         int[] result=instance.getMergeSort(stream);
         //long finishTime = System.currentTimeMillis();
@@ -73,5 +82,6 @@ public class B_MergeSort {
             System.out.print(index+" ");
         }
     }
+
 
 }

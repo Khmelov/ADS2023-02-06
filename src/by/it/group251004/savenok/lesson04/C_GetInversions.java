@@ -34,9 +34,8 @@ Sample Output:
 
 
 public class C_GetInversions {
-
     int inversions = 0;
-    int calc(InputStream stream) {
+    int calc(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!
@@ -47,14 +46,19 @@ public class C_GetInversions {
         for (int i = 0; i < n; i++) {
             a[i] = scanner.nextInt();
         }
+        int result = 0;
+        //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
+
         mergeSort(a, 0, a.length - 1);
         return inversions;
+        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
     void merge(int[] a, int left, int middle, int right) {
         int[] LArray = new int[middle - left + 1];
         int[] RArray = new int[right - middle];
-        System.arraycopy(a, left, LArray, 0, LArray.length);
+        for (int i = 0; i < LArray.length; i++)
+            LArray[i] = a[left + i];
         for (int i = 0; i < RArray.length; i++)
             RArray[i] = a[middle + 1 + i];
         int i = 0, j = 0, k = left;
@@ -80,10 +84,11 @@ public class C_GetInversions {
             merge(a, left, middle, right);
         }
     }
+
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson04/dataC.txt");
-        by.it.group251004.krutko.lesson04.C_GetInversions instance = new by.it.group251004.krutko.lesson04.C_GetInversions();
+        C_GetInversions instance = new C_GetInversions();
         //long startTime = System.currentTimeMillis();
         int result = instance.calc(stream);
         //long finishTime = System.currentTimeMillis();
