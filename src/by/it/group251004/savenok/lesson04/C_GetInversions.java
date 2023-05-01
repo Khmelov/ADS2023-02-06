@@ -1,4 +1,4 @@
-package by.it.group251004.krutko.lesson04;
+package by.it.group251004.savenok.lesson04;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -34,8 +34,9 @@ Sample Output:
 
 
 public class C_GetInversions {
+
     int inversions = 0;
-    public int calc(InputStream stream) throws FileNotFoundException {
+    int calc(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!
@@ -66,7 +67,6 @@ public class C_GetInversions {
                 a[k++] = RArray[j++];
                 inversions += j + 1;
                 //inversions = LArray.length - i;
-                //inversionCount += middle - i + 1;
             }
         while (i < LArray.length)
             a[k++] = LArray[i++];
@@ -85,7 +85,7 @@ public class C_GetInversions {
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson04/dataC.txt");
-        C_GetInversions instance = new C_GetInversions();
+        by.it.group251004.krutko.lesson04.C_GetInversions instance = new by.it.group251004.krutko.lesson04.C_GetInversions();
         //long startTime = System.currentTimeMillis();
         int result = instance.calc(stream);
         //long finishTime = System.currentTimeMillis();

@@ -132,7 +132,7 @@ public class A_Huffman {
         }
         while (priorityQueue.size() != 1) {
             Node left = priorityQueue.poll();
-            Node right = priorityQueue.poll();
+            Node right = priorityQueue.remove();
             priorityQueue.add(new InternalNode(left, right));
         }
         priorityQueue.element().fillCodes("");
