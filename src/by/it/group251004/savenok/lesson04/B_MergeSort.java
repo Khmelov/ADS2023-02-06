@@ -21,7 +21,7 @@ Sample Output:
 */
 public class B_MergeSort {
 
-    int[] getMergeSort(InputStream stream) throws FileNotFoundException {
+    int[] getMergeSort(InputStream stream) {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
@@ -42,8 +42,7 @@ public class B_MergeSort {
     void merge(int[] a, int left, int middle, int right) {
         int[] LArray = new int[middle - left + 1];
         int[] RArray = new int[right - middle];
-        for (int i = 0; i < LArray.length; i++)
-            LArray[i] = a[left + i];
+        System.arraycopy(a, left, LArray, 0, LArray.length);
         for (int i = 0; i < RArray.length; i++)
             RArray[i] = a[middle + 1 + i];
         int i = 0, j = 0, k = left;
