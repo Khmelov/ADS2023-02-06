@@ -1,4 +1,4 @@
-package by.it.group251003.gabrus.lesson03;
+package by.it.group251003.zkmlrabotaem.lesson03;
 
 import org.junit.Test;
 
