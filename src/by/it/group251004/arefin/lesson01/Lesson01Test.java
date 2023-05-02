@@ -1,4 +1,4 @@
-package by.it.group251004.arefin;
+package by.it.group251004.arefin.lesson01;
 
 import org.junit.Test;
 
