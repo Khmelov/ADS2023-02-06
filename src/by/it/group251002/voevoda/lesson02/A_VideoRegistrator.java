@@ -32,4 +32,5 @@ public class A_VideoRegistrator {
 
         return res;                        //вернем итог
     }
+    //////
 }

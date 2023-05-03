@@ -106,4 +106,5 @@ public class C_GreedyKnapsack {
         long finishTime = System.currentTimeMillis();
         System.out.printf("Общая стоимость %f (время %d)",costFinal,finishTime - startTime);
     }
+    //////
 }
