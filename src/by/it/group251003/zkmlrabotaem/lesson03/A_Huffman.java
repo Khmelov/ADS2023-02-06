@@ -1,4 +1,4 @@
-package by.it.group251003.gabrus.lesson03;
+package by.it.group251003.zkmlrabotaem.lesson03;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -78,6 +78,11 @@ public class A_Huffman {
             this.left = left;
             this.right = right;
         }
+        InternalNode(){
+            super(0);
+            this.left = null;
+            this.right = null;
+        }
 
         @Override
         void fillCodes(String code) {
@@ -103,66 +108,47 @@ public class A_Huffman {
             //добрались до листа, значит рекурсия закончена, код уже готов
             //и можно запомнить его в индексе для поиска кода по символу.
             codes.put(this.symbol, code);
-
         }
     }
 
     //индекс данных из листьев
     static private Map<Character, String> codes = new TreeMap<>();
-
-
-    //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
     String encode(File file) throws FileNotFoundException {
-        //прочитаем строку для кодирования из тестового файла
         Scanner scanner = new Scanner(file);
         String s = scanner.next();
-
-        //все комментарии от тестового решения были оставлены т.к. это задание A.
-        //если они вам мешают их можно удалить
-
-        //1. переберем все символы по очереди и рассчитаем их частоту в Map count
-        //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
+        scanner.close();
 
         Map<Character, Integer> count = new HashMap<>();
         for (int i = 0; i < s.length(); i++) {
-            count.computeIfPresent(s.charAt(i), (w, prev) -> prev + 1);
-            count.putIfAbsent(s.charAt(i), 1);
+            char currChar = s.charAt(i);
+
+            if(!count.containsKey(currChar))
+                count.put(currChar, 1);
+            else
+                count.put(currChar, count.get(currChar) + 1);
         }
 
-        //2. перенесем все символы в приоритетную очередь в виде листьев
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
-        for (Map.Entry<Character, Integer> entry: count.entrySet())
-        {
-            Character key = entry.getKey();
-            Integer value = entry.getValue();
-
-            priorityQueue.add(new LeafNode(value,  key));
+        for (Map.Entry<Character, Integer> tmp : count.entrySet()) {
+            Node node = new LeafNode(tmp.getValue(), tmp.getKey());
+            priorityQueue.add(node);
         }
 
-
-        //3. вынимая по два узла из очереди (для сборки родителя)
-        //и возвращая этого родителя обратно в очередь
-        //построим дерево кодирования Хаффмана.
-        //У родителя частоты детей складываются.
-
-        Node a, b, c;
+        Node head = new InternalNode();
         while (priorityQueue.size() != 1) {
-            a = priorityQueue.poll();
-            b = priorityQueue.poll();
-            c = new InternalNode(a,b);
-            priorityQueue.add(c);
+            Node leftNode = priorityQueue.poll();
+            Node rightNode = priorityQueue.poll();
+            head = new InternalNode(leftNode, rightNode);
+            priorityQueue.add(head);
         }
-        c = priorityQueue.poll();
 
-        //4. последний из родителей будет корнем этого дерева
-        //это будет последний и единственный элемент оставшийся в очереди priorityQueue
         StringBuilder sb = new StringBuilder();
-        c.fillCodes(String.valueOf(sb));
-        for (int  i = 0; i < s.length(); i++)
+        head.fillCodes("");
+
+        for (int i = 0; i < s.length(); i++)
             sb.append(codes.get(s.charAt(i)));
+
         return sb.toString();
-        //01001100100111
-        //01001100100111
     }
     //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -170,7 +156,7 @@ public class A_Huffman {
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
         File f = new File(root + "by/it/a_khmelev/lesson03/dataHuffman.txt");
-        A_Huffman instance = new A_Huffman();
+        by.it.group251003.zkmlrabotaem.lesson03.A_Huffman instance = new by.it.group251003.zkmlrabotaem.lesson03.A_Huffman();
         long startTime = System.currentTimeMillis();
         String result = instance.encode(f);
         long finishTime = System.currentTimeMillis();
