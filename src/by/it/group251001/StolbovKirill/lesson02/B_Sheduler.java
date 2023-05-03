@@ -46,19 +46,25 @@ public class B_Sheduler {
         //Начало и конец событий могут совпадать.
         List<Event> result = new ArrayList<>();
 
-        List<Event> eventList = Arrays.stream(events)
-                .filter(event -> event.start >= from && event.stop <= to)
-                .sorted(Comparator.comparingInt(event -> event.stop))
-                .toList();
+        Arrays.sort(events, new Comparator<Event>() {
+            @Override
+            public int compare(Event o1, Event o2) {
+                if (o1.stop != o2.stop)
+                    return o1.stop - o2.stop;
+                return o1.start - o2.start;
 
-        result.add(eventList.get(0));
-
-        for (int i = 1; i < eventList.size(); i++) {
-
-            if (eventList.get(i).start >= result.get(result.size() - 1).stop) {
-                result.add(eventList.get(i));
             }
+        });
+
+        int i = 0, j = 0;
+        while (i < events.length){
+            result.add(events[i]);
+            while (j < events.length && events[i].stop > events[j].start){
+                j++;
+            }
+            i = j;
         }
+
         return result;
     }
 }
