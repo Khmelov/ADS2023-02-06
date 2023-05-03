@@ -1,4 +1,4 @@
-package by.it.group251002.Trubach.lesson03;
+package by.it.group251003.AlexanderKovalevich.lesson03;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -38,55 +38,63 @@ import java.util.Scanner;
 public class C_HeapMax {
 
     private class MaxHeap {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         //тут запишите ваше решение.
         //Будет мало? Ну тогда можете его собрать как Generic и/или использовать в варианте B
         private List<Long> heap = new ArrayList<>();
 
-        void siftDown(int i) { //просеивание вверх
-            if (i * 2 + 2 <= heap.size() - 1) {
-                if (heap.get(i * 2 + 1) > heap.get(i * 2 + 2)) {
-                    Long temp = heap.get(i);
-                    heap.set(i, heap.get(i * 2 + 1));
-                    heap.set(i * 2 + 1, temp);
-                    siftDown(i * 2 + 1);
-                } else {
-                    Long temp = heap.get(i);
-                    heap.set(i, heap.get(i * 2 + 2));
-                    heap.set(i * 2 + 2, temp);
-                    siftDown(i * 2 + 2);
-                }
-            } else
-            if (i * 2 + 1<= heap.size() - 1){
-                Long temp = heap.get(i);
-                heap.set(i, heap.get(i * 2 + 1));
-                heap.set(i * 2 + 1, temp);
-            }
+        int siftDown(int i) { //просеивание вверх
+           while (2*i+1<heap.size()){
+               int left = 2*i+1;
+               int right = 2*i+2;
+               int j = left;
+               if (right<heap.size() && heap.get(right)>heap.get(left)){
+                   j=right;
+               }
+               if (heap.get(i)<= heap.get(j)){
+                   break;
+               }
+               long temp;
+               temp = heap.get(i);
+               heap.set(i,heap.get(j));
+               heap.set(j,temp);
+               i=j;
+
+           }
+            return i;
         }
-        void siftUp(int i) { //просеивание вниз
-            if ((i != 0) && (heap.get((i - 1)/ 2) < heap.get(i))){
-                Long temp = heap.get(i);
-                heap.set(i, heap.get((i - 1)/ 2));
-                heap.set((i - 1) / 2, temp);
+
+        int siftUp(int i) { //просеивание вниз
+            long temp;
+            while (heap.get(i)>heap.get((i-1)/2)){
+                temp = heap.get(i);
+                heap.set(i,heap.get((i-1)/2));
+                heap.set((i-1)/2,temp);
             }
+            i=(i-1)/2;
+
+            return i;
         }
-        void insert(Long value) {  // вставка
+
+        void insert(Long value) {
             heap.add(value);
-            siftUp(heap.size() - 1);
+            siftUp(heap.size()-1);
         }
         Long extractMax() { //извлечение и удаление максимума
-            Long result;
-            if (heap.size() == 0) {
-                return 0L;
-            } else {result = heap.get(0);
-                heap.set(0, heap.get(heap.size() - 1));
-                heap.remove(heap.size() - 1);
-                siftDown(0);
-            }
+            Long result = null;
+            result = heap.get(0);
+            heap.remove(0);
+            siftDown(0);
+
+            //вернёт маесимальнвц и удалит
             return result;
         }
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+
     }
+
+
+   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+
 
     //эта процедура читает данные из файла, ее можно не менять.
     Long findMaxValue(InputStream stream) {
@@ -108,7 +116,7 @@ public class C_HeapMax {
                 if (p[0].equalsIgnoreCase("insert"))
                     heap.insert(Long.parseLong(p[1]));
                 i++;
-                //System.out.println(heap); //debug
+            //System.out.println(heap); //debug
             }
         }
         return maxValue;
