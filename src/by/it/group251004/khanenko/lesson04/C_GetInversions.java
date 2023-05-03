@@ -22,7 +22,8 @@ public class C_GetInversions {
             MergeSort(arr, middle + 1, right);
             Merge(arr, left, middle, right);
         } else if ((right - left == 1) && (arr[right] > arr[left]))
-            swapELements(arr[right],arr[left]);
+                swapELements(arr[right],arr[left]);
+
         return arr;
     }
 
@@ -37,22 +38,27 @@ public class C_GetInversions {
                 res += middle - EF;
             }
         }
+
         while (EF <= middle)
             arr[CE++] = arr[EF++];
         while (ES <= right)
             arr[CE++] = arr[ES++];
+
         return arr;
     }
     int calc(InputStream stream) {
         int result;
         Scanner scan = new Scanner(stream);
+
         int size = scan.nextInt();
         int[] arr = new int[size];
         for (int i = 0; i < size; i++) {
             arr[i] = scan.nextInt();
         }
+
         MergeSort(arr,0,size-1);
         result = res;
+
         return result;
     }
 

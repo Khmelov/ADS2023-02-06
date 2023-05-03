@@ -37,7 +37,6 @@ public class A_Huffman {
     }
 
     private class LeafNode extends Node {
-        //лист
         Object symbol;
 
         LeafNode(int frequence, Object symbol) {

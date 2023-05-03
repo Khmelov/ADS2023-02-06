@@ -7,17 +7,18 @@ import java.util.Scanner;
 
 public class A_BinaryFind {
     int[] findIndex(InputStream stream) throws FileNotFoundException {
-        Scanner scanner = new Scanner(stream);
+        Scanner scan = new Scanner(stream);
 
-        int sizeSortedArr = scanner.nextInt();
+        int sizeSortedArr = scan.nextInt();
         int[] arr = new int[sizeSortedArr];
         for (int i = 0; i < sizeSortedArr; i++) {
-            arr[i] = scanner.nextInt();
+            arr[i] = scan.nextInt();
         }
-        int sizeArrOfIndexes = scanner.nextInt();
+
+        int sizeArrOfIndexes = scan.nextInt();
         int[] result = new int[sizeArrOfIndexes];
         for (int i = 0; i < sizeArrOfIndexes; i++) {
-            int value = scanner.nextInt();
+            int value = scan.nextInt();
             int left = 0;
             int right = sizeSortedArr - 1;
             result[i] = -1;
@@ -29,10 +30,11 @@ public class A_BinaryFind {
                     break;
                 }
                 else
-                if (value > arr[mid])
-                    left = mid;
-                else
-                    right = mid;
+                    if (value > arr[mid])
+                        left = mid;
+                    else
+                        right = mid;
+
             } while (right - left > 1);
 
             if (arr[left] == value)
@@ -40,6 +42,7 @@ public class A_BinaryFind {
             else if (arr[right] == value)
                 result[i] = right  + 1;
         }
+
         return result;
     }
 
@@ -51,8 +54,8 @@ public class A_BinaryFind {
         //long startTime = System.currentTimeMillis();
         int[] result=instance.findIndex(stream);
         //long finishTime = System.currentTimeMillis();
-        for (int index:result){
-            System.out.print(index+" ");
+        for (int index: result){
+            System.out.print(index + " ");
         }
     }
 

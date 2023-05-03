@@ -69,7 +69,7 @@ public class B_Huffman {
     private class InternalNode extends Node {
         Node left;
         Node right;
-
+        //
         InternalNode(Node left, Node right) {
             super(left.frequence + right.frequence);
             this.left = left;
