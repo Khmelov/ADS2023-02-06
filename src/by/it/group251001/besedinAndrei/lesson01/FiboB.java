@@ -16,7 +16,7 @@ public class FiboB {
         return result;
     }
 
-    private BigInteger fastB(Integer n) {
+    BigInteger fastB(Integer n) {
         // Для результата, входящего в диапазон BigInteger
         // С помощью массива, O(n)
 

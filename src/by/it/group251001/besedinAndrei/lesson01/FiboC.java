@@ -31,7 +31,7 @@ public class FiboC {
         return res;
     }
 
-    public long fasterC(long n, int m) {
+    long fasterC(long n, int m) {
         n = n % pizanoPeriod(m);
         long prev = 0;
         long curr = 1;

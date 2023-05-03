@@ -23,7 +23,7 @@ public class FiboA {
         return calc(n - 1) + calc(n - 2); 
     } 
 
-    private BigInteger slowA(Integer n) {
+    BigInteger slowA(Integer n) {
         // Для результата, входящего в диапазон BigInteger
         // Рекурсия, O(2^n)
         if (n.equals(0)) return BigInteger.ZERO;
