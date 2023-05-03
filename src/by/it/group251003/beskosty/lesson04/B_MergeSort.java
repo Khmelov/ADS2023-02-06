@@ -1,4 +1,4 @@
-package by.it.group251003.gabrus.lesson04;
+package by.it.group251003.beskosty.lesson04;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,7 +20,42 @@ Sample Output:
 2 2 3 9 9
 */
 public class B_MergeSort {
+    public static void MergeSort(int[] Array, int Length) {
+        if (Length < 2) return;
+        int Mid = Length / 2;
+        int[] Left = new int[Mid];
+        int[] Right = new int[Length - Mid];
 
+        for (int i = 0; i < Mid; i++) {
+            Left[i] = Array[i];
+        }
+        for (int i = Mid; i < Length; i++) {
+            Right[i - Mid] = Array[i];
+        }
+        MergeSort(Left, Mid);
+        MergeSort(Right, Length - Mid);
+
+        Merge(Array, Left, Right, Mid, Length - Mid);
+    }
+    public static void Merge(
+            int[] Array, int[] LeftA, int[] RightA, int L, int R) {
+        int i,j,k;
+        i = j = k = 0;
+        while (i < L && j < R) {
+            if (LeftA[i] <= RightA[j]) {
+                Array[k++] = LeftA[i++];
+            }
+            else {
+                Array[k++] = RightA[j++];
+            }
+        }
+        while (i < L) {
+            Array[k++] = LeftA[i++];
+        }
+        while (j < R) {
+            Array[k++] = RightA[j++];
+        }
+    }
     int[] getMergeSort(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
@@ -37,7 +72,7 @@ public class B_MergeSort {
 
         // тут ваше решение (реализуйте сортировку слиянием)
         // https://ru.wikipedia.org/wiki/Сортировка_слиянием
-
+        MergeSort(a,a.length);
 
 
 
