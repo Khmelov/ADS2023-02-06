@@ -23,9 +23,12 @@ public class C_GreedyKnapsack {
         int cost;
         int weight;
 
+        double cool;
+
         Item(int cost, int weight) {
             this.cost = cost;
             this.weight = weight;
+            this.cool = cost/ weight;
         }
 
         @Override
@@ -39,18 +42,27 @@ public class C_GreedyKnapsack {
         @Override
         public int compareTo(Item o) {
             //тут может быть ваш компаратор
-
-
             return 0;
         }
     }
-
-    static class Mysort implements Comparator<Item> {
-        public int compare(Item a, Item b) {
-            return b.cost - a.cost;
+    Item[] QSort(Item[] items, int l, int r){
+        double eth = items[(l + r) / 2].cool;
+        int i = l, j = r;
+        while(i < j){
+            while(items[i].cool > eth) ++i;
+            while(items[j].cool < eth) --j;
+            if(i <= j){
+                Item temp = items[i];
+                items[i] = items[j];
+                items[j] = temp;
+                ++i; --j;
+            }
         }
-
+        if(l < j) items = QSort(items,l,j);
+        if(i < r) items = QSort(items,i,r);
+        return items;
     }
+
     double calc(File source) throws FileNotFoundException {
         Scanner input = new Scanner(source);
         int n = input.nextInt();      //сколько предметов в файле
@@ -67,40 +79,28 @@ public class C_GreedyKnapsack {
 
         //тут необходимо реализовать решение задачи
         //итогом является максимально воможная стоимость вещей в рюкзаке
-        //вещи можно резать на кусочки (непрерывный рюкзак)
-        Arrays.sort(items, new Mysort());
-        for (Item item:items) {
-            System.out.println(item);
-        }
-        System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
-        double result = 0;
-        int i = 0;
-        boolean NotEnough = true;
-        while (i < n && NotEnough)
-        {
-            if (items[i].weight < W)
-            {
-                W -= items[i].weight;
-                result += items[i].cost * items[i].weight;
-            }
-            else
-            {
-                result += items[i].cost * W;
-                NotEnough = false;
-            }
-            i++;
-        }
+        //вещи можно резать на кусочки (непрерывный рюкзак);
         //тут реализуйте алгоритм сбора рюкзака
         //будет особенно хорошо, если с собственной сортировкой
         //кроме того, можете описать свой компаратор в классе Item
-
         //ваше решение.
 
+        double result = 0;
 
+        items = QSort(items,0,items.length - 1);
 
-
-
-        System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
+        int i = 0;
+        int ourW = 0;
+        while((i < items.length) && (ourW < W)){
+            if (ourW + items[i].weight > W) {
+                result += 1.0 * items[i].cost * ((double)(W - ourW) / items[i].weight);
+                ourW = W;
+            } else {
+                result += 1.0 * items[i].cost;
+                ourW += items[i].weight;
+            }
+            ++i;
+        }
         return result;
     }
 

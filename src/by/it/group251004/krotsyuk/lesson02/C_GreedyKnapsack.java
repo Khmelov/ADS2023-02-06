@@ -15,7 +15,7 @@ package by.it.group251004.krotsyuk.lesson02;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-
+import java.util.Arrays;
 public class C_GreedyKnapsack {
     private static class Item implements Comparable<Item> {
         int cost;
@@ -34,10 +34,56 @@ public class C_GreedyKnapsack {
         @Override
         public int compareTo(Item o) {
             //тут может быть ваш компаратор
-
-
-            return 0;
+            if(cost / weight > o.cost / o.weight)
+                return 0;
+            else
+                return -1;
         }
+    }
+
+    private static void sortBinaryInserts(Item[] items, int n) {
+        Item buf;
+        int left;
+        int right;
+        int mid;
+        int res = 0;
+        int elem;
+        for (int i = 1; i < n; i++) {
+            res = items[i - 1].compareTo(items[i]);
+            if (res < 0) {
+                buf = items[i];
+                left = 0;
+                right = i - 1;
+                do {
+                    mid = (left + right) / 2;
+                    elem = buf.compareTo(items[mid]);
+                    if (elem < 0)
+                        left = mid + 1;
+                    else
+                        right = mid - 1;
+                } while (left <= right);
+                for (int j = i - 1; j >= left; j--)
+                    items[j + 1] = items[j];
+                items[left] = buf;
+            }
+        }
+    }
+
+    static double getCombination(Item[] items, int W){
+        double cost = 0;
+        double tmpWeight = 0;
+        int counter = 0;
+        while((counter < items.length) && (tmpWeight < W)){
+            if (tmpWeight + items[counter].weight < W){
+                tmpWeight += items[counter].weight;
+                cost += items[counter].cost;
+            } else{
+                cost += (W - tmpWeight) * (items[counter].cost / items[counter].weight);
+                tmpWeight = W;
+            }
+            counter++;
+        }
+        return(cost);
     }
 
     double calc(File source) throws FileNotFoundException {
@@ -53,21 +99,15 @@ public class C_GreedyKnapsack {
             System.out.println(item);
         }
         System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
-
         //тут необходимо реализовать решение задачи
         //итогом является максимально воможная стоимость вещей в рюкзаке
         //вещи можно резать на кусочки (непрерывный рюкзак)
-        double result = 0;
+        sortBinaryInserts(items, n);
+        double result = getCombination(items, W);
         //тут реализуйте алгоритм сбора рюкзака
         //будет особенно хорошо, если с собственной сортировкой
         //кроме того, можете описать свой компаратор в классе Item
-
         //ваше решение.
-
-
-
-
-
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
         return result;
     }
