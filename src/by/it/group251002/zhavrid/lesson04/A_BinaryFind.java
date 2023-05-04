@@ -1,12 +1,10 @@
 package by.it.group251002.zhavrid.lesson04;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;
 
 /*
-
 В первой строке источника данных даны:
         - целое число 1<=n<=100000 (размер массива)
         - сам массив A[1...n] из n различных натуральных чисел,
@@ -73,14 +71,13 @@ public class A_BinaryFind {
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
-        InputStream stream = new FileInputStream(root + "by/it/group251002/zhavrid/lesson04/dataA.txt");
+        InputStream stream = new FileInputStream(root + "by/it/group251001/zhavrid/lesson04/dataA.txt");
         A_BinaryFind instance = new A_BinaryFind();
         //long startTime = System.currentTimeMillis();
         int[] result=instance.findIndex(stream);
         //long finishTime = System.currentTimeMillis();
         for (int index:result){
             System.out.print(index+" ");
-
         }
     }
 
