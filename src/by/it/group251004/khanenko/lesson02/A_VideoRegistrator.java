@@ -1,4 +1,4 @@
-package by.it.group251004.khanenko.lesson01.lesson02;
+package by.it.group251004.khanenko.lesson02;
 
 import java.util.ArrayList;
 import java.util.Arrays;
