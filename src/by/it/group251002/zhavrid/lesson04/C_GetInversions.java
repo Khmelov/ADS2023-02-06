@@ -28,7 +28,6 @@ Sample Output:
 Большой тестовый массив можно прочитать свой или сгенерировать его программно.
 */
 
-
 public class C_GetInversions {
     int res = 0;
     void Swap(int a, int b){

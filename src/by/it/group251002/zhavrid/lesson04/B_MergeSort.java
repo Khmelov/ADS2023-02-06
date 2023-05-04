@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;
 
+
 /*
 Реализуйте сортировку слиянием для одномерного массива.
 Сложность алгоритма должна быть не хуже, чем O(n log n)
