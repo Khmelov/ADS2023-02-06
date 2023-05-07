@@ -51,10 +51,32 @@ public class C_LongNotUpSubSeq {
         }
         //тут реализуйте логику задачи методами динамического программирования (!!!)
         int result = 0;
-
+        int[] steps = new int[n];
+        int[] prev = new int[n];
+        for(int i=0;i<n;i++){
+            steps[i]=1;
+            prev[i]=-1;     // maybe not?
+            for(int j=0;j<i;j++){
+                if((m[j]>=m[i])&&steps[j]>=steps[i]){
+                    steps[i]=steps[j]+1;
+                    prev[i]=j;
+                }
+            }
+            if(steps[result]<steps[i]){
+                result=i;
+            }
+        }
+        System.out.println(steps[result]);
+        String s="";
+        int i=result;
+        while (i!=-1){
+            s=String.valueOf(i+1)+" "+s;
+            i=prev[i];
+        }
+        System.out.println(s);
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return steps[result];
     }
 
 
