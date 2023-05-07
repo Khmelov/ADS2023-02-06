@@ -44,9 +44,41 @@ public class C_Stairs {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         int result = 0;
 
-
-
-
+        int[] sums = new int[n];
+        for (int i=0;i<n;i++){
+            if(i>1) {
+                sums[i]=stairs[i]+((sums[i-1]<sums[i-2])?sums[i-2]:sums[i-1]);
+            }
+            else{
+                if(i==0){
+                    sums[i]=stairs[i];
+                }
+                else{
+                    sums[i]=stairs[i]+((sums[i-1]<0)?0:sums[i-1]);
+                }
+            }
+        }/*
+        int i=n-1;
+        while(i>1){
+            result+=stairs[i];
+            if((stairs[i-1]>=0)&&(stairs[i-2]>=0)){
+                i--;
+            }
+            else{
+                if(stairs[i-1]<stairs[i-2]){
+                    i-=2;
+                }
+                else{
+                    i--;
+                }
+            }
+        }
+        result+=stairs[i];
+        if((i==1)&&(stairs[i-1]>=0)){
+            result+=stairs[0];
+        }
+*/
+        result=sums[n-1];
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
