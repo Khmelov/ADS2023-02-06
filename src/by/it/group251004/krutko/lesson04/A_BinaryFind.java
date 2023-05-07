@@ -64,6 +64,22 @@ public class A_BinaryFind {
         return item;
         }*/ //код, чтобы возвращать сразу элемент
 
+    /*int BinarySearch(int[] arr, int x)
+    {
+        int left = 0, right = arr.length - 1;
+        while (left <= right)
+        {
+            int mid = (left + right) / 2;
+            if (arr[mid] == x)
+                return mid;
+            else if (arr[mid] < x)
+                left = mid + 1;
+            else
+                right = mid - 1;
+        }
+        return -1;
+    }
+    */
     public int BinarySearch(int[] a, int value, int left, int right)
     {
         if (left < right) {
