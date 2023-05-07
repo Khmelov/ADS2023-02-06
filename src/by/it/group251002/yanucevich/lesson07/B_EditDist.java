@@ -38,14 +38,40 @@ import java.util.Scanner;
 */
 
 public class B_EditDist {
-
+    int min(int a,int b,int c){
+        int result=a;
+        if (b<result){
+            result=b;
+        }
+        if (c<result){
+            result=c;
+        }
+        return result;
+    }
 
     int getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int n=one.length()+1;
+        int m=two.length()+1;
+        int[][] matrix = new int[n][m];
+        for(int i=0;i<n;i++){
+            matrix[i][0]=i;
+        }
+        for(int i=0;i<m;i++){
+            matrix[0][i]=i;
+        }
 
+        int del,rep,ins;
+        for(int i=1;i<n;i++){
+            for(int j=1;j<m;j++){
+                del=matrix[i-1][j]+1;
+                rep=matrix[i-1][j-1]+((one.charAt(i-1)==two.charAt(j-1))?0:1);
+                ins=matrix[i][j-1]+1;
+                matrix[i][j]=min(del,rep,ins);
+            }
+        }
 
-
-        int result = 0;
+        int result = matrix[n-1][m-1];
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }

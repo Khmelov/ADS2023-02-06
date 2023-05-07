@@ -38,13 +38,54 @@ import java.util.Scanner;
 */
 
 public class A_EditDist {
-
+    int elem;
+    String first,second;
+    int min(int a,int b,int c){
+        int result=a;
+        if (b<result){
+            result=b;
+        }
+        if (c<result){
+            result=c;
+        }
+        return result;
+    }
+    int GetDist(int[][]Arr,int n,int m){
+        if(Arr[n][m]==elem){
+            if(n*m==0){
+                Arr[n][m]=(n==0)?m:n;
+            }
+            else{
+                int del=GetDist(Arr,n-1,m)+1;
+                int rep=GetDist(Arr,n-1,m-1)+((first.charAt(n-1)==second.charAt(m-1))?0:1);
+                int ins=GetDist(Arr,n,m-1)+1;
+                Arr[n][m]=min(del,rep,ins);
+            }
+        }
+        return Arr[n][m];
+    }
 
     int getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int n=one.length()+1;
+        int m=two.length()+1;
+        int[][] matrix=new int[n][m];
+        first=one;
+        second=two;
+        if (n<m){
+            elem=m+1;
+        }
+        else{
+            elem=n+1;
+        }
+        for (int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                matrix[i][j]=elem;
+            }
+        }
 
+        int result=GetDist(matrix,n-1,m-1);
 
-        int result = 0;
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }

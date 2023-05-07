@@ -48,12 +48,99 @@ import java.util.Scanner;
 
 
 public class C_EditDist {
+    int min(int a,int b,int c){
+        int result=a;
+        if (b<result){
+            result=b;
+        }
+        if (c<result){
+            result=c;
+        }
+        return result;
+    }
 
     String getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
 
-
+        int n = two.length()+1;
+        int m = one.length()+1;
+        int[][] matrix = new int[n][m];
+        for(int i=0;i<n;i++){
+            matrix[i][0]=i;
+        }
+        for(int i=0;i<m;i++){
+            matrix[0][i]=i;
+        }
+        int del,rep,ins;
+        for(int i=1;i<n;i++){
+            for(int j=1;j<m;j++){
+                del=matrix[i-1][j]+1;
+                rep=matrix[i-1][j-1]+((two.charAt(i-1)==one.charAt(j-1))?0:1);
+                ins=matrix[i][j-1]+1;
+                matrix[i][j]=min(del,rep,ins);
+            }
+        }
         String result = "";
+        int i=n-1,j=m-1;
+        while(i*j!=0){
+            if (matrix[i][j]-matrix[i-1][j-1]==1){  //replace
+                result="~"+two.charAt(i-1)+","+result;
+                i--;
+                j--;
+            }
+            else{                                   //match
+                if(one.charAt(j-1)==two.charAt(i-1)){
+                    result="#,"+result;
+                    i--;
+                    j--;
+                }
+                else{
+                    if(matrix[i][j]-matrix[i-1][j]==1){     //left
+                        result="+"+two.charAt(i-1)+","+result;
+                        i--;
+                    }
+                    else{
+                        result="-"+one.charAt(j-1)+","+result;
+                        j--;
+                    }
+                }
+            }
+
+        }
+        while(i!=0){        // need to go up
+            result="-"+one.charAt(i-1)+","+result;
+            i--;
+        }
+        while(j!=0){
+            result="+"+two.charAt(j-1)+","+result;
+            j--;
+        }
+        /*
+        while((i!=0)&&(j!=0)){
+
+            if(matrix[i][j]-matrix[i-1][j]==1){             //delete
+                result+="-"+one.charAt(j-1);
+                i--;
+            }
+            else{
+                if(matrix[i][j]-matrix[i][j-1]==1){         //insert
+                    result+="+"+two.charAt(i-1);
+                    j--;
+                }
+                else{                                       //diagonal
+                    if (matrix[i][j]-matrix[i-1][j-1]==1){  //replace
+                        result+=two.charAt(i-1);
+                    }
+                    else{                                   //match
+                        result+="#";
+                    }
+                    i--;
+                    j--;
+                }
+            }
+            result+=",";
+        }*/
+
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
