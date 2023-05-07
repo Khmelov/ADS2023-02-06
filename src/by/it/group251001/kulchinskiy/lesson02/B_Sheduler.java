@@ -1,9 +1,9 @@
-package by.it.group251002.nikonorova.lesson1.lesson02;
+package by.it.group251001.kulchinskiy.lesson02;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Comparator;
+import java.util.List;
 /*
 Даны интервальные события events
 реализуйте метод calcStartTimes, так, чтобы число принятых к выполнению
@@ -43,48 +43,18 @@ public class B_Sheduler {
     }
 
     List<Event> calcStartTimes(Event[] events, int from, int to) {
-        //Events - события которые нужно распределить в аудитории
-        //в период [from, int] (включительно).
-        //оптимизация проводится по наибольшему числу непересекающихся событий.
-        //Начало и конец событий могут совпадать.
-        List<Event> result;
-        result = new ArrayList<>();
-        //ваше решение.
+        List<Event> result = new ArrayList<>();
+        Arrays.sort(events, Comparator.comparingInt(e -> e.stop));
 
-        Comparator<Event> comp = new Comparator<Event>() {
-            @Override
-            public int compare(Event event1, Event event2) {
-                return Integer.compare(event1.stop, event2.stop);
+        int prevEnd = from;
+        for (Event event : events) {
+            if (event.start >= prevEnd && event.stop <= to) {
+                result.add(event);
+                prevEnd = event.stop;
             }
-        };
+        }
 
-        Arrays.sort(events, comp);
-
-        int i=0;
-        int j = 0;
-
-
-        result.add(events[0]);
-           while(i<=events.length){
-                j=i;
-                boolean n = true;
-                while (n && j < events.length-1) {
-                    if (events[i].stop == events[j + 1].start) {
-                        n = false;
-                        result.add(events[j + 1]);
-                    } else if(j++ == events.length-3) {
-                       j=i;
-                        while (n && j < events.length-1) {
-                            if (events[i].stop+1 == events[j + 1].start) {
-                                n = false;
-                                result.add(events[j + 1]);
-                            }
-                            else j++;}
-                    }
-                    else j++;
-                }
-               i=j+1;
-            }
-        return result;          //вернем итог
+        return result;
     }
+
 }
