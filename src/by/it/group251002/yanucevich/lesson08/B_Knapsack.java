@@ -37,9 +37,24 @@ public class B_Knapsack {
         for (int i = 0; i < n; i++) {
             gold[i]=scanner.nextInt();
         }
+        int[] possibleSacks = new int[w+1];
+        possibleSacks[0]=1;                     // we can always put 0
+        for(int i=1;i<=w;i++){
+            possibleSacks[i]=0;
+        }
+        for(int i=0;i<n;i++){
+            for(int j=w;j>=gold[i];j--){
+                if(possibleSacks[j-gold[i]]==1){
+                    possibleSacks[j]=1;
+                }
+            }
+        }
 
 
-        int result = 0;
+        int result = w;
+        while(possibleSacks[result]!=1){
+            result--;
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }

@@ -53,6 +53,18 @@ public class A_Knapsack {
         for (int i = 0; i < n; i++) {
             gold[i]=scanner.nextInt();
         }
+        int[] possibleSacks = new int[w+1];
+        for (int i=0;i<=w;i++){
+            possibleSacks[i]=0;
+            for(int j=0;j<n;j++){
+                if (gold[j]<=i){
+                    possibleSacks[i]=Integer.max(possibleSacks[i],possibleSacks[i-gold[j]]+gold[j]);
+                }
+            }
+        }
+
+
+/*
         int[] sacks = new int[w+1];
         sacks[0]=0;
         int maxCriteria, opt;
@@ -66,8 +78,8 @@ public class A_Knapsack {
                 }
             }
         }
-
-        int result = sacks[w];
+*/
+        int result = possibleSacks[w];
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
