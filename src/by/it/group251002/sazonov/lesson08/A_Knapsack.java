@@ -42,13 +42,20 @@ public class A_Knapsack {
         int w=scanner.nextInt();
         int n=scanner.nextInt();
         int gold[]=new int[n];
-        int min = 100000;
         for (int i = 0; i < n; i++) {
             gold[i]=scanner.nextInt();
-            min = Integer.min(min, gold[i]);
         }
 
-        int result = w - (w % min);
+        int ans[] = new int[w + 1];
+        int result = 0;
+        for(int i = 1; i <= w; i++) {
+            for(int j = 0; j < n; j++) {
+                if (i - gold[j] >= 0) {
+                    ans[i] = Integer.max(ans[i - gold[j]] + gold[j], ans[i]);
+                    result = Integer.max(result, ans[i]);
+                }
+            }
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
