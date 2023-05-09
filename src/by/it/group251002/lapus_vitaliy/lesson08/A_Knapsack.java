@@ -45,9 +45,34 @@ public class A_Knapsack {
         for (int i = 0; i < n; i++) {
             gold[i]=scanner.nextInt();
         }
+        int[] arr=new int[w+1];
+        for(int i=0;i<w+1;i++)
+        {
+            arr[i]=0;
+        }
+        arr[0]=1;
 
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<w+1;j++)
+            {
+                if(arr[j]==1) {
+                    if (j + gold[i] <= w) {
+                        arr[j+gold[i]] = 1;
+                    }
+                }
+            }
+        }
+        int result = w+1;
+        for(int i=w;i>0;i--)
+        {
+            if(arr[i]==1)
+            {
+                result=i;
+                break;
+            }
+        }
 
-        int result = 0;
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }

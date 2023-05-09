@@ -51,7 +51,7 @@ public class C_EditDist {
 
     String getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        String result = "";
+        StringBuffer result = new StringBuffer();
         int n=one.length();
         int m=two.length();
         int[][] arr=new int[m+1][n+1];
@@ -89,42 +89,53 @@ public class C_EditDist {
 
         int i=m;
         int j=n;
-        while(i!=0 || j!=0) {
-            if( arr[i][j] == arr[i][j - 1] + 1)
+        int buf;
+        while(i!=0 && j!=0)
+        {
+            buf=arr[i][j-1];
+            if(arr[i][j]>arr[i][j-1])
             {
-                result+='+';
-                result+=one.charAt(j-1);
-                result+=',';
+                result.insert(0,',');
+                result.insert(0,one.charAt(j-1));
+                result.insert(0,'+');
+                j--;
+            } else if (arr[i][j]>arr[i-1][j]) {
+                result.insert(0,',');
+                result.insert(0,two.charAt(i-1));
+                result.insert(0,'-');
+                i--;
+            } else if (one.charAt(j-1)==two.charAt(i-1)) {
+                result.insert(0,',');
+                result.insert(0,'#');
+                i--;
+                j--;
+            } else if (arr[i][j]>=arr[i-1][j-1]) {
+                result.insert(0,',');
+                result.insert(0,one.charAt(i-1));
+                result.insert(0,'~');
+                i--;
                 j--;
             }
-            else if (arr[i][j] == arr[i - 1][j]+1) {
-                result+='-';
-                result+=two.charAt(i-1);
-                result+=',';
-                i--;
-            }
-            else if (one.charAt(j - 1) == two.charAt(i - 1)) {
-                if (arr[i][j] == arr[i - 1][j - 1]) {
-                    result+='#';
-                    result+=',';
-
-                }
-            } else {
-                if (arr[i][j] == arr[i - 1][j - 1] + 1) {
-                    result+='~';
-                    result+=two.charAt(i-1);
-                    result+=',';
-                }
-            }
+        }
+        while(i!=0)
+        {
+            result.insert(0,',');
+            result.insert(0,two.charAt(i-1));
+            result.insert(0,'-');
             i--;
+        }
+        while(j!=0)
+        {
+            result.insert(0,',');
+            result.insert(0,one.charAt(j-1));
+            result.insert(0,'+');
             j--;
         }
 
 
 
-
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return result.toString();
     }
 
 
