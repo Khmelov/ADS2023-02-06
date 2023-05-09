@@ -46,7 +46,7 @@ public class C_Stairs {
         int[] arr = new int[n + 1];
         arr[0] = 0;
         for(int i = 1; i <= n; i ++) {
-            arr[i] = -10000;
+            arr[i] = -10000000;
             if (i - 1 >= 0) {
                 arr[i] = Integer.max(arr[i], arr[i - 1] + stairs[i - 1]);
             }
