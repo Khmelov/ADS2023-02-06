@@ -1,5 +1,6 @@
 package by.it.group251001.voytov.lesson05;
 
+import java.awt.image.renderable.RenderableImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -36,22 +37,24 @@ import java.util.Scanner;
 */
 
 public class A_QSort {
-
-    //отрезок
     private class Segment  implements Comparable<Segment>{
         int start;
         int stop;
 
-        Segment(int start, int stop){
+        Segment(int start, int stop) {
             this.start = start;
             this.stop = stop;
-            //тут вообще-то лучше доделать конструктор на случай если
-            //концы отрезков придут в обратном порядке
         }
 
         @Override
         public int compareTo(Segment o) {
-            //подумайте, что должен возвращать компаратор отрезков
+            if (this.start > o.start) {
+                return 1;
+            }
+
+            if (this.start < this.start) {
+                return -1;
+            }
 
             return 0;
         }
@@ -59,34 +62,66 @@ public class A_QSort {
 
 
     int[] getAccessory(InputStream stream) throws FileNotFoundException {
-        //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        //число отрезков отсортированного массива
         int n = scanner.nextInt();
         Segment[] segments=new Segment[n];
-        //число точек
         int m = scanner.nextInt();
         int[] points=new int[m];
         int[] result=new int[m];
 
-        //читаем сами отрезки
         for (int i = 0; i < n; i++) {
-            //читаем начало и конец каждого отрезка
             segments[i]=new Segment(scanner.nextInt(),scanner.nextInt());
         }
-        //читаем точки
+
         for (int i = 0; i < m; i++) {
             points[i]=scanner.nextInt();
         }
-        //тут реализуйте логику задачи с применением быстрой сортировки
-        //в классе отрезка Segment реализуйте нужный для этой задачи компаратор
 
+        QuickSort(segments, 0, segments.length - 1);
 
-
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        for (int j = 0; j < points.length; j++) {
+            for (int i = 0; i < segments.length && points[j] >= segments[i].start; i++) {
+                if (points[j] <= segments[i].stop) {
+                    result[j]++;
+                }
+            }
+        }
         return result;
+    }
+
+    private static void QuickSort(Segment[] array, int high, int low) {
+
+        if (low >= high) {
+            return;
+        }
+
+        int leftIndex = low;
+        int rightIndex = high;
+        Segment pivot = array[high];
+
+        while (leftIndex < rightIndex) {
+
+            while (array[leftIndex].compareTo(pivot) <= 0 && leftIndex < rightIndex) {
+                leftIndex++;
+            }
+
+            while (array[rightIndex].compareTo(pivot) > 0 && leftIndex < rightIndex) {
+                rightIndex++;
+            }
+
+            swap(array, leftIndex, rightIndex);
+        }
+
+        swap(array, leftIndex, high);
+
+        QuickSort(array, low, leftIndex - 1);
+        QuickSort(array, leftIndex + 1, high);
+    }
+
+    private static void swap(Segment[] array, int index1, int index2) {
+        Segment temp = array[index1];
+        array[index1] = array[index2];
+        array[index2] = temp;
     }
 
 
