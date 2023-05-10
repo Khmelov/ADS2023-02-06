@@ -33,6 +33,12 @@ Sample Output 3:
 */
 
 public class C_Stairs {
+    int GetMax(int n , int [] stairs) {
+        if  (n==1) return stairs[n-1];
+        if  (n==2) return Integer.max(stairs[n-1],Integer.max(stairs[n-1]+stairs[n-2],stairs[n-2]));
+        return  Integer.max(GetMax(n-1,stairs) +stairs[n-1],GetMax(n-2,stairs)+stairs[n-1]);
+
+    }
 
     int getMaxSum(InputStream stream ) {
         Scanner scanner = new Scanner(stream);
@@ -42,7 +48,7 @@ public class C_Stairs {
             stairs[i]=scanner.nextInt();
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        int result = 0;
+        int result = GetMax(n,stairs);
 
 
 
