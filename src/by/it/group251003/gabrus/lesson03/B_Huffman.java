@@ -2,6 +2,8 @@ package by.it.group251003.gabrus.lesson03;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 // Lesson 3. B_Huffman.
@@ -51,8 +53,24 @@ public class B_Huffman {
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         //тут запишите ваше решение
 
+        HashMap<String, Character> codes = new HashMap<>();
 
+        for (int i = 0; i < count; i++){
+            char value = scanner.next().charAt(0);
+            String code = scanner.next();
+            codes.put(code, value);
+        }
 
+        String string = scanner.next();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < length; i++){
+            stringBuilder.append(string.charAt(i));
+            if (string.charAt(i) == '0'){
+                result.append(codes.get(stringBuilder.toString()));
+                stringBuilder.setLength(0);
+            }
+        }
+        result.append(codes.get(stringBuilder.toString()));
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         return result.toString(); //01001100100111
