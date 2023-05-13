@@ -39,7 +39,7 @@ public class B_CountSort {
         int j = 0;
         for (int i = 0; i < 10; i++) {
             while (appearences[i] != 0) {
-                points[j] = i;
+                points[j] = i + 1;
                 appearences[i]--;
                 j++;
             }
