@@ -43,7 +43,7 @@ public class A_QSort {
         int stop;
 
         Segment(int start, int stop){
-            if (start >= stop)
+            if (start <= stop)
             {
                 this.start = start;
                 this.stop = stop;
@@ -60,8 +60,10 @@ public class A_QSort {
         @Override
         public int compareTo(Segment o) {
             //подумайте, что должен возвращать компаратор отрезков
-
-            return 0;
+            if (this.start > o.start)
+                return 1;
+            else
+                return 0;
         }
     }
 
@@ -90,12 +92,52 @@ public class A_QSort {
         //тут реализуйте логику задачи с применением быстрой сортировки
         //в классе отрезка Segment реализуйте нужный для этой задачи компаратор
 
+        quickSort(segments, 0, n-1);
 
-
+        int i = 0;
+        while (i < points.length){
+            int point = points[i];
+            int j = 0;
+            while (j < segments.length && segments[j].start <= point) {
+                if (segments[j].stop >= point) {
+                    result[i]++;
+                }
+                j++;
+            }
+            i++;
+        }
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
+
+    public static void swap(Segment[] array, int i, int j) {
+        Segment temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    public static void quickSort(Segment[] array, int low, int high) {
+        if (low < high) {
+            int pivotIndex = partition(array, low, high);
+            quickSort(array, low, pivotIndex - 1);
+            quickSort(array, pivotIndex + 1, high);
+        }
+    }
+    public static int partition(Segment[] array, int low, int high) {
+        Segment pivot = array[high];
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+            if (array[j].compareTo(pivot) != 1) {
+                i++;
+                swap(array, i, j);
+            }
+        }
+
+        swap(array, i + 1, high);
+        return i + 1;
+    }
+
 
 
     public static void main(String[] args) throws FileNotFoundException {
