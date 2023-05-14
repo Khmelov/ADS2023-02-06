@@ -3,6 +3,7 @@ package by.it.group251003.gabrus.lesson08;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /*
@@ -38,8 +39,27 @@ public class B_Knapsack {
             gold[i]=scanner.nextInt();
         }
 
+        Arrays.sort(gold);
 
-        int result = 0;
+        int result;
+        if (gold[0] < w) {
+            int dp[] = new int[n];
+
+            dp[0] = gold[0];
+            for (int i = 1; i < n; i++) {
+                for (int j = 0; j < i; j++) {
+                    int currWeight = dp[j] + gold[i];
+                    if (currWeight <= w && currWeight > dp[i]){
+                        dp[i] = currWeight;
+                    }
+                }
+                if (dp[i] == 0) dp[i] = dp[i - 1];
+            }
+
+            result = dp[n - 1];
+        } else {
+            result = 0;
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }

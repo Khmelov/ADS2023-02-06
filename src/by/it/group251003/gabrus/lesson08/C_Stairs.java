@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;
+import java.util.Arrays;
 
 /*
 Даны число 1<=n<=100 ступенек лестницы и
@@ -42,11 +43,20 @@ public class C_Stairs {
             stairs[i]=scanner.nextInt();
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        int result = 0;
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, -10000);
+        dp[0] = 0;
+        dp[1] = stairs[0];
 
+        for (int i = 1; i < n; i++){
+            for (int j = i - 1; j <= i; j++){
+                if (stairs[i] + dp[j] > dp[i + 1]){
+                    dp[i + 1] = stairs[i] + dp[j];
+                }
+            }
+        }
 
-
-
+        int result = dp[n];
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
