@@ -60,13 +60,15 @@ public class B_Huffman {
             String code = scanner.next();
             codes.put(code,symbol);
         }
-
+        //Based on hash-table method
         String outcodedline = scanner.next();
         String outcodedletter = new String();
         String answer = new String();
         for (int i=0;i<length;i++)
         {
+            //Put outcoded char index into variable symbol
             char symbol = outcodedline.charAt(i);
+            //Put new outcoded symbol into outcoded string
             outcodedletter+=symbol;
             if (symbol=='0' || outcodedletter.length()==count-1)
             {
