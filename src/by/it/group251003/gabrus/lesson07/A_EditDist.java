@@ -42,13 +42,30 @@ public class A_EditDist {
 
     int getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-        int result = 0;
+        int result = calculateDistanceRecursive(one, two, one.length() - 1, two.length() - 1);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
 
+    private static int calculateDistanceRecursive(String s1, String s2, int n, int m) {
+        if (n < 0) {
+            return m + 1;
+        }
+
+        if (m < 0) {
+            return n + 1;
+        }
+
+        if (s1.charAt(n) == s2.charAt(m)) {
+            return calculateDistanceRecursive(s1, s2, n - 1, m - 1);
+        }
+
+        int insert = calculateDistanceRecursive(s1, s2, n, m - 1) + 1;
+        int delete = calculateDistanceRecursive(s1, s2, n - 1, m) + 1;
+        int replace = calculateDistanceRecursive(s1, s2, n - 1, m - 1) + 1;
+
+        return Math.min(insert, Math.min(delete, replace));
+    }
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";

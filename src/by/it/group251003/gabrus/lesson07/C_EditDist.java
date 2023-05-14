@@ -51,12 +51,59 @@ public class C_EditDist {
 
     String getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int n = one.length();
+        int m = two.length();
+        int[][] matrix = new int[n + 1][m + 1];
+        short[][] way = new short[n + 1][m + 1];
 
+        for (int i = 0; i <= n; i++) {
+            matrix[i][0] = i;
+        }
 
+        for (int j = 0; j <= m; j++) {
+            matrix[0][j] = j;
+        }
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                if (one.charAt(i - 1) == two.charAt(j - 1)) {
+                    matrix[i][j] = matrix[i - 1][j - 1];
+                    way[i][j] = 3;
+                } else {
+                    int min = Math.min(matrix[i - 1][j], Math.min(matrix[i][j - 1], matrix[i - 1][j - 1]));
+                    matrix[i][j] = min + 1;
+
+                    if (min == matrix[i - 1][j]) way[i][j] = 1;
+                    else if (min == matrix[i][j - 1])  way[i][j] = 0;
+                    else if (min == matrix[i - 1][j - 1])  way[i][j] = 2;
+                }
+            }
+        }
+
+        int i = n;
+        int j = m;
         String result = "";
+
+        while (i != 0 || j != 0){
+            if (way[i][j] == 3){
+                result = "#," + result;
+                i--; j--;
+            } else if (way[i][j] == 2){
+                result = "-" + one.charAt(i - 1) + "," + result;
+                i--; j--;
+            } else if (way[i][j] == 1){
+                result = "~" + two.charAt(j - 1) + "," + result;
+                i--;
+            } else if (way[i][j] == 0){
+                result = "+" + two.charAt(j - 1) + "," + result;
+                j--;
+            }
+        }
+
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
+
 
 
     public static void main(String[] args) throws FileNotFoundException {
