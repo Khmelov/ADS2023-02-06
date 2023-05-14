@@ -33,7 +33,7 @@ import java.util.Scanner;
 public class C_QSortOptimized {
 
     //отрезок
-    private class Segment  implements Comparable{
+    private class Segment  implements Comparable<Segment>{
         int start;
         int stop;
 
@@ -43,9 +43,10 @@ public class C_QSortOptimized {
         }
 
         @Override
-        public int compareTo(Object o) {
+        public int compareTo(Segment o) {
             //подумайте, что должен возвращать компаратор отрезков
-            return 0;
+
+            return Integer.compare(this.start,o.start);
         }
     }
 
@@ -68,17 +69,54 @@ public class C_QSortOptimized {
             segments[i]=new Segment(scanner.nextInt(),scanner.nextInt());
         }
         //читаем точки
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < m; i++) {
             points[i]=scanner.nextInt();
         }
         //тут реализуйте логику задачи с применением быстрой сортировки
         //в классе отрезка Segment реализуйте нужный для этой задачи компаратор
-
-
+        QSort(segments,0,n-1);
+        for (int i = 0; i <m; i++) {
+        int count=0;
+        int left=0;
+        int right=n-1;
+        while(left<=right) {
+            int mid = (left + right)/ 2 ;
+            if (points[i]>segments[mid].stop){
+                left=mid+1;
+            } else {
+                if (points[i] < segments[mid].start) {
+                    right = mid - 1;
+                } else{count++;break;}
+            }
+        }
+        result[i]=count;
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
+    int Partition(Segment[] arr, int l, int r) {
+        Segment x = arr[l];
+        int j = l;
+        for (int i = l + 1; i <= r; i++)
+            if (arr[i].compareTo(x) <= 0) {
+                j++;
+                Segment temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        Segment temp = arr[l];
+        arr[l] = arr[j];
+        arr[j] = temp;
+        return j;
+    }
 
+    void QSort(Segment[] arr, int l, int r) {
+        while (l < r) {
+            int m = Partition(arr, l, r);
+            QSort(arr, l, m - 1);
+            l=m+1;
+        }
+    }
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
