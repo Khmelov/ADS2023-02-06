@@ -20,7 +20,30 @@ Sample Output:
 2 2 3 9 9
 */
 public class B_MergeSort {
+    void merge(int[] a, int left, int middle, int right) {
+        int[] LArray = new int[middle - left + 1];
+        int[] RArray = new int[right - middle];
+        for (int i = 0; i < LArray.length; i++)
+            LArray[i] = a[left + i];
+        for (int i = 0; i < RArray.length; i++)
+            RArray[i] = a[middle + 1 + i];
+        int i = 0, j = 0, k = left;
+        while (i < LArray.length && j < RArray.length)
+            a[k++] = (LArray[i] <= RArray[j]) ? LArray[i++] : RArray[j++];
+        while (i < LArray.length)
+            a[k++] = LArray[i++];
+        while (j < RArray.length)
+            a[k++] = RArray[j++];
+    }
 
+    void mergeSort(int[] a, int left, int right) {
+        if (left < right) {
+            int middle = (left + right) / 2;
+            mergeSort(a, left, middle);
+            mergeSort(a, middle + 1, right);
+            merge(a, left, middle, right);
+        }
+    }
     int[] getMergeSort(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
@@ -34,15 +57,7 @@ public class B_MergeSort {
             a[i] = scanner.nextInt();
             System.out.println(a[i]);
         }
-
-        // тут ваше решение (реализуйте сортировку слиянием)
-        // https://ru.wikipedia.org/wiki/Сортировка_слиянием
-
-
-
-
-
-
+        mergeSort(a, 0,a.length - 1);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return a;
     }
