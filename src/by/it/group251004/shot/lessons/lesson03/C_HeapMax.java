@@ -39,27 +39,49 @@ public class C_HeapMax {
 
     private class MaxHeap {
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-        //тут запишите ваше решение.
-        //Будет мало? Ну тогда можете его собрать как Generic и/или использовать в варианте B
         private List<Long> heap = new ArrayList<>();
 
-        int siftDown(int i) { //просеивание вверх
+        private void swap(int parent, int i) {
+            Long tmp = heap.get(parent);
+            heap.set(parent, heap.get(i));
+            heap.set(i, tmp);
+        }
 
+        int siftDown(int i) {
+            int leftChild = 2 * i + 1;
+            int rightChild = leftChild + 1;
+            int largest = i;
+            Long tmp;
+            if (leftChild < heap.size() && heap.get(leftChild) > heap.get(largest))
+                largest = leftChild;
+            if (rightChild < heap.size() && heap.get(rightChild) > heap.get(largest))
+                largest = rightChild;
+            if (largest != i) {
+                swap(largest, i);
+                siftDown(largest);
+            }
             return i;
         }
 
-        int siftUp(int i) { //просеивание вниз
-
-            return i;
+        void siftUp(int i) {
+            if (i < 1) return;
+            int parent = (i - 1) / 2;
+            if (heap.get(parent) < heap.get(i))
+                swap(parent, i);
+            siftUp(parent);
         }
 
-        void insert(Long value) { //вставка
+        void insert(Long value) {
+            heap.add(value);
+            siftUp(heap.size() - 1);
         }
 
-        Long extractMax() { //извлечение и удаление максимума
-            Long result = null;
-
-            return result;
+        Long extractMax() {
+            if (heap.size() == 0)
+                return 0L;
+            Long res = heap.remove(0);
+            siftDown(0);
+            return res;
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
     }

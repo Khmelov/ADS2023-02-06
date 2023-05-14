@@ -2,6 +2,7 @@ package by.it.group251004.shot.lessons.lesson03;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 // Lesson 3. B_Huffman.
@@ -42,18 +43,55 @@ import java.util.Scanner;
 
 public class B_Huffman {
 
+    private class Node {
+        String data;
+        char letter;
+        Node left;
+        Node right;
+        Node (String data, char letter) {
+            this.data = data;
+            this.letter = letter;
+        }
+        Node (Node left, Node right) {
+            this.left = left;
+            this.right = right;
+        }
+        int encryptStr (StringBuilder result, Node node, String temp, String input, int i) {
+            if (node.data != null && node.data.equals(temp)) {
+                result.append(node.letter);
+                return i;
+            } else
+                i = (input.charAt(i) == '1') ? node.right.encryptStr(result, node.right, temp + input.charAt(i), input, ++i) : node.left.encryptStr(result, node.left,temp + input.charAt(i), input, ++i);
+            return i;
+        }
+    }
+
+    public Node takeNodeScan(Integer count, Scanner scan) {
+        ArrayList<B_Huffman.Node> list = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            String[] strArr = scan.nextLine().split(": ");
+            list.add(new Node(strArr[1], strArr[0].charAt(0)));
+        }
+        while (list.size() > 1) {
+            Node parent = new Node(list.remove(list.size() - 2), list.remove(list.size() - 1));
+            list.add(parent);
+        }
+        return list.get(0);
+    }
+
     String decode(File file) throws FileNotFoundException {
         StringBuilder result=new StringBuilder();
         //прочитаем строку для кодирования из тестового файла
         Scanner scanner = new Scanner(file);
         Integer count = scanner.nextInt();
         Integer length = scanner.nextInt();
+        scanner.nextLine();
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-        //тут запишите ваше решение
-
-
-
-
+        Node node = takeNodeScan(count, scanner);
+        String input = scanner.nextLine();
+        int i = 0;
+        while (i < input.length())
+            i = node.encryptStr(result, node, "", input, i);
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         return result.toString(); //01001100100111
     }
