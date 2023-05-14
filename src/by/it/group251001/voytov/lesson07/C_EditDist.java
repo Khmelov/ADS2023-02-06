@@ -51,11 +51,79 @@ public class C_EditDist {
 
     String getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int[][] Tabl = new int[one.length() + 1][two.length() + 1];
+        int n = one.length(), m = two.length();
+        for (int i = 0; i <= m; i++) {
+            Tabl[0][i] = i;
+        }
+        for (int j = 0; j <= n; j++) {
+            Tabl[j][0] = j;
+        }
 
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
 
-        String result = "";
+                Tabl[i][j] = Tabl[i - 1][j] + 1;
+                if (Tabl[i][j - 1] + 1 < Tabl[i][j]) Tabl[i][j] = Tabl[i][j - 1] + 1;
+                int tmp = Tabl[i - 1][j - 1];
+                if (one.charAt(i - 1) != two.charAt(j - 1)) tmp++;
+                if (tmp < Tabl[i][j]) Tabl[i][j] = tmp;
+            }
+        }
+        int tmp;
+        char[] A = new char[one.length() + 1];
+        char[] B = new char[two.length() + 1];
+
+        for (int i = 1; i < A.length; i++) {
+            A[i] = one.charAt(i - 1);
+        }
+
+        for (int i = 1; i < B.length; i++) {
+            B[i] = two.charAt(i - 1);
+        }
+        StringBuilder result = new StringBuilder();
+
+        int i = n, j = m;
+        while (i > 0 && j > 0) {
+            if (A[i] == B[j]) tmp = 0;
+            else tmp = 1;
+            if (Tabl[i][j] == Tabl[i - 1][j - 1] + tmp) {
+                result.insert(0, ',');
+                result.insert(0, tmp == 1 ? "~" : "#");
+                if (tmp == 1) {
+                    result.insert(1, B[j]);
+                }
+                i--;
+                j--;
+            } else if (Tabl[i][j] == Tabl[i][j - 1] + 1) {
+                result.insert(0, ',');
+                result.insert(0, '+');
+                result.insert(1, B[j]);
+                j--;
+            } else {
+                result.insert(0, ',');
+                result.insert(0, '-');
+                result.insert(1, A[i]);
+                i--;
+            }
+
+        }
+
+        while (i > 0) {
+            result.insert(0, ',');
+            result.insert(0, '-');
+            result.insert(1, A[i]);
+            i--;
+        }
+        while (j > 0) {
+            result.insert(0, ',');
+            result.insert(0, '+');
+            result.insert(1, B[j]);
+            j--;
+        }
+
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return result.toString();
     }
 
 
@@ -64,9 +132,9 @@ public class C_EditDist {
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson07/dataABC.txt");
         C_EditDist instance = new C_EditDist();
         Scanner scanner = new Scanner(stream);
-        System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));
-        System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));
-        System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));
+        System.out.println(instance.getDistanceEdinting(scanner.nextLine(), scanner.nextLine()));
+        System.out.println(instance.getDistanceEdinting(scanner.nextLine(), scanner.nextLine()));
+        System.out.println(instance.getDistanceEdinting(scanner.nextLine(), scanner.nextLine()));
     }
 
 }

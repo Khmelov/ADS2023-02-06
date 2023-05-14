@@ -39,14 +39,31 @@ import java.util.Scanner;
 
 public class A_EditDist {
 
+    public static int CountD(int a, int b, String word1, String word2) {
+
+        if (a == 0 || b == 0) {
+            return a + b;
+        }
+
+        int result = CountD(a - 1, b, word1, word2) + 1;
+        if (result > CountD(a, b - 1, word1, word2) + 1) {
+            result = CountD(a, b - 1, word1, word2) + 1;
+        }
+
+        int tmp = CountD(a - 1, b - 1, word1, word2);
+        if (word1.charAt(a - 1) != word2.charAt(b - 1)) {
+            tmp++;
+        }
+
+        if (tmp < result) {
+            result = tmp;
+        }
+        return result;
+    }
 
     int getDistanceEdinting(String one, String two) {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
 
-
-        int result = 0;
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return CountD(two.length(), one.length(), two, one);
     }
 
 
@@ -55,8 +72,8 @@ public class A_EditDist {
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson07/dataABC.txt");
         A_EditDist instance = new A_EditDist();
         Scanner scanner = new Scanner(stream);
-        System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));
-        System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));
-        System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));
+        System.out.println(instance.getDistanceEdinting(scanner.nextLine(), scanner.nextLine()));
+        System.out.println(instance.getDistanceEdinting(scanner.nextLine(), scanner.nextLine()));
+        System.out.println(instance.getDistanceEdinting(scanner.nextLine(), scanner.nextLine()));
     }
 }

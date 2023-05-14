@@ -42,14 +42,38 @@ public class B_EditDist {
 
     int getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int[][] Tabl = new int[one.length() + 1][two.length() + 1];
 
+        for (int i = 0; i <= two.length(); i++) {
+            Tabl[0][i] = i;
+        }
 
+        for (int j = 0; j <= one.length(); j++) {
+            Tabl[j][0] = j;
+        }
 
-        int result = 0;
+        for (int i = 1; i <= one.length(); i++) {
+            for (int j = 1; j <= two.length(); j++) {
+
+                Tabl[i][j] = Tabl[i - 1][j] + 1;
+                if (Tabl[i][j - 1] + 1 < Tabl[i][j]) {
+                    Tabl[i][j] = Tabl[i][j - 1] + 1;
+                }
+
+                int tmp = Tabl[i - 1][j - 1];
+                if (one.charAt(i - 1) != two.charAt(j - 1)) {
+                    tmp++;
+                }
+
+                if (tmp < Tabl[i][j]) {
+                    Tabl[i][j] = tmp;
+                }
+            }
+        }
+
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return Tabl[one.length()][two.length()];
     }
-
 
 
     public static void main(String[] args) throws FileNotFoundException {
@@ -57,9 +81,9 @@ public class B_EditDist {
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson07/dataABC.txt");
         B_EditDist instance = new B_EditDist();
         Scanner scanner = new Scanner(stream);
-        System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));
-        System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));
-        System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));
+        System.out.println(instance.getDistanceEdinting(scanner.nextLine(), scanner.nextLine()));
+        System.out.println(instance.getDistanceEdinting(scanner.nextLine(), scanner.nextLine()));
+        System.out.println(instance.getDistanceEdinting(scanner.nextLine(), scanner.nextLine()));
     }
 
 }
