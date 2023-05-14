@@ -56,7 +56,7 @@ public class C_GreedyKnapsack {
         Item[] items = new Item[n];   //получим список предметов
         for (int i = 0; i < n; i++) { //создавая каждый конструктором
             items[i] = new Item(input.nextInt(), input.nextInt());
-            items[i].cost/=items[i].weight;
+            items[i].cost/=items[i].weight; //Ud cost
         }
         //покажем предметы
         for (Item item:items) {
@@ -75,7 +75,7 @@ public class C_GreedyKnapsack {
         Arrays.sort(items, new Sort()); //Sort po konc
         boolean NotFull=true;
         int i=0;
-        while (i < n && NotFull) {     //Propusk sob
+        while (i < n && NotFull) {     //Sort of weight and cost
             if (items[i].weight<W) {
                 W -= items[i].weight;
                 result += items[i].weight*items[i].cost;
