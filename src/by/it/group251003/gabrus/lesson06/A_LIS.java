@@ -45,6 +45,17 @@ public class A_LIS {
             m[i] = scanner.nextInt();
         }
         int result = 0;
+
+        int[] curr = new int[n];
+        curr[0] = 1;
+        for (int i = 1; i < n; i++){
+            int higherAm = 0;
+            for (int j = 0; j < i; j++)
+                if (m[i] > m[j] && higherAm < curr[j]) higherAm = curr[j];
+            curr[i] = higherAm + 1;
+        }
+
+        result = curr[n-1];
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
