@@ -3,6 +3,7 @@ package by.it.group251004.shunko.lesson05;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /*
@@ -52,8 +53,8 @@ public class A_QSort {
         @Override
         public int compareTo(Segment o) {
             //подумайте, что должен возвращать компаратор отрезков
+            return 0 ;
 
-            return 0;
         }
     }
 
@@ -81,7 +82,18 @@ public class A_QSort {
         }
         //тут реализуйте логику задачи с применением быстрой сортировки
         //в классе отрезка Segment реализуйте нужный для этой задачи компаратор
-
+        Arrays.sort(segments);
+        for (int i = 0; i < m; i++) {
+            int count = 0;
+            int j = 0;
+            while (j < n && segments[j].start <= points[i]) {
+                if (segments[j].stop >= points[i]) {
+                    count++;
+                }
+                j++;
+            }
+            result[i] = count;
+        }
 
 
 
