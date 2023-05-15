@@ -40,6 +40,23 @@ public class B_Sheduler {
         System.out.println(starts);                                 //покажем рассчитанный график занятий
     }
 
+    Event[] SortByRight(Event[] in_events) {
+        int gap = in_events.length / 2;
+        while (gap > 0) {
+            for (int i = 0; i < in_events.length - gap; i++) {
+                int j = i;
+                Event temp = in_events[j + gap];
+                while (j >= 0 && (in_events[j].stop > temp.stop || (in_events[j].stop == temp.stop && in_events[j].start > temp.start))) {
+                    in_events[j + gap] = in_events[j];
+                    in_events[j] = temp;
+                    j -= gap;
+                }
+            }
+            gap /= 2;
+        }
+        return in_events;
+    }
+
     List<Event> calcStartTimes(Event[] events, int from, int to) {
         //Events - события которые нужно распределить в аудитории
         //в период [from, int] (включительно).
@@ -48,12 +65,13 @@ public class B_Sheduler {
         List<Event> result;
         result = new ArrayList<>();
         //ваше решение.
-
-
-
-
-
-
+        events = SortByRight(events);
+        for (int i = 0; i < events.length;) { //while i < events.length
+            int end = events[i].stop;
+            result.add(events[i]);
+            while (i < events.length && end > events[i].start)
+                i++;
+        }
         return result;          //вернем итог
     }
 }
