@@ -6,7 +6,7 @@ import java.util.*;
 
 public class A_Huffman {
     abstract class Node implements Comparable<Node> {
-        private final int frequence; //частота символов
+        private final int frequence;
 
         abstract void fillCodes(String code);
 
