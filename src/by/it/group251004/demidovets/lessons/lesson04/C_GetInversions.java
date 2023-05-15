@@ -35,6 +35,7 @@ Sample Output:
 
 public class C_GetInversions {
 
+    int inversions = 0;
     int calc(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
@@ -47,18 +48,39 @@ public class C_GetInversions {
             a[i] = scanner.nextInt();
         }
         int result = 0;
-        //!!!!!!!!!!!!!!!!!!!!!!!!     тут ваше решение   !!!!!!!!!!!!!!!!!!!!!!!!
+        mergeSort(a, 0, a.length - 1);
+        return inversions;
+    }
 
+    void merge(int[] a, int left, int middle, int right) {
+        int[] LArray = new int[middle - left + 1];
+        int[] RArray = new int[right - middle];
+        for (int i = 0; i < LArray.length; i++)
+            LArray[i] = a[left + i];
+        for (int i = 0; i < RArray.length; i++)
+            RArray[i] = a[middle + 1 + i];
+        int i = 0, j = 0, k = left;
+        while (i < LArray.length && j < RArray.length)
+            if (LArray[i] <= RArray[j])
+                a[k++] = LArray[i++];
+            else {
+                a[k++] = RArray[j++];
+                inversions += j + 1;
+                //inversions = LArray.length - i;
+            }
+        while (i < LArray.length)
+            a[k++] = LArray[i++];
+        while (j < RArray.length)
+            a[k++] = RArray[j++];
+    }
 
-
-
-
-
-
-
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+    void mergeSort(int[] a, int left, int right) {
+        if (left < right) {
+            int middle = (left + right) / 2;
+            mergeSort(a, left, middle);
+            mergeSort(a, middle + 1, right);
+            merge(a, left, middle, right);
+        }
     }
 
 
