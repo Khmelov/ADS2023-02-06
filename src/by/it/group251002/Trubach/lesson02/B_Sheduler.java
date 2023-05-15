@@ -1,4 +1,4 @@
-package by.it.group251002.Trubach.lesson02;
+package by.it.group251002.trubach.lesson02;
 
 import java.util.ArrayList;
 import java.util.Arrays;

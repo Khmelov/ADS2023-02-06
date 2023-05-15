@@ -1,4 +1,4 @@
-package by.it.group251002.Trubach.lesson01;
+package by.it.group251002.trubach.lesson01;
 
 import org.junit.Test;
 

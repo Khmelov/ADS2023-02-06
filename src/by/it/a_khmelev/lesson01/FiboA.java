@@ -32,23 +32,18 @@ public class FiboA {
         //здесь простейший вариант, в котором код совпадает
         //с математическим определением чисел Фибоначчи
         //время O(2^n)
-        if ((n == 0) || (n == 1))
-            return n;
-        else
-            return calc(n - 1) + calc(n - 2);
+        return 0;
     }
 
 
-    BigInteger slowA(int n) {
+    BigInteger slowA(Integer n) {
         //рекурсия
         //здесь нужно реализовать вариант без ограничения на размер числа,
         //в котором код совпадает с математическим определением чисел Фибоначчи
         //время O(2^n)
-        if (n == 0 || n == 1) {
-            return BigInteger.valueOf(n);
-        } else {
-            return slowA(n - 1).add(slowA(n - 2));
-        }
+
+
+        return BigInteger.ZERO;
     }
 
 

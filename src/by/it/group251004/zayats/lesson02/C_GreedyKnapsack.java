@@ -43,10 +43,43 @@ public class C_GreedyKnapsack {
         }
     }
 
+    Item[] Sort(Item[] items) {
+        int gap = items.length / 2;
+        while (gap > 0) {
+            for (int i = 0; i < items.length - gap; i++) {
+                int j = i;
+                Item temp = items[j + gap];
+                while (j >= 0 && temp.cost / temp.weight > items[j].cost / items[j].weight) {
+                    items[j + gap] = items[j];
+                    items[j] = temp;
+                    j -= gap;
+                }
+            }
+            gap /= 2;
+        }
+        return items;
+    }
+
+    double MaxPackage(Item[] items, int Weight) {
+        double result = 0;
+        int i = 0;
+        double tempW = 0;
+        while (i < items.length && tempW < Weight) {
+            if (tempW + items[i].weight < Weight) {
+                result += items[i].cost;
+                tempW += items[i].weight;
+            } else {
+                result += items[i].cost * ((Weight - tempW) / items[i].weight);
+                tempW = Weight;
+            }
+            i++;
+        }
+        return result;
+    }
     double calc(File source) throws FileNotFoundException {
         Scanner input = new Scanner(source);
         int n = input.nextInt();      //сколько предметов в файле
-        int W = input.nextInt();      //какой вес у рюкзака
+        int Weight = input.nextInt();      //какой вес у рюкзака
         Item[] items = new Item[n];   //получим список предметов
         for (int i = 0; i < n; i++) { //создавая каждый конструктором
             items[i] = new Item(input.nextInt(), input.nextInt());
@@ -55,22 +88,10 @@ public class C_GreedyKnapsack {
         for (Item item:items) {
             System.out.println(item);
         }
-        System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
+        System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,Weight);
 
-        //тут необходимо реализовать решение задачи
-        //итогом является максимально воможная стоимость вещей в рюкзаке
-        //вещи можно резать на кусочки (непрерывный рюкзак)
-        double result = 0;
-        //тут реализуйте алгоритм сбора рюкзака
-        //будет особенно хорошо, если с собственной сортировкой
-        //кроме того, можете описать свой компаратор в классе Item
-
-        //ваше решение.
-
-
-
-
-
+        items = Sort(items);
+        double result = MaxPackage(items, Weight);
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
         return result;
     }
