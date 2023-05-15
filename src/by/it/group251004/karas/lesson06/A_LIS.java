@@ -20,8 +20,6 @@ import java.util.Scanner;
     для которой каждый элемент A[i[k]]больше любого предыдущего
     т.е. для всех 1<=j<k, A[i[j]]<A[i[j+1]].
 
-Решить задачу МЕТОДАМИ ДИНАМИЧЕСКОГО ПРОГРАММИРОВАНИЯ
-
     Sample Input:
     5
     1 3 3 2 6
@@ -31,21 +29,31 @@ import java.util.Scanner;
 */
 
 public class A_LIS {
-
-
-    int getSeqSize(InputStream stream) throws FileNotFoundException {
-        //подготовка к чтению данных
+    int getSeqSize(InputStream stream){
         Scanner scanner = new Scanner(stream);
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+
         //общая длина последовательности
         int n = scanner.nextInt();
         int[] m = new int[n];
-        //читаем всю последовательность
+
         for (int i = 0; i < n; i++) {
             m[i] = scanner.nextInt();
         }
         int result = 0;
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int[] arr = new int[n];
+
+        for (int i = 0; i < n; i++){
+            arr[i] = 1;
+            for(int j = 0; j < i; j++){
+                if (m[j] < m[i] && arr[i] < arr[j] + 1) arr[i] = arr[j] + 1;
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (arr[i] > result){
+                result = arr[i];
+            }
+        }
         return result;
     }
 

@@ -18,8 +18,6 @@ import java.util.Scanner;
     для которой каждый элемент A[i[k]] делится на предыдущий
     т.е. для всех 1<=j<k, A[i[j+1]] делится на A[i[j]].
 
-Решить задачу МЕТОДАМИ ДИНАМИЧЕСКОГО ПРОГРАММИРОВАНИЯ
-
     Sample Input:
     4
     3 6 7 12
@@ -29,24 +27,30 @@ import java.util.Scanner;
 */
 
 public class B_LongDivComSubSeq {
-
-
-    int getDivSeqSize(InputStream stream) throws FileNotFoundException {
-        //подготовка к чтению данных
+    int getDivSeqSize(InputStream stream){
         Scanner scanner = new Scanner(stream);
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        //общая длина последовательности
+
         int n = scanner.nextInt();
         int[] m = new int[n];
-        //читаем всю последовательность
         for (int i = 0; i < n; i++) {
             m[i] = scanner.nextInt();
         }
-        //тут реализуйте логику задачи методами динамического программирования (!!!)
+        int[] arr = new int[n];
         int result = 0;
+        for (int i = 0; i < n; i++) {
+            arr[i] = 1;
+            for (int j = 0; j < i; j++) {
+                if (arr[i] < arr[j] + 1 && m[i] % m[j] == 0){
+                    arr[i] = arr[j] + 1;
+                }
+            }
+        }
 
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        for (int i = 0; i < n; i++) {
+            if(arr[i] > result){
+                result = arr[i];
+            }
+        }
         return result;
     }
 
