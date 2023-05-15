@@ -43,7 +43,15 @@ public class C_Stairs {
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         int result = 0;
-
+        int[] Values = new int[n];
+        Values = stairs;
+        for (int i = 1; i < n; i++) {
+            if (i >= 2)
+                Values[i] = Integer.max(Values[i - 1],Values[i - 2]) + stairs[i]; // если ступенек > 2, то выбираю большее между 2 шагами
+            else                                                                               // иначе , когда остается 1 ступенька или 0, добавляю это значение
+                Values[i]=Integer.max (stairs[i],Values[i-1] + stairs[i]);                      // либо конец
+        }
+        result = Values[n-1];
 
 
 

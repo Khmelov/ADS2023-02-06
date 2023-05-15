@@ -41,13 +41,14 @@ public class A_Knapsack {
         Scanner scanner = new Scanner(stream);
         int w=scanner.nextInt();
         int n=scanner.nextInt();
-        int gold[]=new int[n];
+        int gold[] = new int[n];
+        int max = 300;
         for (int i = 0; i < n; i++) {
-            gold[i]=scanner.nextInt();
+            gold[i] = scanner.nextInt();
+            max = Integer.min(max, gold[i]);
         }
-
-
-        int result = 0;
+        // выбираю наименьший вес слитка и вычитаю из полного веса пустое место, учитывая вес выбранного слитка
+        int result = w - (w % max);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }

@@ -39,12 +39,28 @@ import java.util.Scanner;
 
 public class A_EditDist {
 
+    int min(int a, int b, int c) {
+        return Integer.min(a, Integer.min(b, c));
+    }
 
+    int dist(int i, int j, String one, String two) {
+        if (i == 0) {
+            return j;
+        }
+
+        if (j == 0) {
+            return i;
+        }
+
+        int tmp = (one.charAt(i - 1) == two.charAt(j - 1)) ? 0 : 1; // увеличиваю разность строк в случае, если если не сошлась буква, рекурсия
+        return min(dist(i - 1, j, one, two) + 1, dist(i, j - 1, one, two) + 1, dist(i - 1, j - 1, one, two) + tmp);
+    }
     int getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
 
-
         int result = 0;
+
+        result = dist(one.length(), two.length(), one, two);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }

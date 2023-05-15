@@ -40,15 +40,49 @@ import java.util.Scanner;
 public class B_EditDist {
 
 
-    int getDistanceEdinting(String one, String two) {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
 
 
+        // Алгоритм Вагнера-Фишера - вычисление мартрицы
 
-        int result = 0;
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+
+//        для всех i от 0 до M
+//        для всех j от 0 до N
+//        вычислить D(i, j)
+//        вернуть D(M, N)
+int getDistanceEdinting(String one, String two) {
+    int n = one.length();
+    int m = two.length();
+
+    // Creating matrix
+    int[][] d = new int[n + 1][m + 1];
+
+    // Filling first column and row
+    for (int i = 0; i <= n; i++) {
+        d[i][0] = i;
     }
+    for (int j = 0; j <= m; j++) {
+        d[0][j] = j;
+    }
+
+    // Filling remaining cells
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            int diff = one.charAt(i - 1) == two.charAt(j - 1) ? 0 : 1;
+            d[i][j] = Math.min(
+                    d[i - 1][j] + 1,     // Deleting symbol from string one
+                    Math.min(
+                            d[i][j - 1] + 1,     // Import symbol in string one
+                            d[i - 1][j - 1] + diff // Changing symbol from string one with symbol from string two
+                    )
+            );
+        }
+    }
+
+    // Returning the answer - value in cell (n, m)
+    return d[n][m];
+
+}
+
 
 
 
