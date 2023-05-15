@@ -1,4 +1,4 @@
-package by.it.group251004.demidovets.lesson01;
+package by.it.group251004.demidovets;
 
 import org.junit.Test;
 

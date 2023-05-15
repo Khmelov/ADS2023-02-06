@@ -1,4 +1,4 @@
-package by.it.group251004.demidovets.lesson01;
+package by.it.group251004.demidovets;
 
 /*
  * Даны целые числа 1<=n<=1E18 и 2<=m<=1E5,
