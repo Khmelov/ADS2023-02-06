@@ -21,7 +21,47 @@ Sample Output:
 */
 public class B_MergeSort {
 
-    int[] getMergeSort(InputStream stream) throws FileNotFoundException {
+    public int [] cutArray(int[] array) {
+        if (array.length < 2) {
+            return array;
+        }
+        int [] firstArray = new int[array.length / 2];
+        System.arraycopy(array, 0, firstArray, 0, array.length / 2);
+        int [] secondArray = new int[array.length - array.length / 2];
+        System.arraycopy(array, array.length / 2, secondArray, 0, array.length - array.length / 2);
+        firstArray = cutArray(firstArray);
+        secondArray = cutArray(secondArray);
+        return sortArrays(firstArray, secondArray);
+    }
+    public static int[] sortArrays(int[] firstArray, int[] secondArray) {
+        int[] resArray = new int[firstArray.length + secondArray.length];
+        int i = 0, j = 0, k = 0;
+        while (i < firstArray.length && j < secondArray.length) {
+            if (firstArray[i] <= secondArray[j]) {
+                resArray[k] = firstArray[i];
+                i++;
+            }
+            else {
+                resArray[k] = secondArray[j];
+                j++;
+            }
+            k++;
+        }
+        while (i < firstArray.length) {
+            resArray[k] = firstArray[i];
+            i++;
+            k++;
+        }
+        while (j < secondArray.length) {
+            resArray[k] = secondArray[j];
+            j++;
+            k++;
+        }
+        return resArray;
+    }
+
+
+    int[] getMergeSort(InputStream stream) {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
@@ -29,22 +69,18 @@ public class B_MergeSort {
         //размер массива
         int n = scanner.nextInt();
         //сам массив
-        int[] a=new int[n];
+        int[] arr = new int[n];
         for (int i = 0; i < n; i++) {
-            a[i] = scanner.nextInt();
-            System.out.println(a[i]);
+            arr[i] = scanner.nextInt();
+            System.out.println(arr[i]);
         }
+
+        arr = cutArray(arr);
 
         // тут ваше решение (реализуйте сортировку слиянием)
         // https://ru.wikipedia.org/wiki/Сортировка_слиянием
-
-
-
-
-
-
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return a;
+        return arr;
     }
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
