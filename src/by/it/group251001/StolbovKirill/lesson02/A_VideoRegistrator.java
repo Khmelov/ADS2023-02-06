@@ -22,15 +22,18 @@ public class A_VideoRegistrator {
 
     //модификаторы доступа опущены для возможности тестирования
     List<Double> calcStartTimes(double[] events, double workDuration) {
-        List<Double> result = new ArrayList<>();
+        //events - события которые нужно зарегистрировать
+        //timeWorkDuration время работы видеокамеры после старта
+        List<Double> result;
+        result = new ArrayList<>();
+        int i = 0, j = 0;
         Arrays.sort(events);
-
-        result.add(events[0]);
-        for (int i = 1; i < events.length; i++) {
-
-            if (result.get(result.size() - 1) + workDuration < events[i]) {
-                result.add(events[i]);
-            }
+        while (i < events.length)
+        {
+            result.add(events[i]);
+            while (j < events.length && 1 + events[i] >= events[j])
+                j++;
+            i = j;
         }
 
         return result;
