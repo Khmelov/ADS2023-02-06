@@ -59,12 +59,13 @@ public class C_GetInversions {
             else
                 sorted[numsArrInd++] = nums[rightArrInd++];
         }
-        while (leftArrInd <= mid) {
+        while (leftArrInd <= mid)
             sorted[numsArrInd++] = nums[leftArrInd++];
-            numberInversions += rightArrInd - mid - 1;
-        }
-        while (rightArrInd <= right)
+
+        while (rightArrInd <= right) {
             sorted[numsArrInd++] = nums[rightArrInd++];
+
+        }
 
         for (int i = left; i <= right; i++)
             nums[i] = sorted[i - left];

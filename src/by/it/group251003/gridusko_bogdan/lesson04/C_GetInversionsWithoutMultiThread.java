@@ -59,6 +59,7 @@ public class C_GetInversionsWithoutMultiThread {
         while (j <= right)
             temp[k++] = array[j++];
 
+
         System.arraycopy(temp, 0, array, left, temp.length);
 
         return result;
