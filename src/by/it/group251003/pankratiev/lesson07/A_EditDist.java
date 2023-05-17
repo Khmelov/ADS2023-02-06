@@ -42,11 +42,24 @@ public class A_EditDist {
 
     int getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int m = one.length();
+        int n = two.length();
 
+        if (m == 0)
+            return n;
 
-        int result = 0;
+        if (n == 0)
+            return m;
+
+        if (one.charAt(m - 1) == two.charAt(n - 1))
+            return getDistanceEdinting(one.substring(0, m - 1), two.substring(0, n - 1));
+
+        int insert = getDistanceEdinting(one, two.substring(0, n - 1)) + 1;
+        int delete = getDistanceEdinting(one.substring(0, m - 1), two) + 1;
+        int replace = getDistanceEdinting(one.substring(0, m - 1), two.substring(0, n - 1)) + 1;
+
+        return Math.min(Math.min(insert, delete), replace);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
     }
 
 

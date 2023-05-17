@@ -51,11 +51,45 @@ public class C_EditDist {
 
     String getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int n = one.length();
+        int m = two.length();
+        int[][] dp = new int[n + 1][m + 1];
 
+        for (int i = 0; i < n + 1; i++)
+            for (int j = 0; j < m + 1; j++)
+                dp[i][j] = i + j;
+
+        for (int i = 1; i < n + 1; i++)
+            for (int j = 1; j < m + 1; j++)
+                dp[i][j] = Math.min(dp[i][j - 1] + 1, Math.min(dp[i - 1][j] + 1,dp[i - 1][j - 1] +
+                        (one.charAt(i - 1) != two.charAt(j - 1) ? 1:0)));
 
         String result = "";
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int i = n;
+        int j = m;
+        while (i != 0 && j != 0){
+            if (dp[i-1][j] + 1 == dp[i][j]){
+                result = "+" + two.charAt(j - 1) + "," + result;
+                i--;
+            }
+            else if (dp[i][j - 1] + 1 == dp[i][j]){
+                result = "-" + one.charAt(i - 1) + "," + result;
+                j--;
+            }
+            else if(dp[i - 1][j - 1] == dp[i][j]){
+                result = "#" + "," + result;
+                i--;
+                j--;
+            }
+            else {
+                result = "~" + two.charAt(j - 1) + "," + result;
+                j--;
+                i--;
+            }
+        }
+
         return result;
+        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
 
