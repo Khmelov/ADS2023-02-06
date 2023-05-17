@@ -81,15 +81,15 @@ public class C_QSortOptimized {
 
             while (low <= high) {
                 int mid = (low + high) / 2;
-                if (currentSegment.compareTo(arr[mid]) < 0) {
+                if (currentSegment.compareTo(arr[mid]) < 0)
                     high = mid - 1;
-                } else {
+                else
                     low = mid + 1;
-                }
             }
 
             for (int j = i - 1; j >= low; j--)
                 arr[j + 1] = arr[j];
+
             arr[low] = currentSegment;
         }
     }
@@ -104,7 +104,7 @@ public class C_QSortOptimized {
             Segment pivot = medianOfThree(arr, left, right);
             int low = left;
             int high = right;
-            int middle = left;
+            int middle = (left + right) / 2;
 
             while (middle <= high) {
                 if (arr[middle].compareTo(pivot) < 0) {
@@ -119,7 +119,7 @@ public class C_QSortOptimized {
             }
 
             QuickSort(arr, left, low - 1);
-            left = middle;
+            left = low;
         }
     }
 
