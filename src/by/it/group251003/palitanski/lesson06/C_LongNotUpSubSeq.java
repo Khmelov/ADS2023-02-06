@@ -52,6 +52,45 @@ public class C_LongNotUpSubSeq {
         //тут реализуйте логику задачи методами динамического программирования (!!!)
         int result = 0;
 
+        int[] arr = new int[n];
+        int[] prev = new int[n];
+        int indmax = 0;
+        for (int i = 0; i < n; i++){
+            arr[i] = 1;
+            prev[i] = -1;
+            for(int j = 0; j < i; j++){
+                if (m[j] >= m[i] && arr[j] + 1 > arr[i]){
+                    arr[i] = arr[j] + 1;
+                    prev[i] = j+1;
+                }
+            }
+            if (arr[i] > result){
+                result = arr[i];
+                indmax = i+1;
+            }
+        }
+
+        int[] ind = new int[result];
+        ind[0] = indmax;
+        int j = 0;
+
+        int i = indmax - 1;
+        boolean isCont = true;
+        j = 1;
+        while ((i > 0) && (isCont)) {
+            ind[j] = prev[i];
+            i = prev[i-1];
+            j++;
+            if (i <= 0){
+                isCont = false;
+            }
+        }
+
+        for(j = result - 1; j >= 0; j--){
+            System.out.print(ind[j] + " ");
+        }
+
+        System.out.println();
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;

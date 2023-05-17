@@ -11,25 +11,21 @@ import java.util.Scanner;
 Найдите максимальную сумму, которую можно получить, идя по лестнице
 снизу вверх (от нулевой до n-й ступеньки), каждый раз поднимаясь на
 одну или на две ступеньки.
-
 Sample Input 1:
 2
 1 2
 Sample Output 1:
 3
-
 Sample Input 2:
 2
 2 -1
 Sample Output 2:
 1
-
 Sample Input 3:
 3
 -1 2 1
 Sample Output 3:
 3
-
 */
 
 public class C_Stairs {
@@ -41,14 +37,18 @@ public class C_Stairs {
         for (int i = 0; i < n; i++) {
             stairs[i]=scanner.nextInt();
         }
+
+
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        int result = 0;
-
-
-
+        int[] sum = new int[n + 1];
+        sum[0] = 0;
+        sum[1] = stairs[0];
+        for (int i = 2; i <= n; i++) {
+            sum[i] = stairs[i - 1] + Math.max(sum[i - 1], sum[i  - 2]);
+        }
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return sum[n];
     }
 
 

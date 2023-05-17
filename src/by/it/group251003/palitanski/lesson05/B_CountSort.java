@@ -32,9 +32,38 @@ public class B_CountSort {
         }
         //тут реализуйте логику задачи с применением сортировки подсчетом
 
+        int min, max = min = points[0];
+        // тупо находим максимальное и минимальное значение
+        for (int i = 1; i < points.length; i++) {
+            if (points[i] < min) {
+                min = points[i];
+            }
+            if (points[i] > max) {
+                max = points[i];
+            }
+        }
 
+        int[] count = new int[max - min + 1];
 
-
+        for (int i = 0; i < points.length; i++) {
+            // подсчитываем сколько раз встречается число,
+            // встретилось +1 к счетчику
+            count[points[i] - min]++;
+        }
+        // например. count[0]=1, count[1]=2, count[3]=0,count[4]=0,count[5]=1
+        int idx = 0;
+        // теперь все готово
+        // пробегаем по всему счетчику (от 0 до 5)
+        // count[i] - показывает сколько раз встречается то или иное число
+        for (int i = 0; i < count.length; i++) {
+            // count[0]=1, значит array[0]=0;
+            // count[1]=2, значит вставляем два раза array[1]=array[2]=1;
+            // count[2]=1, опять только один раз. array[3]=2;
+            // count[3]=0, значит ничего не вставляем и т.д.
+            for (int j = 0; j < count[i]; j++) {
+                points[idx++] = i + min;
+            }
+        }
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return points;

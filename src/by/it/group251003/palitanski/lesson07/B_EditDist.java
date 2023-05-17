@@ -3,6 +3,7 @@ package by.it.group251003.palitanski.lesson07;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /*
@@ -39,15 +40,32 @@ import java.util.Scanner;
 
 public class B_EditDist {
 
+    public static int min(int... numbers) {
+        return Arrays.stream(numbers).min().orElse(Integer.MAX_VALUE);
+    }
 
     int getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int[][] matrix = new int[one.length() + 1][two.length() + 1];
 
+        for (int i = 0; i <= one.length(); i++) {
+            for (int j = 0; j <= two.length(); j++) {
+                if (i == 0) {
+                    matrix[i][j] = j;
+                }
+                else if (j == 0) {
+                    matrix[i][j] = i;
+                }
+                else {
+                    matrix[i][j] = min(matrix[i - 1][j - 1] + (one.charAt(i - 1) == two.charAt(j - 1) ? 0 : 1), matrix[i - 1][j] + 1, matrix[i][j - 1] + 1);
+                }
+            }
+        }
 
 
         int result = 0;
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return matrix[one.length()][two.length()];
     }
 
 

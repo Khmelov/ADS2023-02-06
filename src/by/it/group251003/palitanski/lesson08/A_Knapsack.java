@@ -7,31 +7,24 @@ import java.util.Scanner;
 
 /*
 Задача на программирование: рюкзак с повторами
-
 Первая строка входа содержит целые числа
     1<=W<=100000     вместимость рюкзака
     1<=n<=300        сколько есть вариантов золотых слитков
                      (каждый можно использовать множество раз).
 Следующая строка содержит n целых чисел, задающих веса слитков:
   0<=w[1]<=100000 ,..., 0<=w[n]<=100000
-
 Найдите методами динамического программирования
 максимальный вес золота, который можно унести в рюкзаке.
-
-
 Sample Input:
 10 3
 1 4 8
 Sample Output:
 10
-
 Sample Input 2:
-
 15 3
 2 8 16
 Sample Output 2:
 14
-
 */
 
 public class A_Knapsack {
@@ -46,10 +39,17 @@ public class A_Knapsack {
             gold[i]=scanner.nextInt();
         }
 
+        int[] maxWeights = new int[w + 1];
 
-        int result = 0;
+        for (int i = 1; i <= w; i++) {
+            for (int j = 0; j < n; j++) {
+                if (gold[j] <= i){
+                    maxWeights[i] = Math.max(maxWeights[i], gold[j] + maxWeights[i - gold[j]]);
+                }
+            }
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return maxWeights[w];
     }
 
 
