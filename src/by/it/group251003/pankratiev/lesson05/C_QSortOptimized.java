@@ -106,7 +106,7 @@ public class C_QSortOptimized {
             int high = right;
             int middle = (left + right) / 2;
 
-            while (middle <= high) {
+            while (low <= high) {
                 if (arr[middle].compareTo(pivot) < 0) {
                     swap(arr, middle, low);
                     middle++;
