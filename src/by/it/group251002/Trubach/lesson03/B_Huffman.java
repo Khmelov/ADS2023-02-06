@@ -1,4 +1,4 @@
-package by.it.group251002.trubach.lesson03;
+package by.it.group251002.Trubach.lesson03;
 
 import java.io.File;
 import java.io.FileNotFoundException;
