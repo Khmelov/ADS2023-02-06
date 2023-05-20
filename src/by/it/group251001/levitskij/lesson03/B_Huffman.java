@@ -68,7 +68,7 @@ public class B_Huffman {
                 k = i+1;
             }
         }
-
+        result.append(decode.get(source.substring(k, length)));
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         return result.toString(); //01001100100111
