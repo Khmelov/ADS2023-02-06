@@ -47,13 +47,26 @@ public class B_Sheduler {
         //Начало и конец событий могут совпадать.
         List<Event> result;
         result = new ArrayList<>();
-        //ваше решение.
-
-
-
-
-
-
+        int i = from;
+        while(i<=to)
+        {
+            boolean pickit = false;
+            Event NewEvent = new Event(i,to);
+            for(int j = 0;j< events.length;j++)
+            {
+                if (i == events[j].start && ((NewEvent.stop - NewEvent.start) > (events[j].stop - events[j].start)))
+                {
+                    pickit = true;
+                    NewEvent = events[j];
+                }
+            }
+            if(pickit)
+            {
+                result.add(NewEvent);
+                i=NewEvent.stop;
+            }
+            else i++;
+        }
         return result;          //вернем итог
     }
 }
