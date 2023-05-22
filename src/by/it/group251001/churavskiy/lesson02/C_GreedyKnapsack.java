@@ -36,20 +36,35 @@ public class C_GreedyKnapsack {
         }
 
         @Override
-        public int compareTo(Item o) {
-            //тут может быть ваш компаратор
+        public int compareTo(Item other) {
+            double costPerWeightThis = ((double) cost) / weight;
+            double costPerWeightOther = ((double) other.cost) / other.weight;
 
-
-            return 0;
+            return Double.compare(costPerWeightOther, costPerWeightThis);
         }
+    }
+
+    Item[] bubbleSort(Item[] items) {
+        Item temp;
+
+        for(int i = 0; i < items.length - 1; i++ ) {
+            for(int j = 0; j < items.length - i - 1; j++ ) {
+                if (items[j].cost > items[j + 1].cost) {
+                    temp = items[j];
+                    items[j] = items[j + 1];
+                    items[j + 1] = temp;
+                }
+            }
+        }
+        return items;
     }
 
     double calc(File source) throws FileNotFoundException {
         Scanner input = new Scanner(source);
-        int n = input.nextInt();      //сколько предметов в файле
-        int W = input.nextInt();      //какой вес у рюкзака
-        Item[] items = new Item[n];   //получим список предметов
-        for (int i = 0; i < n; i++) { //создавая каждый конструктором
+        int n = input.nextInt();
+        int W = input.nextInt();
+        Item[] items = new Item[n];
+        for (int i = 0; i < n; i++) {
             items[i] = new Item(input.nextInt(), input.nextInt());
         }
         //покажем предметы
@@ -58,15 +73,18 @@ public class C_GreedyKnapsack {
         }
         System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
 
-        //тут необходимо реализовать решение задачи
-        //итогом является максимально воможная стоимость вещей в рюкзаке
-        //вещи можно резать на кусочки (непрерывный рюкзак)
+        Arrays.sort(items);
         double result = 0;
-        //тут реализуйте алгоритм сбора рюкзака
-        //будет особенно хорошо, если с собственной сортировкой
-        //кроме того, можете описать свой компаратор в классе Item
+        int totalWeight = 0;
+        for (Item item : items) {
+            if (totalWeight + item.weight > W) {
+                result += ((double) item.cost) / item.weight * (W - totalWeight);
+                break;
+            }
 
-        //ваше решение.
+            result += item.cost;
+            totalWeight += item.weight;
+        }
 
 
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
