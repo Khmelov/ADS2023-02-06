@@ -2,6 +2,8 @@ package by.it.group251001.Gushcha.lesson03;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 // Lesson 3. B_Huffman.
@@ -42,28 +44,45 @@ import java.util.Scanner;
 
 public class B_Huffman {
 
-    String decode(File file) throws FileNotFoundException {
-        StringBuilder result=new StringBuilder();
-        //прочитаем строку для кодирования из тестового файла
-        Scanner scanner = new Scanner(file);
-        Integer count = scanner.nextInt();
-        Integer length = scanner.nextInt();
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-        //тут запишите ваше решение
-
-
-
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-        return result.toString(); //01001100100111
-    }
-
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
         File f = new File(root + "by/it/a_khmelev/lesson03/encodeHuffman.txt");
         B_Huffman instance = new B_Huffman();
         String result = instance.decode(f);
         System.out.println(result);
+    }
+
+    String decode(File file) throws FileNotFoundException {
+        Scanner scanner = new Scanner(file);
+        int count = scanner.nextInt();
+        int length = scanner.nextInt();
+        Map<String, Character> codes = new HashMap<>();
+
+        int maxCodeSize = 0;
+        scanner.nextLine();
+        for (int i = 0; i < count; i++) {
+            String line = scanner.nextLine();
+            String[] parts = line.split(": ");
+
+            codes.put(parts[1], parts[0].charAt(0));
+
+            maxCodeSize = Math.max(maxCodeSize, parts[1].length());
+        }
+
+        String code = scanner.next();
+
+        StringBuilder sb = new StringBuilder();
+        StringBuilder result = new StringBuilder();
+        for (char c : code.toCharArray()) {
+            sb.append(c);
+
+            if (c == '0' || sb.length() == maxCodeSize) {
+                result.append(codes.get(sb.toString()));
+                sb.setLength(0);
+            }
+        }
+
+        return result.toString();
     }
 
 
