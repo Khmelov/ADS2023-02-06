@@ -41,13 +41,36 @@ public class B_EditDist {
 
 
     int getDistanceEdinting(String one, String two) {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int n = one.length();
+        int m = two.length();
 
+        // Создаем матрицу
+        int[][] d = new int[n+1][m+1];
 
+        // Заполняем первый столбец и первую строку
+        for (int i = 0; i <= n; i++) {
+            d[i][0] = i;
+        }
+        for (int j = 0; j <= m; j++) {
+            d[0][j] = j;
+        }
 
-        int result = 0;
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        // Заполняем оставшиеся ячейки
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                int diff = one.charAt(i-1) == two.charAt(j-1) ? 0 : 1;
+                d[i][j] = Math.min(
+                        d[i-1][j] + 1,     // удаление символа из строки one
+                        Math.min(
+                                d[i][j-1] + 1,     // вставка символа в строку one
+                                d[i-1][j-1] + diff // замена символа в строке one на символ в строке two
+                        )
+                );
+            }
+        }
+
+        // Возвращаем результат - значение в ячейке (n, m)
+        return d[n][m];
     }
 
 

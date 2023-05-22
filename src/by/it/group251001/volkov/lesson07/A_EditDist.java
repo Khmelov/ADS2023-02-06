@@ -42,12 +42,35 @@ public class A_EditDist {
 
     int getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+            int[][] d = new int[one.length() + 1][two.length() + 1];
 
+            // инициализируем первую строку и первый столбец
+            for (int i = 0; i <= one.length(); i++) {
+                d[i][0] = i;
+            }
+            for (int j = 0; j <= two.length(); j++) {
+                d[0][j] = j;
+            }
 
-        int result = 0;
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
-    }
+            // заполняем массив по формуле
+            for (int j = 1; j <= two.length(); j++) {
+                for (int i = 1; i <= one.length(); i++) {
+                    int insertion = d[i][j - 1] + 1;
+                    int deletion = d[i - 1][j] + 1;
+                    int match = d[i - 1][j - 1];
+                    int mismatch = d[i - 1][j - 1] + 1;
+
+                    if (one.charAt(i - 1) == two.charAt(j - 1)) {
+                        d[i][j] = Math.min(Math.min(insertion, deletion), match);
+                    } else {
+                        d[i][j] = Math.min(Math.min(insertion, deletion), mismatch);
+                    }
+                }
+            }
+
+            return d[one.length()][two.length()];
+        }
+        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!
 
 
     public static void main(String[] args) throws FileNotFoundException {
