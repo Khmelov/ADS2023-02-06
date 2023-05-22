@@ -2,6 +2,8 @@ package by.it.group251001.volkov.lesson03;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 // Lesson 3. B_Huffman.
@@ -51,6 +53,31 @@ public class B_Huffman {
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         //тут запишите ваше решение
 
+        Map< String,Character> SymbolsMap = new HashMap<>();
+        String  k;
+        for (int i = 0; i < count; i++){
+            k = scanner.next();
+            char sym = k.charAt(0);
+            k = scanner.next();
+            SymbolsMap.put(k,sym);
+        }
+
+
+        int i = 0;
+        StringBuilder sb = new StringBuilder();
+        String code = scanner.next();
+
+        while (i<length) {
+            sb.append(code.charAt(i));
+            String yes = sb.toString();
+
+            if (SymbolsMap.containsKey(yes)) {
+                result.append(SymbolsMap.get(yes));
+                sb.delete(0, yes.length());
+            }
+            i++;
+
+        }
 
 
 
