@@ -3,6 +3,7 @@ package by.it.group251001.volkov.lesson08;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /*
@@ -38,8 +39,14 @@ public class B_Knapsack {
             gold[i]=scanner.nextInt();
         }
 
-
+        Arrays.sort(gold);
         int result = 0;
+        for (int i = gold.length - 1; i >= 0; i--) {
+            if (gold[i] <= w) {
+                w -= gold[i];
+                result += gold[i];
+            }
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
