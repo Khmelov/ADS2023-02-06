@@ -33,7 +33,7 @@ import java.util.Scanner;
 public class C_QSortOptimized {
 
     //отрезок
-    private class Segment  implements Comparable{
+    private class Segment implements Comparable<Segment>{
         int start;
         int stop;
 
@@ -45,14 +45,13 @@ public class C_QSortOptimized {
                 this.start = start;
                 this.stop = stop;
             }
+            //тут вообще-то лучше доделать конструктор на случай если
+            //концы отрезков придут в обратном порядке
         }
-
         @Override
-        public int compareTo(Object o) {
+        public int compareTo(Segment o) {
             if (this.start == o.start) return this.stop - o.stop;
             return this.start - o.start;
-            //подумайте, что должен возвращать компаратор отрезков
-            return 0;
         }
     }
 
@@ -108,6 +107,7 @@ public class C_QSortOptimized {
         arr[a] = arr[b];
         arr[b] = tmp;
     }
+
     int[] getAccessory2(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
@@ -126,12 +126,11 @@ public class C_QSortOptimized {
             segments[i]=new Segment(scanner.nextInt(),scanner.nextInt());
         }
         //читаем точки
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < m; i++) {
             points[i]=scanner.nextInt();
         }
         //тут реализуйте логику задачи с применением быстрой сортировки
         //в классе отрезка Segment реализуйте нужный для этой задачи компаратор
-
         int min = segments[0].start;
         int max = segments[0].stop;
         quickSort(segments, 0, n - 1);
@@ -151,6 +150,7 @@ public class C_QSortOptimized {
                     result[i]++;
             }
         }
+
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
@@ -158,7 +158,7 @@ public class C_QSortOptimized {
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
-        InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson05/dataC.txt");
+        InputStream stream = new FileInputStream(root + "by/it/group251002/sazonov/lesson05/dataC.txt");
         C_QSortOptimized instance = new C_QSortOptimized();
         int[] result=instance.getAccessory2(stream);
         for (int index:result){
