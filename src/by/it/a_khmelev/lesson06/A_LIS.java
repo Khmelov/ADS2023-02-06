@@ -30,7 +30,7 @@ import java.util.Scanner;
     3
 */
 
-public class    A_LIS {
+public class A_LIS {
 
 
     int getSeqSize(InputStream stream) throws FileNotFoundException {
