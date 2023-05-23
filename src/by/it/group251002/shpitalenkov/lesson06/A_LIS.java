@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson06;
+package by.it.group251002.shpitalenkov.lesson06;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -44,9 +44,19 @@ public class    A_LIS {
         for (int i = 0; i < n; i++) {
             m[i] = scanner.nextInt();
         }
-        int result = 0;
+
+        int[] lis = new int[n];
+        lis[0] = 1;
+        for (int i = 1; i < n; i++) {
+            int maxLen = 0;
+            for (int j = 0; j < i; j++)
+                if (m[i] > m[j])
+                    maxLen = lis[j];
+
+            lis[i] = maxLen + 1;
+        }
+        return lis[n - 1];
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
     }
 
 
