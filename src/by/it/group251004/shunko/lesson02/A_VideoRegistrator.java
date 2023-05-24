@@ -26,7 +26,7 @@ public class A_VideoRegistrator {
         //timeWorkDuration время работы видеокамеры после старта
 
         List<Double> result;
-        result = new ArrayList<>();
+        result = new ArrayList<>() ;
         double theFirst = 0;
         Arrays.sort(events); // очевидно , сортирую массив) таким образом можно сильно упростить дальнейший алгос, хотя не исключаю, что можно и без этого
         theFirst = events[0];

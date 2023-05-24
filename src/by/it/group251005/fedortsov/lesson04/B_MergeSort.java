@@ -16,6 +16,13 @@ Sample Input:
 2 3 9 2 9
 Sample Output:
 2 2 3 9 9
+
+2 3 9  2 9
+2 2 3 9 9
+2 3 6     9 10 11
+2 3 6 9 10 11
+
+
 */
 public class B_MergeSort {
 
