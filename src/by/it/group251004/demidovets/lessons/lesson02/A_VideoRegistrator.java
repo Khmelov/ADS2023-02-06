@@ -21,6 +21,8 @@ public class A_VideoRegistrator {
     }
     //модификаторы доступа опущены для возможности тестирования
     List<Double> calcStartTimes(double[] events, double workDuration){
+        //events - события которые нужно зарегистрировать
+        //timeWorkDuration время работы видеокамеры после старта
         List<Double> result;
         result = new ArrayList<>();
         int i=0;                              //i - это индекс события events[i]
@@ -41,6 +43,9 @@ public class A_VideoRegistrator {
         //вычислим момент окончания работы видеокамеры
         //и теперь пропустим все покрываемые события
         //за время до конца работы, увеличивая индекс
-        return result;
+
+
+
+        return result;                        //вернем итог
     }
 }

@@ -34,7 +34,6 @@ Sample Output:
 
 
 public class C_GetInversions {
-
     int inversions = 0;
     int calc(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
@@ -82,8 +81,6 @@ public class C_GetInversions {
             merge(a, left, middle, right);
         }
     }
-
-
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson04/dataC.txt");

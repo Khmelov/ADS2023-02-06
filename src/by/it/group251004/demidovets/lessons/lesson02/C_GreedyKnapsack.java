@@ -86,15 +86,18 @@ public class C_GreedyKnapsack {
             items[i] = new Item(input.nextInt(), input.nextInt());
         }
         //покажем предметы
-        for (Item item:items) {
+        for (Item item : items) {
             System.out.println(item);
         }
         System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
+        //тут необходимо реализовать решение задачи
+        //итогом является максимально воможная стоимость вещей в рюкзаке
+        //вещи можно резать на кусочки (непрерывный рюкзак)
+        items = shellsSort(items);
         //тут реализуйте алгоритм сбора рюкзака
         //будет особенно хорошо, если с собственной сортировкой
         //кроме того, можете описать свой компаратор в классе Item
         //ваше решение.
-        items = shellsSort(items);
         double result = getMaximumPackage(items, W);
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
         return result;

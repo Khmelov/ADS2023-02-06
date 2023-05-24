@@ -93,7 +93,7 @@ public class A_Huffman {
         //лист
         char symbol; //символы хранятся только в листах
 
-        LeafNode(int frequence, char c) {
+        LeafNode(int frequence, char symbol) {
             super(frequence);
             this.symbol = symbol;
         }
@@ -109,9 +109,9 @@ public class A_Huffman {
     //индекс данных из листьев
     static private Map<Character, String> codes = new TreeMap<>();
 
-
     //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
     String encode(File file) throws FileNotFoundException {
+        //прочитаем строку для кодирования из тестового файла
         Scanner scanner = new Scanner(file);
         String s = scanner.next();
         //все комментарии от тестового решения были оставлены т.к. это задание A.

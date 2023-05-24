@@ -41,14 +41,20 @@ import java.util.Scanner;
 //        Sample Output 2:
 //        abacabad
 
+
+
+
+
 public class B_Huffman {
 
     String decode(File file) throws FileNotFoundException {
-        StringBuilder result=new StringBuilder();
+        StringBuilder result = new StringBuilder();
         //прочитаем строку для кодирования из тестового файла
         Scanner scanner = new Scanner(file);
         Integer count = scanner.nextInt();
         Integer length = scanner.nextInt();
+        scanner.nextLine();
+
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         //тут запишите ваше решение
         Node node = getNode(count, scanner);
@@ -98,7 +104,7 @@ public class B_Huffman {
             this.left = left;
             this.right = right;
         }
-        int getEncode (StringBuilder result,Node node, String temp, String input, int i) {
+        int getEncode (StringBuilder result, Node node, String temp, String input, int i) {
             if (node.content != null && node.content.equals(temp)) {
                 result.append(node.letter);
                 return i;
