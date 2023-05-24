@@ -78,7 +78,7 @@ public class C_GreedyKnapsack {
             Item temp = items[i];
             int swap = Worth[i];
             for (j = i; j > 0 && swap > Worth[j - 1]; j--) {
-                items[j] = items[j-1];
+                items[j] = items[j - 1];
                 Worth[j] = Worth[j - 1];
             }
             Worth[j] = swap;
