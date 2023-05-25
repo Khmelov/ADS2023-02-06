@@ -40,3 +40,4 @@ public class Lesson6Test {
     }
 
 }
+
