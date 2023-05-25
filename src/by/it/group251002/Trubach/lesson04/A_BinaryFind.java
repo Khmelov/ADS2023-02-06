@@ -50,20 +50,6 @@ public class A_BinaryFind {
     }
 
 
-    /*int item = -1;
-        if (left > right)
-            return item;
-        else {
-        int middle = (left + right) / 2;
-        if (value < a[middle])
-            item = BinarySearch(a, value, left, middle - 1);
-        else if (value > a[middle])
-            item = BinarySearch(a, value, middle + 1, right);
-        else if (value == a[middle])
-            item = value;
-        return item;
-        }*/ //код, чтобы возвращать сразу элемент
-
     public int BinarySearch(int[] a, int value, int left, int right)
     {
         if (left < right) {

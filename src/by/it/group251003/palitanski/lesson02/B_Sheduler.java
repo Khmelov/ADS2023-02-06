@@ -49,6 +49,7 @@ public class B_Sheduler {
         List<Event> result;
         result = new ArrayList<>();
         //ваше решение.
+
         Event temp;
 
         for ( int i = 0; i <= events.length - 1; i++) {
@@ -65,14 +66,15 @@ public class B_Sheduler {
         while  (i < events.length) {
             if (from >= events[i].start) {
                 result.add(events[i]);
+                i++;
                 break;
             }
             else i++;
         }
 
-        int a =0;
+        int a = 0;
         while (i < events.length) {
-            if ( (events[i].start >= result.get(a).stop) & (events[i].stop <= to) ) {
+            if ( (events[i].start >= result.get(a).stop) ) {
                 result.add(events[i]);
                 a++;
                 i++;
