@@ -8,7 +8,6 @@ package by.it.group251005.fedortsov.lesson02;
     120 30
     100 50
 Все это указано в файле (by/it/a_khmelev/lesson02/greedyKnapsack.txt)
-
 Необходимо собрать наиболее дорогой вариант рюкзака для этого объема
 Предметы можно резать на кусочки (т.е. алгоритм будет жадным)
  */
@@ -21,12 +20,9 @@ public class C_GreedyKnapsack {
         int cost;
         int weight;
 
-        double cool;
-
         Item(int cost, int weight) {
             this.cost = cost;
             this.weight = weight;
-            this.cool = cost / weight;
         }
 
         @Override
@@ -45,26 +41,15 @@ public class C_GreedyKnapsack {
             return 0;
         }
     }
-
-    Item[] QSort(Item[] items, int l, int r){
-        double eth = items[(l + r) / 2].cool;
-        int i = l, j = r;
-
-        while(i < j){
-            while(items[i].cool > eth) ++i;
-            while(items[j].cool < eth) --j;
-            if(i <= j){
-                Item temp = items[i];
-                items[i] = items[j];
-                items[j] = temp;
-                ++i; --j;
+    void itemSort(Item[] items){
+        Item temp;
+        for(int i=1;i<items.length;i++)
+            for(int j=i;j>0 && (items[j-1].cost<items[j].cost)&&(items[j-1].weight>items[j].weight);j--){
+                temp = items[j-1];
+                items[j-1]=items[j];
+                items[j]=temp;
             }
-        }
-        if(l < j) items = QSort(items,l,j);
-        if(i < r) items = QSort(items,i,r);
-        return items;
     }
-
     double calc(File source) throws FileNotFoundException {
         Scanner input = new Scanner(source);
         int n = input.nextInt();      //сколько предметов в файле
@@ -78,30 +63,28 @@ public class C_GreedyKnapsack {
             System.out.println(item);
         }
         System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
-
+        itemSort(items);
         //тут необходимо реализовать решение задачи
         //итогом является максимально воможная стоимость вещей в рюкзаке
         //вещи можно резать на кусочки (непрерывный рюкзак)
         double result = 0;
+        int i=0;
         //тут реализуйте алгоритм сбора рюкзака
         //будет особенно хорошо, если с собственной сортировкой
         //кроме того, можете описать свой компаратор в классе Item
 
-        items = QSort(items,0,items.length - 1);
-
-        int i = 0;
-        int ourW = 0;
-        while((i < items.length) && (ourW < W)){
-            if (ourW + items[i].weight > W) {
-                result += 1.0 * items[i].cost * ((double)(W - ourW) / items[i].weight);
-                ourW = W;
-            } else {
-                result += 1.0 * items[i].cost;
-                ourW += items[i].weight;
+        //ваше решение.
+        while((i<items.length)&&(W>0)){
+            if(W-items[i].weight>0) {
+                result += items[i].cost;
+                W-=items[i].weight;
             }
-            ++i;
+            else{
+                result+=(W*items[i].cost/items[i].weight);
+                W=0;
+            }
+            i++;
         }
-
         System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
         return result;
     }
