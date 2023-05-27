@@ -15,8 +15,7 @@ import java.util.Scanner;
 Следующая строка содержит n целых чисел, задающих веса каждого из слитков:
   0<=w[1]<=100000 ,..., 0<=w[n]<=100000
 
-Найдите методами динамического программирования
-максимальный вес золота, который можно унести в рюкзаке.
+Найдите максимальный вес золота, который можно унести в рюкзаке.
 
 Sample Input:
 10 3
@@ -29,7 +28,6 @@ Sample Output:
 public class B_Knapsack {
 
     int getMaxWeight(InputStream stream ) {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         Scanner scanner = new Scanner(stream);
         int w=scanner.nextInt();
         int n=scanner.nextInt();
@@ -55,7 +53,6 @@ public class B_Knapsack {
                 }
             }
         }
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return maxWeight[w][n];
     }
 

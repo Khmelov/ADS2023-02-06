@@ -74,8 +74,6 @@ public class A_QSort {
         for (int i = 0; i < m; i++) {
             points[i]=scanner.nextInt();
         }
-        //тут реализуйте логику задачи с применением быстрой сортировки
-        //в классе отрезка Segment реализуйте нужный для этой задачи компаратор
         Arrays.sort(segments);
         for (int i = 0; i < points.length; i++) {
             int meet_num = 0;

@@ -7,8 +7,6 @@ import java.util.Scanner;
 
 /*
 Задача на программирование: наибольшая возрастающая подпоследовательность
-см.     https://ru.wikipedia.org/wiki/Задача_поиска_наибольшей_увеличивающейся_подпоследовательности
-        https://en.wikipedia.org/wiki/Longest_increasing_subsequence
 
 Дано:
     целое число 1≤n≤1000
@@ -45,7 +43,9 @@ public class A_LIS {
         for (int i = 0; i < n; i++){
             arr[i] = 1;
             for(int j = 0; j < i; j++){
-                if (m[j] < m[i] && arr[i] < arr[j] + 1) arr[i] = arr[j] + 1;
+                if (m[j] < m[i] && arr[i] < arr[j] + 1) {
+                    arr[i] = arr[j] + 1;
+                }
             }
         }
 
