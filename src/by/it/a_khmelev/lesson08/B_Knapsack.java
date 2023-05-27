@@ -28,7 +28,7 @@ Sample Output:
 
 public class B_Knapsack {
 
-    int getMaxWeight(InputStream stream ) {
+    public int getMaxWeight(InputStream stream) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         Scanner scanner = new Scanner(stream);
         int w=scanner.nextInt();

@@ -33,7 +33,7 @@ import java.util.Scanner;
 public class A_LIS {
 
 
-    int getSeqSize(InputStream stream) throws FileNotFoundException {
+    public int getSeqSize(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
@@ -44,21 +44,20 @@ public class A_LIS {
         for (int i = 0; i < n; i++) {
             m[i] = scanner.nextInt();
         }
-        int result = 0;
-
+        int result;
         int[] d = new int[n];
-        for (int i = 0;i < n; i++){
+        for (int i=0; i<n; i++){
             d[i] = 1;
-            for (int j = 0; j < i; j++){
-                if (m[j] < m[i] && d[i] < d[j] + 1)
-                    d[i] = d[j] + 1;
+            for (int j=0; j<=i-1; j++){
+                if (m[j] < m[i] && (d[j] + 1) > d[i]) d[i] = d[j] + 1;
             }
         }
+
         result = d[0];
-        for (int i = 1; i < n; i++){
-            if (d[i] > result)
-                result = d[i];
+        for (int i=1; i<n; i++) {
+            if (d[i]>result) result = d[i];
         }
+
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
@@ -67,7 +66,7 @@ public class A_LIS {
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson06/dataA.txt");
-        A_LIS instance = new A_LIS();
+        by.it.group251003.beskosty.lesson06.A_LIS instance = new by.it.group251003.beskosty.lesson06.A_LIS();
         int result = instance.getSeqSize(stream);
         System.out.print(result);
     }
