@@ -49,7 +49,7 @@ import java.util.Scanner;
 
 public class C_EditDist {
 
-    public String getDistanceEdinting(String one, String two) {
+    String getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
 
 

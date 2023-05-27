@@ -50,7 +50,7 @@ public class C_QSortOptimized {
     }
 
 
-    public int[] getAccessory2(InputStream stream) throws FileNotFoundException {
+    int[] getAccessory2(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!

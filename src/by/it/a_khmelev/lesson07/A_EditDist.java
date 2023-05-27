@@ -40,7 +40,7 @@ import java.util.Scanner;
 public class A_EditDist {
 
 
-    public int getDistanceEdinting(String one, String two) {
+    int getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
 
 

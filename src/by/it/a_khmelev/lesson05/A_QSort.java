@@ -58,7 +58,7 @@ public class A_QSort {
     }
 
 
-    public int[] getAccessory(InputStream stream) throws FileNotFoundException {
+    int[] getAccessory(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
