@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class C_GetInversionsAdditionallyNotAsync {
     int calc(InputStream stream) throws FileNotFoundException {

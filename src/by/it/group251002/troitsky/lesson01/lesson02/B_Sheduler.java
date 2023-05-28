@@ -1,6 +1,8 @@
 package by.it.group251002.troitsky.lesson01.lesson02;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 /*
 Даны интервальные события events
@@ -25,7 +27,11 @@ public class B_Sheduler {
             return "("+ start +":" + stop + ")";
         }
     }
-
+    class SortByRight implements Comparator<Event> {
+        public int compare(Event a, Event b){
+            return a.stop - b.stop;
+        }
+    }
     public static void main(String[] args) {
         B_Sheduler instance = new B_Sheduler();
         Event[] events = {  new Event(0, 3),  new Event(0, 1), new Event(1, 2), new Event(3, 5),
@@ -48,6 +54,15 @@ public class B_Sheduler {
         List<Event> result;
         result = new ArrayList<>();
         //ваше решение.
+
+        Arrays.sort(events, new SortByRight());
+        int lastEventFinish = from-1;
+        for(int i=0; i<=events.length-1;i++){
+            if ((events[i].start>=lastEventFinish)&&(events[i].start>=from)&&(events[i].stop<=to)){
+                result.add(events[i]);
+                lastEventFinish = events[i].stop;
+            }
+        }
 
 
 
