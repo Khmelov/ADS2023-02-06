@@ -1,4 +1,4 @@
-package by.it.group251004.demidovets.lesson01;
+package by.it.group251004.demidovets;
 
 import java.math.BigInteger;
 
@@ -15,7 +15,6 @@ public class FiboA {
         FiboA fibo = new FiboA();
         int n = 33;
         System.out.printf("calc(%d)=%d \n\t time=%d \n\n", n, fibo.calc(n), fibo.time());
-
         //вычисление чисел фибоначчи медленным методом (рекурсией)
         fibo = new FiboA();
         n = 34;
