@@ -82,7 +82,7 @@ public class A_QSort {
         }
         //тут реализуйте логику задачи с применением быстрой сортировки
         //в классе отрезка Segment реализуйте нужный для этой задачи компаратор
-        Arrays.sort(segments);
+        //Arrays.sort(segments);
         for (int i = 0; i < points.length; i++) {
             int meet_num = 0;
             for (int j = 0; j < segments.length; j++) {
