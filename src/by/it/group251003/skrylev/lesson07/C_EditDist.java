@@ -51,11 +51,58 @@ public class C_EditDist {
 
     String getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int lengthOfFirstString = one.length();
+        int lengthOfSecondString = two.length();
+        int[][] matrix = new int[lengthOfFirstString + 1][lengthOfSecondString + 1];
 
+        for (int i = 0; i <= lengthOfSecondString; i++){
+            matrix[0][i] = i;
+        }
+        for (int i = 0; i <= lengthOfFirstString; i++){
+            matrix[i][0] = i;
+        }
 
-        String result = "";
+        for (int i = 1; i <= lengthOfFirstString; i++) {
+            for (int j = 1; j <= lengthOfSecondString; j++) {
+                int insert = matrix[i][j - 1] + 1;
+                int delete = matrix[i - 1][j] + 1;
+                int match = matrix[i - 1][j - 1] + (one.charAt(i - 1) == two.charAt(j - 1) ? 0 : 1);
+
+                int min = insert;
+                if (delete < min){
+                    min = delete;
+                }
+                if (match < min){
+                    min = match;
+                }
+                matrix[i][j] = min;
+            }
+        }
+
+        StringBuilder result = new StringBuilder();
+
+        int i = lengthOfFirstString, j = lengthOfSecondString;
+
+        while (i != 0 || j != 0){
+            if (i > 0 && j > 0 && matrix[i - 1][j - 1] + (one.charAt(i - 1) == two.charAt(j - 1) ? 0 : 1) == matrix[i][j]){
+                if(one.charAt(i - 1) == two.charAt(j - 1)){
+                    result.insert(0, "#,");
+                }else {
+                    result.insert(0, "~" + two.charAt(j - 1) + ",");
+                }
+                i--;
+                j--;
+            } else if (j > 0 && matrix[i][j] == matrix[i][j - 1] + 1) {
+                result.insert(0, "+" + two.charAt(j - 1) + ",");
+                j--;
+            } else if ( i > 0 && matrix[i][j] == matrix[i - 1][j] + 1) {
+                result.insert(0, "-" + one.charAt(i - 1) + ",");
+                i--;
+            }
+        }
+
+        return result.toString();
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
     }
 
 
