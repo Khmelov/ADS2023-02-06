@@ -1,8 +1,5 @@
 package by.it.group251001.zhidkov.lesson03;
 
-import by.it.group251001.zhidkov.lesson03.B_Huffman;
-import by.it.group251001.zhidkov.lesson03.C_HeapMax;
-import by.it.group251001.zhidkov.lesson03.A_Huffman;
 import org.junit.Test;
 
 import java.io.File;
