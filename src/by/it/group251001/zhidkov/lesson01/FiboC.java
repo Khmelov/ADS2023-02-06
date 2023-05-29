@@ -6,9 +6,6 @@ package by.it.group251001.zhidkov.lesson01;
  * время расчета должно быть не более 2 секунд
  */
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class FiboC {
 
     private long startTime = System.currentTimeMillis();
