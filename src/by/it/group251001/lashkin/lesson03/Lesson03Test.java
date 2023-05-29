@@ -19,14 +19,14 @@ public class Lesson03Test {
     */
 
 
-    @Test
-    public void A() throws Exception {
-        String root = System.getProperty("user.dir") + "/src/";
-        File f = new File(root + "by/it/a_khmelev/lesson03/dataHuffman.txt");
-        A_Huffman instance = new A_Huffman();
-        String result = instance.encode(f);
-        boolean ok=result.equals("01001100100111");
-        assertTrue("A failed", ok);
+            @Test
+            public void A() throws Exception {
+                String root = System.getProperty("user.dir") + "/src/";
+                File f = new File(root + "by/it/a_khmelev/lesson03/dataHuffman.txt");
+                A_Huffman instance = new A_Huffman();
+                String result = instance.encode(f);
+                boolean ok=result.equals("01001100100111");
+                assertTrue("A failed", ok);
     }
 
     @Test
