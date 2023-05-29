@@ -1,5 +1,4 @@
 package by.it.group251001.politykina.lesson08;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -36,20 +35,30 @@ Sample Output 2:
 
 public class A_Knapsack {
 
-    int getMaxWeight(InputStream stream ) {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+    int getMaxWeight(InputStream stream) {
         Scanner scanner = new Scanner(stream);
-        int w=scanner.nextInt();
-        int n=scanner.nextInt();
-        int gold[]=new int[n];
+        int w = scanner.nextInt();
+        int n = scanner.nextInt();
+        int[] gold = new int[n];
         for (int i = 0; i < n; i++) {
-            gold[i]=scanner.nextInt();
+            gold[i] = scanner.nextInt();
         }
 
+        boolean[] dp = new boolean[w + 1];
+        dp[0] = true;
 
-        int result = 0;
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        for(int i = 0; i <= w; i++){
+            if(!dp[i]) continue;
+
+            for(int x: gold){
+                if(i + x <= w) dp[i + x] = true;
+            }
+        }
+
+        int i = w;
+        while(!dp[i]) i--;
+
+        return i;
     }
 
 
@@ -57,7 +66,7 @@ public class A_Knapsack {
         String root = System.getProperty("user.dir") + "/src/";
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson08/dataA.txt");
         A_Knapsack instance = new A_Knapsack();
-        int res=instance.getMaxWeight(stream);
+        int res = instance.getMaxWeight(stream);
         System.out.println(res);
     }
 }
