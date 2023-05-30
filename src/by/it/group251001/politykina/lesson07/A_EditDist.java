@@ -3,7 +3,11 @@ package by.it.group251001.politykina.lesson07;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Scanner;
+import java.util.function.IntBinaryOperator;
+
+import static java.lang.Math.min;
 
 /*
 Задача на программирование: расстояние Левенштейна
@@ -35,18 +39,32 @@ import java.util.Scanner;
     Sample Output 3:
     5
 
+
 */
 
 public class A_EditDist {
+    private static final int INF = 1_000_000_000;
 
+    int levenshtein(int[][] dp, int i, int j, String s1, String s2){
+        if(i == 0) return dp[i][j] = j;
+        if(j == 0) return dp[i][j] = i;
+
+        if(dp[i][j] != INF) return dp[i][j];
+
+        int ins = levenshtein(dp, i,j - 1, s1, s2) + 1;
+        int del = levenshtein(dp, i - 1, j, s1, s2) + 1;
+        int repl = levenshtein(dp, i - 1, j - 1, s1, s2) + (s1.charAt(i - 1) != s2.charAt(j - 1) ? 1 : 0);
+
+        return dp[i][j] = min(ins, min(del, repl));
+    }
 
     int getDistanceEdinting(String one, String two) {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int[][] dp = new int[one.length() + 1][two.length() + 1];
+        for (int[] row : dp) {
+            Arrays.fill(row, INF);
+        }
 
-
-        int result = 0;
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return levenshtein(dp, one.length(), two.length(), one, two);
     }
 
 

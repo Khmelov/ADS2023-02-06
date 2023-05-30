@@ -33,15 +33,25 @@ public class B_Knapsack {
         Scanner scanner = new Scanner(stream);
         int w=scanner.nextInt();
         int n=scanner.nextInt();
-        int gold[]=new int[n];
+        int[] gold =new int[n];
         for (int i = 0; i < n; i++) {
             gold[i]=scanner.nextInt();
         }
 
 
-        int result = 0;
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        boolean[] dp = new boolean[w + 1];
+        dp[0] = true;
+
+        for(int x: gold){
+            for(int i = w - x; i >= 0; i--){
+                dp[i + x] |= dp[i];
+            }
+        }
+
+        int i = w;
+        while(!dp[i]) i--;
+
+        return i;
     }
 
 
