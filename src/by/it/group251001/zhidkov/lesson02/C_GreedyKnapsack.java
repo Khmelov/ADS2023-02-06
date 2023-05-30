@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class C_GreedyKnapsack {
+    // Класс предмета
     private static class Item implements Comparable<Item> {
         int cost;
         int weight;
@@ -35,6 +36,7 @@ public class C_GreedyKnapsack {
                     '}';
         }
 
+        // Реализация сравнения предметов по стоимости на единицу веса
         @Override
         public int compareTo(Item other) {
             double costPerUnitOfWeight = cost / (double) weight;
@@ -43,50 +45,50 @@ public class C_GreedyKnapsack {
         }
     }
 
+    // Расчет общей стоимости рюкзака
     double calc(File source) throws FileNotFoundException {
         Scanner input = new Scanner(source);
-        int n = input.nextInt();      //сколько предметов в файле
-        int W = input.nextInt();      //какой вес у рюкзака
-        Item[] items = new Item[n];   //получим список предметов
-        for (int i = 0; i < n; i++) { //создавая каждый конструктором
+        int n = input.nextInt();      // Количество предметов в файле
+        int W = input.nextInt();      // Вес рюкзака
+        Item[] items = new Item[n];   // Массив предметов
+        for (int i = 0; i < n; i++) { // Чтение предметов из файла и создание объектов Item
             items[i] = new Item(input.nextInt(), input.nextInt());
         }
-        //покажем предметы
-        for (Item item:items) {
+
+        // Вывод информации о предметах
+        for (Item item : items) {
             System.out.println(item);
         }
-        System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n",n,W);
+        System.out.printf("Всего предметов: %d. Рюкзак вмещает %d кг.\n", n, W);
 
-        Arrays.sort(items);
-        //System.out.println(Arrays.toString(items));
+        Arrays.sort(items); // Сортировка предметов по стоимости на единицу веса
         double result = 0;
         int weightSoFar = 0;
         int current = 0;
 
-        while(current < items.length && weightSoFar != W) {
-            if(weightSoFar + items[current].weight < W) {
-                //берем вещь целиком
+        while (current < items.length && weightSoFar != W) {
+            if (weightSoFar + items[current].weight < W) {
+                // Берем предмет целиком
                 result += items[current].cost;
                 weightSoFar += items[current].weight;
             } else {
-                //берем вещь частично
-                result += ((W - weightSoFar) / (double) items[current].weight)
-                        * items[current].cost;
+                // Берем предмет частично
+                result += ((W - weightSoFar) / (double) items[current].weight) * items[current].cost;
                 weightSoFar = W;
             }
             current++;
         }
 
-        System.out.printf("Удалось собрать рюкзак на сумму %f\n",result);
+        System.out.printf("Удалось собрать рюкзак на сумму %f\n", result);
         return result;
     }
 
     public static void main(String[] args) throws FileNotFoundException {
         long startTime = System.currentTimeMillis();
-        String root=System.getProperty("user.dir")+"/src/";
-        File f=new File(root+"by/it/a_khmelev/lesson02/greedyKnapsack.txt");
-        double costFinal=new C_GreedyKnapsack().calc(f);
+        String root = System.getProperty("user.dir") + "/src/";
+        File f = new File(root + "by/it/a_khmelev/lesson02/greedyKnapsack.txt");
+        double costFinal = new C_GreedyKnapsack().calc(f);
         long finishTime = System.currentTimeMillis();
-        System.out.printf("Общая стоимость %f (время %d)",costFinal,finishTime - startTime);
+        System.out.printf("Общая стоимость %f (время %d)", costFinal, finishTime - startTime);
     }
 }

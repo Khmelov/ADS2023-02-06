@@ -39,17 +39,28 @@ import java.util.Scanner;
 
 public class A_EditDist {
 
-    int levenshtein(int l1, String one, int l2, String two){
+    // Рекурсивная функция расчета расстояния Левенштейна
+    int levenshtein(int l1, String one, int l2, String two) {
+        // Если одна из строк пустая, возвращаем длину другой строки
         if (l1 == 0) return l2;
+        else if (l2 == 0) return l1;
+            // Если обе строки состоят из одного символа
+        else if (l1 == 1 && l2 == 1 && one.charAt(0) == two.charAt(0)) return 0;
+        else if (l1 == 1 && l2 == 1 && one.charAt(0) != two.charAt(0)) return 1;
         else
-        if (l2 == 0) return l1;
-        else
-        if (l1 == 1 && l2 == 1 && one.charAt(0) == two.charAt(0)) return 0;
-        else
-        if (l1 == 1 && l2 == 1 && one.charAt(0) != two.charAt(0)) return 1;
-        else
-            return Math.min(Math.min(levenshtein(l1 - 1,one,l2,two) + 1,levenshtein(l1,one,l2 - 1,two) + 1),levenshtein(l1 - 1,one,l2 - 1,two) + ((one.charAt(l1 - 1) == two.charAt(l2 - 1))?0:1));
+            // Вычисляем минимальное расстояние Левенштейна, используя рекурсию и операции добавления, удаления и замены символов
+            return Math.min(
+                    Math.min(
+                            // Добавление символа в первую строку
+                            levenshtein(l1 - 1, one, l2, two) + 1,
+                            // Добавление символа во вторую строку
+                            levenshtein(l1, one, l2 - 1, two) + 1
+                    ),
+                    // Замена символа или совпадение символов
+                    levenshtein(l1 - 1, one, l2 - 1, two) + ((one.charAt(l1 - 1) == two.charAt(l2 - 1)) ? 0 : 1)
+            );
     }
+    // Метод для получения расстояния Левенштейна между двумя строками
     int getDistanceEdinting(String one, String two) {
         return levenshtein(one.length(), one, two.length(), two);
     }
@@ -60,6 +71,7 @@ public class A_EditDist {
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson07/dataABC.txt");
         A_EditDist instance = new A_EditDist();
         Scanner scanner = new Scanner(stream);
+        // Вывод результатов расчета расстояния Левенштейна для трех пар строк
         System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));
         System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));
         System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));

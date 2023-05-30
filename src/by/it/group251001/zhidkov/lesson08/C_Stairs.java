@@ -33,29 +33,34 @@ Sample Output 3:
 */
 
 public class C_Stairs {
-
-    int getMaxSum(InputStream stream ) {
+    int getMaxSum(InputStream stream) {
+        // Чтение входных данных
         Scanner scanner = new Scanner(stream);
-        int n=scanner.nextInt();
-        int stairs[]=new int[n];
+        int n = scanner.nextInt(); // Число ступенек лестницы
+        int stairs[] = new int[n]; // Числа, которыми помечены ступеньки
         for (int i = 0; i < n; i++) {
-            stairs[i]=scanner.nextInt();
+            stairs[i] = scanner.nextInt();
         }
+
         int[] sum = new int[n + 1];
         sum[0] = 0;
         sum[1] = stairs[0];
-        for (int i = 2;i <= n; i++)
-            sum[i] = Math.max(stairs[i - 1] + sum[i - 1],stairs[i - 1] + sum[i - 2]);
-        return sum[n];
-    }
 
+        // Заполнение массива сумм методом динамического программирования
+        for (int i = 2; i <= n; i++)
+            sum[i] = Math.max(stairs[i - 1] + sum[i - 1], stairs[i - 1] + sum[i - 2]);
+
+        int result = sum[n]; // Максимальная сумма
+
+        return result;
+    }
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson08/dataC.txt");
         C_Stairs instance = new C_Stairs();
-        int res=instance.getMaxSum(stream);
+        int res = instance.getMaxSum(stream);
         System.out.println(res);
     }
-
 }
+

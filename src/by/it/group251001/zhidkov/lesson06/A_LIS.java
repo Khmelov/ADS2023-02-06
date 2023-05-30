@@ -31,38 +31,37 @@ import java.util.Scanner;
 */
 
 public class A_LIS {
-
-
     int getSeqSize(InputStream stream) throws FileNotFoundException {
-        //подготовка к чтению данных
-        Scanner scanner = new Scanner(stream);
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        //общая длина последовательности
-        int n = scanner.nextInt();
-        int[] m = new int[n];
+        Scanner scanner = new Scanner(stream); // Создание объекта Scanner для чтения данных из входного потока
+        int n = scanner.nextInt(); // Чтение целочисленного значения из входного потока и сохранение его в переменной n
+        int[] m = new int[n]; // Объявление массива целых чисел m размером n
 
-        //читаем всю последовательность
         for (int i = 0; i < n; i++) {
-            m[i] = scanner.nextInt();
+            m[i] = scanner.nextInt(); // Чтение n чисел из входного потока и сохранение их в массиве m
         }
-        //тут реализуйте логику задачи методами динамического программирования (!!!)
-        int[] d = new int[n];
-        for (int i = 0;i < n; i++){
-            d[i] = 1;
+
+        int[] d = new int[n]; // Объявление массива целых чисел d размером n. Массив d будет хранить длину наибольшей возрастающей подпоследовательности для каждого элемента
+
+        for (int i = 0; i < n; i++){
+            d[i] = 1; // Инициализация каждого элемента массива d значением 1
+
             for (int j = 0; j < i; j++){
-                if (m[j] < m[i] && d[i] < d[j] + 1)
-                    d[i] = d[j] + 1;
+                if (m[j] < m[i] && d[i] < d[j] + 1) {
+                    d[i] = d[j] + 1; // Обновление значения d[i] на основе значения d[j] и элементов m[j] и m[i]
+                }
             }
         }
-        int result = d[0];
-        for (int i = 1; i < n; i++){
-            if (d[i] > result)
-                result = d[i];
-        }
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
-    }
 
+        int result = d[0]; // Инициализация переменной result значением первого элемента массива d
+
+        for (int i = 1; i < n; i++){
+            if (d[i] > result) {
+                result = d[i]; // Обновление значения result на основе значения d[i]
+            }
+        }
+
+        return result; // Возвращение значения result как размера максимальной возрастающей подпоследовательности
+    }
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";

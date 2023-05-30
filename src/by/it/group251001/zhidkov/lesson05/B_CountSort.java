@@ -17,45 +17,50 @@ import java.util.Scanner;
 
 public class B_CountSort {
 
-
     int[] countSort(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+
         //размер массива
         int n = scanner.nextInt();
-        int[] points=new int[n];
+        int[] points = new int[n];
 
         //читаем точки
         for (int i = 0; i < n; i++) {
-            points[i]=scanner.nextInt();
+            points[i] = scanner.nextInt();
         }
+
         //тут реализуйте логику задачи с применением сортировки подсчетом
+
+        // Создаем массив для подсчета количества вхождений каждого числа
         int[] arr_count = new int[10];
 
-        for (int i = 0; i < n; i++){
+        // Подсчитываем количество вхождений каждого числа в исходном массиве
+        for (int i = 0; i < n; i++) {
             arr_count[points[i]]++;
         }
+
+        // Восстанавливаем упорядоченный массив на основе подсчета
         int index = 0;
-        for (int i = 0; i < 10; i++){
-            for (int j = 0; j < arr_count[i];j++){
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < arr_count[i]; j++) {
                 points[index] = i;
                 index++;
             }
         }
+
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return points;
     }
-
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson05/dataB.txt");
         B_CountSort instance = new B_CountSort();
-        int[] result=instance.countSort(stream);
-        for (int index:result){
-            System.out.print(index+" ");
+        int[] result = instance.countSort(stream);
+        for (int index : result) {
+            System.out.print(index + " ");
         }
     }
-
 }

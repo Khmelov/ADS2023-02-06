@@ -38,50 +38,50 @@ import java.util.Scanner;
 
 
 public class C_LongNotUpSubSeq {
-    static int[] answer;
+    static int[] answer; // Статический массив для хранения ответа (последовательности индексов)
     int getNotUpSeqSize(InputStream stream) throws FileNotFoundException {
-        //подготовка к чтению данных
-        Scanner scanner = new Scanner(stream);
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        //общая длина последовательности
-        int n = scanner.nextInt();
-        int[] m = new int[n];
-        //читаем всю последовательность
-        for (int i = 0; i < n; i++) {
-            m[i] = scanner.nextInt();
-        }
-        //тут реализуйте логику задачи методами динамического программирования (!!!)
-        int[] d = new int[n];
-        int[] index = new int[n];
+        Scanner scanner = new Scanner(stream); // Создание объекта Scanner для чтения данных из входного потока
+        int n = scanner.nextInt(); // Чтение целочисленного значения из входного потока и сохранение его в переменной n
+        int[] m = new int[n]; // Объявление массива целых чисел m размером n
 
-        for (int i = 0;i < n; i++){
-            d[i] = 1;
-            index[i] = -1;
+        for (int i = 0; i < n; i++) {
+            m[i] = scanner.nextInt(); // Чтение n чисел из входного потока и сохранение их в массиве m
+        }
+
+        int[] d = new int[n]; // Объявление массива целых чисел d размером n. Массив d будет хранить длину наибольшей невозрастающей подпоследовательности для каждого элемента
+        int[] index = new int[n]; // Объявление массива целых чисел index размером n. Массив index будет хранить индексы предыдущих элементов, образующих наибольшую невозрастающую подпоследовательность для каждого элемента
+
+        for (int i = 0; i < n; i++){
+            d[i] = 1; // Инициализация каждого элемента массива d значением 1
+            index[i] = -1; // Инициализация каждого элемента массива index значением -1
             for (int j = 0; j < i; j++){
                 if (m[i] <= m[j] && d[i] < d[j] + 1) {
-                    d[i] = d[j] + 1;
-                    index[i] = j;
+                    d[i] = d[j] + 1; // Обновление значения d[i] на основе значения d[j] и проверки невозрастания m[i] по отношению к m[j]
+                    index[i] = j; // Обновление значения index[i] на j
                 }
             }
         }
-        int result = d[0];
+
+        int result = d[0]; // Инициализация переменной result значением первого элемента массива d
         int max = 0;
+
         for (int i = 1; i < n; i++){
             if (d[i] > result) {
-                result = d[i];
-                max = i;
+                result = d[i]; // Обновление значения result на основе значения d[i]
+                max = i; // Обновление значения max на i
             }
         }
-        answer = new int[result];
+
+        answer = new int[result]; // Инициализация массива answer размером result
         int i = result - 1;
-        do{
-            answer[i] = max + 1;
-            max = index[max];
+
+        do {
+            answer[i] = max + 1; // Заполнение массива answer индексами элементов
+            max = index[max]; // Обновление значения max на основе значения index[max]
             i--;
-        }
-        while (max > -1);
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        } while (max > -1);
+
+        return result; // Возвращение значения result как размера наибольшей невозрастающей подпоследовательности
     }
 
 
@@ -90,11 +90,10 @@ public class C_LongNotUpSubSeq {
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson06/dataC.txt");
         C_LongNotUpSubSeq instance = new C_LongNotUpSubSeq();
         int result = instance.getNotUpSeqSize(stream);
-        System.out.println(result);
-        for (int i = 0; i < result;i++){
-            System.out.print(String.valueOf(answer[i])+ ' ');
+        System.out.println(result); // Вывод размера наибольшей невозрастающей подпоследовательности
+
+        for (int i = 0; i < result; i++) {
+            System.out.print(String.valueOf(answer[i]) + ' '); // Вывод элементов последовательности
         }
-
     }
-
 }

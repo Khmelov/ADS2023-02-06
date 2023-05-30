@@ -38,94 +38,94 @@ import java.util.Scanner;
 public class C_HeapMax {
 
     private class MaxHeap {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-        //тут запишите ваше решение.
-        //Будет мало? Ну тогда можете его собрать как Generic и/или использовать в варианте B
-        private List<Long> heap = new ArrayList<>();
+        private List<Long> heap = new ArrayList<>(); // создание списка для хранения элементов кучи
 
-        int siftDown(int i) { //просеивание вверх
-            int parentIndex = (i - 1) / 2;
-            while (i > 0 && heap.get(i) > heap.get(parentIndex)) {
-                long temp = heap.get(parentIndex);
+        int siftDown(int i) { // просеивание вверх
+            int parentIndex = (i - 1) / 2; // индекс родительского элемента
+            while (i > 0 && heap.get(i) > heap.get(parentIndex)) { // пока текущий элемент больше родительского
+                long temp = heap.get(parentIndex); // обмен значениями текущего элемента и родительского
                 heap.set(parentIndex, heap.get(i));
                 heap.set(i, temp);
 
-                i = parentIndex;
+                i = parentIndex; // переход к родительскому элементу
                 parentIndex = (i - 1) / 2;
             }
-            return i;
+            return i; // возврат индекса элемента после просеивания вверх
         }
 
-        int siftUp(int i) { //просеивание вниз
-            int leftChild = 2 * i + 1;
-            int rightChild = 2 * i + 2;
-            int largestChild = i;
+        int siftUp(int i) { // просеивание вниз
+            int leftChild = 2 * i + 1; // индекс левого потомка
+            int rightChild = 2 * i + 2; // индекс правого потомка
+            int largestChild = i; // индекс наибольшего потомка
             boolean flg = true;
 
             while (flg) {
-                if (leftChild < heap.size() && heap.get(leftChild) > heap.get(largestChild))
+                if (leftChild < heap.size() && heap.get(leftChild) > heap.get(largestChild)) // если левый потомок больше наибольшего
                     largestChild = leftChild;
-                if (rightChild < heap.size() && heap.get(rightChild) > heap.get(largestChild))
+                if (rightChild < heap.size() && heap.get(rightChild) > heap.get(largestChild)) // если правый потомок больше наибольшего
                     largestChild = rightChild;
-                if (largestChild == i)
+                if (largestChild == i) // если наибольший потомок совпадает с текущим элементом, останавливаем просеивание
                     flg = false;
 
-                long temp = heap.get(largestChild);
+                long temp = heap.get(largestChild); // обмен значениями текущего элемента и наибольшего потомка
                 heap.set(largestChild, heap.get(i));
                 heap.set(i, temp);
 
-                i = largestChild;
+                i = largestChild; // переход к наибольшему потомку
                 leftChild = 2 * i + 1;
                 rightChild = 2 * i + 2;
             }
-            return i;
+            return i; // возврат индекса элемента после просеивания вниз
         }
 
-        void insert(Long value) { //вставка
+        void insert(Long value) { // вставка элемента в кучу
             heap.add(value);
             siftDown(heap.size() - 1);
         }
 
-        Long extractMax() { //извлечение и удаление максимума
-            long result = heap.get(0);
-            heap.set(0, heap.remove(heap.size() - 1));
-            siftUp(0);
-            return result;
+        Long extractMax() { // извлечение и удаление максимального элемента
+            long result = heap.get(0); // сохраняем значение максимального элемента
+            heap.set(0, heap.remove(heap.size() - 1)); // заменяем корень кучи последним элементом и удаляем его
+            siftUp(0); // просеиваем корень вниз
+            return result; // возвращаем максимальный элемент
         }
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
     }
 
     //эта процедура читает данные из файла, ее можно не менять.
     Long findMaxValue(InputStream stream) {
         Long maxValue=0L;
-        C_HeapMax.MaxHeap heap = new C_HeapMax.MaxHeap();
-        //прочитаем строку для кодирования из тестового файла
-        Scanner scanner = new Scanner(stream);
-        Integer count = scanner.nextInt();
+        C_HeapMax.MaxHeap heap = new C_HeapMax.MaxHeap(); // создание экземпляра класса MaxHeap
+
+        Scanner scanner = new Scanner(stream); // создание объекта Scanner для чтения данных из потока
+        Integer count = scanner.nextInt(); // считываем количество операций
+
         for (int i = 0; i < count; ) {
-            String s = scanner.nextLine();
-            if (s.equalsIgnoreCase("extractMax")) {
-                Long res=heap.extractMax();
-                if (res!=null && res>maxValue) maxValue=res;
-                System.out.println();
+            String s = scanner.nextLine(); // считываем очередную строку
+
+            if (s.equalsIgnoreCase("extractMax")) { // если строка содержит операцию "extractMax"
+                Long res=heap.extractMax(); // извлекаем и удаляем максимальный элемент из кучи
+                if (res!=null && res>maxValue) maxValue=res; // обновляем максимальное значение, если оно больше текущего
+                System.out.println(); // выводим пустую строку (для целей отладки)
                 i++;
             }
-            if (s.contains(" ")) {
-                String[] p = s.split(" ");
-                if (p[0].equalsIgnoreCase("insert"))
-                    heap.insert(Long.parseLong(p[1]));
+
+            if (s.contains(" ")) { // если строка содержит пробел (или другой разделитель)
+                String[] p = s.split(" "); // разделяем строку на части по пробелу
+                if (p[0].equalsIgnoreCase("insert")) // если первая часть равна "insert"
+                    heap.insert(Long.parseLong(p[1])); // вставляем элемент в кучу
                 i++;
                 //System.out.println(heap); //debug
             }
         }
-        return maxValue;
+
+        return maxValue; // возвращаем максимальное значение
     }
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson03/heapData.txt");
         C_HeapMax instance = new C_HeapMax();
-        System.out.println("MAX="+instance.findMaxValue(stream));
+        System.out.println("MAX="+instance.findMaxValue(stream)); // выводим максимальное значение
     }
 
     // РЕМАРКА. Это задание исключительно учебное.
@@ -133,3 +133,4 @@ public class C_HeapMax {
     // "В реальном бою" все существенно иначе. Изучите и используйте коллекции
     // TreeSet, TreeMap, PriorityQueue и т.д. с нужным CompareTo() для объекта внутри.
 }
+

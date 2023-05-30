@@ -30,33 +30,37 @@ import java.util.Scanner;
 
 public class B_LongDivComSubSeq {
     int getDivSeqSize(InputStream stream) throws FileNotFoundException {
-        //подготовка к чтению данных
-        Scanner scanner = new Scanner(stream);
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        //общая длина последовательности
-        int n = scanner.nextInt();
-        int[] m = new int[n];
-        //читаем всю последовательность
+        Scanner scanner = new Scanner(stream); // Создание объекта Scanner для чтения данных из входного потока
+        int n = scanner.nextInt(); // Чтение целочисленного значения из входного потока и сохранение его в переменной n
+        int[] m = new int[n]; // Объявление массива целых чисел m размером n
+
         for (int i = 0; i < n; i++) {
-            m[i] = scanner.nextInt();
+            m[i] = scanner.nextInt(); // Чтение n чисел из входного потока и сохранение их в массиве m
         }
-        //тут реализуйте логику задачи методами динамического программирования (!!!)
-        int[] d = new int[n];
-        for (int i = 0;i < n; i++){
-            d[i] = 1;
+
+        int[] d = new int[n]; // Объявление массива целых чисел d размером n. Массив d будет хранить длину наибольшей кратной подпоследовательности для каждого элемента
+
+        for (int i = 0; i < n; i++){
+            d[i] = 1; // Инициализация каждого элемента массива d значением 1
+
             for (int j = 0; j < i; j++){
-                if (m[i] % m[j] == 0 && d[i] < d[j] + 1)
-                    d[i] = d[j] + 1;
+                if (m[i] % m[j] == 0 && d[i] < d[j] + 1) {
+                    d[i] = d[j] + 1; // Обновление значения d[i] на основе значения d[j] и проверки деления m[i] на m[j]
+                }
             }
         }
-        int result = d[0];
+
+        int result = d[0]; // Инициализация переменной result значением первого элемента массива d
+
         for (int i = 1; i < n; i++){
-            if (d[i] > result)
-                result = d[i];
+            if (d[i] > result) {
+                result = d[i]; // Обновление значения result на основе значения d[i]
+            }
         }
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+
+        return result; // Возвращение значения result как размера максимальной кратной подпоследовательности
     }
+
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson06/dataB.txt");
@@ -64,5 +68,4 @@ public class B_LongDivComSubSeq {
         int result = instance.getDivSeqSize(stream);
         System.out.print(result);
     }
-
 }

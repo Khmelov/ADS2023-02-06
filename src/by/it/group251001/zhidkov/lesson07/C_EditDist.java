@@ -41,21 +41,23 @@ import java.util.Scanner;
 
 
 public class C_EditDist {
-    int m(int i0, int j0, String s1, String s2){
+    // Функция для определения замены символа (равенство или несоответствие)
+    int m(int i0, int j0, String s1, String s2) {
         i0--;
         j0--;
-        if (s1.charAt(i0) == s2.charAt(j0)){
+        if (s1.charAt(i0) == s2.charAt(j0)) {
             return 0;
-        }
-        else{
+        } else {
             return 1;
         }
     }
-    int min(int n1, int n2, int n3){
-        if (n1>n2){
+
+    // Функция для определения минимального значения из трех чисел
+    int min(int n1, int n2, int n3) {
+        if (n1 > n2) {
             n1 = n2;
         }
-        if (n1>n3){
+        if (n1 > n3) {
             n1 = n3;
         }
         return n1;
@@ -65,6 +67,7 @@ public class C_EditDist {
         int n = one.length();
         int m = two.length();
         int[][] matrix = new int[n+1][m+1];
+        // Инициализация матрицы
         for (int i = 0; i<=n; i++){
             for (int j = 0; j<=m; j++){
                 if ((i == 0) && (j == 0)){
@@ -110,6 +113,7 @@ public class C_EditDist {
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson07/dataABC.txt");
         C_EditDist instance = new C_EditDist();
         Scanner scanner = new Scanner(stream);
+        // Вывод результатов расчета расстояния Левенштейна для трех пар строк
         System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));
         System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));
         System.out.println(instance.getDistanceEdinting(scanner.nextLine(),scanner.nextLine()));
