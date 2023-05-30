@@ -89,7 +89,7 @@ public class C_GetInversions {
             j++;
             k++;
         }
-        return resArray;
+        return resArray; //
     }
 
 
