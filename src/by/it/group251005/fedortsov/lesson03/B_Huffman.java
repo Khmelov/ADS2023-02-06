@@ -49,29 +49,18 @@ public class B_Huffman {
         StringBuilder result = new StringBuilder();
         //прочитаем строку для кодирования из тестового файла
         Scanner scanner = new Scanner(file);
-        Integer count = scanner.nextInt();
-        Integer length = scanner.nextInt();
+        Integer count = scanner.nextInt(); // 4
+        Integer length = scanner.nextInt(); // 14
         scanner.nextLine();
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         //тут запишите ваше решение
         Node node = getNode(count, scanner);
         String input = scanner.nextLine();
-        //Node tempNode = node;
-        //String temp = "";
+
         int i = 0;
         while (i < input.length())
             i = node.getEncode(result, node, "", input, i);
-            /*if (tempNode.content != null && tempNode.content.equals(temp)) {
-                result.append(tempNode.letter);
-                temp = "";
-                tempNode = node;
-            } else {
-                tempNode = (input.charAt(i) == '1') ? tempNode.right : tempNode.left;
-                temp += input.charAt(i);
-                i++;
-                result.append((i == input.length()) ? tempNode.letter : "");
-            }*/
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         return result.toString(); //01001100100111
     }
