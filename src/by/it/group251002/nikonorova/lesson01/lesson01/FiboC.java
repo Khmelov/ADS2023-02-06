@@ -28,15 +28,31 @@ public class FiboC {
         //Решение сложно найти интуитивно
         //возможно потребуется дополнительный поиск информации
         //см. период Пизано
-        List<Long> o = new ArrayList<>();
-        o.add(0L);
-        o.add(1L);
-        int i = 2;
-        while (!(o.get(i - 2) == 0 && o.get(i - 1) == 1) || i <= 2) {
-            o.add((o.get(i - 2) + o.get(i - 1)) % m);
-            i++;
+        long prev=0;
+        long curr=1;
+        long temp =0;
+        long period=0;
+        for (int i=0;i<6*m;i++) {
+            temp = curr;
+            curr = (prev + curr) % m;
+            prev = temp;
+            if (prev == 0 && curr == 1)
+                period = i + 1;
         }
-        return o.get((int) (n % (i - 2)));
+
+        n=n%period;
+        prev=0;
+        curr=1;
+        if(n==0) return 0;
+        else if (n==1) return 1;
+        for(int i=2;i<=n;i++){
+            temp = curr;
+            curr = (prev + curr) % m;
+            prev = temp;
+        }
+
+        return curr%m;
+
     }
 
 
