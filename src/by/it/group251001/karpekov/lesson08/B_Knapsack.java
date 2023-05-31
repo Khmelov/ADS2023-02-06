@@ -38,8 +38,26 @@ public class B_Knapsack {
             gold[i]=scanner.nextInt();
         }
 
+        int[][] knapsack = new int[n + 1][w + 1];
 
-        int result = 0;
+        for (int j = 1; j <= w; j++) {
+            if (gold[0] <= j) {
+                knapsack[1][j] = gold[0];
+            }
+        }
+
+        // заполнение остальной таблицы
+        for (int i = 2; i <= n; i++) {
+            for (int j = 1; j <= w; j++) {
+                if (gold[i - 1] <= j) {
+                    knapsack[i][j] = Math.max(knapsack[i - 1][j], knapsack[i - 1][j - gold[i - 1]] + gold[i - 1]);
+                } else {
+                    knapsack[i][j] = knapsack[i - 1][j];
+                }
+            }
+        }
+
+        int result = knapsack[n][w];
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
