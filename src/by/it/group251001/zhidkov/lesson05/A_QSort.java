@@ -70,7 +70,6 @@ public class A_QSort {
         int m = scanner.nextInt();
         int[] points = new int[m];
         int[] result = new int[m];
-
         // Читаем сами отрезки
         for (int i = 0; i < n; i++) {
             // Читаем начало и конец каждого отрезка

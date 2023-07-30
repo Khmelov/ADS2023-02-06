@@ -82,7 +82,6 @@ public class C_HeapMax {
             heap.add(value);
             siftDown(heap.size() - 1);
         }
-
         Long extractMax() { // извлечение и удаление максимального элемента
             long result = heap.get(0); // сохраняем значение максимального элемента
             heap.set(0, heap.remove(heap.size() - 1)); // заменяем корень кучи последним элементом и удаляем его
@@ -90,7 +89,6 @@ public class C_HeapMax {
             return result; // возвращаем максимальный элемент
         }
     }
-
     //эта процедура читает данные из файла, ее можно не менять.
     Long findMaxValue(InputStream stream) {
         Long maxValue=0L;

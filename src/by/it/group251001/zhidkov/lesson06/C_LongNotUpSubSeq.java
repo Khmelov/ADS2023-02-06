@@ -91,7 +91,6 @@ public class C_LongNotUpSubSeq {
         C_LongNotUpSubSeq instance = new C_LongNotUpSubSeq();
         int result = instance.getNotUpSeqSize(stream);
         System.out.println(result); // Вывод размера наибольшей невозрастающей подпоследовательности
-
         for (int i = 0; i < result; i++) {
             System.out.print(String.valueOf(answer[i]) + ' '); // Вывод элементов последовательности
         }

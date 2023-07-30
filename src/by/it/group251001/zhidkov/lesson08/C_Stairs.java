@@ -41,7 +41,6 @@ public class C_Stairs {
         for (int i = 0; i < n; i++) {
             stairs[i] = scanner.nextInt();
         }
-
         int[] sum = new int[n + 1];
         sum[0] = 0;
         sum[1] = stairs[0];

@@ -103,10 +103,8 @@ public class A_BinaryFind {
 
         A_BinaryFind instance = new A_BinaryFind();
 // Создание экземпляра класса A_BinaryFind
-
         int[] result = instance.findIndex(stream);
 // Вызов метода findIndex для поиска индексов и сохранение результата в массив result
-
         for (int index : result) {
             System.out.print(index + " ");
         }

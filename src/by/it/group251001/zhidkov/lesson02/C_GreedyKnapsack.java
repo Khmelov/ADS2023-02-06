@@ -27,7 +27,6 @@ public class C_GreedyKnapsack {
             this.cost = cost;
             this.weight = weight;
         }
-
         @Override
         public String toString() {
             return "Item{" +

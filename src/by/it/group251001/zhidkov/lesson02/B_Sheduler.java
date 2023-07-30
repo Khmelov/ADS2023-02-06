@@ -55,9 +55,7 @@ public class B_Sheduler {
                 return Integer.compare(first.stop, second.stop);
             }
         };
-
         Arrays.sort(events, myComparator); // Сортировка массива событий по времени окончания
-
         int i = 0;
         while (i < events.length) {
             double stop = events[i].stop;

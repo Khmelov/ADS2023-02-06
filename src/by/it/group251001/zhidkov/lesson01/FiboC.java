@@ -9,7 +9,6 @@ package by.it.group251001.zhidkov.lesson01;
 public class FiboC {
 
     private long startTime = System.currentTimeMillis();
-
     private long time() {
         return System.currentTimeMillis() - startTime;
     }

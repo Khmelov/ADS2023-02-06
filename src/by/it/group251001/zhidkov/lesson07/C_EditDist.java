@@ -84,7 +84,6 @@ public class C_EditDist {
                 }
             }
         }
-
         String result = "";
         int i = n, j = m;
         while (i > 0 && j > 0) {

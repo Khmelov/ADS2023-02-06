@@ -21,7 +21,6 @@ public class B_CountSort {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-
         //размер массива
         int n = scanner.nextInt();
         int[] points = new int[n];

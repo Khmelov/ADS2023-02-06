@@ -179,5 +179,4 @@ public class A_Huffman {
         }
         System.out.println(result);
     }
-
 }

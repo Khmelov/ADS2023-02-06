@@ -94,7 +94,6 @@ public class B_MergeSort {
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson04/dataB.txt");
 
         B_MergeSort instance = new B_MergeSort();
-
         // Вызов сортировки слиянием и сохранение результата в массив result
         int[] result = instance.getMergeSort(stream);
 

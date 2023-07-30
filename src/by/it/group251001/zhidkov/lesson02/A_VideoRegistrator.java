@@ -27,7 +27,6 @@ public class A_VideoRegistrator {
         int i=0; // Инициализация переменной-счетчика
 
         Arrays.sort(events); // Сортировка массива событий в порядке возрастания
-
         double temp = events[i]; // Присваивание первого элемента массива переменной temp
         result.add(temp); // Добавление значения temp в список результатов
 

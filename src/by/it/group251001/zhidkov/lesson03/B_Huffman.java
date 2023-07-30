@@ -10,7 +10,6 @@ public class B_Huffman {
     String decode(File file) throws FileNotFoundException {
         StringBuilder result = new StringBuilder();
         Scanner scanner = new Scanner(file);
-
         // Чтение количества различных букв и размера закодированной строки
         Integer count = scanner.nextInt();  // количество различных букв
         Integer length = scanner.nextInt(); // размер закодированной строки

@@ -22,7 +22,6 @@ public class FiboB {
         int n = 10;
         System.out.printf("fastB(%d)=%d \n\t time=%d \n\n", n, fibo.fastB(n), fibo.time());
     }
-
     BigInteger fastB(Integer n) {
         //здесь нужно реализовать вариант с временем O(n) и памятью O(n)
         BigInteger[] Arr = new BigInteger[n + 1];

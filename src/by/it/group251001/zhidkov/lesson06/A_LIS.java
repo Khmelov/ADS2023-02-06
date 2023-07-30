@@ -51,7 +51,6 @@ public class A_LIS {
                 }
             }
         }
-
         int result = d[0]; // Инициализация переменной result значением первого элемента массива d
 
         for (int i = 1; i < n; i++){
