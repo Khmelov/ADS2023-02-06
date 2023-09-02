@@ -37,12 +37,19 @@ public class FiboA {
         else if (n==1) {
             return 1;
         }
-        int result=0;
-        for (int i=1; i<=n; i++)
+        else if(n==2)
+            return 1;
+        int num1=1,num2=1;
+        for (int i = 3; i < n;i+=2)
         {
-           result+=i;
+            num1=num1+num2;
+            num2=num2+num1;
         }
-        return result;
+        if(n%2==0)
+            return num1;
+        else return num2;
+
+
     }
 
 
@@ -56,7 +63,7 @@ public class FiboA {
         else if (n==1) {
             return BigInteger.ONE;
         }
-        return BigInteger.valueOf(n).add(slowA(n-1));
+        return slowA(n-1).add(slowA(n-2));
     }
 
 
