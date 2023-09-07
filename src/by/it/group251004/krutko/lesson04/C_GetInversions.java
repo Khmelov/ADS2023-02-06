@@ -66,6 +66,7 @@ public class C_GetInversions {
                 a[k++] = RArray[j++];
                 inversions += j + 1;
                 //inversions = LArray.length - i;
+                //inversionCount += middle - i + 1;
             }
         while (i < LArray.length)
             a[k++] = LArray[i++];
