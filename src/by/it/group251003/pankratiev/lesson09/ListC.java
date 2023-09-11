@@ -3,15 +3,12 @@ package by.it.group251003.pankratiev.lesson09;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 public class ListC<E> implements List<E> {
     private E[] arr = (E[]) new Object[0];
     private int size = 0;
     private void resize() {
-        E[] newArr = (E[]) new Object[arr.length * (3 / 2) + 1];
-        System.arraycopy(arr, 0, newArr, 0, size);
-        arr = newArr;
+        resize(arr.length);
     }
     private void resize(int newSize) {
         E[] newArr = (E[]) new Object[newSize * (3 / 2) + 1];

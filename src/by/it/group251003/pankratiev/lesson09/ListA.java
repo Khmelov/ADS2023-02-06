@@ -8,9 +8,7 @@ public class ListA<E> implements List<E> {
     private E[] arr = (E[]) new Object[0];
     private int size = 0;
     private void resize() {
-        E[] newArr = (E[]) new Object[arr.length * (3 / 2) + 1];
-        System.arraycopy(arr, 0, newArr, 0, size);
-        arr = newArr;
+        resize(arr.length);
     }
     private void resize(int newSize) {
         E[] newArr = (E[]) new Object[newSize * (3 / 2) + 1];
