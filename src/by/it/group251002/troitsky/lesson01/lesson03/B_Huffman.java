@@ -2,6 +2,8 @@ package by.it.group251002.troitsky.lesson01.lesson03;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 // Lesson 3. B_Huffman.
@@ -40,6 +42,8 @@ import java.util.Scanner;
 //        Sample Output 2:
 //        abacabad
 
+
+
 public class B_Huffman {
 
     String decode(File file) throws FileNotFoundException {
@@ -50,9 +54,24 @@ public class B_Huffman {
         Integer length = scanner.nextInt();
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         //тут запишите ваше решение
+        Map<String,Character> codes = new HashMap<>();
+        for (int i=0;i<count;i++){
+            String anotherSymbolCode = scanner.next();
+            Character sym = anotherSymbolCode.charAt(0);
+            anotherSymbolCode=scanner.next();
+            codes.put(anotherSymbolCode,sym);
+        }
 
-
-
+        String s = scanner.next();
+        String temp="";
+        for (int i=0; i<length;i++){
+            Character ch = s.charAt(i);
+            temp+=ch;
+            if(ch=='0' || temp.length()==count-1){
+                result.append(codes.get(temp));
+                temp="";
+            }
+        }
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         return result.toString(); //01001100100111
