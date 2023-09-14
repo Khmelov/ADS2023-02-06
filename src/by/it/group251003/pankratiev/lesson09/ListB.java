@@ -1,6 +1,8 @@
 package by.it.group251003.pankratiev.lesson09;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 public class ListB<E> implements List<E> {
     private E[] arr = (E[]) new Object[0];
@@ -34,6 +36,9 @@ public class ListB<E> implements List<E> {
     }
     @Override
     public boolean add(E e) {
+        if (isInvalidType(e))
+            throw new IllegalArgumentException("Element cannot be null");
+
         if (size == arr.length)
             resize();
 
@@ -63,6 +68,9 @@ public class ListB<E> implements List<E> {
         if (isInvalidIndex(index))
             throw new IndexOutOfBoundsException("Index out of bounds");
 
+        if (isInvalidType(element))
+            throw new IllegalArgumentException("Element cannot be null");
+
         if (size == arr.length)
             resize();
 
@@ -89,6 +97,9 @@ public class ListB<E> implements List<E> {
     public E set(int index, E element) {
         if (isInvalidIndex(index))
             throw new IndexOutOfBoundsException("Index out of bounds");
+
+        if (isInvalidType(element))
+            throw new IllegalArgumentException("Element cannot be null");
 
         E result = arr[index];
         arr[index] = element;
@@ -209,8 +220,7 @@ public class ListB<E> implements List<E> {
             throw new IndexOutOfBoundsException("Index out of bounds");
 
         ListA<E> result = new ListA<>();
-        for (int i = fromIndex; i < toIndex; i++)
-            result.add((E) arr[i]);
+        result.addAll(this);
 
         return result;
     }
@@ -274,9 +284,7 @@ public class ListB<E> implements List<E> {
             return currIndex - 1;
         }
         @Override
-        public void remove() {
-            ListB.this.remove(--currIndex);
-        }
+        public void remove() { throw new UnsupportedOperationException("remove is not supported"); }
         @Override
         public void set(E e) {
             ListB.this.set(currIndex - 1, e);

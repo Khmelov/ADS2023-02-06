@@ -36,6 +36,9 @@ public class ListA<E> implements List<E> {
     }
     @Override
     public boolean add(E e) {
+        if (isInvalidType(e))
+            throw new IllegalArgumentException("Element cannot be null");
+
         if (size == arr.length)
             resize();
 
@@ -65,6 +68,9 @@ public class ListA<E> implements List<E> {
         if (isInvalidIndex(index))
             throw new IndexOutOfBoundsException("Index out of bounds");
 
+        if (isInvalidType(element))
+            throw new IllegalArgumentException("Element cannot be null");
+
         if (size == arr.length)
             resize();
 
@@ -91,6 +97,9 @@ public class ListA<E> implements List<E> {
     public E set(int index, E element) {
         if (isInvalidIndex(index))
             throw new IndexOutOfBoundsException("Index out of bounds");
+
+        if (isInvalidType(element))
+            throw new IllegalArgumentException("Element cannot be null");
 
         E result = arr[index];
         arr[index] = element;
@@ -211,8 +220,7 @@ public class ListA<E> implements List<E> {
             throw new IndexOutOfBoundsException("Index out of bounds");
 
         ListA<E> result = new ListA<>();
-        for (int i = fromIndex; i < toIndex; i++)
-            result.add((E) arr[i]);
+        result.addAll(this);
 
         return result;
     }
@@ -276,9 +284,7 @@ public class ListA<E> implements List<E> {
             return currIndex - 1;
         }
         @Override
-        public void remove() {
-            ListA.this.remove(--currIndex);
-        }
+        public void remove() { throw new UnsupportedOperationException("remove is not supported"); }
         @Override
         public void set(E e) {
             ListA.this.set(currIndex - 1, e);
