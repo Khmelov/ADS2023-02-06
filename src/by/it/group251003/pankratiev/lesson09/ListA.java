@@ -161,8 +161,15 @@ public class ListA<E> implements List<E> {
         if (c.isEmpty())
             return false;
 
-        for (E element : c)
-            add(element);
+        int newSize = size + c.size();
+        if (newSize > arr.length)
+            resize(newSize);
+
+        for (E element : c) {
+            if (isInvalidType(element))
+                throw new IllegalArgumentException("Element cannot be null");
+            arr[size++] = element;
+        }
 
         return true;
     }
@@ -192,15 +199,15 @@ public class ListA<E> implements List<E> {
     }
     @Override
     public boolean removeAll(Collection<?> c) {
-        boolean modified = false;
+        boolean result = false;
         for (int i = 0; i < size; i++)
             if (c.contains(arr[i])) {
                 remove(i);
-                modified = true;
+                result = true;
                 i--;
             }
 
-        return modified;
+        return result;
     }
     @Override
     public boolean retainAll(Collection<?> c) {
