@@ -181,14 +181,15 @@ public class ListC<E> implements List<E> {
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        if (index>-1){
+        boolean f=false;
+        if (index>-1&& index<size){
             for (E e:c){
                 add(index, e);
                 index++;
+                f = true;
             }
-            return true;
         }
-        return false;
+        return f;
     }
 
     @Override
@@ -198,7 +199,7 @@ public class ListC<E> implements List<E> {
         for (int i = 0; i < size; i++) {
             if (c.contains(list[i])) {
                 remove(i);
-                i--; // Уменьшаем счетчик, так как размер списка уменьшился
+                i--;
                 f = true;
             }
         }
