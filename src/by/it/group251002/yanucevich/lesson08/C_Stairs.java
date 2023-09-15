@@ -32,7 +32,12 @@ Sample Output 3:
 
 */
 
-public class C_Stairs {
+
+
+
+public class C_Stairs{
+    
+
 
     int getMaxSum(InputStream stream ) {
         Scanner scanner = new Scanner(stream);
@@ -79,6 +84,7 @@ public class C_Stairs {
         }
 */
         result=sums[n-1];
+
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
@@ -91,5 +97,6 @@ public class C_Stairs {
         int res=instance.getMaxSum(stream);
         System.out.println(res);
     }
+
 
 }
