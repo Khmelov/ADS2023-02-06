@@ -34,17 +34,38 @@ public class ListA<E> implements List<E> {
     /////////////////////////////////////////////////////////////////////////
     @Override
     public String toString() {
-        StringBuilder str = new StringBuilder();
-        str.append('[');
-        for(Node ptr = head; ptr != null; ptr = ptr.next){
-            str.append(ptr.value);
-            if(ptr.next != null){
-                str.append(", ");
+        String sb = new String();
+        //StringBuilder sb = new StringBuilder();
+        sb += "[";
+        //sb.append('[');
+
+        Node<E> ptr = head;
+        if(ptr != null){
+            //sb.append(ptr.value);
+            sb += ptr.value;
+            ptr = ptr.next;
+        }
+
+        while(ptr != null){
+            //sb.append(", ").append(ptr.value);
+            sb += ", " + ptr.value;
+            ptr = ptr.next;
+        }
+
+        /*
+
+        for (Node ptr = head; ptr != null; ptr = ptr.next) {
+            sb.append(ptr.value);
+            if (ptr.next != null) {
+                sb.append(", ");
             }
         }
-        str.append(']');
-        //return "";
-        return str.toString();
+
+         */
+
+        //sb.append(']');
+        sb += "]";
+        return sb;
     }
 
     @Override
@@ -62,21 +83,12 @@ public class ListA<E> implements List<E> {
         }
         ptr.next = second;
         this.size = this.size + 1;
+
         return true;
     }
 
     @Override
     public E remove(int index) {
-        /*
-        Node<E> ptr = this.head;
-        for(int i = 0; i < index;i++){
-            ptr = ptr.next;
-        }
-        E result = (E) ptr.next.value;
-        ptr.next = ptr.next.next;
-        this.size = this.size - 1;
-        return result;
-         */
 
         if (index < 0 || index >= this.size) {
             return null;

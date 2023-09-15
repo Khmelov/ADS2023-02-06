@@ -22,7 +22,6 @@ public class ListB<E> implements List<E> {
     }
     private Node<E> head;
     private int size;
-
     //Создайте аналог списка БЕЗ использования других классов СТАНДАРТНОЙ БИБЛИОТЕКИ
 
     /////////////////////////////////////////////////////////////////////////
@@ -32,17 +31,38 @@ public class ListB<E> implements List<E> {
     /////////////////////////////////////////////////////////////////////////
     @Override
     public String toString() {
-        StringBuilder str = new StringBuilder();
-        str.append('[');
-        for(ListB.Node ptr = head; ptr != null; ptr = ptr.next){
-            str.append(ptr.value);
-            if(ptr.next != null){
-                str.append(", ");
+        String sb = new String();
+        //StringBuilder sb = new StringBuilder();
+        sb += "[";
+        //sb.append('[');
+
+        Node<E> ptr = head;
+        if(ptr != null){
+            //sb.append(ptr.value);
+            sb += ptr.value;
+            ptr = ptr.next;
+        }
+
+        while(ptr != null){
+            //sb.append(", ").append(ptr.value);
+            sb += ", " + ptr.value;
+            ptr = ptr.next;
+        }
+
+        /*
+
+        for (Node ptr = head; ptr != null; ptr = ptr.next) {
+            sb.append(ptr.value);
+            if (ptr.next != null) {
+                sb.append(", ");
             }
         }
-        str.append(']');
-        //return "";
-        return str.toString();
+
+         */
+
+        //sb.append(']');
+        sb += "]";
+        return sb;
     }
 
     @Override
@@ -60,6 +80,7 @@ public class ListB<E> implements List<E> {
         }
         ptr.next = second;
         this.size = this.size + 1;
+
         return true;
     }
 
@@ -108,12 +129,23 @@ public class ListB<E> implements List<E> {
     @Override
     public void add(int index, E element) {
         //Node<E> second = new Node<E>;
+        if(index < 0 || index > this.size){
+            return;
+        }
+        Node<E> newNode = new Node<>(element);
         Node<E> ptr = this.head;
+        if(index == 0){
+            newNode.next = this.head;
+            this.head = newNode;
+            //this.head = ptr;
+            this.size++;
+            return;
+        }
         for(int i = 0;i < index - 1;i++){
             ptr = ptr.next;
             //this.head = this.head.next;
         }
-        Node<E> newNode = new Node<>(element);
+
         newNode.next = ptr.next;
         ptr.next = newNode;
         //ptr.next.value = element;
@@ -145,14 +177,14 @@ public class ListB<E> implements List<E> {
             return false;
         }
         if (o.equals(this.head.value)) {
-                if (this.size == 1) {
-                    this.head = null;
-                } else {
-                    this.head = this.head.next;
-                }
-                --this.size;
-                return true;
+            if (this.size == 1) {
+                this.head = null;
+            } else {
+                this.head = this.head.next;
             }
+            --this.size;
+            return true;
+        }
         if (this.size == 1) {
             return false;
         }
@@ -225,7 +257,7 @@ public class ListB<E> implements List<E> {
     @Override
     public boolean contains(Object o) {
         Node<E> ptr = this.head;
-        while(ptr.next!=null){
+        while(ptr != null){
             if(o.equals(ptr.value)){
                 return true;
             }
