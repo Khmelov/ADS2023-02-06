@@ -15,71 +15,149 @@ public class ListB<E> implements List<E> {
     //////               Обязательные к реализации методы             ///////
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
+    E[] list;
+    private int size;
+    private int capacity;
+    ListB(){
+        size=0;
+        capacity=10;
+        list=(E[]) new Object[capacity];
+    }
     @Override
     public String toString() {
-        return "";
+        String res=new String();
+        if(!this.isEmpty()){
+            res+="[";
+            for(int i=0;i<size-1;i++)
+                res=res+this.list[i]+", ";
+            res+=this.list[size-1]+"]";
+        } else{
+            res="[]";
+        }
+        return res;
     }
 
     @Override
     public boolean add(E e) {
-        return false;
+        if(size==capacity){
+            capacity=(int)(capacity*1.5);
+            E[] list=(E[]) new Object[capacity];
+            System.arraycopy(this.list,0,list,0,size);
+            this.list=list;
+        }
+        this.list[size]=e;
+        size++;
+        return true;
     }
 
     @Override
     public E remove(int index) {
+        E el=null;
+        if(index<size && index>-1) {
+            size--;
+            el = this.list[index];
+            E[] l=(E[]) new Object[size-index];
+            System.arraycopy(list,index+1,l,0,l.length);
+            System.arraycopy(l,0,list,index,l.length);
+            this.list[size] = null;
+            return el;
+        }
         return null;
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     public void add(int index, E element) {
-
+        while(index>=capacity){
+            capacity=(int)(capacity*1.5);
+            E[] list=(E[]) new Object[capacity];
+            System.arraycopy(this.list,0,list,0,size);
+            this.list=list;
+        }
+        E[] l=(E[]) new Object[size-index];
+        System.arraycopy(list,index,l,0,l.length);
+        list[index]=element;
+        System.arraycopy(l,0,list,index+1,l.length);
+        size++;
     }
 
     @Override
     public boolean remove(Object o) {
-        return false;
+        if(this.contains(o)){
+            this.remove(this.indexOf(o));
+            return true;
+        }
+        else
+            return false;
     }
 
     @Override
     public E set(int index, E element) {
+        if(index<size && index>-1) {
+            E el = list[index];
+            list[index] = element;
+            return el;
+        }
         return null;
     }
 
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return (size==0)?true:false;
     }
 
 
     @Override
     public void clear() {
-
+        for(int i=0;i<size;i++){
+            list[i]=null;
+        }
+        size=0;
     }
 
     @Override
     public int indexOf(Object o) {
-        return 0;
+        for(int i=0;i<size;i++){
+            if(list[i].equals(o)){
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
     public E get(int index) {
-        return null;
+        if(index<size && index>-1)
+            return list[index];
+        else
+            return null;
     }
 
     @Override
     public boolean contains(Object o) {
-        return false;
+        boolean flag=false;
+        for(int i=0;i<size;i++){
+            if(list[i].equals(o)){
+                flag=true;
+            }
+        }
+        return flag;
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        int lastIndex=-1;
+        for(int i=0;i<size;i++){
+            if(list[i].equals(o)){
+                lastIndex=i;
+            }
+        }
+        return lastIndex;
     }
 
 
