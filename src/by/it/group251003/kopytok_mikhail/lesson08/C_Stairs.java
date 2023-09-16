@@ -1,4 +1,4 @@
-package by.it.group251002.yanucevich.lesson08;
+package by.it.group251003.kopytok_mikhail.lesson08;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,61 +32,26 @@ Sample Output 3:
 
 */
 
-
-
-
-public class C_Stairs{
-    
-
+public class C_Stairs {
 
     int getMaxSum(InputStream stream ) {
         Scanner scanner = new Scanner(stream);
         int n=scanner.nextInt();
-        int stairs[]=new int[n];
+        int[] stairs =new int[n];
         for (int i = 0; i < n; i++) {
             stairs[i]=scanner.nextInt();
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        int result = 0;
+        int[] dp = new int[n];
 
-        int[] sums = new int[n];
-        for (int i=0;i<n;i++){
-            if(i>1) {
-                sums[i]=stairs[i]+((sums[i-1]<sums[i-2])?sums[i-2]:sums[i-1]);
-            }
-            else{
-                if(i==0){
-                    sums[i]=stairs[i];
-                }
-                else{
-                    sums[i]=stairs[i]+((sums[i-1]<0)?0:sums[i-1]);
-                }
-            }
-        }/*
-        int i=n-1;
-        while(i>1){
-            result+=stairs[i];
-            if((stairs[i-1]>=0)&&(stairs[i-2]>=0)){
-                i--;
-            }
-            else{
-                if(stairs[i-1]<stairs[i-2]){
-                    i-=2;
-                }
-                else{
-                    i--;
-                }
-            }
-        }
-        result+=stairs[i];
-        if((i==1)&&(stairs[i-1]>=0)){
-            result+=stairs[0];
-        }
-*/
-        result=sums[n-1];
+        dp[0] = stairs[0];
+        dp[1] = Math.max(dp[0], 0) + stairs[1];
 
+        for (int i = 2; i < n; i++)
+            dp[i] = Math.max(dp[i - 2], dp[i - 1]) + stairs[i];
+
+        return dp[n - 1];
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
     }
 
 
@@ -97,6 +62,5 @@ public class C_Stairs{
         int res=instance.getMaxSum(stream);
         System.out.println(res);
     }
-
 
 }

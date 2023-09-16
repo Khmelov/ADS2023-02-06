@@ -1,4 +1,4 @@
-package by.it.group251002.yanucevich.lesson08;
+package by.it.group251004.stasevich.lesson08;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,12 +32,7 @@ Sample Output 3:
 
 */
 
-
-
-
-public class C_Stairs{
-    
-
+public class C_Stairs {
 
     int getMaxSum(InputStream stream ) {
         Scanner scanner = new Scanner(stream);
@@ -47,46 +42,15 @@ public class C_Stairs{
             stairs[i]=scanner.nextInt();
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        int result = 0;
-
-        int[] sums = new int[n];
-        for (int i=0;i<n;i++){
-            if(i>1) {
-                sums[i]=stairs[i]+((sums[i-1]<sums[i-2])?sums[i-2]:sums[i-1]);
-            }
-            else{
-                if(i==0){
-                    sums[i]=stairs[i];
-                }
-                else{
-                    sums[i]=stairs[i]+((sums[i-1]<0)?0:sums[i-1]);
-                }
-            }
-        }/*
-        int i=n-1;
-        while(i>1){
-            result+=stairs[i];
-            if((stairs[i-1]>=0)&&(stairs[i-2]>=0)){
-                i--;
-            }
-            else{
-                if(stairs[i-1]<stairs[i-2]){
-                    i-=2;
-                }
-                else{
-                    i--;
-                }
-            }
+        int[] sum = new int[n + 1];
+        sum[0] = 0;
+        sum[1] = stairs[0];
+        for (int i = 2; i <= n; i++) {
+            sum[i] = stairs[i - 1] + Math.max(sum[i - 1], sum[i  - 2]);
         }
-        result+=stairs[i];
-        if((i==1)&&(stairs[i-1]>=0)){
-            result+=stairs[0];
-        }
-*/
-        result=sums[n-1];
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return sum[n];
     }
 
 
@@ -97,6 +61,5 @@ public class C_Stairs{
         int res=instance.getMaxSum(stream);
         System.out.println(res);
     }
-
 
 }
