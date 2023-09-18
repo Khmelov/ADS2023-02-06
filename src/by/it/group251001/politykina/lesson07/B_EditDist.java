@@ -3,7 +3,10 @@ package by.it.group251001.politykina.lesson07;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Scanner;
+
+import static java.lang.Math.min;
 
 /*
 Задача на программирование: расстояние Левенштейна
@@ -38,16 +41,27 @@ import java.util.Scanner;
 */
 
 public class B_EditDist {
-
+    private static final int INF = 1_000_000_000;
 
     int getDistanceEdinting(String one, String two) {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int[][] dp = new int[one.length() + 1][two.length() + 1];
 
+        for(int i = 0; i <= one.length(); i++){
+            dp[i][0] = i;
+        }
 
+        for(int j = 0; j <= two.length(); j++){
+            dp[0][j] = j;
+        }
 
-        int result = 0;
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        for(int i = 1; i <= one.length(); i++){
+            for(int j = 1; j <= two.length(); j++){
+                int c = (one.charAt(i - 1) != two.charAt(j - 1) ? 1 : 0);
+                dp[i][j] = min(min(dp[i - 1][j] + 1, dp[i][j - 1] + 1), dp[i - 1][j - 1] + c);
+            }
+        }
+
+        return dp[one.length()][two.length()];
     }
 
 

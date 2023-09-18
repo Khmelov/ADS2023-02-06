@@ -1,9 +1,13 @@
 package by.it.group251001.politykina.lesson07;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
+
+import static java.lang.Math.min;
 
 /*
 Задача на программирование: расстояние Левенштейна
@@ -49,13 +53,51 @@ import java.util.Scanner;
 
 public class C_EditDist {
 
+
     String getDistanceEdinting(String one, String two) {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int[][] dp = new int[one.length() + 1][two.length() + 1];
 
+        for(int i = 0; i <= one.length(); i++){
+            dp[i][0] = i;
+        }
 
-        String result = "";
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        for(int j = 0; j <= two.length(); j++){
+            dp[0][j] = j;
+        }
+
+        for(int i = 1; i <= one.length(); i++){
+            for(int j = 1; j <= two.length(); j++){
+                int c = (one.charAt(i - 1) != two.charAt(j - 1) ? 1 : 0);
+                dp[i][j] = min(min(dp[i - 1][j] + 1, dp[i][j - 1] + 1), dp[i - 1][j - 1] + c);
+            }
+        }
+
+        List<String> res = new ArrayList<>();
+        int i = one.length(), j = two.length();
+        while(i > 0 || j > 0){
+            int c = (i > 0 && j > 0 && one.charAt(i - 1) != two.charAt(j - 1) ? 1 : 0);
+
+            if(i > 0 && j > 0 && dp[i][j] == dp[i - 1][j - 1] + c){
+                res.add(c == 0 ? "#" : "~" + two.charAt(j - 1));
+                i--;
+                j--;
+            }else if(i > 0 && dp[i][j] == dp[i - 1][j] + 1){
+                res.add("-" + one.charAt(i - 1));
+                i--;
+            }else if(j > 0 && dp[i][j] == dp[i][j - 1] + 1){
+                res.add("+" + two.charAt(j - 1));
+                j--;
+            }
+        }
+
+        Collections.reverse(res);
+        StringBuilder sb = new StringBuilder();
+        for (String s : res) {
+            sb.append(s);
+            sb.append(',');
+        }
+
+        return sb.toString();
     }
 
 

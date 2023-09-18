@@ -57,7 +57,6 @@ public class B_CountSort {
                 max = points[i];
             }
         }
-
         return sort(points, min, max);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
     }
