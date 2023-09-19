@@ -1,7 +1,6 @@
 package by.it.group251001.lashkin.lesson09;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 public class ListB<E> implements List<E> {
 
@@ -93,19 +92,25 @@ public class ListB<E> implements List<E> {
 
     @Override
     public void clear() {
-        IntStream.range(0, size).forEach(i -> elem[i] = null);
+        for (int i = 0; i < size; i++) {
+            elem[i] = null;
+        }
         size = 0;
     }
 
     @Override
     public int indexOf(Object o) {
-        return IntStream.range(0, size).filter(i -> ((o == null) && (elem[i] == null)) || Objects.equals(o, elem[i])).findFirst().orElse(-1);
+        for (int i = 0; i < size; i++) {
+            if (((o == null) && (elem[i] == null)) || Objects.equals(o, elem[i])) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
     public E get(int index) {
-        E e = elem[index];
-        return e;
+        return elem[index];
     }
 
     @Override
