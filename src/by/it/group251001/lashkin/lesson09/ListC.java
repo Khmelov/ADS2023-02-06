@@ -1,7 +1,6 @@
 package by.it.group251001.lashkin.lesson09;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 public class ListC<E> implements List<E> {
 
@@ -70,10 +69,10 @@ public class ListC<E> implements List<E> {
     @Override
     public boolean remove(Object o) {
         int idx = indexOf(o);
-        if (idx != -1) {
+        if (idx > -1) {
             remove(idx);
         }
-        return (idx != -1);
+        return (idx > -1);
     }
 
     @Override
@@ -92,24 +91,30 @@ public class ListC<E> implements List<E> {
 
     @Override
     public void clear() {
-        IntStream.range(0, size).forEach(i -> elem[i] = null);
+        for (int i = 0; i < size; i++) {
+            elem[i] = null;
+        }
         size = 0;
     }
 
     @Override
     public int indexOf(Object o) {
-        return IntStream.range(0, size).filter(i -> ((o == null) && (elem[i] == null)) || Objects.equals(o, elem[i])).findFirst().orElse(-1);
+        for (int i = 0; i < size; i++) {
+            if (((o == null) && (elem[i] == null)) || Objects.equals(o, elem[i])) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
     public E get(int index) {
-        E e = elem[index];
-        return e;
+        return elem[index];
     }
 
     @Override
     public boolean contains(Object o) {
-        return (indexOf(o) != -1);
+        return (indexOf(o) > -1);
     }
 
     @Override
@@ -119,12 +124,8 @@ public class ListC<E> implements List<E> {
             if ((o == null) && (elem[i] == null)) {
                 last = i;
             }
-            if (null != elem[i]) {
-                if (elem[i].equals(o)) {
-                    last = i;
-                }
-            } else {
-                throw new AssertionError();
+            if (elem[i].equals(o)) {
+                last = i;
             }
         }
         return last;
@@ -132,20 +133,29 @@ public class ListC<E> implements List<E> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return IntStream.range(0, c.size()).allMatch(i -> contains(c.stream().toList().get(i)));
+        for (int i = 0; i <c.size(); i++) {
+            if (!contains(c.stream().toList().get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
         int prev = size;
-        IntStream.range(0, c.size()).mapToObj(i -> c.stream().toList().get(i)).forEach(this::add);
+        for (int i = 0; i < c.size(); i++) {
+            add(c.stream().toList().get(i));
+        }
         return (prev != size);
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
         int prev = size;
-        IntStream.range(0, c.size()).forEach(i -> add(index + i, c.stream().toList().get(i)));
+        for (int i = 0; i < c.size(); i++) {
+            add(index + i, c.stream().toList().get(i));
+        }
         return (prev != size);
     }
 
@@ -153,14 +163,12 @@ public class ListC<E> implements List<E> {
     public boolean removeAll(Collection<?> c) {
         int i = 0;
         int prev = size;
-        if (i < size) {
-            do {
-                if (c.contains(elem[i])) {
-                    remove(i);
-                } else {
-                    i++;
-                }
-            } while (i < size);
+        while (i < size) {
+            if (c.contains(elem[i])) {
+                remove(i);
+            } else {
+                i++;
+            }
         }
         return (prev != size);
     }
@@ -169,14 +177,12 @@ public class ListC<E> implements List<E> {
     public boolean retainAll(Collection<?> c) {
         int i = 0;
         int prev = size;
-        if (i < size) {
-            do {
-                if (!c.contains(elem[i])) {
-                    remove(i);
-                } else {
-                    i++;
-                }
-            } while (i < size);
+        while (i < size) {
+            if (!c.contains(elem[i])) {
+                remove(i);
+            } else {
+                i++;
+            }
         }
         return (prev != size);
     }
