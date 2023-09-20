@@ -143,11 +143,10 @@ public class ListC<E> implements List<E> {
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        int prev = size;
-        for (int i = 0; i < c.size(); i++) {
-            add(c.stream().toList().get(i));
+        for (Object o : c) {
+            add((E) o);
         }
-        return (prev != size);
+        return !c.isEmpty();
     }
 
     @Override
