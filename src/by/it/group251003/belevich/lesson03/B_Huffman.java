@@ -2,6 +2,7 @@ package by.it.group251003.belevich.lesson03;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.Scanner;
 
 // Lesson 3. B_Huffman.
@@ -43,13 +44,31 @@ import java.util.Scanner;
 public class B_Huffman {
 
     String decode(File file) throws FileNotFoundException {
-        StringBuilder result=new StringBuilder();
+        StringBuilder result = new StringBuilder();
         //прочитаем строку для кодирования из тестового файла
         Scanner scanner = new Scanner(file);
         Integer count = scanner.nextInt();
         Integer length = scanner.nextInt();
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         //тут запишите ваше решение
+        HashMap<String, Character> codes = new HashMap<>();
+
+        for (int i = 0; i < count; i++){
+            char value = scanner.next().charAt(0);
+            String code = scanner.next();
+            codes.put(code, value);
+        }
+
+        String string = scanner.next();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < length; i++){
+            stringBuilder.append(string.charAt(i));
+            if (string.charAt(i) == '0'){
+                result.append(codes.get(stringBuilder.toString()));
+                stringBuilder.setLength(0);
+            }
+        }
+        result.append(codes.get(stringBuilder.toString()));
 
 
 
