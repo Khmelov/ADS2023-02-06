@@ -43,35 +43,24 @@ public class B_LongDivComSubSeq {
             m[i] = scanner.nextInt();
         }
         //тут реализуйте логику задачи методами динамического программирования (!!!)
-        int result = 0;
-        int[] p = new int[m.length];
-        int[] v = new int[m.length + 1];
-        int l = 0;
-        int lo, hi, mid, newl;
-        for(int i = 0; i < m.length; i++) {
-            lo = 1;
-            hi = l;
-            while (lo <= hi) {
-                mid = (lo + hi + 1) / 2;
-                if(m[i] % m[v[mid]] == 0)
-                    lo = mid + 1;
-                else
-                    hi = mid - 1;
-            }
-            newl = lo;
-            p[i] = v[newl - 1];
-            v[newl] = i;
-            if(newl > l)
-                l = newl;
-        }
-        int[] s = new int[l];
-        int k = v[l];
-        for(int i = l - 1; i >= 0; i--) {
-            s[i] = m[k];
-            k = p[k];
-        }
-        result = s.length;
 
+        int result = 0;
+        int[] maxSequences = new int[n]; //Array contains maximum length of sequences, ended by element with corresponding index
+
+        for (int i = 0; i < n; ++i) {
+            maxSequences[i] = 1; //Minimum length of sequence
+            for (int j = 0; j < i; ++j) {
+
+                //If current element is divided by last sequence element without remainder - update maximum length of sequence ended by current element if it's reasonable
+                if (m[i] % m[j] == 0 && maxSequences[j] + 1 > maxSequences[i])
+                    maxSequences[i] = maxSequences[j] + 1;
+
+            }
+
+            //If we got bigger sequence - update maximum size
+            if (result < maxSequences[i])
+                result = maxSequences[i];
+        }
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;

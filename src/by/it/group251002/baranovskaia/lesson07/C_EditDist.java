@@ -48,65 +48,76 @@ import java.util.Scanner;
 
 
 public class C_EditDist {
+
     String getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
 
+        final int N = one.length() + 1;
+        final int M = two.length() + 1;
+        int[][] distancesTable = new int[N][M];
 
-        int lengthOfFirstString = one.length();
-        int lengthOfSecondString = two.length();
-        int[][] M = new int[lengthOfFirstString + 1][lengthOfSecondString + 1];
+        //Fill 1-st raw and 1-st column with string indexes
+        for (int i = 0; i < N; ++i)
+            distancesTable[i][0] = i;
+        for (int j = 0; j < M; ++j)
+            distancesTable[0][j] = j;
 
-        for (int i = 0; i <= lengthOfSecondString; i++)
-            M[0][i] = i;
-        for (int i = 0; i <= lengthOfFirstString; i++)
-            M[i][0] = i;
-
-        for (int i = 1; i <= lengthOfFirstString; i++) {
-            for (int j = 1; j <= lengthOfSecondString; j++) {
-                int insert = M[i][j - 1] + 1;
-                int delete = M[i - 1][j] + 1;
-                int match = M[i - 1][j - 1] + (one.charAt(i - 1) == two.charAt(j - 1) ? 0 : 1);
-
-                int min = insert;
-                if (delete < min){
-                    min = delete;
-                }
-                if (match < min){
-                    min = match;
-                }
-                M[i][j] = min;
+        for (int i = 1; i < N; ++i)
+            for (int j = 1; j < M; ++j) {
+                int ins = distancesTable[i][j - 1] + 1; //If insert element - take left one form the table + 1
+                int del = distancesTable[i - 1][j] + 1; //If delete element - take one above from the table + 1
+                int sub = distancesTable[i - 1][j - 1] + ((one.charAt(i-1) == two.charAt(j-1)) ? 0 : 1); //If change element - take one from diagonal + 1, if it's not the same element
+                distancesTable[i][j] = Math.min(Math.min(ins, del), sub); //Take minimum of values above
             }
-        }
 
-        StringBuilder result = new StringBuilder();
-
-        int i = lengthOfFirstString, j = lengthOfSecondString;
-
+        //Make string with sequence of operations and elements in reverse order
+        String revResult = "";
+        int i = N - 1;
+        int j = M - 1;
         while (i != 0 || j != 0){
-            if (i > 0 && j > 0 && M[i - 1][j - 1] + (one.charAt(i - 1) == two.charAt(j - 1) ? 0 : 1) == M[i][j]){
-                if(one.charAt(i - 1) == two.charAt(j - 1)){
-                    result.insert(0, "#,");
-                }
-                else {
-                    result.insert(0, "~" + two.charAt(j - 1) + ",");
-                }
-                i--;
-                j--;
+            if (distancesTable[i][j] == distancesTable[i][j - 1] + 1) { //If equals to left element - it's insert operation
+                revResult += "+" + two.charAt(j - 1) + ",";
+                --j;
             }
-            else if (j > 0 && M[i][j] == M[i][j - 1] + 1) {
-                result.insert(0, "+" + two.charAt(j - 1) + ",");
-                j--;
+            else if (distancesTable[i][j] == distancesTable[i - 1][j] + 1) { //If equals to element above - it's delete operation
+                revResult += "-" + one.charAt(i - 1) + ",";
+                --i;
             }
-            else if (i > 0 && M[i][j] == M[i - 1][j] + 1) {
-                result.insert(0, "-" + one.charAt(i - 1) + ",");
-                i--;
+            else {
+                if (distancesTable[i][j] == distancesTable[i - 1][j - 1]) //If equals to diagonal and didn't make sequence longer - it's copy operation
+                    revResult += "#,";
+                else //If equals to diagonal and made sequence longer - it's replace operation
+                    revResult += "~" + two.charAt(j - 1) + ",";
+                --i;
+                --j;
             }
         }
 
-        return result.toString();
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-    }
+        //Reverse string with operations and symbols (very simple algorithm)
+        String result = "";
+        int count = revResult.length() - 2;
+        while (count >= 0) {
+            int length = 0;
+            String oper_plus_elem = "";
+            while (count >= 0 && revResult.charAt(count) != ',') {
+                --count;
+                ++length;
+            }
+            oper_plus_elem += revResult.substring(count + 1, count + 1 + length);
+            result += oper_plus_elem + ",";
+            --count;
+        }
 
+        /* !!!NOTICE!!! */
+        /*
+        --------------------------------------------------------------------------------------------------------
+        This program provides different from expected result in 2-nd and 3-rd cases, but they are CORRECT either
+        --------------------------------------------------------------------------------------------------------
+         */
+
+        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        return result;
+    }
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";

@@ -54,24 +54,27 @@ public class C_QSortOptimized {
 
     void QSort(Segment[] Arr, int a, int b){
         if (a<b) {
-            int posb=a,pose=b-a-1,i=a;
-            while (i<pose){
-                if (Arr[i].compareTo(Arr[i+1])>=0) {
-                    Segment temp=Arr[i];
-                    Arr[i]=Arr[i+1];
-                    Arr[i+1]=temp;
+            int posb=a,pose=a,i=a+1;
+            while (i<b-1){
+                if (Arr[pose].compareTo(Arr[i])>0) {
+                    Segment temp=Arr[posb];
+                    Arr[posb]=Arr[i];
+                    Arr[i]=Arr[pose+1];
+                    Arr[pose+1]=temp;
                     posb++;
+                    pose++;
                 }
-                else if (Arr[i].compareTo(Arr[i+1])<=0) {
-                    Segment temp=Arr[i+1];
-                    Arr[i+1]=Arr[pose];
-                    Arr[pose]=Arr[i+1];
-                    pose--;
-                } else i++;
+                else if (Arr[i].compareTo(Arr[i+1])==0) {
+                    Segment temp=Arr[i];
+                    Arr[i]=Arr[pose+1];
+                    Arr[pose+1]=temp;
+                    pose++;
+                }
+                i++;
 
             }
-            QSort(Arr, a, posb);
-            QSort(Arr, pose+2, b);
+            QSort(Arr, a, posb-1);
+            QSort(Arr, pose+1, b);
         }
     }
 
