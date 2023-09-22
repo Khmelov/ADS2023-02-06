@@ -34,7 +34,6 @@ public class ListC<E> implements List<E> {
     @Override
     public boolean add(E e) {
         if (size == elements.length){
-            //elements = Arrays.copyOf(elements,size*3/2+1);
             E[] newelem =(E[])new Object[(size*3/2+1)];
             System.arraycopy(elements,0,newelem,0,size);
             elements=newelem;

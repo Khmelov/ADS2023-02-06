@@ -30,7 +30,6 @@ public class ListA<E> implements List<E> {
     @Override
     public boolean add(E e) {
         if (size == elements.length){
-            //elements = Arrays.copyOf(elements,size*3/2+1);
             E[] newelem =(E[])new Object[(size*3/2+1)];
             System.arraycopy(elements,0,newelem,0,size);
             elements=newelem;
@@ -61,7 +60,6 @@ public class ListA<E> implements List<E> {
     @Override
     public void add(int index, E element) {
         if (size == elements.length)
-            //elements=Arrays.copyOf(elements,size*3/2+1);
         System.arraycopy(elements,0,elements,0,size*3/2+1);
             System.arraycopy(elements,index,elements,index+1,size);
             elements[index]=element;

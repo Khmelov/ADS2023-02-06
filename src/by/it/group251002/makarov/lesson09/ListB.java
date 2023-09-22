@@ -18,7 +18,6 @@ public class ListB<E> implements List<E> {
     /////////////////////////////////////////////////////////////////////////
     @Override
     public String toString() {
-
         StringBuilder sb = new StringBuilder();
         String del = ", ";
         sb.append("[");
