@@ -23,6 +23,7 @@ import static org.junit.Assert.fail;
 public class Test_Part2_Lesson09Test extends HomeWork {
 
 
+
     private static final int RND_SEED = 1234;
     public static final int INVOCATION_COUNT_PER_METHOD = 10;
     public static final int MAX_VALUE = 100;
