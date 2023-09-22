@@ -5,7 +5,6 @@ import java.util.*;
 public class ListC<E> implements List<E> {
 
 
-
     private E[] elements = (E[]) new Object[]{};
 
     private int size;
