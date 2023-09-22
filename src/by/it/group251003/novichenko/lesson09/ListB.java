@@ -4,6 +4,7 @@ import java.util.*;
 
 public class ListB<E> implements List<E> {
 
+
     private E[] elements = (E[]) new Object[]{};
     private int size=0;
     //Создайте аналог списка БЕЗ использования других классов СТАНДАРТНОЙ БИБЛИОТЕКИ
