@@ -46,11 +46,12 @@ public class A_EditDist {
         }
 
         int result = CountD(a - 1, b, word1, word2) + 1;
-        if (result > CountD(a, b - 1, word1, word2) + 1) {
-            result = CountD(a, b - 1, word1, word2) + 1;
+        int tmp = CountD(a, b - 1, word1, word2) + 1;
+        if (result > tmp) {
+            result = tmp;
         }
 
-        int tmp = CountD(a - 1, b - 1, word1, word2);
+        tmp = CountD(a - 1, b - 1, word1, word2);
         if (word1.charAt(a - 1) != word2.charAt(b - 1)) {
             tmp++;
         }

@@ -46,10 +46,10 @@ public class B_LongDivComSubSeq {
         }
         //тут реализуйте логику задачи методами динамического программирования (!!!)
         int result = 0;
-        for (int i = 0; i < n; i++) {
+        for (int i = 1; i < n; i++) {
 
             for (int j = 0; j < i; j++) {
-                if (m[i] % m[j] == 0 && f[j] >= f[i]) {
+                if (m[i] % m[j] == 0) {
                     f[i] = f[j];
                     f[i]++;
                 }
