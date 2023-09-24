@@ -53,7 +53,7 @@ public class ListA<E> implements List<E> {
         if (size > 0){
             System.arraycopy(elems, index + 1, elems, index, size - index - 1);
         }
-        size--;
+        elems[--size] = null;
         return deletedElem;
     }
 
