@@ -4,11 +4,11 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Queue;
 
-public class MyPriorityQueue<E> implements Queue<E> {
+public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
 
-    static private int minCapacity = 3;
+    static private int minCapacity = 1;
     private int size = 0;
-    private E[] arr = (E[]) new Object[minCapacity];
+    private E[] arr = (E[]) new Comparable[minCapacity];
 
     private int parent(int index) {
         return (index - 1) / 2;
@@ -29,10 +29,10 @@ public class MyPriorityQueue<E> implements Queue<E> {
         }
 
         int goToChild = l;
-        if (r < size && ((Comparable<E>)arr[r]).compareTo(arr[l]) < 0) {
+        if (r < size && arr[r].compareTo(arr[l]) < 0) {
             goToChild = r;
         }
-        if (((Comparable<E>)arr[goToChild]).compareTo(arr[index]) >= 0) {
+        if (arr[goToChild].compareTo(arr[index]) >= 0) {
             return ;
         }
 
@@ -49,7 +49,7 @@ public class MyPriorityQueue<E> implements Queue<E> {
             return;
         }
         int parentInd = parent(index);
-        if (((Comparable <E>)arr[parentInd]).compareTo(arr[index]) < 0) {
+        if (arr[parentInd].compareTo(arr[index]) < 0) {
             return ;
         }
 
@@ -61,7 +61,7 @@ public class MyPriorityQueue<E> implements Queue<E> {
     }
 
     private void grow() {
-        E[] NewArr = (E[]) new Object[(size*3)/2+1];
+        E[] NewArr = (E[]) new Comparable[size * 2];
         System.arraycopy(arr, 0, NewArr, 0, size);
         arr = NewArr;
     }
