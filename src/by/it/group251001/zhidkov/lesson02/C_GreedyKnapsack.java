@@ -42,6 +42,7 @@ public class C_GreedyKnapsack {
             double costPerUnitOfWeightOther = other.cost / (double) other.weight;
             return Double.compare(costPerUnitOfWeightOther, costPerUnitOfWeight);
         }
+
     }
     // Расчет общей стоимости рюкзака
     double calc(File source) throws FileNotFoundException {

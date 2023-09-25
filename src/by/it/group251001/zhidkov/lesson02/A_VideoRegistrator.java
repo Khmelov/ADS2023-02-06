@@ -35,6 +35,7 @@ public class A_VideoRegistrator {
             if(events[i] - temp > workDuration) {
                 temp = events[i];
                 result.add(temp);
+
             }
         }
         return result; // Возвращение списка с регистрированными временными метками начала событий
