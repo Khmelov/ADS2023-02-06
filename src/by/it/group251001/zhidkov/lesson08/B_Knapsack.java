@@ -38,7 +38,6 @@ public class B_Knapsack {
         }
 
         int[][] table = new int[n + 1][w + 1];
-
         // Инициализация начальных значений таблицы
         for (int i = 0; i <= w; i++)
             table[0][i] = 0;
