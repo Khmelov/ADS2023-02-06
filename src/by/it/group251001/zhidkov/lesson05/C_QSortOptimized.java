@@ -59,7 +59,6 @@ public class C_QSortOptimized {
         int m = scanner.nextInt();
         int[] points=new int[m];
         int[] result=new int[m];
-
         //читаем сами отрезки
         for (int i = 0; i < n; i++) {
             //читаем начало и конец каждого отрезка
