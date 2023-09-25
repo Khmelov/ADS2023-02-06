@@ -47,7 +47,6 @@ public class C_QSortOptimized {
         }
     }
 
-
     int[] getAccessory2(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
 

@@ -52,7 +52,6 @@ public class A_QSort {
                 this.stop = start;
             }
         }
-
         @Override
         public int compareTo(Segment o) {
             // Реализация интерфейса Comparable для сравнения отрезков по их конечной точке (stop)
