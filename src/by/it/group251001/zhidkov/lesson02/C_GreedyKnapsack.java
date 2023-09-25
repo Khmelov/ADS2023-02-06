@@ -53,7 +53,6 @@ public class C_GreedyKnapsack {
         for (int i = 0; i < n; i++) { // Чтение предметов из файла и создание объектов Item
             items[i] = new Item(input.nextInt(), input.nextInt());
         }
-
         // Вывод информации о предметах
         for (Item item : items) {
             System.out.println(item);

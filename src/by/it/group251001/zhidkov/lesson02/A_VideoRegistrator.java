@@ -25,11 +25,9 @@ public class A_VideoRegistrator {
         List<Double> result; // Список для хранения результатов
         result = new ArrayList<>(); // Инициализация списка результатов
         int i=0; // Инициализация переменной-счетчика
-
         Arrays.sort(events); // Сортировка массива событий в порядке возрастания
         double temp = events[i]; // Присваивание первого элемента массива переменной temp
         result.add(temp); // Добавление значения temp в список результатов
-
         // Цикл для проверки разницы между событиями и определения моментов начала новых событий
         for(i = 1; i < events.length; i++) {
             if(events[i] - temp > workDuration) {
