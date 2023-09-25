@@ -178,6 +178,7 @@ public class A_Huffman {
             System.out.printf("%s: %s\n", entry.getKey(), entry.getValue());
         }
         System.out.println(result);
+
     }
 
 }
