@@ -86,6 +86,7 @@ public class B_MergeSort {
                 posC++;
             }
         }
+
         return array;
     }
 
