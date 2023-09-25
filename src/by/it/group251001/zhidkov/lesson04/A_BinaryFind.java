@@ -81,7 +81,6 @@ public class A_BinaryFind {
                     // Если значение value равно элементу в середине, установка найденного индекса и установка isFound в true
                 }
             }
-
             if (isFound)
                 result[i] = middle + 1;
             else

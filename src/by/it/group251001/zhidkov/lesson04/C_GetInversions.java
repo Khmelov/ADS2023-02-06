@@ -88,7 +88,6 @@ public class C_GetInversions {
         // Копируем отсортированный результирующий массив
         return count;
     }
-
     int calc(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);

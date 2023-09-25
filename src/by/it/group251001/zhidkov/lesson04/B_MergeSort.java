@@ -63,7 +63,6 @@ public class B_MergeSort {
         // Слияние двух отсортированных половин
         return mergeArray(arrayB, arrayC);
     }
-
     public int[] mergeArray(int[] arrayB, int[] arrayC) {
         int[] array = new int[arrayB.length + arrayC.length];
         int posB = 0, posC = 0;
