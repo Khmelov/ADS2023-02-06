@@ -14,7 +14,6 @@ public class FiboB {
     private long time() {
         return System.currentTimeMillis() - startTime;
     }
-
     public static void main(String[] args) {
 
         //вычисление чисел простым быстрым методом
