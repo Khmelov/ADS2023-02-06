@@ -51,7 +51,6 @@ public class C_EditDist {
             return 1;
         }
     }
-
     // Функция для определения минимального значения из трех чисел
     int min(int n1, int n2, int n3) {
         if (n1 > n2) {

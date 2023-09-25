@@ -43,7 +43,6 @@ public class B_EditDist {
         int M = one.length();
         int N = two.length();
         int[][] D = new int[M + 1][N + 1];
-
         // Инициализируем значения в первой строке и первом столбце
         D[0][0] = 0;
         for (int j = 1; j <= N; j++)// Вычисляем значения внутри матрицы D
