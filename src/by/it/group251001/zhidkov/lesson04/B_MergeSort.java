@@ -88,6 +88,7 @@ public class B_MergeSort {
         }
         return array;
     }
+
     public static void main(String[] args) throws FileNotFoundException {
         // Получение пути к текущей директории и формирование пути к файлу данных
         String root = System.getProperty("user.dir") + "/src/";

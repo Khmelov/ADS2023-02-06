@@ -47,7 +47,6 @@ public class B_Sheduler {
     List<Event> calcStartTimes(Event[] events, int from, int to) {
         List<Event> result;
         result = new ArrayList<>();
-
         // Компаратор для сравнения событий по времени окончания
         Comparator<Event> myComparator = new Comparator<Event>() {
             @Override

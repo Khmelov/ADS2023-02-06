@@ -40,6 +40,7 @@ public class FiboC {
             }
         }
         long num = n % (i - 1);
+
         return Arr[(int)num];
     }
 

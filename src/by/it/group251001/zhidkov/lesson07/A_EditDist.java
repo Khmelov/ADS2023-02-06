@@ -41,6 +41,7 @@ public class A_EditDist {
     // Рекурсивная функция расчета расстояния Левенштейна
     int levenshtein(int l1, String one, int l2, String two) {
         // Если одна из строк пустая, возвращаем длину другой строки
+
         if (l1 == 0) return l2;
         else if (l2 == 0) return l1;
             // Если обе строки состоят из одного символа

@@ -22,6 +22,7 @@ public class Lesson7Test {
         assertEquals("B3 failed", instance.getDistanceEdinting("distance","editing"),5);
     }
 
+
     @Test
     public void C() throws Exception {
         C_EditDist instance = new C_EditDist();

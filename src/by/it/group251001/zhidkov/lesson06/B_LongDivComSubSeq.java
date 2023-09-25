@@ -23,7 +23,6 @@ import java.util.Scanner;
     Sample Input:
     4
     3 6 7 12
-
     Sample Output:
     3
 */

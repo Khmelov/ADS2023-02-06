@@ -23,6 +23,7 @@ public class Lesson01Test {
         BigInteger res=fibo.slowA(33);
         boolean ok=res.toString().equals("3524578");
         assertTrue("slowA failed", ok);
+
     }
 
     @Test(timeout = 2000)

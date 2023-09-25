@@ -63,6 +63,7 @@ public class A_QSort {
     int[] getAccessory(InputStream stream) throws FileNotFoundException {
         // Подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
+
         // Число отрезков отсортированного массива
         int n = scanner.nextInt();
         Segment[] segments = new Segment[n];

@@ -34,6 +34,7 @@ Sample Output 3:
 
 public class C_Stairs {
     int getMaxSum(InputStream stream) {
+
         // Чтение входных данных
         Scanner scanner = new Scanner(stream);
         int n = scanner.nextInt(); // Число ступенек лестницы

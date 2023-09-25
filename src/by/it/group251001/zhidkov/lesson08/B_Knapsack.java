@@ -27,6 +27,7 @@ Sample Output:
 
 public class B_Knapsack {
     int getMaxWeight(InputStream stream) {
+
         // Чтение входных данных
         Scanner scanner = new Scanner(stream);
         int w = scanner.nextInt(); // Вместимость рюкзака

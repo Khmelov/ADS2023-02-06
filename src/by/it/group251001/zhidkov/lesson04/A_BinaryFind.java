@@ -102,6 +102,7 @@ public class A_BinaryFind {
 // Создание входного потока данных для чтения из файла
 
         A_BinaryFind instance = new A_BinaryFind();
+
 // Создание экземпляра класса A_BinaryFind
         int[] result = instance.findIndex(stream);
 // Вызов метода findIndex для поиска индексов и сохранение результата в массив result

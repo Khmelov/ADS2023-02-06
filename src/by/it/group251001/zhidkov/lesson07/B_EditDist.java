@@ -22,7 +22,6 @@ import java.util.Scanner;
     ab
     Sample Output 1:
     0
-
     Sample Input 2:
     short
     ports

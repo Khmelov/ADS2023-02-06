@@ -101,6 +101,7 @@ public class C_GetInversions {
         }
         return sortArray(a, 0, a.length - 1);
         // Вызываем функцию sortArray для сортировки массива и подсчета инверсий
+
     }
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";

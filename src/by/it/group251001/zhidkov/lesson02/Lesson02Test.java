@@ -15,6 +15,7 @@ public class Lesson02Test {
     Test kind:          All in package
     Package:            by.it.a_khmelev (тут ваша фамилия)
     Search for test:    In whole project
+
     */
 
 

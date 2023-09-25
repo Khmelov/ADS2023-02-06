@@ -17,6 +17,7 @@ public class Lesson5Test {
         int[] result=instance.getAccessory(stream);
         boolean ok=Arrays.equals(result,new int[]{1,0,0});
         assertTrue("A failed", ok);
+
     }
 
 

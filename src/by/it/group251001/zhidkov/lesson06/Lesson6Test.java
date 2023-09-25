@@ -16,6 +16,7 @@ public class Lesson6Test {
         int result=instance.getSeqSize(stream);
         boolean ok=(result==3);
         assertTrue("A failed", ok);
+
     }
 
 

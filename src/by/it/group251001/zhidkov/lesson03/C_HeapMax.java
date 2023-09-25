@@ -83,6 +83,7 @@ public class C_HeapMax {
             siftDown(heap.size() - 1);
         }
         Long extractMax() { // извлечение и удаление максимального элемента
+
             long result = heap.get(0); // сохраняем значение максимального элемента
             heap.set(0, heap.remove(heap.size() - 1)); // заменяем корень кучи последним элементом и удаляем его
             siftUp(0); // просеиваем корень вниз

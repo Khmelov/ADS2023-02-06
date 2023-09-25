@@ -43,7 +43,6 @@ public class C_GreedyKnapsack {
             return Double.compare(costPerUnitOfWeightOther, costPerUnitOfWeight);
         }
     }
-
     // Расчет общей стоимости рюкзака
     double calc(File source) throws FileNotFoundException {
         Scanner input = new Scanner(source);

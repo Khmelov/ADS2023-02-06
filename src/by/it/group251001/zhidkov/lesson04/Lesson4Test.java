@@ -20,6 +20,7 @@ public class Lesson4Test {
         StringBuilder sb=new StringBuilder();
         for (int index:result){
             sb.append(index).append(" ");
+
         }
         boolean ok=sb.toString().trim().equals("3 1 -1 1 -1");
         assertTrue("A failed", ok);

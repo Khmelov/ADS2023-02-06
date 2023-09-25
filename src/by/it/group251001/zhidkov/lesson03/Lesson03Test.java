@@ -21,6 +21,7 @@ public class Lesson03Test {
 
     @Test
     public void A() throws Exception {
+
         String root = System.getProperty("user.dir") + "/src/";
         File f = new File(root + "by/it/a_khmelev/lesson03/dataHuffman.txt");
         by.it.group251001.zhidkov.lesson03.A_Huffman instance = new A_Huffman();

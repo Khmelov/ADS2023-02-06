@@ -37,7 +37,6 @@ public class A_VideoRegistrator {
                 result.add(temp);
             }
         }
-
         return result; // Возвращение списка с регистрированными временными метками начала событий
     }
 }

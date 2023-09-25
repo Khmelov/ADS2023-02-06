@@ -7,7 +7,8 @@ import java.util.Scanner;
 
 public class B_Huffman {
 
-    String decode(File file) throws FileNotFoundException {
+    String decode(File file) throws FileNotFoundException
+    {
         StringBuilder result = new StringBuilder();
         Scanner scanner = new Scanner(file);
         // Чтение количества различных букв и размера закодированной строки

@@ -38,6 +38,7 @@ public class C_QSortOptimized {
         int stop;
         Segment(int start, int stop){
             this.start = start;
+
             this.stop = stop;
         }
         @Override
@@ -49,6 +50,7 @@ public class C_QSortOptimized {
 
     int[] getAccessory2(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
+
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         //число отрезков отсортированного массива
