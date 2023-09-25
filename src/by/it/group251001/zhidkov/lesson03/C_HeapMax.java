@@ -58,7 +58,6 @@ public class C_HeapMax {
             int rightChild = 2 * i + 2; // индекс правого потомка
             int largestChild = i; // индекс наибольшего потомка
             boolean flg = true;
-
             while (flg) {
                 if (leftChild < heap.size() && heap.get(leftChild) > heap.get(largestChild)) // если левый потомок больше наибольшего
                     largestChild = leftChild;

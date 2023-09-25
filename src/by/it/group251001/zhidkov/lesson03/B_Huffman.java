@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class B_Huffman {
-
     String decode(File file) throws FileNotFoundException
     {
         StringBuilder result = new StringBuilder();
