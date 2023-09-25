@@ -35,7 +35,6 @@ public class A_LIS {
         Scanner scanner = new Scanner(stream); // Создание объекта Scanner для чтения данных из входного потока
         int n = scanner.nextInt(); // Чтение целочисленного значения из входного потока и сохранение его в переменной n
         int[] m = new int[n]; // Объявление массива целых чисел m размером n
-
         for (int i = 0; i < n; i++) {
             m[i] = scanner.nextInt(); // Чтение n чисел из входного потока и сохранение их в массиве m
         }
