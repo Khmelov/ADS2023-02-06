@@ -26,7 +26,6 @@ import java.util.Scanner;
     Sample Output:
     3
 */
-
 public class B_LongDivComSubSeq {
     int getDivSeqSize(InputStream stream) throws FileNotFoundException {
         Scanner scanner = new Scanner(stream); // Создание объекта Scanner для чтения данных из входного потока

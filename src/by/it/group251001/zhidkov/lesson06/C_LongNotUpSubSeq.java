@@ -71,7 +71,6 @@ public class C_LongNotUpSubSeq {
                 max = i; // Обновление значения max на i
             }
         }
-
         answer = new int[result]; // Инициализация массива answer размером result
         int i = result - 1;
 
