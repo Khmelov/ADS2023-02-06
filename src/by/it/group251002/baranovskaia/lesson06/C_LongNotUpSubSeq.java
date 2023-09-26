@@ -51,34 +51,50 @@ public class C_LongNotUpSubSeq {
         }
         //тут реализуйте логику задачи методами динамического программирования (!!!)
         int result = 0;
-        int[] p = new int[m.length];
-        int[] v = new int[m.length + 1];
-        int l = 0;
-        int lo, hi, mid, newl;
-        for(int i = 0; i < m.length; i++) {
-            lo = 1;
-            hi = l;
-            while (lo <= hi) {
-                mid = (lo + hi + 1) / 2;
-                if(m[v[mid]] >= m[i])
-                    lo = mid + 1;
-                else
-                    hi = mid - 1;
-            }
-            newl = lo;
-            p[i] = v[newl - 1];
-            v[newl] = i;
-            if(newl > l)
-                l = newl;
-        }
-        int[] s = new int[l];
-        int k = v[l];
-        for(int i = l - 1; i >= 0; i--) {
-            s[i] = m[k];
-            k = p[k];
-        }
-        result = s.length;
 
+        int[] maxSequences = new int[n]; //Array contains maximum length of sequences, ended by element with corresponding index
+        int[] previousSequenceElements = new int[n]; //Each element of array contains index of the largest previous sequence element
+        int[] indexesPrint = new int[n]; //Contains final indexes of sequence to output in reverse order
+        int lastMaxSequenceElementIndex = 0;
+
+        for (int i = 0; i < n; ++i) {
+            maxSequences[i] = 1; //Minimum length of sequence
+            for (int j = 0; j < i; ++j) {
+
+                //If last sequence element greater or equal to current - update maximum length of sequence ended by current element if it's reasonable
+                if (m[j] >= m[i] && maxSequences[j] + 1 > maxSequences[i]) {
+                    maxSequences[i] = maxSequences[j] + 1;
+                    previousSequenceElements[i] = j;
+                }
+
+            }
+
+            //If we got bigger sequence - update maximum size and update last element of the largest sequence
+            if (result < maxSequences[i]) {
+                result = maxSequences[i];
+                lastMaxSequenceElementIndex = i;
+            }
+        }
+
+        //Here array with indexes to output is filled in reverse order
+        int count = 0;
+        int i = lastMaxSequenceElementIndex;
+        while (previousSequenceElements[i] > 0 || i != 0){
+            indexesPrint[count] = i + 1;
+            i = previousSequenceElements[i];
+            ++count;
+        }
+        if (previousSequenceElements[i] == 0 && i == 0){
+            indexesPrint[count] = 1;
+            ++count;
+        }
+
+        //Print indexes
+        for (int j = count - 1; j >= 0; --j)
+            System.out.print(indexesPrint[j] + " ");
+
+
+        System.out.println("\n");
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;

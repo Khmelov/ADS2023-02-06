@@ -39,26 +39,26 @@ public class A_Knapsack {
     int getMaxWeight(InputStream stream ) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         Scanner scanner = new Scanner(stream);
-        int w = scanner.nextInt();
-        int n = scanner.nextInt();
-        int[] G = new int[n];
+        int w=scanner.nextInt();
+        int n=scanner.nextInt();
+        int gold[]=new int[n];
         for (int i = 0; i < n; i++) {
-            G[i] = scanner.nextInt();
+            gold[i]=scanner.nextInt();
         }
 
-        int[] maxW = new int[w + 1];
+        //Array represents maximum weight of gold we can take with knapsack with capacity of corresponding index
+        int[] maximumWeights = new int[w + 1];
 
-        for (int i = 1; i <= w; i++) {
-            for (int j = 0; j < n; j++) {
-                if (G[j] <= i) {
-                    maxW[i] = Math.max(maxW[i], G[j] + maxW[i - G[j]]);
-                }
-            }
-        }
+        for (int i = 0; i  < w + 1; ++i) //Fill the next cell with maximum gold weight
+            for (int j = 0; j < n; ++j) //Watch all gold bars and choose the best one
+                if (gold[j] <= i) //If we have space for gold bar
+                    //Choose either maximumWeights[i], if it's already contains maximum weight, or maximum weight with space that left + new gold with checked capacity
+                    maximumWeights[i] = Math.max(maximumWeights[i], maximumWeights[i - gold[j]] + gold[j]);
+
+        int result = maximumWeights[w]; //As a result we have maximum gold weight with knapsack capacity in the last cell
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return maxW[w];
+        return result;
     }
-
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
