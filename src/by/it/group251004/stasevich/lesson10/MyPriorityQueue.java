@@ -29,14 +29,14 @@ public class MyPriorityQueue <E extends Comparable<E>> implements Queue<E> {
     void siftDown(int index) { //просеивание вверх
         int left = 2 * index + 1;
         int right = 2 * index + 2;
-        int largest = left;
-        if (right < size && heap[right].compareTo(heap[largest]) < 0)
-            largest = right;
-        if (largest < size && heap[largest].compareTo(heap[index]) < 0) {
+        int larg = left;
+        if (right < size && heap[right].compareTo(heap[larg]) < 0)
+            larg = right;
+        if (larg < size && heap[larg].compareTo(heap[index]) < 0) {
             E temp = heap[index];
-            heap[index] = heap[largest];
-            heap[largest] = temp;
-            siftDown(largest);
+            heap[index] = heap[larg];
+            heap[larg] = temp;
+            siftDown(larg);
         }
     }
 
