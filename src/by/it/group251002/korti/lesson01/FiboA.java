@@ -19,7 +19,7 @@ public class FiboA {
         //вычисление чисел фибоначчи медленным методом (рекурсией)
         fibo = new FiboA();
         n = 34;
-        System.out.printf("slowA(%d)=%d \n\t time=%d \n\n", n, fibo.slowA(n), fibo.time());
+        System.out.printf("slowA(%d)=%d \n\t time=%d \n\n", n, fibo.calc(n), fibo.time());
     }
 
     private long time() {
@@ -37,16 +37,15 @@ public class FiboA {
     }
 
 
-    BigInteger slowA(Integer n) {
-        //рекурсия
-        //здесь нужно реализовать вариант без ограничения на размер числа,
-        //в котором код совпадает с математическим определением чисел Фибоначчи
-        //время O(2^n)
-        if (n==0) return BigInteger.ZERO;
-        if (n==1) return BigInteger.ONE;
-        return slowA(n-1).add(slowA(n-2));
-    }
+    public class Test {
+        public static void main(String[] args){
+            int[][] x = new int[2][5];
+            int[][] y = new int[2][5];
+            System.out.println(x[1][3]);
+            System.arraycopy(x, 0, y, 0, x.length);
+            x[1][3] = 55;
+            System.out.println(y[1][3]);
 
 
-}
+}}}
 
