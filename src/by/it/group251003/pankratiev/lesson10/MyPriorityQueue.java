@@ -145,10 +145,11 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
+        int prevSize = size;
         for (E element : c)
             offer(element);
 
-        return true;
+        return prevSize != size;
     }
 
     @Override
