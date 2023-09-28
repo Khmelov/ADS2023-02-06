@@ -11,7 +11,7 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
         resize(arr.length);
     }
     private void resize(int newSize) {
-        E[] newArr = (E[]) new Comparable[newSize * (3 / 2) + 1];
+        E[] newArr = (E[]) new Comparable[newSize * 3 / 2 + 1];
         System.arraycopy(arr, 0, newArr, 0, size);
         arr = newArr;
     }
