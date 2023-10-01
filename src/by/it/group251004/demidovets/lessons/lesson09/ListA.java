@@ -4,7 +4,7 @@ import java.util.*;
 
 public class ListA<E> implements List<E> {
 
-    private E[] array = (E[]) new Object[]{};
+    private E[] arr = (E[]) new Object[]{};
     private int list_size = 0;
 
     //Создайте аналог списка БЕЗ использования других классов СТАНДАРТНОЙ БИБЛИОТЕКИ
@@ -14,7 +14,7 @@ public class ListA<E> implements List<E> {
     public String toString() {
         StringBuilder str = new StringBuilder("[");
         for (int i = 0; i < list_size; i++) {
-            str.append(array[i]);
+            str.append(arr[i]);
             if (i + 1 != list_size) {
                 str.append(", ");
             }
@@ -25,17 +25,17 @@ public class ListA<E> implements List<E> {
 
     @Override
     public boolean add(E e) {
-        if (list_size == array.length) {
-            array = Arrays.copyOf(array, (list_size * 3 / 2 + 1));
+        if (list_size == arr.length) {
+            arr = Arrays.copyOf(arr, (list_size * 3 / 2 + 1));
         }
-        array[list_size++] = e;
+        arr[list_size++] = e;
         return true;
     }
 
     @Override
     public E remove(int index) {
-        E elem = array[index];
-        System.arraycopy(array, index + 1, array, index, list_size - 1 - index);
+        E elem = arr[index];
+        System.arraycopy(arr, index + 1, arr, index, list_size - 1 - index);
         list_size--;
         return elem;
     }
