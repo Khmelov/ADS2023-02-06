@@ -62,23 +62,23 @@ public class A_BinaryFind {
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
 
-        //размер отсортированного массива
-        int n = scanner.nextInt();
-        //сам отсортированный массива
-        int[] a = new int[n];
-        for (int i = 1; i <= n; i++) {
-            a[i - 1] = scanner.nextInt();
-        }
+            //размер отсортированного массива
+            int n = scanner.nextInt();
+            //сам отсортированный массива
+            int[] a = new int[n];
+            for (int i = 1; i <= n; i++) {
+                a[i - 1] = scanner.nextInt();
+            }
 
-        //размер массива индексов
-        int k = scanner.nextInt();
-        int[] result = new int[k];
-        for (int i = 0; i < k; i++) {
-            int value = scanner.nextInt();
-            //тут реализуйте бинарный поиск индекса
-            int index = binarySearch(a, value);
-            if (index == -1) result[i] = -1;
-            else result[i] = index + 1;
+            //размер массива индексов
+            int k = scanner.nextInt();
+            int[] result = new int[k];
+            for (int i = 0; i < k; i++) {
+                int value = scanner.nextInt();
+                //тут реализуйте бинарный поиск индекса
+                int index = binarySearch(a, value);
+                if (index == -1) result[i] = -1;
+                else result[i] = index + 1;
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
