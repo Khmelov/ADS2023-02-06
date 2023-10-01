@@ -36,7 +36,7 @@ public class ListA<E> implements List<E> {
     public E remove(int index) {
         E elem = arr[index];
         System.arraycopy(arr, index + 1, arr, index, list_size - 1 - index);
-        list_size--;
+        list_size -= 1;
         return elem;
     }
 
