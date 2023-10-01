@@ -43,7 +43,6 @@ public class ListC<E> implements List<E> {
         return list_size;
     }
 
-
     @Override
     public void add(int i, E element) {
         if (list_size == arr.length) {
