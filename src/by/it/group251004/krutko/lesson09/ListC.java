@@ -162,6 +162,8 @@ public class ListC<E> implements List<E> {
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
+        if (c.isEmpty())
+            return false;
         for (E item : c)
             add(item);
         return true;
