@@ -4,6 +4,15 @@ import java.util.*;
 
 public class MyLinkedList<T> implements Deque<T> {
 
+    public static void main(String[] args) {
+        MyLinkedList<Integer> l = new MyLinkedList<>();
+        Random r = new Random();
+        for (int i = 0; i < 100; i++) {
+            l.add(r.nextInt(100));
+        }
+        System.out.println(l);
+    }
+
     private int size;
     private Node<T> first;
     private Node<T> last;
@@ -24,6 +33,11 @@ public class MyLinkedList<T> implements Deque<T> {
 
     @Override
     public String toString() {
+
+        if (this.isEmpty()) {
+            return "[]";
+        }
+
         StringBuilder sb = new StringBuilder().append("[");
         Node<T> curr;
         for (curr = first; curr.next != null; curr = curr.next) {
@@ -132,7 +146,6 @@ public class MyLinkedList<T> implements Deque<T> {
     private void unlink(Node<T> n) {
         Node<T> next = n.next;
         Node<T> prev = n.prev;
-        T item = n.item;
 
         if (prev == null) {
             first = next;
@@ -188,23 +201,27 @@ public class MyLinkedList<T> implements Deque<T> {
 
 
     private void linkFirst(T item) {
+        Node<T> f = first;
         Node<T> newNode = new Node<>(null, item, first);
-        if (first == null) {
+        first = newNode;
+        if (f == null) {
             last = newNode;
         }
         else {
-            first.prev = newNode;
+            f.prev = newNode;
         }
         size++;
     }
 
     private void linkLast(T item) {
-        Node<T> newNode = new Node<>(last, item, null);
-        if (last == null) {
+        Node<T> l = last;
+        Node<T> newNode = new Node<>(l, item, null);
+        last = newNode;
+        if (l == null) {
             first = newNode;
         }
         else {
-            last.next = newNode;
+            l.next = newNode;
         }
         size++;
     }
