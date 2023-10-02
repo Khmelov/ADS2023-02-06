@@ -4,15 +4,6 @@ import java.util.*;
 
 public class MyLinkedList<T> implements Deque<T> {
 
-    public static void main(String[] args) {
-        MyLinkedList<Integer> l = new MyLinkedList<>();
-        Random r = new Random();
-        for (int i = 0; i < 100; i++) {
-            l.add(r.nextInt(100));
-        }
-        System.out.println(l);
-    }
-
     private int size;
     private Node<T> first;
     private Node<T> last;
@@ -59,6 +50,23 @@ public class MyLinkedList<T> implements Deque<T> {
             throw new NoSuchElementException();
         }
         return unlinkFirst(f);
+    }
+
+    public T remove(int index) {
+
+        if (index >= size) {
+            throw new NoSuchElementException();
+        }
+
+        Node<T> curr = first;
+        for (int i = 0; i < index; i++) {
+            curr = curr.next;
+        }
+
+        T val = curr.item;
+        unlink(curr);
+
+        return val;
     }
 
     @Override
