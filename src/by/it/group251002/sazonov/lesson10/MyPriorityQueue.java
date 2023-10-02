@@ -4,11 +4,11 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Queue;
 
-public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
+public class MyPriorityQueue<E> implements Queue<E> {
 
     static private int minCapacity = 1;
     private int size = 0;
-    private E[] arr = (E[]) new Comparable[minCapacity];
+    private E[] arr = (E[]) new Object[minCapacity];
 
     private int parent(int index) {
         return (index - 1) / 2;
@@ -29,10 +29,10 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
         }
 
         int goToChild = l;
-        if (r < size && arr[r].compareTo(arr[l]) < 0) {
+        if (r < size && ((Comparable<E>)arr[r]).compareTo(arr[l]) < 0) {
             goToChild = r;
         }
-        if (arr[goToChild].compareTo(arr[index]) >= 0) {
+        if (((Comparable<E>)arr[goToChild]).compareTo(arr[index]) >= 0) {
             return ;
         }
 
@@ -49,7 +49,7 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
             return;
         }
         int parentInd = parent(index);
-        if (arr[parentInd].compareTo(arr[index]) < 0) {
+        if (((Comparable<E>)arr[parentInd]).compareTo(arr[index]) < 0) {
             return ;
         }
 
@@ -163,14 +163,12 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        E[] a = (E[]) new Object[c.size()];
-        a = c.toArray(a);
-        for(int i = 0; i < a.length; i++) {
-            if (!contains(a[i])) {
+        E[] newArr = (E[]) c.toArray();
+        for (int i = 0; i < c.size(); i++) {
+            if (!contains(newArr[i])) {
                 return false;
             }
         }
-
         return true;
     }
 
