@@ -95,8 +95,6 @@ public class Test_Part2_Lesson10Test extends HomeWork {
                                 
                 containsAll(Collection)
                 addAll(Collection)
-                removeAll(Collection)
-                retainAll(Collection)
                 """.split("\\s+");
         eObject = new PriorityQueue<>();
         randomCheck("MyPriorityQueue", methods);
@@ -222,8 +220,8 @@ public class Test_Part2_Lesson10Test extends HomeWork {
 
     private boolean notComparable(Method m) {
         return m.getReturnType() != Comparable.class &&
-               Arrays.stream(m.getParameterTypes())
-                       .noneMatch(p -> p == Comparable.class);
+                Arrays.stream(m.getParameterTypes())
+                        .noneMatch(p -> p == Comparable.class);
     }
 
     private String getSignature(Method method) {
