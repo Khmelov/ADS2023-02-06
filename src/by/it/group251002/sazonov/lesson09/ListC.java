@@ -90,6 +90,9 @@ public class ListC<E> implements List<E> {
     @Override
     public void clear() {
         size = 0;
+        for(int i = 0; i < size; i++) {
+            arr[i] = null;
+        }
         arr = (E[]) new Object[]{};
     }
 
