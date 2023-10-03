@@ -40,36 +40,32 @@ import java.util.Scanner;
 public class B_EditDist {
 
 
-    int getMin(int i, int j, int[][] matr) {
-        int min = Math.min(matr[i - 1][j], matr[i][j - 1]);
-        min = Math.min(min, matr[i - 1][j - 1]);
-        return min;
-    }
-    int getCount(String one, String two, int i, int j, int[][] matr) {
-        if(one.charAt(i - 1) == two.charAt(j - 1))
-            return matr[i - 1][j - 1];
-        else
-            return 1 + getMin(i, j, matr);
-    }
     int getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        int[][] matr = new int[one.length() + 1][two.length() + 1];
-        for(int i = 0; i < one.length() + 1; i++) {
-            matr[i][0] = i;
-        }
-        for(int i = 0; i < two.length() + 1; i++) {
-            matr[0][i] = i;
-        }
-        for(int i = 1; i < one.length() + 1; i++) {
-            for(int j = 1; j < two.length() + 1; j++) {
-                matr[i][j] = getCount(one, two, i, j, matr);
+
+        final int N = one.length() + 1;
+        final int M = two.length() + 1;
+        int[][] distancesTable = new int[N][M];
+
+        //Fill 1-st raw and 1-st column with string indexes
+        for (int i = 0; i < N; ++i)
+            distancesTable[i][0] = i;
+        for (int j = 0; j < M; ++j)
+            distancesTable[0][j] = j;
+
+        for (int i = 1; i < N; ++i)
+            for (int j = 1; j < M; ++j) {
+                int ins = distancesTable[i][j - 1] + 1; //If insert element - take left one form the table + 1
+                int del = distancesTable[i - 1][j] + 1; //If delete element - take one above from the table + 1
+                int sub = distancesTable[i - 1][j - 1] + ((one.charAt(i-1) == two.charAt(j-1)) ? 0 : 1); //If change element - take one from diagonal + 1, if it's not the same element
+                distancesTable[i][j] = Math.min(Math.min(ins, del), sub); //Take minimum of values above
             }
-        }
-        int result = matr[one.length()][two.length()];
+
+        int result = distancesTable[N - 1][M - 1];
+
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
-
 
 
     public static void main(String[] args) throws FileNotFoundException {
