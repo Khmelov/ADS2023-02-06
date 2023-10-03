@@ -23,3 +23,5 @@
 
                 containsAll(Collection<E> c)
                 addAll(Collection<E> c)
+                removeAll(Collection<E> c)
+                retainAll(Collection<E> c)
