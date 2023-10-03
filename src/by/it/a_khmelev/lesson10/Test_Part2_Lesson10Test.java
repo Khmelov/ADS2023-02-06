@@ -54,6 +54,30 @@ public class Test_Part2_Lesson10Test extends HomeWork {
     }
 
     @Test(timeout = 5000)
+    public void testTaskB() throws Exception {
+        String[] methods = """
+                toString()
+                add(Object)
+                remove(int)
+                remove(Object)
+                size()
+                                
+                addFirst(Object)
+                addLast(Object)
+                                
+                element()
+                getFirst()
+                getLast()
+                                
+                poll()
+                pollFirst()
+                pollLast()
+                """.split("\\s+");
+        eObject = new LinkedList<>();
+        randomCheck("MyLinkedList", methods);
+    }
+
+    @Test(timeout = 5000)
     public void testTaskC() throws Exception {
         String[] methods = """
                 toString()
@@ -80,33 +104,9 @@ public class Test_Part2_Lesson10Test extends HomeWork {
         // Подсказка! Вывод образцовой коллекции должен быть абсолютно идентичен вашей.
         // Все методы имеют жестко заданное поведение, а уровень C не удается пройти скорее всего
         // из-за того, что методы removeAll(Collection) и retainAll(Collection) вами сделаны наивно
-        // и имеют скрость O(n log n). Сторонним эффектом такого решения будет отличие в порядке элементов.
+        // и имеют скорость O(n log n). Сторонним эффектом такого решения будет отличие в порядке элементов.
         // Корректно написанные removeAll и retainAll должны работать за O(n), считая, что операции contains
         // в переданной коллекции работают за O(1). See https://en.wikipedia.org/wiki/Heapsort
-    }
-
-    @Test(timeout = 5000)
-    public void testTaskB() throws Exception {
-        String[] methods = """
-                toString()
-                add(Object)
-                remove(int)
-                remove(Object)
-                size()
-                                
-                addFirst(Object)
-                addLast(Object)
-                                
-                element()
-                getFirst()
-                getLast()
-                                
-                poll()
-                pollFirst()
-                pollLast()
-                """.split("\\s+");
-        eObject = new LinkedList<>();
-        randomCheck("MyLinkedList", methods);
     }
 
     private void randomCheck(String aClassName, String... methods) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
