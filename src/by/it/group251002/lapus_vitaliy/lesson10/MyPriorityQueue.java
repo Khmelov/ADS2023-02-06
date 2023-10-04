@@ -49,6 +49,13 @@ public class MyPriorityQueue<E> implements Queue<E> {
         return arr;
     }
 
+    E[] heapify(E[] arr, int size)
+    {
+        for (int i = size / 2 - 1; i >= 0; i--)
+            arr=siftdown(arr, i, size);
+        return arr;
+    }
+
     private E[] elements = (E[]) new Object[]{};
     private int size = 0;
 
@@ -172,11 +179,15 @@ public class MyPriorityQueue<E> implements Queue<E> {
     @Override
     public boolean removeAll(Collection<?> c) {
         int lastSize=size;
-        E[] bufAr = (E[]) new Object[c.size()];
-        bufAr=c.toArray(bufAr);
-        for (int i = 0; i < bufAr.length; i++) {
-            while(remove(bufAr[i]));
+        for (int i = size-1; i > -1; i--) {
+            if((c.contains(elements[i]))) {
+                E elem = elements[i];
+                System.arraycopy(elements, i+1, elements, i, size-i-1);
+                size--;
+                elements[size] = null;
+            }
         }
+        heapify(elements,size);
         return lastSize!=size;
     }
 
@@ -184,9 +195,14 @@ public class MyPriorityQueue<E> implements Queue<E> {
     public boolean retainAll(Collection<?> c) {
         int lastSize=size;
         for (int i = size-1; i > -1; i--) {
-            if(!(c.contains(elements[i])))
-                remove(i);
+            if(!(c.contains(elements[i]))) {
+                E elem = elements[i];
+                System.arraycopy(elements, i+1, elements, i, size-i-1);
+                size--;
+                elements[size] = null;
+            }
         }
+        heapify(elements,size);
         return lastSize!=size;
     }
 
