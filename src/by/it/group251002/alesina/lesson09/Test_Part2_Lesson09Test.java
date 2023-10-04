@@ -31,6 +31,7 @@ public class Test_Part2_Lesson09Test extends HomeWork {
 
     private Map<Method, String> cache = new HashMap<>();
 
+
     @Test(timeout = 5000)
     public void testTaskA() throws Exception {
         String[] methods = """

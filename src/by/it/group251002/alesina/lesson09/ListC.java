@@ -165,6 +165,7 @@ public class ListC<E> implements List<E> {
 
     }
 
+
     @Override
     public boolean containsAll(Collection<?> c) {
         E[] CollArr = (E[]) c.toArray();

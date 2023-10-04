@@ -62,6 +62,7 @@ public class ListA<E> implements List<E> {
         return Element;
     }
 
+
     @Override
     public int size() {
         return ListSize;

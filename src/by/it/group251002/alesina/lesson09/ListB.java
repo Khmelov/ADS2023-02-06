@@ -120,6 +120,7 @@ public class ListB<E> implements List<E> {
     }
 
 
+
     @Override
     public void clear() {
         for(int i=0;i<ListSize;i++){
