@@ -29,6 +29,14 @@ public class MyPriorityQueue<E> implements Queue<E> {
             index=(index-1)>>1 ;
         }
     }
+
+    private void heapify() {
+        int i = (size - 1) / 2;
+        while (i >=0) {
+            siftDown(i);
+            i--;
+        }
+    }
     private int leftChild(int value){
         return value*2+1;
     }
@@ -112,7 +120,7 @@ public class MyPriorityQueue<E> implements Queue<E> {
         elems[size]=e;
         siftUp(size);
         size++;
-        return false;
+        return true;
     }
 
     @Override
@@ -151,25 +159,29 @@ public class MyPriorityQueue<E> implements Queue<E> {
     @Override
     public boolean removeAll(Collection<?> c) {
         int prevsize=size;
-        for(Object o:c){
-            while(contains(o)){
-                remove(o);
+        int i=0,j=0;
+        while(i!=prevsize){
+            if(!c.contains(elems[i])) {
+                elems[j++] = elems[i];
             }
+            i++;
         }
+        size=j;
+        heapify();
         return prevsize!=size;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        int prevSize=size,i=0;
-        while(i!=size){
-            if(!c.contains(elems[i])){
-                remove(elems[i]);
+        int prevSize=size,j=0,i=0;
+        while(i!=prevSize){
+            if(c.contains(elems[i])){
+                elems[j++]=elems[i];
             }
-            else{
-                i++;
-            }
+            i++;
         }
+        size=j;
+        heapify();
         return prevSize!=size;
     }
 
