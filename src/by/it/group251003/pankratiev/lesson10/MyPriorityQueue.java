@@ -56,6 +56,10 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
             index = parentIndex;
         }
     }
+    private void heapify() {
+        for (int i = (size / 2) - 1; i >= 0; i--)
+            siftDown(i);
+    }
     private void remove(int index) {
         if (isInvalidIndex(index))
             throw new IndexOutOfBoundsException("Index out of bounds");
@@ -145,35 +149,56 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        int prevSize = size;
-        for (E element : c)
-            offer(element);
+        if (c.isEmpty())
+            return false;
 
-        return prevSize != size;
+        int newSize = size + c.size();
+        if (newSize > arr.length)
+            resize(newSize);
+
+        for (E e : c) {
+            arr[size++] = e;
+            siftUp(size - 1);
+        }
+
+        heapify();
+        return true;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        boolean result = false;
-        for (int i = size - 1; i >= 0; i--)
+        final int prevSize = size;
+        for (int i = 0, j = 0; j < size; i++) {
             if (c.contains(arr[i])) {
-                remove(i);
-                result = true;
+                size--;
+                arr[i] = null;
             }
+            else {
+                arr[j] = arr[i];
+                j++;
+            }
+        }
 
-        return result;
+        heapify();
+        return prevSize != size;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        boolean result = false;
-        for (int i = size - 1; i >= 0; i--)
+        final int prevSize = size;
+        for (int i = 0, j = 0; j < size; i++) {
             if (!c.contains(arr[i])) {
-                remove(i);
-                result = true;
+                size--;
+                arr[i] = null;
             }
+            else {
+                arr[j] = arr[i];
+                j++;
+            }
+        }
 
-        return result;
+        heapify();
+        return prevSize != size;
     }
 
     @Override
