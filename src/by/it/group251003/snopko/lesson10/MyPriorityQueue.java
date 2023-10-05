@@ -18,7 +18,7 @@ public class MyPriorityQueue <E extends Comparable<E>>  implements Queue<E> {
     private void SiftDown(int index){
         int indexChild = index * 2 + 1;
 
-        if((indexChild + 1) < size && data[indexChild + 1].compareTo(data[indexChild]) <= 0){
+        if((indexChild + 1) < size && data[indexChild + 1].compareTo(data[indexChild]) < 0){
             indexChild++;
         }
         if (indexChild < size && data[indexChild].compareTo(data[index]) < 0) {
@@ -107,6 +107,7 @@ public class MyPriorityQueue <E extends Comparable<E>>  implements Queue<E> {
         for (int i = 0; i < size; i++) {
             if (Objects.equals(o, data[i])) {
                 data[i] = data[--size];
+                data[size] = null;
                 SiftDown(i);
                 return true;
             }
@@ -118,7 +119,7 @@ public class MyPriorityQueue <E extends Comparable<E>>  implements Queue<E> {
     public boolean containsAll(Collection<?> c) {
         for (Object item : c) {
             if (!contains(item)) {
-                ;
+                return false;
             }
         }
         return true;
@@ -126,34 +127,63 @@ public class MyPriorityQueue <E extends Comparable<E>>  implements Queue<E> {
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
+        boolean changed = false;
         for (E i:c){
             add(i);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        for (Object i:c){
-            remove(i);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        boolean changed = false;
-        for (int i = size - 1; i >= 0; i--){
-            if(!c.contains(data[i])){
-                remove(data[i]);
-                changed = true;
-            }
+            changed = true;
         }
         return changed;
     }
 
     @Override
+    public boolean removeAll(Collection<?> c) {
+        boolean changed = false;
+        int i = 0;
+        int index = 0;
+        while (index < size) {
+            if (c.contains(data[i])) {
+                i++;
+                size--;
+                changed = true;
+            } else {
+                data[index] = data[i];
+                index++;
+                i++;
+            }
+        }
+        for (int k = size; k < data.length; k++){
+            data[k] = null;
+        }
+        for (int j = size / 2; j >= 0; j--)
+            SiftDown(j);
+        return changed;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        boolean changed = false;
+        int i = 0;
+        int index = 0;
+        while (index < size){
+            if (!c.contains(data[i])) {
+                i++;
+                size--;
+                changed = true;
+            } else {
+                data[index] = data[i];
+                index++;
+                i++;
+            }
+        }
+        for (int j = size / 2; j >= 0; j--)
+            SiftDown(j);
+        return changed;
+    }
+
+    @Override
     public void clear() {
+        for (int i = 0; i < size; i++)
+            data[i] = null;
         size = 0;
     }
 
