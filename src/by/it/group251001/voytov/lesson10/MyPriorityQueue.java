@@ -2,11 +2,16 @@ package by.it.group251001.voytov.lesson10;
 
 import java.util.*;
 
+@SuppressWarnings("unchecked")
 public class MyPriorityQueue<T> implements Queue<T> {
+
+    private static final int DEFAULT_CAPACITY = 10;
+
     private Object[] queue;
     private int size;
+
     public MyPriorityQueue() {
-        queue = new Object[10];
+        queue = new Object[DEFAULT_CAPACITY];
     }
 
     @Override
@@ -78,8 +83,9 @@ public class MyPriorityQueue<T> implements Queue<T> {
             size--;
             T last = (T) queue[size];
             queue[size] = null;
+            queue[0] = last;
             if (size > 0) {
-                siftDown(0, last);
+                siftDown(0);
             }
         }
         return element;
@@ -125,24 +131,38 @@ public class MyPriorityQueue<T> implements Queue<T> {
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        boolean modified = false;
-        for (Object o : c) {
-            if (remove(o)) {
-                modified = true;
+        Object[] newData = new Object[size];
+        int newSize = 0;
+        for (int i = 0; i < size; i++) {
+            if (!c.contains(queue[i])) {
+                newData[newSize] = queue[i];
+                newSize++;
             }
         }
+        boolean modified = newSize != size;
+        queue = newData;
+        size = newSize;
+        for (int i = size / 2; i >= 0; i--)
+            siftDown(i);
         return modified;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        boolean modified = false;
-        for (int i = size - 1; i >= 0; i--) {
-            if (!c.contains(queue[i])) {
-                remove(queue[i]);
-                modified = true;
+        Object[] newData = new Object[size];
+        int newSize = 0;
+        for (int i = 0; i < size; i++) {
+            if (c.contains(queue[i])) {
+                newData[newSize] = queue[i];
+                newSize++;
             }
         }
+
+        boolean modified = newSize != size;
+        queue = newData;
+        size = newSize;
+        for (int i = size / 2; i >= 0; i--)
+            siftDown(i);
         return modified;
     }
 
@@ -178,29 +198,33 @@ public class MyPriorityQueue<T> implements Queue<T> {
         queue[index] = item;
     }
 
-    private void siftDown(int index, T item) {
+    private void siftDown(int index) {
 
-        Comparable<? super T> comparable = (Comparable<? super T>) item;
-        while (index < size / 2) {
-            int childIndex = 2 * index + 1;
-            Object leastChild = queue[childIndex];
+        int left = 2 * index + 1;
+        int right = left + 1;
 
-            if (childIndex + 1 < size &&
-                    ((Comparable<? super T>) queue[childIndex]).compareTo((T) queue[childIndex + 1]) > 0) {
-                childIndex = childIndex + 1;
-                leastChild = queue[childIndex];
-            }
+        int largest = index;
 
-            if (comparable.compareTo((T) leastChild) <= 0) {
-                break;
-            }
-
-            queue[index] = leastChild;
-            index = childIndex;
+        if (left < size && ((Comparable<? super T>) queue[left]).compareTo((T) queue[index]) < 0) {
+            largest = left;
         }
 
-        queue[index] = item;
+        if (right < size && ((Comparable<? super T>) queue[right]).compareTo((T) queue[largest]) < 0) {
+            largest = right;
+        }
 
+        if (largest != index) {
+            swap(index, largest);
+            siftDown(largest);
+        }
+
+
+    }
+
+    private void swap(int index1, int index2) {
+        Object temp = queue[index1];
+        queue[index1] = queue[index2];
+        queue[index2] = temp;
     }
 
     //————————————————————
@@ -229,8 +253,9 @@ public class MyPriorityQueue<T> implements Queue<T> {
         size--;
         T last = (T) queue[size];
         queue[size] = null;
+        queue[index] = last;
         if (size > 0) {
-            siftDown(index, last);
+            siftDown(index);
         }
 
         return true;
