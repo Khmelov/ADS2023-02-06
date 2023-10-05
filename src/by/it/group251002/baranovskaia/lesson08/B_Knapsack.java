@@ -33,30 +33,32 @@ public class B_Knapsack {
         Scanner scanner = new Scanner(stream);
         int w=scanner.nextInt();
         int n=scanner.nextInt();
-        int[] G = new int[n];
+        int gold[]=new int[n];
         for (int i = 0; i < n; i++) {
-            G[i]=scanner.nextInt();
+            gold[i]=scanner.nextInt();
         }
 
-        int[][] maxW = new int[w + 1][n + 1];
+        //Each array cell with index i contains 1 if it's possible to fill knapsack in completely with gold bars we have
+        //if knapsack would have capacity of i, 0 otherwise
+        int[] arr = new int[w + 1];
 
-        for (int i = 0; i <= w; i++){
-            maxW[i][0] = 0;
-        }
-        for (int i = 0; i <= n; i++){
-            maxW[0][i] = 0;
-        }
+        arr[0] = 1; //With 0 knapsack capacity it's always possible to fill it in completely
 
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= w; j++) {
-                maxW[j][i] = maxW[j][i - 1];
-                if (G[i - 1] <= j){
-                    maxW[j][i] = Math.max(maxW[j][i], maxW[j - G[i - 1]][i - 1] + G[i - 1]);
-                }
+        for (int i = 0; i < gold.length; ++i) //All gold bars
+            for(int j = w; j >= gold[i]; --j) //All positions from max weight to weight of current gold bar
+                if (arr[j - gold[i]] == 1) //If we have space for new gold bar then set it in array
+                    arr[j] = 1;
+
+        //Watching from the end of array, first 1 we meet is our answer
+        int result = 0;
+        for(int i = w;  ; --i)
+            if (arr[i] > 0) {
+                result = i;
+                break;
             }
-        }
+
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return maxW[w][n];
+        return result;
     }
 
 

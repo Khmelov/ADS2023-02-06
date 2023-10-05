@@ -40,24 +40,39 @@ import java.util.Arrays;
 
 public class A_EditDist {
 
-    public static int Min(int... numbers) {
-        return Arrays.stream(numbers).min().orElse(Integer.MAX_VALUE);
-    }
+
     int getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        if(one.isEmpty()&&two.isEmpty())
-            return 0;
-        else if (one.isEmpty())
-            return two.length();
-        else if (two.isEmpty())
-            return one.length();
-        else {
-            int a = getDistanceEdinting(one.substring(1), two.substring(1)) + (one.charAt(0) == two.charAt(0) ? 0 : 1);
-            int b = getDistanceEdinting(one, two.substring(1)) + 1;
-            int c = getDistanceEdinting(one.substring(1), two) + 1;
-            //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-            return Min(a, b, c);
-        }
+
+        final int N = one.length() + 1;
+        final int M = two.length() + 1;
+        int[][] distancesTable = new int[N][M];
+
+        //Fill distancesTable with (-1)
+        for (int i = 0; i < N; ++i)
+            Arrays.fill(distancesTable[i], -1);
+
+        editDistTD(distancesTable, one, two, N - 1, M - 1);
+
+        int result = distancesTable[N - 1][M - 1];
+
+        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        return result;
+    }
+
+    private int editDistTD(int[][] distancesTable, String one, String two, int i, int j){
+        if (distancesTable[i][j] == -1) //If cell have to be filled
+            if (i == 0) // If it's 1-st raw, just fill it with string indexes[0..two.length()]
+                distancesTable[i][j] = j;
+            else if (j == 0) // If it's 1-st raw, just fill it with string indexes[0..one.length()]
+                distancesTable[i][j] = i;
+            else {
+                int ins = editDistTD(distancesTable, one, two, i, j - 1) + 1; //If insert element - take left one form the table + 1
+                int del = editDistTD(distancesTable, one, two, i - 1, j) + 1; //If delete element - take one above from the table + 1
+                int sub = editDistTD(distancesTable, one, two, i - 1, j - 1) + ((one.charAt(i-1) == two.charAt(j-1)) ? 0 : 1); //If change element - take one from diagonal + 1, if it's not the same element
+                distancesTable[i][j] = Math.min(Math.min(ins, del), sub); //Take minimum of values above
+            }
+        return distancesTable[i][j];
     }
 
 
