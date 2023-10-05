@@ -1,4 +1,4 @@
-package by.it.group251001.Gushcha.lesson02;
+package by.it.group251001.gushcha.lesson02;
 /*
 Даны
 1) объем рюкзака 4

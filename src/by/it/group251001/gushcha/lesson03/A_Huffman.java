@@ -1,4 +1,4 @@
-package by.it.group251001.Gushcha.lesson03;
+package by.it.group251001.gushcha.lesson03;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -1,4 +1,4 @@
-package by.it.group251001.Gushcha.lesson02;
+package by.it.group251001.gushcha.lesson02;
 
 import org.junit.Test;
 
