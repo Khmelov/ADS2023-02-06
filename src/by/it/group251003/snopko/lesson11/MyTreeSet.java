@@ -9,6 +9,23 @@ public class MyTreeSet<E> implements Set<E> {
     private E[] data;
     private int size;
 
+    private int BinarySearch(int L, int R, Object Key){
+        while (L <= R) {
+            int mid = (L + R) /2;
+            Comparable midValue = (Comparable) data[mid];
+            int res = midValue.compareTo(Key);
+
+            if (res < 0)
+                L = mid + 1;
+            else if (res > 0)
+                R = mid - 1;
+            else
+                return mid;
+        }
+        return -1 * L - 1;
+
+    }
+
     MyTreeSet(){
         data = (E[]) new Object[10];
         size = 0;
@@ -47,7 +64,7 @@ public class MyTreeSet<E> implements Set<E> {
     @Override
     public boolean contains(Object o) {
         if (size == 0){return false;}
-        int index = Arrays.binarySearch(data,0,  size, o);
+        int index = BinarySearch(0,  size - 1, o);
         if (index < 0) {index *= -1;index--;}
         return data[index] == o;
     }
@@ -74,7 +91,7 @@ public class MyTreeSet<E> implements Set<E> {
         if (size == 0)
             index = -1;
         else
-             index = Arrays.binarySearch(data, 0, size, e);
+             index = BinarySearch(0, size - 1, e);
         if (index >= 0) {return false;}
         if (index < 0) {index *= -1;index--;}
         if (size == data.length){
@@ -89,7 +106,7 @@ public class MyTreeSet<E> implements Set<E> {
     @Override
     public boolean remove(Object o) {
         if (size == 0) {return false;}
-        int index = Arrays.binarySearch(data, 0, size, o);
+        int index = BinarySearch(0, size - 1, o);
         if (index < 0) {return false;}
             System.arraycopy(data, index + 1, data, index,  Math.max(0,size - index - 1));
             size--;
