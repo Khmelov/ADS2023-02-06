@@ -21,7 +21,6 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
         StringBuilder result = new StringBuilder("[");
         if (size > 0) {
             result.append(arr[0]);
-
             for (int i = 1; i < size; i++)
                 result.append(", ").append(arr[i]);
         }
@@ -150,7 +149,7 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
     @Override
     public boolean removeAll(Collection<?> c) {
         int prevSize = size;
-        for (int i = size - 1; i >= 0; i--)
+        for (int i = 0; i < size; i++)
             if (c.contains(arr[i])) {
                 remove(i);
             }
