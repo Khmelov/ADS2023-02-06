@@ -64,9 +64,13 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
         if (isInvalidIndex(index))
             throw new IndexOutOfBoundsException("Index out of bounds");
 
-        arr[index] = arr[--size];
+        --size;
+        arr[index] = arr[size];
+        E moved = arr[size];
         arr[size] = null;
         siftDown(index);
+        if (arr[index] == moved)
+            siftUp(index);
     }
     @Override
     public String toString() {
