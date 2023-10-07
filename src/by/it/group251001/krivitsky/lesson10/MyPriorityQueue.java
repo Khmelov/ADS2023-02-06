@@ -73,8 +73,7 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E>{
 
     public void clear(){
         size = 0;
-        E[] newarr = (E[]) new Comparable[1];
-        elements = newarr;
+        elements = (E[]) new Comparable[1];
     }
     public boolean add(E element){
         posincsize();
@@ -134,11 +133,11 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E>{
     }
     @Override
     public boolean containsAll(Collection<?> c){
-        boolean isFound = false;
-        for (Object ci : c){
+        boolean isFound;
+        for (Object ci:c){
             isFound = false;
             for (int i = 0; i < size; i++){
-                if (ci.equals(elements[i])){
+                if (ci.equals(elements[i])) {
                     isFound = true;
                 }
             }
