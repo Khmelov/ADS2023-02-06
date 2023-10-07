@@ -186,7 +186,10 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
         for (E el : c)
             add(el);
 
-        return true;
+        if (c.isEmpty())
+            return false;
+        else
+            return true;
     }
 
     @Override
