@@ -105,7 +105,6 @@ public class C_EditDist {
         return result.toString();
     }
 
-
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
         InputStream stream = new FileInputStream(root + "by/it/a_khmelev/lesson07/dataABC.txt");

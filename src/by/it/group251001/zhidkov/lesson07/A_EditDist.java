@@ -35,7 +35,6 @@ import java.util.Scanner;
     Sample Output 3:
     5
 */
-
 public class A_EditDist {
     // Рекурсивная функция расчета расстояния Левенштейна
     int levenshtein(int l1, String one, int l2, String two) {
