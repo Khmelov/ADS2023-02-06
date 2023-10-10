@@ -30,7 +30,7 @@ public class ListA<E> implements List<E> {
     @Override
     public boolean add(E e) {
         if (size==elements.length) {
-        E[] NewElements = (E[])  new Object[(elements.length*3)/2+1];
+        E[] NewElements = (E[]) new Object[(elements.length*3)/2+1];
         System.arraycopy(elements,0,NewElements,0,size);
         elements=NewElements;}
         elements[size++]=e;
