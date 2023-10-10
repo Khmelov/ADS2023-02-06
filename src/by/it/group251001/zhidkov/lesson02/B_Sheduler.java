@@ -55,7 +55,6 @@ public class B_Sheduler {
             result.add(events[i]);
             while ((i < events.length) && (events[i].start < stop))
                 ++i;
-
         }
 
         return result; // Возвращение списка непересекающихся событий

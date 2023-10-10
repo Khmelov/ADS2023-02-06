@@ -22,7 +22,6 @@ public class C_GreedyKnapsack {
     private static class Item implements Comparable<Item> {
         int cost;
         int weight;
-
         Item(int cost, int weight) {
             this.cost = cost;
             this.weight = weight;
