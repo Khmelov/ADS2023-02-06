@@ -23,6 +23,7 @@ public class ListA<E> implements List<E> {
         {
             result.append(arr[i]);
             if (i < size - 1) result.append(", ");
+
         }
         result.append("]");
         return result.toString();
