@@ -2,6 +2,7 @@ package by.it.group251001.smychek.lesson11;
 
 import java.lang.reflect.Array;
 import java.util.*;
+
 public class MyHashSet<E> implements Set<E> {
     private class MyList<E>{
         private class node<E>{

@@ -1,4 +1,5 @@
 package by.it.group251001.smychek.lesson11;
+
 import java.util.*;
 public class MyTreeSet<E> implements Set<E> {
     E[] value = (E[]) new Object[]{};

@@ -1,4 +1,5 @@
 package by.it.group251001.smychek.lesson11;
+
 import java.util.*;
 public class MyLinkedHashSet<E> implements Set<E>{
     private class MyList<E>{
