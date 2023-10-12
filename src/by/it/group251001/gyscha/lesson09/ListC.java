@@ -7,21 +7,26 @@ import java.util.ListIterator;
 
 public class ListC<E> implements List<E> {
 
-    //Создайте аналог списка БЕЗ использования других классов СТАНДАРТНОЙ БИБЛИОТЕКИ
-
     private E[] array = (E[]) new Object[0];
     private int size;
-    @Override
-    public String toString() {
-        StringBuilder str = new StringBuilder("[");
-        String temp = "";
-        for(int i = 0; i < size; i++){
-            str.append(temp).append(array[i]);
-            temp = ", ";
-        }
-        str.append("]");
 
-        return str.toString();
+    @Override
+    public boolean isEmpty() {return size==0;}
+
+    @Override
+    public void clear() {
+        while(size != 0){
+            remove(0);
+        }
+    }
+
+
+    @Override
+    public int indexOf(Object o) {
+        for (int k = 0; k < size; k++){
+            if (array[k].equals(o)) return k;
+        }
+        return -1;
     }
 
     @Override
@@ -45,9 +50,19 @@ public class ListC<E> implements List<E> {
     }
 
     @Override
-    public int size() {
+    public int size() {return size;}
 
-        return size;
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder("[");
+        String temp = "";
+        for(int i = 0; i < size; i++){
+            str.append(temp).append(array[i]);
+            temp = ", ";
+        }
+        str.append("]");
+
+        return str.toString();
     }
 
     @Override
@@ -73,7 +88,6 @@ public class ListC<E> implements List<E> {
         return (delMem > -1);
     }
 
-
     @Override
     public E set(int index, E element) {
         E prev = array[index];
@@ -83,33 +97,7 @@ public class ListC<E> implements List<E> {
 
 
     @Override
-    public boolean isEmpty() {
-
-        return size==0;
-    }
-
-
-    @Override
-    public void clear() {
-        while(size != 0){
-            remove(0);
-        }
-    }
-
-    @Override
-    public int indexOf(Object o) {
-        for (int k = 0; k < size; k++){
-            if (array[k].equals(o)) return k;
-        }
-
-        return -1;
-    }
-
-    @Override
-    public E get(int index) {
-
-        return array[index];
-    }
+    public E get(int index) {return array[index];}
 
     @Override
     public boolean contains(Object o) {
@@ -135,9 +123,7 @@ public class ListC<E> implements List<E> {
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        if (c.isEmpty()) {
-            return false;
-        }
+        if (c.isEmpty()) {return false;}
         for (E element : c) {
             add(element);
         }
@@ -146,9 +132,7 @@ public class ListC<E> implements List<E> {
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        if (c.isEmpty()) {
-            return false;
-        }
+        if (c.isEmpty()) {return false;}
         int k=0;
         for (E element : c) {
             add(index+k,element);
@@ -174,21 +158,11 @@ public class ListC<E> implements List<E> {
     public boolean retainAll(Collection<?> c) {
         int k = 0;
         while(k < size){
-            if(!c.contains(array[k])){
-                remove(k);
-            }
-            else {
-                k++;
-            }
+            if(!c.contains(array[k])){remove(k);}
+            else {k++;}
         }
         return true;
     }
-
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
-    //////               Опциональные к реализации методы             ///////
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
 
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
@@ -215,12 +189,6 @@ public class ListC<E> implements List<E> {
         return new Object[0];
     }
 
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
-    ////////        Эти методы имплементировать необязательно    ////////////
-    ////////        но они будут нужны для корректной отладки    ////////////
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
     @Override
     public Iterator<E> iterator() {
         return null;

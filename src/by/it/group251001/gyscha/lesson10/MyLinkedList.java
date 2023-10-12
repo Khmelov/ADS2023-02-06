@@ -5,6 +5,32 @@ public class MyLinkedList<E> implements Deque<E>{
     E[] values = (E[]) new Object[]{};
     int size = 0, first = -1, last = -1;
 
+
+    public String toString(){
+        String s = "[";
+        int i = first;
+        for(int j = 0; j < size; ++j, i = (++i) % values.length){
+            s = s + values[i];
+            if(j != size - 1)  s = s + ", ";
+        }
+        s = s + "]";
+        return  s;
+    }
+
+    public E pollFirst(){
+        E res = values[first];
+        first = ++first % values.length;
+        --size;
+        return res;
+    }
+
+    public E pollLast(){
+        E res = values[last];
+        last = last == 0 ? values.length - 1 : last - 1;
+        --size;
+        return res;
+    }
+
     public boolean remove(Object c) {
         for(int i = first, j = 0; j < size; ++j, i = (++i) % values.length){
             if(values[i].equals(c)){
@@ -24,20 +50,7 @@ public class MyLinkedList<E> implements Deque<E>{
         }
         return removeFirst();
     }
-
-    public String toString(){
-        String s = "[";
-        int i = first;
-        for(int j = 0; j < size; ++j, i = (++i) % values.length){
-            s = s + values[i];
-            if(j != size - 1)  s = s + ", ";
-        }
-        s = s + "]";
-        return  s;
-    }
-    public int size(){
-        return size;
-    }
+    public int size(){return size;}
 
     public boolean add(Object element){
         if(size == values.length){
@@ -71,20 +84,6 @@ public class MyLinkedList<E> implements Deque<E>{
         first = first == 0 ? values.length - 1 : first - 1;
         values[first] = (E)element;
         ++size;
-    }
-
-    public E pollFirst(){
-        E res = values[first];
-        first = ++first % values.length;
-        --size;
-        return res;
-    }
-
-    public E pollLast(){
-        E res = values[last];
-        last = last == 0 ? values.length - 1 : last - 1;
-        --size;
-        return res;
     }
 
     public void push(E element){add(element);}

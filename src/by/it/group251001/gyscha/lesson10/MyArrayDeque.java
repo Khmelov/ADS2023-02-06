@@ -55,6 +55,15 @@ public class MyArrayDeque<E> implements Deque<E> {
     }
 
     @Override
+    public E pollLast() {
+        if (size == 0) return null;
+        E elem = deque[tail];
+        size--;
+        tail--;
+        return elem;
+    }
+
+    @Override
     public E pollFirst() {
         if (size == 0)
             return null;
@@ -64,15 +73,6 @@ public class MyArrayDeque<E> implements Deque<E> {
             newList[i]=deque[i+1];
         }
         deque = newList;
-        size--;
-        tail--;
-        return elem;
-    }
-
-    @Override
-    public E pollLast() {
-        if (size == 0) return null;
-        E elem = deque[tail];
         size--;
         tail--;
         return elem;

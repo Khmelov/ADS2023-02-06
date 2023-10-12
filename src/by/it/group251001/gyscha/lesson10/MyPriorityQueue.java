@@ -10,40 +10,6 @@ public class MyPriorityQueue<E> implements Queue<E> {
     E[] values = (E[]) new Object[]{};
     int size = 0;
 
-    private int heapify(int i){
-        int largest = i;
-        if((i * 2 + 1 < size) && (Integer)values[i * 2 + 1] < (Integer)values[largest])
-            largest = i * 2 + 1;
-        if((i * 2 + 2 < size) && (Integer)values[i * 2 + 2] < (Integer)values[largest])
-            largest = i * 2 + 2;
-        E temp = values[largest];
-        values[largest] = values[i];
-        values[i] = temp;
-        return largest;
-    }
-
-    private int heapufy(int i){
-        int largest = i;
-        if(((i - 1) / 2 >= 0) && (Integer)values[(i - 1) / 2] > (Integer)values[largest])
-            largest = (i - 1) / 2;
-        E temp = values[largest];
-        values[largest] = values[i];
-        values[i] = temp;
-        return largest;
-    }
-
-    private void pushup(int i){
-        int largest = heapufy(i);
-        if(largest != i)
-            pushup(largest);
-    }
-
-    private void pushdown(int i){
-        int largest = heapify(i);
-        if(largest != i)
-            pushdown(largest);
-    }
-
     @Override
     public int size() {
         return size;
@@ -74,21 +40,35 @@ public class MyPriorityQueue<E> implements Queue<E> {
         return false;
     }
 
-    @Override
-    public Iterator<E> iterator() {
-        return null;
+    private int SearchDown(int i) {
+        int largest = i;
+        if((i * 2 + 1 < size) && (Integer)values[i * 2 + 1] < (Integer)values[largest]) largest = i * 2 + 1;
+        if((i * 2 + 2 < size) && (Integer)values[i * 2 + 2] < (Integer)values[largest]) largest = i * 2 + 2;
+        E temp = values[largest];
+        values[largest] = values[i];
+        values[i] = temp;
+        return largest;
     }
 
-    @Override
-    public Object[] toArray() {
-        return new Object[0];
+    private int SearchUp(int i) {
+        int largest = i;
+        if(((i - 1) / 2 >= 0) && (Integer)values[(i - 1) / 2] > (Integer)values[largest]) largest = (i - 1) / 2;
+        E temp = values[largest];
+        values[largest] = values[i];
+        values[i] = temp;
+        return largest;
+    }
+    private void pushup(int i){
+        int largest = SearchUp(i);
+        if(largest != i)
+            pushup(largest);
     }
 
-    @Override
-    public <T> T[] toArray(T[] a) {
-        return null;
+    private void pushdown(int i){
+        int largest = SearchDown(i);
+        if(largest != i)
+            pushdown(largest);
     }
-
 
     @Override
     public boolean add(E e) {
@@ -198,4 +178,20 @@ public class MyPriorityQueue<E> implements Queue<E> {
     public E peek() {
         return values[0];
     }
+
+    @Override
+    public Iterator<E> iterator() {
+        return null;
+    }
+
+    @Override
+    public Object[] toArray() {
+        return new Object[0];
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return null;
+    }
+
 }

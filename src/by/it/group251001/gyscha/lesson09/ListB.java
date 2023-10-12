@@ -8,11 +8,7 @@ public class ListB<E> implements List<E> {
     //Создайте аналог списка БЕЗ использования других классов СТАНДАРТНОЙ БИБЛИОТЕКИ
     private E[] elements= (E[]) new Object[]{};
     private int size=0;
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
-    //////               Обязательные к реализации методы             ///////
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
+
     @Override
     public String toString() {
         StringBuilder sb=new StringBuilder("[");
@@ -42,17 +38,23 @@ public class ListB<E> implements List<E> {
     }
 
     @Override
-    public int size() {
-        return size;
+    public boolean isEmpty() {
+        return (size==0);
     }
 
+
     @Override
-    public void add(int index, E element) {
-        if (size==elements.length)
-            elements= Arrays.copyOf(elements, (size * 3)/2+1);
-        System.arraycopy(elements,index,elements,index+1,size-index);
-        elements[index]=element;
-        size++;
+    public void clear() {
+        for(int i=0;i<size;i++){
+            elements[i]=null;
+        }
+        size=0;
+    }
+
+
+    @Override
+    public int size() {
+        return size;
     }
 
     @Override
@@ -73,19 +75,13 @@ public class ListB<E> implements List<E> {
         return null;
     }
 
-
     @Override
-    public boolean isEmpty() {
-        return (size==0);
-    }
-
-
-    @Override
-    public void clear() {
-        for(int i=0;i<size;i++){
-            elements[i]=null;
-        }
-        size=0;
+    public void add(int index, E element) {
+        if (size==elements.length)
+            elements= Arrays.copyOf(elements, (size * 3)/2+1);
+        System.arraycopy(elements,index,elements,index+1,size-index);
+        elements[index]=element;
+        size++;
     }
 
     @Override
@@ -129,14 +125,6 @@ public class ListB<E> implements List<E> {
         }
         return lastIndex;
     }
-
-
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
-    //////               Опциональные к реализации методы             ///////
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
-
 
     @Override
     public boolean containsAll(Collection<?> c) {
@@ -189,12 +177,6 @@ public class ListB<E> implements List<E> {
         return new Object[0];
     }
 
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
-    ////////        Эти методы имплементировать необязательно    ////////////
-    ////////        но они будут нужны для корректной отладки    ////////////
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
     @Override
     public Iterator<E> iterator() {
         return null;
