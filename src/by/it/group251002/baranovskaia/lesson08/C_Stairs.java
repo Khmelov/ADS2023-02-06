@@ -36,20 +36,29 @@ public class C_Stairs {
 
     int getMaxSum(InputStream stream ) {
         Scanner scanner = new Scanner(stream);
-        int n = scanner.nextInt();
-
-        int[] stairs = new int[n];
-        for (int i = 0; i < n; i++)
+        int n=scanner.nextInt();
+        int stairs[]=new int[n];
+        for (int i = 0; i < n; i++) {
             stairs[i]=scanner.nextInt();
+        }
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        int[] sum = new int[n + 1];
-        sum[0] = 0;
-        sum[1] = stairs[0];
-        for (int i = 2; i <= n; i++)
-            sum[i] = stairs[i - 1] + Math.max(sum[i - 1], sum[i  - 2]);
+
+        //Array represents rewards you get when getting to the stair with index i
+        int[] rewards = new int[n];
+
+        rewards[0] = stairs[0]; //Getting to the 1-st stair is always it's cost itself
+        rewards[1] = Math.max(stairs[1], rewards[0] + stairs[1]); //Getting to the 2-nd either it's cost itself or 1-st + 2-nd
+
+        for (int i = 2; i < n; ++i) //Fill rest of stairs rewards
+            rewards[i] = Math.max(rewards[i - 1], rewards[i - 2]) + stairs[i]; //Maximum benefit is current reward + reward for previous stair or pre-previous stair
+
+        //Reward for getting to the last stair
+        int result = rewards[n - 1];
+
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return sum[n];
+        return result;
     }
+
 
     public static void main(String[] args) throws FileNotFoundException {
         String root = System.getProperty("user.dir") + "/src/";
