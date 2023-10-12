@@ -49,6 +49,13 @@ public class MyPriorityQueue<E> implements Queue<E> {
         mas[p]=temp;
         up(p);
     }
+    public void heapify() {
+        int start=size-1;
+        while (start>=0){
+            down(start);
+            start--;
+        }
+    }
     private void grow() {
         E[] newMas=(E[]) new Comparable[size*2];
         System.arraycopy(mas,0,newMas,0,size);
@@ -194,24 +201,31 @@ public class MyPriorityQueue<E> implements Queue<E> {
         int i=0;
         while (i<size) {
             if (c.contains(mas[i])) {
-                remove(mas[i]);
-                flag=true;
-            }
-            else
+                System.arraycopy(mas, i + 1, mas, i, size - i - 1);
+                size--;
+                flag = true;
+            } else {
                 i++;
+            }
         }
+        heapify();
         return flag;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
         boolean flag=false;
-        for (int i=size-1; i>=0;i--) {
+        int i=0;
+        while (i<size) {
             if (!c.contains(mas[i])) {
-                remove(mas[i]);
-                flag=true;
+                System.arraycopy(mas, i + 1, mas, i, size - i - 1);
+                size--;
+                flag = true;
+            } else {
+                i++;
             }
         }
+            heapify();
         return flag;
     }
     ////////////////////////////////////////
