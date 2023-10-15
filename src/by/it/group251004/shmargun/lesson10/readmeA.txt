@@ -23,3 +23,10 @@
                 pollFirst()
                 pollLast()
 
+package by.it.group251001.smychek.lesson10;
+
+import java.util.*;
+
+public class MyArrayDeque<E>{
+
+}
