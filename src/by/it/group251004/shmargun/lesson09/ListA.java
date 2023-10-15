@@ -19,8 +19,9 @@ public class ListA<E> implements List<E> {
     //////               Обязательные к реализации методы             ///////
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
+    //Реализация собственного списка
     @Override
-    public String toString() {
+    public String toString() {                                            //преобразует элементы списка в строку
         StringBuilder str = new StringBuilder();
         str.append('[');
         for (int i = 0; i < listElems.length; i++) {
@@ -37,7 +38,7 @@ public class ListA<E> implements List<E> {
     public boolean add(E e) {
         E[] newListElems;
         try {
-            newListElems = (E[]) new Object[listElems.length + 1];
+            newListElems = (E[]) new Object[listElems.length + 1];      //попытка создать массив обектов типа object
         } catch (OutOfMemoryError error) {
             return false;
         }
