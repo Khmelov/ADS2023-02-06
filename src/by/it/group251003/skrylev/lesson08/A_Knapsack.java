@@ -42,14 +42,15 @@ public class A_Knapsack {
         int w=scanner.nextInt();
         int n=scanner.nextInt();
         int gold[]=new int[n];
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++)
             gold[i]=scanner.nextInt();
-        }
 
+        int min = gold[0];
+        for (int i = 1; i < gold.length; i++)
+            min = Math.min(min, gold[i]);
 
-        int result = 0;
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return w - w % min;
     }
 
 

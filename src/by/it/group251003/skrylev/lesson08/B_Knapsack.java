@@ -28,20 +28,30 @@ Sample Output:
 
 public class B_Knapsack {
 
+    int GetAnswer(int[] gold, int w) {
+        int[] maxValues = new int[w + 1];
+        for (int i = 0; i < gold.length; i++) {
+            int currentValue = gold[i];
+            for (int capacityLeft = w - currentValue; capacityLeft > -1; capacityLeft--) {
+                int maxValueWithCurrent = maxValues[capacityLeft] + currentValue;
+                int maxValueWithoutCurrent = maxValues[capacityLeft + currentValue];
+                maxValues[capacityLeft + currentValue] = Math.max(maxValueWithoutCurrent, maxValueWithCurrent);
+            }
+        }
+        return maxValues[maxValues.length - 1];
+    }
+
+
     int getMaxWeight(InputStream stream ) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         Scanner scanner = new Scanner(stream);
-        int w=scanner.nextInt();
-        int n=scanner.nextInt();
-        int gold[]=new int[n];
-        for (int i = 0; i < n; i++) {
+        int w = scanner.nextInt();
+        int n = scanner.nextInt();
+        int[] gold = new int[n];
+        for (int i = 0; i < n; i++)
             gold[i]=scanner.nextInt();
-        }
-
-
-        int result = 0;
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return GetAnswer(gold, w);
     }
 
 
