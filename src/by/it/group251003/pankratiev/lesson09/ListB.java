@@ -11,7 +11,7 @@ public class ListB<E> implements List<E> {
         resize(arr.length);
     }
     private void resize(int newSize) {
-        E[] newArr = (E[]) new Object[newSize * (3 / 2) + 1];
+        E[] newArr = (E[]) new Object[newSize * 3 / 2 + 1];
         System.arraycopy(arr, 0, newArr, 0, size);
         arr = newArr;
     }
@@ -52,8 +52,7 @@ public class ListB<E> implements List<E> {
 
         E result = arr[index];
 
-        for (int i = index; i < size - 1; i++)
-            arr[i] = arr[i + 1];
+        System.arraycopy(arr, index + 1, arr, index, size - index - 1);
 
         arr[--size] = null;
 
@@ -74,8 +73,7 @@ public class ListB<E> implements List<E> {
         if (size == arr.length)
             resize();
 
-        for (int i = size; i > index; i--)
-            arr[i] = arr[i - 1];
+        System.arraycopy(arr, index, arr, index + 1, size - index);
 
         arr[index] = element;
         size++;
@@ -185,11 +183,12 @@ public class ListB<E> implements List<E> {
         if (newSize > arr.length)
             resize(newSize);
 
-        for (int i = size - 1; i >= index; i--)
-            arr[i + c.size()] = arr[i];
+        System.arraycopy(arr, index, arr, index + c.size(), size - index);
 
         int i = 0;
         for (E element : c) {
+            if (isInvalidType(element))
+                throw new IllegalArgumentException("Element cannot be null");
             arr[index + i] = element;
             i++;
         }
