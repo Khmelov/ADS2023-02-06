@@ -37,6 +37,7 @@ public class MyPriorityQueue<E> implements Queue<E> {
     }
 
 
+
     private void siftUp(int index) {
         boolean f = true;
         while (index >= 0 && f) {

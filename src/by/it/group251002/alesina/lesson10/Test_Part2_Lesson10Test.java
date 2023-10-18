@@ -193,6 +193,7 @@ public class Test_Part2_Lesson10Test extends HomeWork {
         return iterator.next();
     }
 
+
     private int getRandomIndex() {
         return rnd.nextInt(eObject.size());
     }

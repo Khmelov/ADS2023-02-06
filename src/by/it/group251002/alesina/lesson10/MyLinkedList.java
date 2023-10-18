@@ -39,6 +39,7 @@ public class MyLinkedList<E> implements Deque<E> {
         return string.toString();
     }
 
+
     @Override
     public boolean add(E e) {
         Node newElem = new Node(e);
