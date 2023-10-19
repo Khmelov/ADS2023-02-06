@@ -60,6 +60,12 @@ public class MyPriorityQueue<E> implements Queue<E> {
         siftUp(parentInd);
     }
 
+    private void heapRebuild() {
+        for(int i = size - 1; i >= 0; i--) {
+            siftDown(i);
+        }
+    }
+
     private void grow() {
         E[] NewArr = (E[]) new Comparable[size * 2];
         System.arraycopy(arr, 0, NewArr, 0, size);
@@ -192,11 +198,15 @@ public class MyPriorityQueue<E> implements Queue<E> {
         int i = 0;
         while (i < size) {
             if (c.contains(arr[i])) {
-                remove(arr[i]);
+                System.arraycopy(arr, i + 1, arr, i, size-- - 1 - i);
                 changed = true;
             } else {
                 i++;
             }
+        }
+
+        if (changed) {
+            heapRebuild();
         }
 
         return changed;
@@ -207,11 +217,14 @@ public class MyPriorityQueue<E> implements Queue<E> {
         boolean changed = false;
         for (int i = size - 1; i >= 0; i--) {
             if (!c.contains(arr[i])) {
-                remove(arr[i]);
+                System.arraycopy(arr, i + 1, arr, i, size-- - 1 - i);
                 changed = true;
             }
         }
 
+        if (changed) {
+            heapRebuild();
+        }
         return changed;
     }
 
