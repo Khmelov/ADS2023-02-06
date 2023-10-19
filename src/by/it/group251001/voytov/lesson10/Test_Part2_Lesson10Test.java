@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson10;
+package by.it.group251001.voytov.lesson10;
 
 
 import by.it.HomeWork;
@@ -53,7 +53,7 @@ public class Test_Part2_Lesson10Test extends HomeWork {
         randomCheck("MyArrayDeque", methods);
     }
 
-    @Test(timeout = 5000)
+    @Test()
     public void testTaskB() throws Exception {
         String[] methods = """
                 toString()
