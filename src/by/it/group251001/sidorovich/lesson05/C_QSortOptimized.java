@@ -60,7 +60,7 @@ public class C_QSortOptimized {
 
     void quickSort(Segment[] arr, final int leftBorder, final int rightBorder) {
         if (leftBorder < rightBorder) {
-            int part = run(arr, leftBorder, rightBorder);
+            int part = go(arr, leftBorder, rightBorder);
             quickSort(arr, leftBorder, part);
             quickSort(arr, part + 1, rightBorder);
         }
@@ -71,7 +71,7 @@ public class C_QSortOptimized {
         arr[j] = temp;
     }
 
-    int run (Segment[] arr, final int low, final int high) {
+    int go (Segment[] arr, final int low, final int high) {
         Segment mid = arr[(low + high) / 2];
         int i = low;
         int j = high;
