@@ -136,6 +136,8 @@ public class ListC<E> implements List<E> {
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
+        if(c.size()==0)
+            return false;
         for (E elem : c) {
             add(index, elem);
             index++;
