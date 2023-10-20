@@ -51,7 +51,7 @@ public class C_GreedyKnapsack {
 
         int numberOfItems = scan.nextInt();
         int weight = scan.nextInt();
-       Item[] items = new Item[numberOfItems];
+        Item[] items = new Item[numberOfItems];
         for (int i = 0; i < numberOfItems; i++) {
             items[i] = new Item(scan.nextInt(), scan.nextInt());
         }

@@ -121,8 +121,8 @@ public class ListC<E> implements List<E> {
 
     @Override
     public int indexOf(Object o) {
-        for(int i=0;i<size;i++){
-            if(list[i].equals(o)){
+        for (int i = 0; i < size; i++) {
+            if (list[i].equals(o)) {
                 return i;
             }
         }
@@ -139,24 +139,22 @@ public class ListC<E> implements List<E> {
 
     @Override
     public boolean contains(Object o) {
-        boolean flag=false;
         for(int i=0;i<size;i++){
             if(list[i].equals(o)){
-                flag=true;
+                return true;
             }
         }
-        return flag;
+        return false;
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        int lastIndex=-1;
-        for(int i=0;i<size;i++){
+        for(int i=size-1;i>-1;i--){
             if(list[i].equals(o)){
-                lastIndex=i;
+                return i;
             }
         }
-        return lastIndex;
+        return -1;
     }
 
     @Override
