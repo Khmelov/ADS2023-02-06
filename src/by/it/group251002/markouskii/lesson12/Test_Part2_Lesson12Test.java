@@ -83,12 +83,12 @@ public class Test_Part2_Lesson12Test extends HomeWork {
                 size()
                 clear()
                 isEmpty()
-                                
-                headMap(Object)
-                tailMap(Object)
+                
                 firstKey()
                 lastKey()
-                                
+                headMap(Object)
+                tailMap(Object)
+                               
                 lowerKey(Object)
                 floorKey(Object)
                 ceilingKey(Object)
