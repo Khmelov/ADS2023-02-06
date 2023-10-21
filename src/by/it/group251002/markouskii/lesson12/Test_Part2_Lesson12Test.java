@@ -31,7 +31,7 @@ public class Test_Part2_Lesson12Test extends HomeWork {
 
     private Map<Method, String> cache = new HashMap<>();
 
-    @Test(timeout = 500000000 * INVOCATION_COUNT_PER_METHOD)
+    @Test(timeout = 500 * INVOCATION_COUNT_PER_METHOD)
     public void testTaskA() throws Exception {
         String[] methods = """
                 toString()
@@ -61,9 +61,9 @@ public class Test_Part2_Lesson12Test extends HomeWork {
                 size()
                 clear()
                 isEmpty()
-                                
+                
                 headMap(Object)
-                tailMap(Object)
+                tailMap(Object)                
                 firstKey()
                 lastKey()
                 """.split("\\s+");
