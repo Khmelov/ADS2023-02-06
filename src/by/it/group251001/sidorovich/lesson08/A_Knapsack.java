@@ -59,7 +59,10 @@ int[]m=new int[w+1];
                 }
             }
         }
-
+for (int i=0;i<w;i++){
+    System.out.println(m[i]);
+}
+// 0 0 2 2 4 4 6 6 8 8 10 10 12 12 14 14
         int result = m[w];
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;

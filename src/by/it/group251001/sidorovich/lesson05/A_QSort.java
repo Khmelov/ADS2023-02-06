@@ -61,11 +61,42 @@ public class A_QSort {
         @Override
         public int compareTo(Segment o) {
             //подумайте, что должен возвращать компаратор отрезков
-
-            return 0;
+            int res=0;
+if (this.start>o.start){
+    res=1;
+            }
+if (this.start<o.start)
+{
+    res=-1;
+}
+return res;
         }
     }
+public static void quicksort(Segment[] arr, int  low, int high){
+        Segment seg=arr[(low+high)/2];
+        int up=low;
+        int down=high;
+        do{
+            while
+                (arr[up].compareTo(seg)==1) up++;
+            while
+            (arr[down].compareTo(seg)==-1) down--;
+            if (up<=down){
+                Segment t=arr[up];
+                arr[up]=arr[down];
+                arr[down]=t;
+                up++;
+                down--;
+            }
 
+        }while (up<=down);
+        if (down>low){
+            quicksort(arr,low,down);
+        }
+        if(up<high){
+            quicksort(arr,up,high);
+        }
+}
 
     int[] getAccessory(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
@@ -91,8 +122,8 @@ public class A_QSort {
         //тут реализуйте логику задачи с применением быстрой сортировки
         //в классе отрезка Segment реализуйте нужный для этой задачи компаратор
 
+quicksort(segments,0,segments.length-1);
 
-    //    Arrays.sort(segments);
         for (int i = 0; i < points.length; i++)
         {
             int ans= 0;
