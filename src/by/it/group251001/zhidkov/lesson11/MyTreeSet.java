@@ -4,21 +4,70 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
-public class MyTreeSet<E> implements Set<E> {
+public class MyTreeSet<E extends Comparable<E>> implements Set<E> {
+    private E[] array = (E[]) new Comparable[0];
+    private int size;
+    private int binarySearch(E key) {
+        int left = 0;
+        int right = size - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            int comp = array[mid].compareTo(key);
+
+            if (comp < 0) {
+                left = mid + 1;
+            }
+            else
+            {
+                if (comp > 0)
+                {
+                    right = mid - 1;
+                }
+                else
+                {
+                    return -(mid); // Элемент найден
+                }
+            }
+        }
+        return left + 1; // Элемент не найден
+    }
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder("[");
+        if (size > 0)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                if (i != size - 1)
+                    result.append(array[i]).append(", ");
+                else
+                    result.append(array[i]);
+            }
+        }
+        result.append("]");
+        return result.toString();
+    }
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     @Override
     public boolean contains(Object o) {
-        return false;
+        if (size > 0) {
+            return binarySearch((E) o) <= 0;
+        }
+        else
+        {
+            return false;
+        }
     }
+
 
     @Override
     public Iterator<E> iterator() {
@@ -37,36 +86,130 @@ public class MyTreeSet<E> implements Set<E> {
 
     @Override
     public boolean add(E e) {
-        return false;
+        if (size == array.length)
+        {
+            E[] newArray = (E[]) new Comparable[size * 2 + 1];
+            for (int i = 0; i < size; i++)
+            {
+                newArray[i] = array[i];
+            }
+            array = newArray;
+        }
+        if (e != null && !isEmpty()) {
+            int index = binarySearch(e);
+            if (index <= 0) // Элемент уже есть в массиве
+            {
+                return false;
+            }
+            else
+            {
+                index -= 1;
+                System.arraycopy(array, index, array, index + 1, size - index);
+                array[index] = e;
+            }
+            size++;
+            return true;
+        }
+        else
+        {
+            if (e == null)
+            {
+                return false;
+            }
+            else
+            {
+                array[0] = e;
+                size++;
+                return true;
+            }
+        }
     }
 
     @Override
     public boolean remove(Object o) {
-        return false;
+        if (o == null || isEmpty())
+        {
+            return false;
+        }
+        int index = -(binarySearch((E) o));
+        if (index < 0)
+        {
+            return  false;
+        }
+        for (int i = index; i < size; i++)
+        {
+            array[i] = array[i + 1];
+        }
+        size--;
+        return true;
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return false;
+        boolean b = true;
+        for (Object o : c)
+        {
+            if (!contains(o))
+            {
+                b = false;
+            }
+        }
+        return b;
     }
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        return false;
+        boolean b = false;
+        for (E e : c)
+        {
+            if (add(e))
+            {
+                b = true;
+            }
+        }
+        return b;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        if (c.isEmpty()) {
+            clear();
+            return true;
+        }
+        boolean b = false;
+        int i = 0;
+        while (i < size)
+        {
+            if (!c.contains(array[i]))
+            {
+                remove(array[i]);
+                b = true;
+                i--;
+            }
+            i++;
+        }
+        return b;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return false;
+        boolean b = false;
+        for (Object o : c)
+        {
+            if (remove(o))
+            {
+                b = true;
+            }
+        }
+        return b;
     }
 
     @Override
     public void clear() {
-
+        for (int i = 0; i < size; i++)
+        {
+            array[i] = null;
+        }
+        size = 0;
     }
 }
