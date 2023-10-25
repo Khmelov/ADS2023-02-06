@@ -93,15 +93,10 @@ public class Test_Part2_Lesson10Test extends HomeWork {
                 element()
                 isEmpty()
                                 
-                containsAll(Collection)
-                addAll(Collection)
-                removeAll(Collection)
-                retainAll(Collection)
                 """.split("\\s+");
         eObject = new PriorityQueue<>();
         randomCheck("MyPriorityQueue", methods);
     }
-
     private void randomCheck(String aClassName, String... methods) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         Set<String> methodNames = new TreeSet<>(Arrays.asList(methods));
         methodNames.removeIf(key -> key == null || key.isBlank());
