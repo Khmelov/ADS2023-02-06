@@ -46,7 +46,7 @@ public class C_Stairs {
       int cur=0;
         int result = 0;
   int[]m=new int[n+1];
-  m[1]=s[0];
+  m[1]=s[1];
   for (int i=2;i<=n;i++)
   {
 
@@ -61,6 +61,11 @@ public class C_Stairs {
 
       }
   }
+        for (int i=0;i<=n;i++)
+        {
+System.out.print(m[i]+" ");
+        }
+        System.out.println();
     result=m[n];
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
