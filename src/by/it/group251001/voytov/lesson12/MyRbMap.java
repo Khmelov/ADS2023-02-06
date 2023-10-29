@@ -537,21 +537,6 @@ public class MyRbMap implements SortedMap<Integer, String> {
         Integer key;
         String value;
 
-        public Node(Integer key, String value) {
-            this.key = key;
-            this.value = value;
-            color = Color.RED;
-            left = right = parent = null;
-        }
-
-        public Node(Node parent, Integer key, String value) {
-            this.parent = parent;
-            this.key = key;
-            this.value = value;
-            color = Color.RED;
-            left = right = null;
-        }
-
         public Node(Node parent, Integer key, String value, Color color) {
             this.parent = parent;
             this.key = key;
