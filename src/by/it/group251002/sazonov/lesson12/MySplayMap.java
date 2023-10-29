@@ -15,7 +15,7 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         }
     }
 
-    int _size = 0;
+    int size = 0;
     Node head = null;
 
     private Node leftRotate(Node n) {
@@ -333,12 +333,12 @@ public class MySplayMap implements NavigableMap<Integer, String> {
 
     @Override
     public int size() {
-        return _size;
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
-        return _size == 0;
+        return size == 0;
     }
 
     @Override
@@ -393,7 +393,7 @@ public class MySplayMap implements NavigableMap<Integer, String> {
             return oldValue;
         }
 
-        _size++;
+        size++;
         Node preInsert = null;
         n = head;
         while(n != null) {
@@ -423,7 +423,7 @@ public class MySplayMap implements NavigableMap<Integer, String> {
     public String remove(Object key) {
         Node n = search(head, (int)key);
         if (n != null) {
-            _size--;
+            size--;
             remove(n);
             return n.value;
         }
@@ -490,7 +490,7 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         head.left = null;
         head.right = null;
         head = null;
-        _size = 0;
+        size = 0;
     }
 
     @Override
