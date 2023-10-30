@@ -8,16 +8,6 @@ import java.util.Set;
 public class MyTreeSet<E extends Comparable> implements Set<E> {
 
 
-    public static void main(String[] args) {
-        MyTreeSet<Integer> set = new MyTreeSet<>();
-        set.add(5);
-        set.add(1);
-        set.add(4);
-        set.add(11);
-        set.add(8);
-        set.add(6);
-        System.out.println(set.contains(5));
-    }
 
     private class Node {
         E item;
