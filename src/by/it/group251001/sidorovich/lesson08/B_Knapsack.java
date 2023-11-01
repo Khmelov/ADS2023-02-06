@@ -54,6 +54,13 @@ for (int a=0;a<w+1;a++)
             }
             }
         }
+        for(int a=0;a<n+1;a++){
+            for(int b=0;b<w+1;b++)
+            {
+              System.out.print(arr[b][a]+" ");
+            }
+            System.out.println();
+        }
 
         for (int i=0;i<n;i++)
         {

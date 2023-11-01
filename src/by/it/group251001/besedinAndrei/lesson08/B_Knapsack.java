@@ -38,16 +38,27 @@ public class B_Knapsack {
             gold[i]=scanner.nextInt();
         }
 
-        Arrays.sort(gold);
+        int [][] d = new int[n+1][w+1];
 
-        int result = 0;
+        for (int i = 0; i <= n; i++){
+            d[i][0] = 0;
+        }
 
-        for (int i = gold.length - 1; i >= 0; i--) {
-            if (gold[i] <= w) {
-                w = w - gold[i];
-                result = result + gold[i];
+        for (int j = 0; j <= w; j++){
+            d[0][j] = 0;
+        }
+
+        for (int nextw = 1; nextw <= w; nextw++){
+            for (int i = 1; i <= n; i++){
+                if (nextw >= gold[i-1]){
+                    d[i][nextw] = Integer.max(d[i-1][nextw], d[i-1][nextw-gold[i-1]]+gold[i-1]);
+                } else {
+                    d[i][nextw] = d[i-1][nextw];
+                }
             }
         }
+
+        int result  = d[n][w];
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
