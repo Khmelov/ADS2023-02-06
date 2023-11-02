@@ -197,12 +197,10 @@ public void siftUp(int index) {
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        if(size+c.size()>=capacity){
-            capacity=(capacity+c.size())*3/2;
-            E[] newArr = (E[])new Comparable[capacity];
-            System.arraycopy(queue,0,newArr,0,size);
-            queue = newArr;
+        if (c.size() == 0) {
+            return false;
         }
+
         for(E o:c){
             offer(o);
         }
