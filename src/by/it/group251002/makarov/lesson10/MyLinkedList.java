@@ -14,6 +14,8 @@ public class MyLinkedList<E> implements Deque<E> {
         Node<E> prev;
         Node<E> next;
         Node(Node prev,E data, Node next){
+            this.next = next;
+            this.prev = prev;
             this.data = data;
         }
     }
