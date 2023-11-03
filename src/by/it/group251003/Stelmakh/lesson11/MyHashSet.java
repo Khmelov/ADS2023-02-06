@@ -14,7 +14,6 @@ public class MyHashSet<E> implements Set<E> {
             this.item = item;
         }
     }
-
     private static int INITIAL_CAPACITY = 16;
     private static float DEFAULT_LOAD_FACTOR = 7.5f;
 

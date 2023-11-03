@@ -15,7 +15,6 @@ public class MyLinkedHashSet<E> implements Set<E> {
         }
     }
 
-
     private static Node head, tail;
 
     private static int INITIAL_CAPACITY = 16;

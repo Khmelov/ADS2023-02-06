@@ -9,7 +9,6 @@ public class MyTreeSet<E> implements Set<E> {
     private E[] data;
     private int size;
 
-
     private int BinarySearch(int L, int R, Object Key){
         while (L <= R) {
             int mid = (L + R) /2;
