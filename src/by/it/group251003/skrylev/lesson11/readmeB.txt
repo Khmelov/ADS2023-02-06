@@ -22,6 +22,7 @@
                 contains(Object)
 
                 containsAll(Collection)
+
                 addAll(Collection)
                 removeAll(Collection)
                 retainAll(Collection)

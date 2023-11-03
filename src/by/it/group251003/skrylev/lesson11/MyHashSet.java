@@ -14,6 +14,8 @@ public class MyHashSet<E> implements Set<E> {
         }
     }
     private int size = 0;
+
+
     private void resize() {
         ListNode<E>[] tmpMap = new ListNode[map.length * 2 + 1];
         for (ListNode<E> node : map) {

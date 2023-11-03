@@ -5,6 +5,8 @@ import java.util.*;
 public class MyArrayDeque<E> implements Deque<E> {
     private E[]array = (E[])new Object[16];
     private int tail = 0;
+
+
     private int head = 0;
 
     private void resize() {

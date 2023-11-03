@@ -21,6 +21,7 @@
                 containsValue(String)
 
                 size()
+
                 clear()
                 isEmpty()
 

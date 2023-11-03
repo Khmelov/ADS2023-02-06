@@ -19,6 +19,7 @@
                 get(Integer)
                 containsKey(Integer)
 
+
                 size()
                 clear()
                 isEmpty()
