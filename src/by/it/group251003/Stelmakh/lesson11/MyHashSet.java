@@ -173,6 +173,7 @@ public class MyHashSet<E> implements Set<E> {
         return false;
     }
 
+
     @Override
     public void clear() {
         for (int i = 0; i < arr.length; i++) {
