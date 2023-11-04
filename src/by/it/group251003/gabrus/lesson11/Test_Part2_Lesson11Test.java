@@ -46,7 +46,7 @@ public class Test_Part2_Lesson11Test extends HomeWork {
         randomCheck("MyHashSet", methods);
     }
 
-    @Test(timeout = Integer.MAX_VALUE)
+    @Test(timeout = 5000)
     public void testTaskB() throws Exception {
         String[] methods = """
                 toString()
