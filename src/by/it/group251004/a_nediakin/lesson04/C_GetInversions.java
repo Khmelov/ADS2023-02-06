@@ -33,7 +33,7 @@ Sample Output:
 */
 
 
-public class C_GetInversions {
+public class  C_GetInversions {
     int inversions = 0;
     int calc(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
