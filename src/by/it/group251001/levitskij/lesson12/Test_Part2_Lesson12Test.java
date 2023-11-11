@@ -47,21 +47,7 @@ public class Test_Part2_Lesson12Test extends HomeWork {
         eObject = new TreeMap<>();
         randomCheck("MyAvlMap", methods);
     }
-//    toString()
-//    put(Object,Object)
-//    remove(Object)
-//    get(Object)
-//    containsKey(Object)
-//    containsValue(Object)
-//
-//    size()
-//    clear()
-//    isEmpty()
-//
-//    headMap(Object)
-//    tailMap(Object)
-//    firstKey()
-//    lastKey()
+
     @Test(timeout = 500 * INVOCATION_COUNT_PER_METHOD)
     public void testTaskB() throws Exception {
         String[] methods = """
@@ -70,49 +56,46 @@ public class Test_Part2_Lesson12Test extends HomeWork {
                 remove(Object)
                 get(Object)
                 containsKey(Object)
-
+                containsValue(Object)
+                                
                 size()
                 clear()
                 isEmpty()
+                                
+                headMap(Object)
+                tailMap(Object)
+                firstKey()
+                lastKey()
                 """.split("\\s+");
         eObject = new TreeMap<>();
         randomCheck("MyRbMap", methods);
     }
 
-//    put(Object,Object)
-//    remove(Object)
-//    get(Object)
-//    containsKey(Object)
-//    containsValue(Object)
-//
-//    size()
-//    clear()
-//    isEmpty()
-//
-//    headMap(Object)
-//    tailMap(Object)
-//    firstKey()
-//    lastKey()
-//
-//    lowerKey(Object)
-//    floorKey(Object)
-//    ceilingKey(Object)
-//    higherKey(Object)
     @Test(timeout = 500 * INVOCATION_COUNT_PER_METHOD)
     public void testTaskC() throws Exception {
         String[] methods = """
-                toString()
                 put(Object,Object)
                 remove(Object)
                 get(Object)
                 containsKey(Object)
-
+                containsValue(Object)
+                                
                 size()
                 clear()
                 isEmpty()
+                                
+                headMap(Object)
+                tailMap(Object)
+                firstKey()
+                lastKey()
+                                
+                lowerKey(Object)
+                floorKey(Object)
+                ceilingKey(Object)
+                higherKey(Object)
                 """.split("\\s+");
         eObject = new TreeMap<>();
-        randomCheck("MyAvlMap", methods);
+        randomCheck("MySplayMap", methods);
     }
 
     private void randomCheck(String aClassName, String... methods) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {

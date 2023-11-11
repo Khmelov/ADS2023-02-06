@@ -1,12 +1,11 @@
 package by.it.group251001.levitskij.lesson12;
 
+
 import java.util.*;
 
 public class MyRbMap implements SortedMap<Integer, String> {
 
     private int size = 0;
-    private MyNode1 root1;
-    
     private MyNode root;
 
     static private class MyNode{
@@ -30,12 +29,18 @@ public class MyRbMap implements SortedMap<Integer, String> {
         }
         MyNode uncle(){
             MyNode g = this.grandfather();
-            if (g!=null)
+            if (g==null)
                 return null;
             if (this.parent == g.left)
                 return g.right;
             else
                 return g.left;
+        }
+        MyNode sibling(){
+            if (this == this.parent.right)
+                return this.parent.left;
+            else
+                return this.parent.right;
         }
     }
 
@@ -62,64 +67,100 @@ public class MyRbMap implements SortedMap<Integer, String> {
         return sb.toString();
     }
 
+//    private boolean checkrule4(MyNode node, String methodname){
+//        if (node==null)
+//            return true;
+//        if (!node.color)
+//            if (!(checkrule4(node.right, methodname) && checkrule4(node.left, methodname)))
+//                System.out.println("broken rule 4 in"+ methodname);
+//        return node.color;
+//    }
+//    private int checkrule5(MyNode node, String methodname){
+//        if (node == null)
+//            return 1;
+//        int leftbheight = checkrule5(node.left, methodname);
+//        int rightbheight = checkrule5(node.right, methodname);
+//        if (leftbheight != rightbheight)
+//            System.out.println("broken rule 2 in"+ methodname);
+//        return leftbheight+(node.color ? 1 : 0);
+//    }
+//    private void checkrules(String methodname){
+//        if (root!=null){
+//            if (!root.color)
+//                System.out.println("broken rule 2 in"+ methodname);
+//            checkrule4(root, methodname);
+//            checkrule5(root, methodname);
+//        }
+//    }
 
-    private MyNode insert(MyNode node,MyNode parent, Integer key, String value, StringBuilder oldvalue){
-        if (node==null) {
-            size++;
-            return new MyNode(key, value,parent);
-        }
-        if (node.key>key) {
-            MyNode temp = node.left;
-            node.left = insert(node.left, node, key, value, oldvalue);
-            if (node.left!=temp)
-                insertcase1(node.left);
-        }
-        else if (node.key<key){
-            MyNode temp = node.right;
-            node.right = insert(node.right,node, key, value, oldvalue);
-            if (node.right!=temp)
-                insertcase1(node.right);
-        }
-        else {
-            oldvalue.append(node.value);
-            node.value = value;
-            return node;
-        }
-        return node;
-    }
+
+
+
     @Override
     public String put(Integer key, String value) {
-        StringBuilder oldvalue = new StringBuilder();
-        insert(root,null, key, value, oldvalue);
-        return oldvalue.isEmpty()?null:oldvalue.toString();
+        if (root == null){
+            root = new MyNode(key, value,null);
+            insertcase1(root);
+            size++;
+            return null;
+        }
+        MyNode x = root;
+        MyNode parent = null;
+        while(x!=null){
+            if (x.key.equals(key)){
+                String oldvalue = x.value;
+                x.value = value;
+                return oldvalue;
+            }
+            parent = x;
+            if (x.key.compareTo(key)>0)
+                x = x.left;
+            else
+                x = x.right;
+        }
+        x = new MyNode(key, value, parent);
+        if (parent.key.compareTo(key)>0)
+            parent.left = x;
+        else
+            parent.right = x;
+        insertcase1(x);
+        size++;
+//        checkrules("put");
+        return null;
     }
+
     private void rotateright(MyNode node){
         MyNode nextnode = node.left;
         nextnode.parent = node.parent;
-        if (node.parent!=null)
-            if (node.parent.left==node)
+        if (node.parent!=null) {
+            if (node.parent.left == node)
                 node.parent.left = nextnode;
             else
                 node.parent.right = nextnode;
+        } else
+            root = nextnode;
+
         node.parent = nextnode;
         node.left = nextnode.right;
-        if (node.left!=null)
-            node.left.parent = node;
+        if (nextnode.right!=null)
+            nextnode.right.parent = node;
         nextnode.right = node;
     }
 
     private void rotateleft(MyNode node){
         MyNode nextnode = node.right;
         nextnode.parent = node.parent;
-        if (node.parent!=null)
+        if (node.parent!=null){
             if (node.parent.left==node)
                 node.parent.left = nextnode;
             else
                 node.parent.right = nextnode;
+        } else
+            root = nextnode;
         node.parent = nextnode;
         node.right = nextnode.left;
-        if (node.right!=null)
-            node.right.parent = node;
+        if (nextnode.left!=null)
+            nextnode.left.parent = node;
         nextnode.left = node;
     }
     
@@ -150,135 +191,29 @@ public class MyRbMap implements SortedMap<Integer, String> {
         if (node.parent.right==node && node.parent==g.left){
             rotateleft(node.parent);
             node = node.left;
-        } else if(node.parent.right==node && node.parent==g.right) {
+        } else if(node.parent.left==node && node.parent==g.right) {
             rotateright(node.parent);
             node = node.right;
-        } else 
-            insertcase5(node);
+        }
+        insertcase5(node);
     }
     private void insertcase5(MyNode node){
         MyNode g = node.grandfather();
         node.parent.color = true;
+        g.color = false;
         if (node==node.parent.left && node.parent==g.left)
             rotateright(g);
         else 
             rotateleft(g);
     }
 
-    static private class MyNode1{
-        Integer key;
-        String value;
-        int height;
-        MyNode1 left, right;
-        MyNode1(Integer key,String value) {
-            this.key = key;
-            this.value = value;
-            this.height = 1;
-            this.right = null;
-            this.left = null;
-        }
-
-    }
-    private int height(MyNode1 node){
-        return (node!=null) ? node.height : 0;
-    }
-
-    private int bfactor(MyNode1 node){
-        return height(node.right)-height(node.left);
-    }
-
-    private void fixheight(MyNode1 node){
-        int heightright = height(node.right);
-        int heightleft = height(node.left);
-        node.height = (heightright>heightleft ? heightright : heightleft)+1;
-    }
-
-    private MyNode1 rotateright(MyNode1 node){
-        MyNode1 nextnode = node.left;
-        node.left = nextnode.right;
-        nextnode.right = node;
-        fixheight(node);
-        fixheight(nextnode);
-        return nextnode;
-    }
-
-    private MyNode1 rotateleft(MyNode1 node){
-        MyNode1 nextnode = node.right;
-        node.right = nextnode.left;
-        nextnode.left = node;
-        fixheight(node);
-        fixheight(nextnode);
-        return nextnode;
-    }
-    private MyNode1 balance(MyNode1 node){
-        fixheight(node);
-        int h = bfactor(node);
-        if (h == 2){
-            if (bfactor(node.right) < 0)
-                node.right = rotateright(node.right);
-            return rotateleft(node);
-        }
-        if (h == -2){
-            if (bfactor(node.left) > 0)
-                node.left = rotateleft(node.left);
-            return rotateright(node);
-        }
-        return node;
-    }
-
-
-    private MyNode1 findmin(MyNode1 node){
-        if (node.left==null)
-            return node;
-        else
-            return findmin(node.left);
-    }
-
-    private MyNode1 delete(MyNode1 node, Integer key, StringBuilder oldvalue){
-        if (node.key.equals(key)){
-            size--;
-            if (oldvalue!=null)
-                oldvalue.append(node.value);
-            if (node.left==null && node.right==null)
-                return null;
-            if (node.left==null)
-                return node.right;
-            if (node.right==null)
-                return node.left;
-            size++;
-            MyNode1 minnode = findmin(node.right);
-            node.value = minnode.value;
-            node.key = minnode.key;
-            node.right = delete(node.right, minnode.key, null);
-            return node;
-        }
-        if (node.key>key) {
-            if(node.left==null)
-                return node;
-            node.left = delete(node.left, key, oldvalue);
-        }else{
-            if(node.right==null)
-                return node;
-            node.right = delete(node.right, key, oldvalue);
-        }
-        return balance(node);
-    }
-    @Override
-    public String remove(Object key) {
-        int oldsize = size;
-        StringBuilder oldvalue = new StringBuilder();
-        root1 = delete(root1, (Integer)key, oldvalue);
-//        checkavl(root1);
-        return oldsize==size?null:oldvalue.toString();
-    }
-
     @Override
     public String get(Object key) {
-        MyNode1 x = root1;
+        MyNode x = root;
         while(x!=null){
             if (x.key.equals(key))
                 return x.value;
-            if (x.key>(Integer)key)
+            if (x.key.compareTo((Integer) key)>0)
                 x = x.left;
             else
                 x = x.right;
@@ -286,18 +221,147 @@ public class MyRbMap implements SortedMap<Integer, String> {
         return null;
     }
 
+
+    private void deletecase1(MyNode node){
+        if (node.parent != null)
+            deletecase2(node);
+    }
+    private void deletecase2(MyNode node){
+        MyNode s = node.sibling();
+        if (!s.color){
+            node.parent.color = false;
+            s.color = true;
+            if (node == node.parent.left)
+                rotateleft(node);
+            else
+                rotateright(node);
+        }
+        deletecase3(node);
+    }
+    private void deletecase3(MyNode node){
+        MyNode s = node.sibling();
+        if (node.parent.color && s.color && s.left.color && s.right.color){
+            s.color = false;
+            deletecase1(node.parent);
+        } else
+            deletecase4(node);
+
+    }
+    private void deletecase4(MyNode node){
+        MyNode s = node.sibling();
+        if (!node.parent.color && s.color && s.left.color && s.right.color){
+            s.color = false;
+            node.parent.color = true;
+        } else
+            deletecase5(node);
+    }
+    private void deletecase5(MyNode node){
+        MyNode s = node.sibling();
+        if (s.color){
+            if (node == node.parent.left && s.right.color && !s.left.color){
+                s.color = false;
+                s.left.color = true;
+                rotateright(s);
+            } else if (node == node.parent.right && !s.right.color && s.left.color){
+                s.color = false;
+                s.right.color = true;
+                rotateleft(s);
+            }
+        }
+        deletecase6(node);
+    }
+
+    private void deletecase6(MyNode node){
+        MyNode s = node.sibling();
+        s.color = node.parent.color;
+        node.parent.color = true;
+        if (node == node.parent.left){
+            s.right.color = true;
+            rotateleft(node.parent);
+        } else {
+            s.left.color = true;
+            rotateright(node.parent);
+        }
+    }
+    private MyNode findmin(MyNode node){
+        if (node.left==null)
+            return node;
+        else
+            return findmin(node.left);
+    }
+    private void replacechild(MyNode node, MyNode child) {
+        child.parent = node.parent;
+        if (node.parent!=null){
+            if (node == node.parent.right)
+                node.parent.right = child;
+            else
+                node.parent.left = child;
+        } else
+            root = child;
+    }
+    private void deleteonechild(MyNode node){
+        MyNode child = node.right!=null ? node.right : node.left;
+        replacechild(node,child);
+        if (node.color) {
+            if (!child.color)
+                child.color = true;
+            else
+                deletecase1(child);
+        }
+        node.key = null;
+        node.value = null;
+    }
+    private void deletenode(MyNode node){
+        if (node.right!=null && node.left!=null){
+            MyNode min = findmin(node.right);
+            node.value = min.value;
+            node.key = min.key;
+            deletenode(min);
+        } else if (node.right!=null ^ node.left!=null){
+            deleteonechild(node);
+        } else {
+            if (node.parent!=null){
+                if(node == node.parent.left)
+                    node.parent.left = null;
+                else
+                    node.parent.right = null;
+                if (node.color)
+                    insertcase1(node.parent);
+            } else
+                root = null;
+        }
+    }
     @Override
-    public boolean containsKey(Object key) {
-        MyNode1 x = root1;
+    public String remove(Object key) {
+        MyNode x = root;
         while(x!=null){
-            if (x.key==key)
-                return true;
-            if (x.key>(Integer)key)
+            if (x.key.equals(key)){
+                String result = x.value;
+                size--;
+                deletenode(x);
+//                checkrules("remove");
+                return result;
+            }
+            if (x.key.compareTo((Integer) key)>0)
                 x = x.left;
             else
                 x = x.right;
         }
-        return false;
+        return null;
+    }
+    @Override
+    public boolean containsKey(Object key) {
+        return get(key)!=null;
+    }
+
+    private boolean nodecontains(Object value, MyNode node){
+        if (node==null)
+            return false;
+        return node.value.equals(value)||nodecontains(value, node.right) || nodecontains(value, node.left);
+    }
+    @Override
+    public boolean containsValue(Object value) {
+        return nodecontains(value, root);
     }
 
     @Override
@@ -305,29 +369,86 @@ public class MyRbMap implements SortedMap<Integer, String> {
         return size;
     }
 
-
-    private MyNode1 eraseNode(MyNode1 node){
+    private MyNode eraseNode(MyNode node){
         if (node != null){
             node.right = eraseNode(node.right);
             node.left = eraseNode(node.left);
             node.key = null;
             node.value = null;
+            node.parent = null;
         }
         return null;
     }
     @Override
     public void clear() {
         size = 0;
-        root1 = eraseNode(root1);
+        root = eraseNode(root);
     }
+
     @Override
     public boolean isEmpty() {
         return size==0;
     }
-    
-    
-    
-    
+
+    private void addtoHeadMap(SortedMap<Integer, String> result, MyNode node, Integer toKey){
+        if (node!=null){
+            addtoHeadMap(result, node.left, toKey);
+            if (node.key.compareTo(toKey)<0) {
+                result.put(node.key, node.value);
+                addtoHeadMap(result, node.right, toKey);
+            }
+        }
+    }
+    @Override
+    public SortedMap<Integer, String> headMap(Integer toKey) {
+        if (toKey==null)
+            throw new NullPointerException();
+        if (root == null)
+            return null;
+        TreeMap result = new TreeMap();
+        addtoHeadMap(result, root, toKey);
+        return result;
+    }
+    private void addtoTailMap(SortedMap<Integer, String> result, MyNode node, Integer fromKey){
+        if (node!=null){
+            addtoTailMap(result, node.right, fromKey);
+            if (node.key.compareTo(fromKey)>=0) {
+                result.put(node.key, node.value);
+                addtoTailMap(result, node.left, fromKey);
+            }
+        }
+    }
+
+    @Override
+    public SortedMap<Integer, String> tailMap(Integer fromKey) {
+        if (fromKey==null)
+            throw new NullPointerException();
+        if (root == null)
+            return null;
+        MyRbMap result = new MyRbMap();
+        addtoTailMap(result, root, fromKey);
+        return result;
+    }
+    @Override
+    public Integer firstKey() {
+        if (root==null)
+            throw new NoSuchElementException();
+        MyNode x = root;
+        while (x.left!=null)
+            x = x.left;
+        return x.key;
+    }
+
+    @Override
+    public Integer lastKey() {
+        if (root==null)
+            throw new NoSuchElementException();
+        MyNode x = root;
+        while (x.right!=null)
+            x = x.right;
+        return x.key;
+
+    }
     @Override
     public Comparator<? super Integer> comparator() {
         return null;
@@ -338,33 +459,8 @@ public class MyRbMap implements SortedMap<Integer, String> {
         return null;
     }
 
-    @Override
-    public SortedMap<Integer, String> headMap(Integer toKey) {
-        return null;
-    }
 
-    @Override
-    public SortedMap<Integer, String> tailMap(Integer fromKey) {
-        return null;
-    }
 
-    @Override
-    public Integer firstKey() {
-        return null;
-    }
-
-    @Override
-    public Integer lastKey() {
-        return null;
-    }
-
-    
-    @Override
-    public boolean containsValue(Object value) {
-        return false;
-    }
-
-    
     @Override
     public void putAll(Map<? extends Integer, ? extends String> m) {
 
