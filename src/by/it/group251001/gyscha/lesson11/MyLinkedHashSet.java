@@ -7,7 +7,7 @@ import java.util.Set;
 public class MyLinkedHashSet<E> implements Set<E> {
 
     private class LNode<E> {
-        by.it.group251001.gyscha.lesson11.MyLinkedHashSet.LNode next;
+        LNode next;
         E value;
         int cnt;
 

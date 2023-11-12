@@ -108,7 +108,7 @@ public class MyTreeSet<E extends Comparable<E>> implements Set<E> {
     public boolean retainAll(Collection<?> c) {
         if (c.isEmpty()) {this.clear();return true;}
         boolean f = false;
-        by.it.group251001.gyscha.lesson11.MyTreeSet<E> retainSet = new by.it.group251001.gyscha.lesson11.MyTreeSet<>();
+        MyTreeSet<E> retainSet = new MyTreeSet<>();
         for (Object obj : c) {if (contains(obj)) {retainSet.add((E) obj);f = true;}}
         root = retainSet.root;
         size = retainSet.size;
