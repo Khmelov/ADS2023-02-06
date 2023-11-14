@@ -34,7 +34,4 @@ public class MyArrayDequeA<E> implements Deque<E> {
 
     }
 
-    @Override
-    public 
-
 }
