@@ -142,7 +142,7 @@ public class MyHashSet<E> implements Set<E> {
         if (_size == _buf.length) {
             grow();
         }
-        int index = e.hashCode() % _buf.length;
+        int index = e.hashCode() % _buf.    length;
         boolean ok = addToList(index, e);
         if (ok) {
             _size++;
