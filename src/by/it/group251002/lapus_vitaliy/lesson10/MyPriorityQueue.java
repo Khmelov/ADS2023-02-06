@@ -4,7 +4,7 @@ import java.util.*;
 
 
 public class MyPriorityQueue<E> implements Queue<E> {
-    E[] siftup(E[] arr, int large) {
+    void siftup(E[] arr, int large) {
         int now=large;
         int high=(now-1) / 2;
 
@@ -18,13 +18,11 @@ public class MyPriorityQueue<E> implements Queue<E> {
             E buf=arr[now];
             arr[now]=arr[large];
             arr[large]=buf;
-            arr=siftup(arr,now);
+            siftup(arr,now);
         }
-
-        return arr;
     }
 
-    E[] siftdown(E[] arr, int large, int max) {
+    void siftdown(E[] arr, int large, int max) {
         int now=large;
         int left=now*2+1;
         int right=2*now+2;
@@ -43,11 +41,18 @@ public class MyPriorityQueue<E> implements Queue<E> {
             E buf=arr[now];
             arr[now]=arr[large];
             arr[large]=buf;
-            arr=siftdown(arr,now,max);
+            siftdown(arr,now,max);
         }
-
-        return arr;
     }
+
+    void heapify(E[] arr, int size)
+    {
+        for (int i = size / 2 - 1; i >= 0; i--)
+            siftdown(arr, i, size);
+    }
+
+
+
 
     private E[] elements = (E[]) new Object[]{};
     private int size = 0;
@@ -121,7 +126,7 @@ public class MyPriorityQueue<E> implements Queue<E> {
     public boolean add(E e) {
         balanceSize();
         elements[size++]=e;
-        elements=siftup(elements,size-1);
+        siftup(elements,size-1);
         return true;
     }
 
@@ -130,7 +135,8 @@ public class MyPriorityQueue<E> implements Queue<E> {
         size--;
         elements[index]=elements[size];
         elements[size] = null;
-        elements=siftdown(elements,index,size);
+        siftdown(elements,index,size);
+        siftup(elements,size-1);
         return elem;
     }
 
@@ -139,7 +145,8 @@ public class MyPriorityQueue<E> implements Queue<E> {
         for(int index=0;index<size;index++) {
             if (Objects.equals(o, elements[index])) {
                 elements[index] = elements[--size];
-                elements=siftdown(elements,index,size);
+                siftdown(elements,index,size);
+                siftup(elements,size-1);
                 return true;
             }
         }
@@ -172,11 +179,15 @@ public class MyPriorityQueue<E> implements Queue<E> {
     @Override
     public boolean removeAll(Collection<?> c) {
         int lastSize=size;
-        E[] bufAr = (E[]) new Object[c.size()];
-        bufAr=c.toArray(bufAr);
-        for (int i = 0; i < bufAr.length; i++) {
-            while(remove(bufAr[i]));
+        for (int i = size-1; i > -1; i--) {
+            if((c.contains(elements[i]))) {
+                E elem = elements[i];
+                System.arraycopy(elements, i+1, elements, i, size-i-1);
+                size--;
+                elements[size] = null;
+            }
         }
+        heapify(elements,size);
         return lastSize!=size;
     }
 
@@ -184,9 +195,14 @@ public class MyPriorityQueue<E> implements Queue<E> {
     public boolean retainAll(Collection<?> c) {
         int lastSize=size;
         for (int i = size-1; i > -1; i--) {
-            if(!(c.contains(elements[i])))
-                remove(i);
+            if(!(c.contains(elements[i]))) {
+                E elem = elements[i];
+                System.arraycopy(elements, i+1, elements, i, size-i-1);
+                size--;
+                elements[size] = null;
+            }
         }
+        heapify(elements,size);
         return lastSize!=size;
     }
 
@@ -221,7 +237,7 @@ public class MyPriorityQueue<E> implements Queue<E> {
         elements[0]=elements[size-1];
         size--;
         elements[size]=null;
-        elements=siftdown(elements,0,size);
+        siftdown(elements,0,size);
         return buf;
     }
 
