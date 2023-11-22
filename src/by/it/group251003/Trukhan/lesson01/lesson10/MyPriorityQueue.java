@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.Queue;
 
 public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
-    private E[]array = (E[]) new Comparable[0];
+    private E[]array = (E[]) new Comparable[10];
     private int size = 0;
     private void resize() {
         E[] tmpArray = (E[]) new Comparable[size * 2 + 1];
@@ -51,6 +51,13 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
             index = parentIndex;
         }
     }
+    public void heapify(){
+        int start = size - 1;
+        while(start >= 0){
+            siftDown(start);
+            start--;
+        }
+    }
     @Override
     public boolean offer(E e) {
         if (checkType(e))
@@ -75,9 +82,13 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
         return result;
     }
     private void remove(int index) {
-        array[index] = array[--size];
+        --size;
+        array[index] = array[size];
+        E moved = array[size];
         array[size] = null;
         siftDown(index);
+        if (array[index] == moved)
+            siftUp(index);
     }
     public String toString() {
         String res = "[";
@@ -144,38 +155,45 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
     }
     @Override
     public boolean addAll(Collection<? extends E> c) {
+        if (c.isEmpty()) return false;
         for (E element : c)
             offer(element);
         return true;
     }
     @Override
     public boolean removeAll(Collection<?> c) {
-        boolean isChanged = false;
-        for (int i = size - 1; i >= 0; i--) {
+        boolean changed = false;
+        int i = 0;
+        while (i < size) {
             if (c.contains(array[i])) {
-                remove(i);
-                isChanged = true;
+                System.arraycopy(array, i+1, array, i, size-i-1);
+                size--;
+                changed = true;
+            } else {
+                i++;
             }
         }
-        return isChanged;
+        heapify();
+
+        return changed;
     }
     @Override
     public boolean retainAll(Collection<?> c) {
-        boolean isChanged = false;
-        for (int i = size - 1; i >= 0; i--) {
+        boolean changed = false;
+        int i = 0;
+        while (i < size) {
             if (!c.contains(array[i])) {
-                remove(i);
-                isChanged = true;
+                System.arraycopy(array, i+1, array, i, size-i-1);
+                size--;
+                changed = true;
+            } else {
+                i++;
             }
         }
+        heapify();
 
-        return isChanged;
+        return changed;
     }
-
-
-
-
-
 
     @Override
     public boolean remove(Object o) {

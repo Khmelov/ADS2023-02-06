@@ -100,6 +100,13 @@ public class Test_Part2_Lesson10Test extends HomeWork {
                 """.split("\\s+");
         eObject = new PriorityQueue<>();
         randomCheck("MyPriorityQueue", methods);
+
+        // Подсказка! Вывод образцовой коллекции должен быть абсолютно идентичен вашей.
+        // Все методы имеют жестко заданное поведение, а уровень C не удается пройти скорее всего
+        // из-за того, что методы removeAll(Collection) и retainAll(Collection) вами сделаны наивно
+        // и имеют скорость O(n log n). Сторонним эффектом такого решения будет отличие в порядке элементов.
+        // Корректно написанные removeAll и retainAll должны работать за O(n), считая, что операции contains
+        // в переданной коллекции работают за O(1). See https://en.wikipedia.org/wiki/Heapsort
     }
 
     private void randomCheck(String aClassName, String... methods) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {

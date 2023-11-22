@@ -7,8 +7,6 @@ import java.math.BigInteger;
  */
 
 public class FiboA {
-
-
     private long startTime = System.currentTimeMillis();
 
     public static void main(String[] args) {
@@ -49,7 +47,6 @@ public class FiboA {
 
             return slowA(n - 1).add(slowA(n - 2));
         }
-
 
 }
 
