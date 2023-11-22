@@ -133,6 +133,7 @@ public class MyHashSet <E> implements Set<E>{
                 size--;
                 return true;
             }
+
             previous = current;
             current = current.next;
         }
