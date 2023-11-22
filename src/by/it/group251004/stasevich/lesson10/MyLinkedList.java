@@ -5,58 +5,214 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.Objects;
 
-class Node<E> {
-    Node<E> next;
-    Node<E> prev;
-    E elem;
-}
-
 public class MyLinkedList<E> implements Deque<E> {
-    private Node<E> head;
-    private Node<E> tail;
-    private int size;
-
-    MyLinkedList(){
-        tail=null;
-        head = null;
-        size=0;
+    static class Elem<E> {
+        public Elem<E> next;
+        public Elem<E> prev;
+        public E elem;
     }
+
+    private Elem<E> head;
+    private Elem<E> tail;
+    private int size = 0;
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append('[');
-        Node<E> temp = head;
-        while (temp.next != null) {
-            sb.append(temp.elem);
-            sb.append(", ");
-            temp = temp.next;
+        StringBuilder res = new StringBuilder("[");
+        String del = "";
+
+        Elem<E> curr = head;
+        while (curr != tail) {
+            res.append(del).append(curr.elem);
+            curr = curr.next;
+            del = ", ";
         }
-        sb.append(temp.elem);
-        sb.append("]");
-        return sb.toString();
+
+        return res.append("]").toString();
+    }
+
+    @Override
+    public boolean add(E e) {
+        if (size == 0) {
+            head = new Elem<E>();
+            tail = new Elem<E>();
+            head.next = tail;
+            tail.prev = head;
+            head.prev = null;
+            tail.next = null;
+            size++;
+            tail.prev.elem = e;
+            return true;
+        }
+
+        tail.elem = e;
+        Elem<E> newElem = new Elem<E>();
+        tail.next = newElem;
+        newElem.prev = tail;
+        tail = newElem;
+
+        size++;
+        return true;
     }
 
     @Override
     public void addFirst(E e) {
-        Node<E> tmp = new Node();
-        tmp.elem=e;
-        if (size==0) {
-            head = tmp;
-            tail = tmp;
+        if (size == 0) {
+            head = new Elem<E>();
+            tail = new Elem<E>();
+            head.next = tail;
+            tail.prev = head;
             head.prev = null;
             tail.next = null;
-        }else {
-            head.prev = tmp;
-            tmp.next = head;
-            head = tmp;
+            size++;
+            tail.prev.elem = e;
+            return;
         }
+
+        Elem<E> newElem = new Elem<E>();
+        head.prev = newElem;
+        newElem.next = head;
+        newElem.elem = e;
+
+        head = newElem;
         size++;
     }
 
     @Override
     public void addLast(E e) {
         add(e);
+    }
+
+    public E remove(int index) {
+        if (index >= size || size == 0)
+            return null;
+
+        if (index == 0) {
+            E el = head.elem;
+            head = head.next;
+            head.prev = null;
+
+            size--;
+            return el;
+        }
+
+        Elem<E> curr = head;
+        int j = 0;
+        while (curr != tail.prev) {
+            if (j == index) {
+                E el = curr.elem;
+
+                curr.next.prev = curr.prev;
+                curr.prev.next = curr.next;
+                curr.prev = null;
+                curr.next = null;
+
+                size--;
+                return el;
+            }
+
+            curr = curr.next;
+            j++;
+        }
+
+        if (j == index) {
+            E el = tail.prev.elem;
+            tail = tail.prev;
+            tail.next = null;
+
+            size--;
+            return el;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean remove(Object e) {
+        if (size == 0)
+            return false;
+
+        if (e.equals(head.elem)) {
+            head = head.next;
+            head.prev = null;
+
+            size--;
+            return true;
+        }
+
+        Elem<E> curr = head;
+        while (curr != tail.prev) {
+            if (e.equals(curr.elem)) {
+                curr.next.prev = curr.prev;
+                curr.prev.next = curr.next;
+                curr.next = null;
+                curr.prev = null;
+
+                size--;
+                return true;
+            }
+
+            curr = curr.next;
+        }
+
+        if (e.equals(tail.prev.elem)) {
+            tail = tail.prev;
+            tail.next = null;
+
+            size--;
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public E element() {
+        if (size == 0)
+            return null;
+        return head.elem;
+    }
+
+    @Override
+    public E getFirst() {
+        return element();
+    }
+
+    @Override
+    public E getLast() {
+        if (size == 0)
+            return null;
+        return tail.prev.elem;
+    }
+
+    @Override
+    public E poll() {
+        if (size == 0)
+            return null;
+
+        E el = head.elem;
+        head = head.next;
+        head.prev = null;
+
+        size--;
+        return el;
+    }
+
+    @Override
+    public E pollFirst() {
+        return poll();
+    }
+
+    @Override
+    public E pollLast() {
+        if (size == 0)
+            return null;
+
+        E el = tail.prev.elem;
+        tail = tail.prev;
+        tail.next = null;
+
+        size--;
+        return el;
     }
 
     @Override
@@ -80,54 +236,6 @@ public class MyLinkedList<E> implements Deque<E> {
     }
 
     @Override
-    public E pollFirst() {
-        if (size == 0)
-            return null;
-        E output = head.elem;
-        if (size == 1)
-            head = tail = null;
-        else
-        {
-            head = head.next;
-            head.prev = null;
-        }
-        size--;
-        return output;
-    }
-
-    @Override
-    public E pollLast() {
-        if (size == 0)
-            return null;
-        E output = tail.elem;
-        if (size == 1)
-            head = tail = null;
-        else
-        {
-            tail = tail.prev;
-            tail.next = null;
-        }
-        size--;
-        return output;
-    }
-
-    @Override
-    public E getFirst() {
-        if (size==0)
-            return null;
-        else
-            return head.elem;
-    }
-
-    @Override
-    public E getLast() {
-        if (size==0)
-            return null;
-        else
-            return tail.elem;
-    }
-
-    @Override
     public E peekFirst() {
         return null;
     }
@@ -148,25 +256,6 @@ public class MyLinkedList<E> implements Deque<E> {
     }
 
     @Override
-    public boolean add(E e) {
-        Node<E> tmp = new Node();
-        tmp.elem=e;
-        if (size==0) {
-            head = tmp;
-            tail = tmp;
-            head.prev = null;
-            tail.next = null;
-        }else {
-            tail.next = tmp;
-            tmp.prev = tail;
-            tail = tmp;
-            tail.next=null;
-        }
-        size++;
-        return true;
-    }
-
-    @Override
     public boolean offer(E e) {
         return false;
     }
@@ -174,16 +263,6 @@ public class MyLinkedList<E> implements Deque<E> {
     @Override
     public E remove() {
         return null;
-    }
-
-    @Override
-    public E poll() {
-        return pollFirst();
-    }
-
-    @Override
-    public E element() {
-        return getFirst();
     }
 
     @Override
@@ -219,47 +298,6 @@ public class MyLinkedList<E> implements Deque<E> {
     @Override
     public E pop() {
         return null;
-    }
-
-    @Override
-    public boolean remove(Object o) {
-        Node<E> temp = head;
-        while (temp != null) {
-            if (o.equals(temp.elem)) {
-                if (temp.next != null)
-                    temp.next.prev = temp.prev;
-                else
-                    tail = temp.prev;
-                if (temp.prev != null)
-                    temp.prev.next = temp.next;
-                else
-                    head = temp.next;
-                size--;
-                return true;
-            }
-            temp = temp.next;
-        }
-        return false;
-    }
-
-    public void remove(int index) {
-        Node<E> temp = head;
-        if (index > -1 && index < size) {
-            int count = 0;
-            while (count++ < index) {
-                temp = temp.next;
-            }
-            if (temp.next != null)
-                temp.next.prev = temp.prev;
-            else
-                tail = temp.prev;
-
-            if (temp.prev != null)
-                temp.prev.next = temp.next;
-            else
-                head = temp.next;
-            size--;
-        }
     }
 
     @Override
