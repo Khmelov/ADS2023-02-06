@@ -181,14 +181,48 @@ public class MyPriorityQueue<E> implements Queue<E> {
         return changed;
     }
 
+    public void heapify(){
+        int start=size-1;
+        while(start>=0){
+            siftDown(start);
+            start--;
+        }
+        return;
+    }
     @Override
     public boolean removeAll(Collection<?> c) {
-        return false;
+        boolean changed = false;
+        int i = 0;
+        while (i < size) {
+            if (c.contains(arr[i])) {
+                System.arraycopy(arr, i+1, arr, i, size-i-1);
+                size--;
+                changed = true;
+            } else {
+                i++;
+            }
+        }
+        heapify();
+
+        return changed;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        boolean changed = false;
+        int i = 0;
+        while (i < size) {
+            if (!c.contains(arr[i])) {
+                System.arraycopy(arr, i+1, arr, i, size-i-1);
+                size--;
+                changed = true;
+            } else {
+                i++;
+            }
+        }
+        heapify();
+
+        return changed;
     }
 
     @Override
