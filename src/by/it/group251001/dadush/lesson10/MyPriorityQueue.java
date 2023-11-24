@@ -1,12 +1,9 @@
 package by.it.group251001.dadush.lesson10;
 
-import jdk.internal.util.ArraysSupport;
-
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Queue;
-import java.util.Collection;
-import java.lang.Comparable;
 
 public class MyPriorityQueue<E>  implements Queue<E> {
     private Object[] data = new Object[0];
