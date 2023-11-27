@@ -153,20 +153,7 @@ public class MyPriorityQueue<E> implements Queue<E> {
     }
     @Override
     public boolean removeAll(Collection<?> c) {
-        /* E []cArray =(E[]) c.toArray();
-        if(cArray.length == 0)
-            return false;
-        boolean result = false;
-        E []temp = (E[])new Object[size];
-        System.arraycopy(data, 0, temp, 0, size);
-        clear();
-        for(int i = 0; i < temp.length;i++)
-            if(!c.contains(temp[i])) {
-                add(temp[i]);
-            } else {
-                result = true;
-            }
-        return result;*/
+
         int i = 0;
         for(;i<size && !c.contains(data[i]);i++)
             ;
@@ -190,20 +177,7 @@ public class MyPriorityQueue<E> implements Queue<E> {
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        /*E []cArray =(E[]) c.toArray();
-        if(cArray.length == 0)
-            return false;
-        boolean result = false;
-        E []temp = (E[])new Object[size];
-        System.arraycopy(data, 0, temp, 0, size);
-        clear();
-        for(int i = 0; i < temp.length;i++)
-            if(c.contains(temp[i])) {
-                add(temp[i]);
-            } else {
-                result = true;
-            }
-        return result;*/
+
         int i = 0;
         for(;i<size && c.contains(data[i]);i++)
             ;
