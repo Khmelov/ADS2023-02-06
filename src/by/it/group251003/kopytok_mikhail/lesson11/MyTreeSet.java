@@ -28,8 +28,8 @@ public class MyTreeSet<E extends Comparable<E>> implements Set<E> {
 
     private boolean isInvalidType(Object o) {
         return o.getClass() != arr[0].getClass();
-
     }
+
     private int binarySearch(E e) {
         int left = 0;
         int right = size - 1;
