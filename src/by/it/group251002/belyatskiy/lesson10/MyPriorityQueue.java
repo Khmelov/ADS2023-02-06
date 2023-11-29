@@ -26,7 +26,7 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
         arr[i] = arr[j];
         arr[j] = temp;
     }
-    private void siftDown(int index) {
+    private void siftDown(int index) { //Sorting queue by priority
         while (true) {
             int left = 2 * index + 1;
             int right = 2 * index + 2;
@@ -208,7 +208,7 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
     }
 
     @Override
-    public boolean offer(E e) {
+    public boolean offer(E e) { //Input element throw an exception
         if (isInvalidType(e))
             throw new IllegalArgumentException("Element cannot be null");
 
