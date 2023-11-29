@@ -241,8 +241,38 @@ public class MyAvlMap implements Map<Integer, String> {
         return (node == null) ? 0 : height(node.left) - height(node.right);
     }
 
+    private Node rotate(Node x, boolean isLeftRotation) {
+        Node y;
+        Node T;
+
+        if (isLeftRotation) {
+            y = x.right;
+            T = y.left;
+            y.left = x;
+            x.right = T;
+        } else {
+            y = x.left;
+            T = y.right;
+            y.right = x;
+            x.left = T;
+        }
+
+        // Обновление высот
+        x.height = 1 + Math.max(height(x.left), height(x.right));
+        y.height = 1 + Math.max(height(y.left), height(y.right));
+
+        return y;
+    }
 
     private Node rightRotate(Node y) {
+        return rotate(y, false);
+    }
+
+    private Node leftRotate(Node x) {
+        return rotate(x, true);
+    }
+
+    /*  private Node rightRotate(Node y) {
         Node x = y.left;
         Node T2 = x.right;
 
@@ -269,7 +299,7 @@ public class MyAvlMap implements Map<Integer, String> {
         y.height = 1 + Math.max(height(y.left), height(y.right));
 
         return y;
-    }
+    }*/
 
     private Node findMin(Node node) {
         Node current = node;
