@@ -3,14 +3,14 @@ package by.it.group251002.belyatskiy.lesson10;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.Iterator;
-public class MyArrayDeque<E> implements Deque<E> {
+public class MyArrayDeque<E> implements Deque<E> { //queue on array
     private E[] arr = (E[]) new Object[0];
 
     private int size = 0;
 
     private void newsized() {
         newized(arr.length);
-    }
+    } //increasing size x2
     private void newized(int newSize) {
         E[] newArr = (E[]) new Object[newSize * 3 / 2 + 1];
         System.arraycopy(arr, 0, newArr, 0, size);

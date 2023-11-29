@@ -2,8 +2,8 @@ package by.it.group251002.korti.lesson10;
 
 import java.util.Deque;
 
-public class MyArrayDequeA<E> implements Deque<E> {
-
+public class MyArrayDequeA {
+    /*
     private E[] elements =(E[]) new Object[]{};
     private int size = 0;
 
@@ -35,6 +35,8 @@ public class MyArrayDequeA<E> implements Deque<E> {
     }
 
     @Override
-    public 
+    public
+
+     */
 
 }
