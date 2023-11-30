@@ -11,12 +11,12 @@ public class MyHashSet<E> implements Set<E> {
     private int size;
 
     public MyHashSet() {
-        int defaultCapacity = 82;
-        set = new SLL[defaultCapacity];
+        int defaultCapacity = 32;
+        set = (SLL<E>[]) new SLL[defaultCapacity];
     }
 
     public MyHashSet(int capacity) {
-        set = new SLL[capacity];
+        set = (SLL<E>[]) new SLL[capacity];
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -35,6 +35,7 @@ public class MyHashSet<E> implements Set<E> {
                 }
             }
         }
+        index = index == 0 ? 0 : index - 1;
         boolean skipedFirstEl = false;
         for (; index < set.length; ++index) {
             if (set[index] == null) {
@@ -70,12 +71,17 @@ public class MyHashSet<E> implements Set<E> {
     @Override
     public boolean add(E e) {
         int index = e.hashCode() % set.length;
+
+        if (set[index] != null && set[index].contains(e)) {
+            return false;
+        }
+
         if (set[index] == null) {
             set[index] = new SLL<>();
         }
         set[index].append(e);
         ++size;
-        return false;
+        return true;
     }
 
     @Override
@@ -105,6 +111,9 @@ public class MyHashSet<E> implements Set<E> {
     @Override
     public boolean contains(Object o) {
         int index = o.hashCode() % set.length;
+        if (set[index] == null) {
+            return false;
+        }
         E e = (E) o;
         return set[index].getPrev(e) != null || set[index].isHead(e);
     }

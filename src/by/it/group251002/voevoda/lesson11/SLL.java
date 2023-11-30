@@ -12,14 +12,32 @@ public class SLL<E> {
         return head;
     }
 
+    public void setSize(int size) { this.size = size; }
+
+    public int getSize() { return size; }
+
     public void append(E value) {
         Node<E> second = new Node<>(value);
-        if (size++ == 0) {
-            head = tail = second;
+        if (size == 0) {
+            head = second;
+            tail = second;
         } else {
             tail.setNext(second);
             tail = tail.getNext();
         }
+        ++size;
+    }
+
+    public void append(E value, int index) {
+        Node<E> second = new Node<>(value, index);
+        if (size == 0) {
+            head = second;
+            tail = second;
+        } else {
+            tail.setNext(second);
+            tail = tail.getNext();
+        }
+        ++size;
     }
 
     // getPrev returns null if value is either head or there are no such value
@@ -51,12 +69,20 @@ public class SLL<E> {
         return null;
     }
 
+    public boolean contains(E e) {
+        for (Node<E> ptr = head; ptr != null; ptr = ptr.getNext()) {
+            if (ptr.getValue().equals(e)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isHead(E e) {
-        if (size == 0) {
+        if (size == 0 || head == null) {
             return false;
         }
 
         return head.getValue().equals(e);
     }
-
 }
