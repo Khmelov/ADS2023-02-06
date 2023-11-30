@@ -272,34 +272,6 @@ public class MyAvlMap implements Map<Integer, String> {
         return rotate(x, true);
     }
 
-    /*  private Node rightRotate(Node y) {
-        Node x = y.left;
-        Node T2 = x.right;
-
-        x.right = y;
-        y.left = T2;
-
-        // Обновление высот
-        y.height = 1 + Math.max(height(y.left), height(y.right));
-        x.height = 1 + Math.max(height(x.left), height(x.right));
-
-        return x;
-    }
-
-
-    private Node leftRotate(Node x) {
-        Node y = x.right;
-        Node T2 = y.left;
-
-        y.left = x;
-        x.right = T2;
-
-        // Обновление высот
-        x.height = 1 + Math.max(height(x.left), height(x.right));
-        y.height = 1 + Math.max(height(y.left), height(y.right));
-
-        return y;
-    }*/
 
     private Node findMin(Node node) {
         Node current = node;
