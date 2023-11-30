@@ -1,111 +1,144 @@
 package by.it.group251002.belyatskiy.lesson13;
 
-import java.util.*;
-import java.util.Map.Entry;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public class GraphC {
-    static Integer currTime = 0;
+    private static class vector<T>{
+        public int size = 0;
+        public Object[] values = new Object[0];
 
-    private static void DfsTime(String node, Map<String, ArrayList<String>> graph, Set<String> visited, Map<String, Integer> time) {
-        visited.add(node);
-        if (graph.get(node) != null)
-            for (String next_node : graph.get(node))
-                if (!visited.contains(next_node)) {
-                    currTime++;
-                    DfsTime(next_node, graph, visited, time);
-                }
+        public boolean empty(){
+            return size == 0;
+        }
 
-        time.put(node, currTime++);
-    }
+        public void push_back(T value){
+            if(size == values.length)
+                values = Arrays.copyOf(values, size * 3 / 2 + 1);
+            values[size++] = value;
+        }
 
-    private static void DFS(String node, Map<String, ArrayList<String>> graph, Set<String> visited, List<String> path) {
-        visited.add(node);
-        path.add(node);
+        public boolean contains(T val){
+            for(int i = 0; i < size; ++i)
+                if(values[i].equals(val))
+                    return true;
+            return false;
+        }
 
-        if (graph.get(node) != null)
-            for (String next_node : graph.get(node))
-                if (!visited.contains(next_node))
-                    DFS(next_node, graph, visited, path);
-    }
+        public int find(T val){
+            for(int i = 0; i < size; ++i)
+                if(values[i].equals(val))
+                    return i;
+            return  -1;
+        }
 
-    static class StringComparator implements Comparator<String> {
-        @Override
-        public int compare(String s1, String s2) {
-            return s1.compareTo(s2);
+        public void remove(int index){
+            for(int i = index; i < size - 1; ++i)
+                values[i] = values[i + 1];
+            pop_back();
+        }
+
+        public void pop_back(){
+            size--;
+        }
+
+        public T front(){
+            return (T)values[0];
+        }
+
+        public T back(){
+            return (T)values[size - 1];
         }
     }
 
-    static class MapEntryComparator implements Comparator<Entry<String, Integer>> {
-        @Override
-        public int compare(Entry<String, Integer> entry1, Entry<String, Integer> entry2) {
-            int valueComparison = entry1.getValue().compareTo(entry2.getValue());
-            if (valueComparison == 0)
-                return entry2.getKey().compareTo(entry1.getKey());
-
-            return valueComparison;
-        }
-    }
-
-    public static void main(String[] args) {
-        Map<String, ArrayList<String>> graph = new HashMap<>();
-        Map<String, ArrayList<String>> graphReversed = new HashMap<>();
-        Set<String> visited = new HashSet<>();
-        Map<String, Integer> time = new HashMap<>();
-
-        Scanner in = new Scanner(System.in);
-
-        boolean isEnd = false;
-
-        String start = null;
-
-        while (!isEnd) {
-            String a = in.next();
-            if (start == null)
-                start = a;
-
-            String s = in.next();
-            String b = in.next();
-
-            if (b.charAt(b.length() - 1) == ',')
-                b = b.substring(0, s.length() - 1);
-            else
-                isEnd = true;
-
-            if (!graph.containsKey(a))
-                graph.put(a, new ArrayList<>());
-            graph.get(a).add(b);
-
-            if (!graphReversed.containsKey(b))
-                graphReversed.put(b, new ArrayList<>());
-            graphReversed.get(b).add(a);
-        }
-
-        for (String node : graph.keySet())
-            if (!visited.contains(node))
-                DfsTime(node, graph, visited, time);
-
-
-        List<Entry<String, Integer>> entryList = new ArrayList<>(time.entrySet());
-        entryList.sort(new MapEntryComparator());
-        String[] vertices = new String[entryList.size()];
-        for (int i = entryList.size() - 1; i > -1; i--)
-            vertices[entryList.size() - 1 - i] = entryList.get(i).getKey();
-
-
-        visited = new HashSet<>();
-        for (String node : vertices)
-            if (!visited.contains(node)) {
-                List<String> path = new ArrayList<>();
-                DFS(node, graphReversed, visited, path);
-
-                path.sort(new StringComparator());
-
-                for (String n : path)
-                    System.out.print(n);
-
-                System.out.println();
+    static void DFS(Integer v, boolean used[], vector<vector<Integer>> G){
+        vector<Integer> temp = (vector<Integer>)G.values[v];
+        for(int i = 0; i < temp.size; ++i)
+            if(!used[(Integer)temp.values[i]]) {
+                used[(Integer)temp.values[i]] = true;
+                DFS((Integer)temp.values[i], used, G);
             }
+    }
 
+    public static void main(String[] args){
+        vector<vector<Integer>> G = new vector<>();
+        Map<Character, Integer> indexes = new HashMap<>();
+        Map<Integer, Character> chars = new HashMap<>();
+        Map<Integer, Boolean> hasUnit = new HashMap<>();
+        Integer free_index = 0;
+        Scanner in = new Scanner(System.in);
+        boolean stopinput = false;
+        int count = 0;
+        while(!stopinput){
+            String a = in.next();
+            String c = a.substring(3);
+            a = a.substring(0, 1);
+            if(c.charAt(c.length() - 1) != ',')
+                stopinput = true;
+            else
+                c = c.substring(0, c.length() - 1);
+            if(!indexes.containsKey(a.charAt(0))) {
+                indexes.put(a.charAt(0), free_index);
+                chars.put(free_index++, a.charAt(0));
+                vector<Integer> temp = new vector<>();
+                G.push_back(temp);
+                ++count;
+            }
+            if(!indexes.containsKey(c.charAt(0))) {
+                indexes.put(c.charAt(0), free_index);
+                chars.put(free_index++, c.charAt(0));
+                vector<Integer> temp = new vector<>();
+                G.push_back(temp);
+                ++count;
+            }
+            vector<Integer> temp = (vector<Integer>)G.values[indexes.get(a.charAt(0))];
+            temp.push_back(indexes.get(c.charAt(0)));
+        }
+
+        vector <vector <Character> > pathto = new vector<>();
+        for(int i = 0; i < G.size; ++i){
+            vector<Character> temp = new vector<>();
+            pathto.push_back(temp);
+        }
+        for(int i = 0; i < G.size; ++i){
+            boolean used[] = new boolean[G.size];
+            for(int j = 0; j < G.size; ++j)
+                used[j] = false;
+            used[i] = true;
+            DFS(i, used, G);
+            vector<Character> temp = (vector<Character>)pathto.values[i];
+            for(int j = 0; j < G.size; ++j)
+                if(used[j])
+                    temp.push_back(chars.get(j));
+        }
+        int units[] = new int[G.size];
+        for(int i = 0; i < G.size; ++i)
+            units[i] = i;
+        for(int i = 0; i < G.size; ++i)
+            for(int j = i; j < G.size; ++j) {
+                vector<Character> first = (vector<Character>) pathto.values[i];
+                vector<Character> second = (vector<Character>) pathto.values[j];
+                if (first.contains(chars.get(j)) && second.contains(chars.get(i)))
+                    units[j] = units[i];
+            }
+        vector<String> ans = new vector<>();
+        for(int i = 0; i < G.size; ++i)
+            if(!hasUnit.containsKey(units[i])){
+                ans.push_back(new String());
+                String temp = ans.back();
+                for(int j = i; j < G.size; ++j)
+                    if(units[j] == units[i])
+                        temp = temp + chars.get(j);
+                char[] temp2 = temp.toCharArray();
+                Arrays.sort(temp2);
+                temp = new String(temp2);
+                ans.values[ans.size - 1] = temp;
+                hasUnit.put(units[i], true);
+            }
+        for(int i = 0; i < ans.size; ++i)
+            System.out.println((String)ans.values[i]);
         in.close();
     }
 }
