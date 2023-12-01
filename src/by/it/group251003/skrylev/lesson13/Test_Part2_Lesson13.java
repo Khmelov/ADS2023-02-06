@@ -23,7 +23,8 @@ public class Test_Part2_Lesson13 extends HomeWork {
 
     @Test
     public void testGraphB() {
-        run("0 -> 1", true).include("no").exclude("yes");
+        run("0 ->" +
+                " 1", true).include("no").exclude("yes");
         run("0 -> 1, 1 -> 2", true).include("no").exclude("yes");
         run("0 -> 1, 1 -> 2, 2 -> 0", true).include("yes").exclude("no");
         //Дополните эти тесты СВОИМИ более сложными примерами и проверьте их работоспособность.

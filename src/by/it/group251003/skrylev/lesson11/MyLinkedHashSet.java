@@ -13,6 +13,7 @@ public class MyLinkedHashSet<E> implements Set<E> {
         }
     }
 
+
     private ListNode<E> elmsQueue = null;
 
     private void addToQueue(E e) {

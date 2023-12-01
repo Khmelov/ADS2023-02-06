@@ -2,7 +2,8 @@ package by.it.group251003.skrylev.lesson13;
 
 import java.util.*;
 
-public class GraphC {
+public class
+GraphC {
     private final Map<String, Set<String>> adjacencyList = new HashMap<>();
     private final List<List<String>> strongComponents = new ArrayList<>();
     public List<List<String>> getStrongComponents() { return strongComponents; }
