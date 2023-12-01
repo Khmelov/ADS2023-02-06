@@ -3,16 +3,17 @@ package by.it.group251001.zhidkov.lesson13;
 import java.util.*;
 
 public class GraphA {
-    private static String[] digits = new String[10];
-    private static String[] letters = new String[10];
+    private static String[] digits = new String[26];
+    private static String[] letters = new String[26];
     private static int iter = 0;
     private static int len = 0;
-    private static boolean isLetter = false;
+    public static boolean isLetter = false;
     public static void fill() {
-        for (int i = 0; i < 10; i++) {
-            digits[i] = String.valueOf((char)('0' + i));
+        for (int i = 0; i < 26; i++) {
+            digits[i] = String.valueOf(i);
             letters[i] = String.valueOf((char)('A' + i));
         }
+        int i = 0;
     }
     public static boolean isDigit(String str) {
         for (int i = 0; i < 10; i++) {

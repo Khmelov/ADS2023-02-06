@@ -2,29 +2,69 @@ package by.it.group251001.zhidkov.lesson13;
 import java.util.Stack;
 
 public class Graph {
-    private int V;
+    public int V;
     private boolean hasCycle;
-    private int[][] adjMatrix;
+    public int[][] adjMatrix;
     public Graph(int v) {
         V = v;
         adjMatrix = new int[v][v];
         hasCycle = false;
     }
+
     public void addEdge(int v, int w) {
         adjMatrix[v][w] = 1;
     }
-    public void topologicalSort(boolean isLetter) {
-        Stack<String> stack = new Stack<>();
+    public void topSort(boolean isLetter, Stack<String> stack) {
         boolean[] visited = new boolean[V];
         for (int i = V - 1; i >= 0 ; i--) {
             if (!visited[i]) {
                 DFS_A(i, visited, stack, isLetter);
             }
         }
+    }
+    public void topologicalSort(boolean isLetter) {
+        Stack<String> stack = new Stack<>();
+        topSort(isLetter, stack);
         // Вывод результата
         while (!stack.isEmpty()) {
             System.out.print(stack.pop() + " ");
         }
+    }
+    public void findComponents(boolean isLetter, int[] order) {
+        int[] visited = new int[V];
+        int Count = 0;
+        for (int i = 0; i < V; i++) {
+            if (visited[order[i]] == 0) {
+                DFS_C(order[i], ++Count, visited);
+            }
+        }
+        String line = "";
+
+        for (int i = V - 1; i >= 0; i--) {
+            if (isLetter) {
+                line = line + (char) (order[i] + 'A');
+            }
+            else {
+                line = line + order[i];
+            }
+            if (i > 0 && visited[i] != visited[i - 1]) {
+                line = line + "\n";
+            }
+        }
+        System.out.print(line);
+    }
+    public int[] findOrder(boolean isLetter) {
+        Stack<String> stack = new Stack<>();
+        topSort(isLetter, stack);
+        int[] order = new int[V];
+        int i = 0;
+        while (!stack.isEmpty()) {
+            if (isLetter)
+                order[i++] = (int)stack.pop().charAt(0) - 'A';
+            else
+                order[i++] = Integer.valueOf(stack.pop());
+        }
+        return order;
     }
     public boolean isHasCycle() {
         int[] visited = new int[V];
@@ -63,5 +103,14 @@ public class Graph {
             }
         }
         visited[v] = 2;
+    }
+    private void DFS_C(int v, int Component, int[] visited) {
+        visited[v] = Component;
+        for (int i = 0; i < V ; i++) {
+            if (adjMatrix[v][i] == 1) {
+                if (visited[i] == 0)
+                    DFS_C(i, Component, visited);
+            }
+        }
     }
 }

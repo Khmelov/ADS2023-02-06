@@ -56,8 +56,8 @@ public class Test_Part2_Lesson13Test extends HomeWork {
 
     @Test
     public void testGraphC() {
-        run("1 -> 2, 2 -> 3, 3 -> 1, 3 -> 4, 4 -> 5, 5 -> 6, 6 -> 4", true)
-                .include("123\n456");
+        run("0 -> 1, 1 -> 2, 2 -> 0, 2 -> 3, 3 -> 4, 4 -> 5, 5 -> 3", true)
+                .include("012\n345");
         run("C -> B, C -> I, I -> A, A -> D, D -> I, D -> B, B -> H, H -> D, D -> E, H -> E, E -> G, A -> F, G -> F, F -> K, K -> G", true)
                 .include("C\nABDHI\nE\nFGK");
         //Дополните эти тесты СВОИМИ более сложными примерами и проверьте их работоспособность.
