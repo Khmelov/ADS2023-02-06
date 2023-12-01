@@ -14,7 +14,7 @@ public class Graph {
     public void topologicalSort(boolean isLetter) {
         Stack<String> stack = new Stack<>();
         boolean[] visited = new boolean[V];
-        for (int i = 0; i < V; i++) {
+        for (int i = V - 1; i >= 0 ; i--) {
             if (!visited[i]) {
                 DFS(i, visited, stack, isLetter);
             }
@@ -27,7 +27,7 @@ public class Graph {
     private void DFS(int v, boolean[] visited, Stack<String> stack, boolean isLetter) {
         visited[v] = true;
 
-        for (int i = 0; i < V; i++) {
+        for (int i = V - 1; i >= 0 ; i--) {
             if (adjMatrix[v][i] == 1 && !visited[i]) {
                 DFS(i, visited, stack, isLetter);
             }

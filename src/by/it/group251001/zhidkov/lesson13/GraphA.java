@@ -49,19 +49,21 @@ public class GraphA {
                 else
                     isLetter = true;
                 int len = 0;
-                while (!line[len].equals("-1")) {
+                int iter = 0;
+                while (!line[iter].equals("-1")) {
                     boolean rise = true;
-                    for (i = 0; i < len; i++) {
-                        if (line[len].equals(line[i])) {
+                    for (i = 0; i < iter; i++) {
+                        if (line[iter].equals(line[i])) {
                             rise = false;
                             break;
                         }
                     }
+                    iter++;
                     if (rise)
                         len++;
                 }
                 Graph graph = new Graph(len);
-                for (i = 0; i < len; i++) {
+                for (i = 0; i < iter; i++) {
                     if ((i + 1) % 2 == 0) {
                         if (!isLetter)
                             graph.addEdge(Integer.valueOf(line[i - 1]), Integer.valueOf(line[i]));
