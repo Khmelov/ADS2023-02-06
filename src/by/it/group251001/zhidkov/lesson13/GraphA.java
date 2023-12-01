@@ -16,7 +16,7 @@ public class GraphA {
         int i = 0;
     }
     public static boolean isDigit(String str) {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 26; i++) {
             if (digits[i].equals(str)) {
                 return true;
             }
@@ -24,8 +24,8 @@ public class GraphA {
         return false;
     }
     public static Integer getIndex(String str) {
-        for (int i = 0; i < 10; i++) {
-            if (letters[i].equals(str)) {
+        for (int i = 0; i < 26; i++) {
+            if (letters[i].equals(str) || digits[i].equals(str)) {
                 return i;
             }
         }
@@ -54,21 +54,16 @@ public class GraphA {
         len = 0;
         iter = 0;
         while (!line[iter].equals("-1")) {
-            boolean rise = true;
-            for (i = 0; i < iter; i++) {
-                if (line[iter].equals(line[i])) {
-                    rise = false;
-                    break;
-                }
+            int value= getIndex(line[iter]);
+            if (value > len) {
+                len = value;
             }
             iter++;
-            if (rise)
-                len++;
         }
         return line;
     }
     public static Graph graphCreate(String[] line) {
-        Graph graph = new Graph(len);
+        Graph graph = new Graph(len + 1);
         for (int i = 0; i < iter; i++) {
             if ((i + 1) % 2 == 0) {
                 if (!isLetter)
