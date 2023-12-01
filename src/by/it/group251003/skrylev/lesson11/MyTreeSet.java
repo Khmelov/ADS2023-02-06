@@ -11,7 +11,6 @@ public class MyTreeSet<E extends Comparable<E>> implements Set<E> {
         TreeNode right;
 
 
-
         TreeNode(E e) {
             data = e;
         }
