@@ -4,6 +4,7 @@ import java.util.*;
 
 public class GraphA {
 
+
     private static void getGraph(Map<String, ArrayList<String>> graph) {
         Scanner scanner = new Scanner(System.in);
         boolean isEnd = false;

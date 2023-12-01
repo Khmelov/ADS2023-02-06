@@ -10,6 +10,7 @@ public class MyTreeSet<E extends Comparable<E>> implements Set<E> {
         TreeNode left;
         TreeNode right;
 
+
         TreeNode(E e) {
             data = e;
         }
