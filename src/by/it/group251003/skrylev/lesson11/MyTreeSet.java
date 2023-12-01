@@ -15,7 +15,6 @@ public class MyTreeSet<E extends Comparable<E>> implements Set<E> {
             data = e;
         }
     }
-
     private TreeNode map = null;
     private int size = 0;
 

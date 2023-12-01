@@ -21,7 +21,6 @@ public class Test_Part2_Lesson13 extends HomeWork {
         //Параметр метода run - это ввод. Параметр метода include - это вывод.
         //Общее число примеров должно быть не менее 20 (сейчас их 8).
     }
-
     @Test
     public void testGraphB() {
         run("0 ->" +
