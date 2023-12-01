@@ -19,7 +19,7 @@
                 remove(Integer)
                 get(Integer)
                 containsKey(Integer)
-                containsValue(String)
+                containsValue(String
                 size()
 
                 clear()

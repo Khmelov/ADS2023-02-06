@@ -23,4 +23,4 @@
 
                 size()
                 clear()
-                isEmpty()
+                isEmpty(

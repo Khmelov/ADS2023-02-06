@@ -29,7 +29,6 @@ public class Test_Part2_Lesson12Test extends HomeWork {
     private final Random rnd = new Random(RND_SEED);
     private Map<Integer, String> eObject;
     private Map<Integer, String> aObject;
-
     private Map<Method, String> cache = new HashMap<>();
 
     @Test(timeout = 500 * INVOCATION_COUNT_PER_METHOD)
