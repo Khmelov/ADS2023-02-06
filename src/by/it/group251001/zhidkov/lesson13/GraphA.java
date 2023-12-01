@@ -5,6 +5,15 @@ import java.util.*;
 public class GraphA {
     private static String[] digits = new String[10];
     private static String[] letters = new String[10];
+    private static int iter = 0;
+    private static int len = 0;
+    private static boolean isLetter = false;
+    public static void fill() {
+        for (int i = 0; i < 10; i++) {
+            digits[i] = String.valueOf((char)('0' + i));
+            letters[i] = String.valueOf((char)('A' + i));
+        }
+    }
     public static boolean isDigit(String str) {
         for (int i = 0; i < 10; i++) {
             if (digits[i].equals(str)) {
@@ -21,56 +30,59 @@ public class GraphA {
         }
         return -1;
     }
-        public static void main(String[] args) {
-            boolean isLetter;
-            Scanner in = new Scanner(System.in);
-            for (int i = 0; i < 10; i++) {
-                digits[i] = String.valueOf((char)('0' + i));
-                letters[i] = String.valueOf((char)('A' + i));
+    public static String[] strAnalisys(Scanner in) {
+        String[] line = new String[256];
+        for (int i = 0; i < 256; i++) {
+            line[i] = "-1";
+        }
+        int i = 0;
+        while (in.hasNext()) {
+            String nextToken = in.next();
+            if (!("->".equals(nextToken))) {
+                if (nextToken.endsWith(",")) {
+                    nextToken = nextToken.substring(0, nextToken.length() - 1);
+                }
+                line[i] = nextToken;
+                i++;
             }
-            while (in.hasNextLine()) {
-                String[] line = new String[256];
-                for (int i = 0; i < 256; i++) {
-                    line[i] = "-1";
+        }
+        if (isDigit(line[0]))
+            isLetter = false;
+        else
+            isLetter = true;
+        len = 0;
+        iter = 0;
+        while (!line[iter].equals("-1")) {
+            boolean rise = true;
+            for (i = 0; i < iter; i++) {
+                if (line[iter].equals(line[i])) {
+                    rise = false;
+                    break;
                 }
-                int i = 0;
-                while (in.hasNext()) {
-                    String nextToken = in.next();
-                    if (!("->".equals(nextToken))) {
-                        if (nextToken.endsWith(",")) {
-                            nextToken = nextToken.substring(0, nextToken.length() - 1);
-                        }
-                        line[i] = nextToken;
-                        i++;
-                    }
-                }
-                if (isDigit(line[0]))
-                    isLetter = false;
+            }
+            iter++;
+            if (rise)
+                len++;
+        }
+        return line;
+    }
+    public static Graph graphCreate(String[] line) {
+        Graph graph = new Graph(len);
+        for (int i = 0; i < iter; i++) {
+            if ((i + 1) % 2 == 0) {
+                if (!isLetter)
+                    graph.addEdge(Integer.valueOf(line[i - 1]), Integer.valueOf(line[i]));
                 else
-                    isLetter = true;
-                int len = 0;
-                int iter = 0;
-                while (!line[iter].equals("-1")) {
-                    boolean rise = true;
-                    for (i = 0; i < iter; i++) {
-                        if (line[iter].equals(line[i])) {
-                            rise = false;
-                            break;
-                        }
-                    }
-                    iter++;
-                    if (rise)
-                        len++;
-                }
-                Graph graph = new Graph(len);
-                for (i = 0; i < iter; i++) {
-                    if ((i + 1) % 2 == 0) {
-                        if (!isLetter)
-                            graph.addEdge(Integer.valueOf(line[i - 1]), Integer.valueOf(line[i]));
-                        else
-                            graph.addEdge(getIndex(line[i - 1]), getIndex(line[i]));
-                    }
-                }
+                    graph.addEdge(getIndex(line[i - 1]), getIndex(line[i]));
+            }
+        }
+        return graph;
+    }
+        public static void main(String[] args) {
+            Scanner in = new Scanner(System.in);
+            fill();
+            while (in.hasNextLine()) {
+                Graph graph = graphCreate(strAnalisys(in));
                 graph.topologicalSort(isLetter);
             }
     }
