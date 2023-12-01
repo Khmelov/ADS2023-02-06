@@ -15,6 +15,7 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         if (isEmpty()) {
             return "{}";
         }
+
         StringBuilder sb = new StringBuilder("{");
         inorderTraversal(sb, root);
         return sb.delete(sb.length() - 2, sb.length()).append("}").toString();

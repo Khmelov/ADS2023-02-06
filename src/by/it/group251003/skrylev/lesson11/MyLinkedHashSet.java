@@ -12,6 +12,7 @@ public class MyLinkedHashSet<E> implements Set<E> {
             this.data = e;
         }
     }
+
     private ListNode<E> elmsQueue = null;
 
     private void addToQueue(E e) {
