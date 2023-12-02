@@ -30,6 +30,15 @@ public class Graph {
             System.out.print(stack.pop() + " ");
         }
     }
+    public int findMax(int[] visited) {
+        int max = 0;
+        for (int i = 0; i < V; i++) {
+            if (visited[i] > max) {
+                max = visited[i];
+            }
+        }
+        return max;
+    }
     public void findComponents(boolean isLetter, int[] order) {
         int[] visited = new int[V];
         int Count = 0;
@@ -38,18 +47,21 @@ public class Graph {
                 DFS_C(order[i], ++Count, visited);
             }
         }
-        String line = "";
 
-        for (int i = V - 1; i >= 0; i--) {
-            if (isLetter) {
-                line = line + (char) (order[i] + 'A');
+        int max = findMax(visited);
+        String line = "";
+        for (int i = 0; (i < V) && (max != 0); i++) {
+            for (int j = 0; j < V; j++) {
+                if (visited[j] == max) {
+                    if (isLetter)
+                        line += (char) (j + 'A');
+                    else
+                        line += j;
+                }
             }
-            else {
-                line = line + order[i];
-            }
-            if (i > 0 && visited[i] != visited[i - 1]) {
-                line = line + "\n";
-            }
+            max--;
+            if (max != 0)
+                line += "\n";
         }
         System.out.print(line);
     }
@@ -106,7 +118,7 @@ public class Graph {
     }
     private void DFS_C(int v, int Component, int[] visited) {
         visited[v] = Component;
-        for (int i = 0; i < V ; i++) {
+        for (int i = 0; i < V; i++) {
             if (adjMatrix[v][i] == 1) {
                 if (visited[i] == 0)
                     DFS_C(i, Component, visited);
