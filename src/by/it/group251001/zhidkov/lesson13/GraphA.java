@@ -1,7 +1,5 @@
 package by.it.group251001.zhidkov.lesson13;
-
 import java.util.*;
-
 public class GraphA {
     private static String[] digits = new String[26];
     private static String[] letters = new String[26];

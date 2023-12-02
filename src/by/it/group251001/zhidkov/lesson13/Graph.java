@@ -10,7 +10,6 @@ public class Graph {
         adjMatrix = new int[v][v];
         hasCycle = false;
     }
-
     public void addEdge(int v, int w) {
         adjMatrix[v][w] = 1;
     }

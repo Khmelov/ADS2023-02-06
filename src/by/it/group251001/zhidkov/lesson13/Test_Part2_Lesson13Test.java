@@ -1,5 +1,4 @@
 package by.it.group251001.zhidkov.lesson13;
-
 import by.it.HomeWork;
 import org.junit.Test;
 @SuppressWarnings("NewClassNamingConvention")

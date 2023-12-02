@@ -1,5 +1,4 @@
 package by.it.group251001.zhidkov.lesson13;
-
 import java.util.*;
 public class GraphC {
     public static void main(String[] args) {
