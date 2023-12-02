@@ -13,22 +13,17 @@ public class GraphA {
             digits[i] = String.valueOf(i);
             letters[i] = String.valueOf((char)('A' + i));
         }
-        int i = 0;
     }
     public static boolean isDigit(String str) {
-        for (int i = 0; i < 26; i++) {
-            if (digits[i].equals(str)) {
+        for (int i = 0; i < 26; i++)
+            if (digits[i].equals(str))
                 return true;
-            }
-        }
         return false;
     }
     public static Integer getIndex(String str) {
-        for (int i = 0; i < 26; i++) {
-            if (letters[i].equals(str) || digits[i].equals(str)) {
+        for (int i = 0; i < 26; i++)
+            if (letters[i].equals(str) || digits[i].equals(str))
                 return i;
-            }
-        }
         return -1;
     }
     public static String[] strAnalisys(Scanner in) {
@@ -40,9 +35,8 @@ public class GraphA {
         while (in.hasNext()) {
             String nextToken = in.next();
             if (!("->".equals(nextToken))) {
-                if (nextToken.endsWith(",")) {
+                if (nextToken.endsWith(","))
                     nextToken = nextToken.substring(0, nextToken.length() - 1);
-                }
                 line[i] = nextToken;
                 i++;
             }
@@ -55,23 +49,20 @@ public class GraphA {
         iter = 0;
         while (!line[iter].equals("-1")) {
             int value= getIndex(line[iter]);
-            if (value > len) {
+            if (value > len)
                 len = value;
-            }
             iter++;
         }
         return line;
     }
     public static Graph graphCreate(String[] line) {
         Graph graph = new Graph(len + 1);
-        for (int i = 0; i < iter; i++) {
-            if ((i + 1) % 2 == 0) {
+        for (int i = 0; i < iter; i++)
+            if ((i + 1) % 2 == 0)
                 if (!isLetter)
                     graph.addEdge(Integer.valueOf(line[i - 1]), Integer.valueOf(line[i]));
                 else
                     graph.addEdge(getIndex(line[i - 1]), getIndex(line[i]));
-            }
-        }
         return graph;
     }
         public static void main(String[] args) {

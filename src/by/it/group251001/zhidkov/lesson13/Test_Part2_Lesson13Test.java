@@ -58,6 +58,12 @@ public class Test_Part2_Lesson13Test extends HomeWork {
     public void testGraphC() {
         run("1 -> 2, 2 -> 3, 3 -> 1, 2 -> 4, 4 -> 5, 5 -> 6, 6 -> 4", true).include("123\n456");
         run("C -> B, C -> I, I -> A, A -> D, D -> I, D -> B, B -> H, H -> D, D -> E, H -> E, E -> G, A -> F, G -> F, F -> K, K -> G", true).include("C\nABDHI\nE\nFGK");
+        run("A -> B, B -> C, C -> A, C -> D, D -> E, F -> E, F -> G", true).include("F\nG\nABC\nD\nE");
+        run("0 -> 1, 1 -> 2, 2 -> 3, 3 -> 4, 4 -> 1, 3 -> 5", true).include("0\n1234\n5");
+        run("0 -> 1, 1 -> 2, 2 -> 0, 2 -> 3, 3 -> 4, 4 -> 0, 3 -> 5", true).include("01234\n5");
+        run("0 -> 1, 1 -> 0, 2 -> 0, 1 -> 3", true).include("2\n01\n3");
+        run("0 -> 1, 1 -> 0, 2 -> 0, 1 -> 3, 3 -> 4, 4 -> 2", true).include("01234");
+        run("A -> B, B -> C, C -> D, D -> E, E -> C, E -> B, E -> F, A -> G", true).include("A\nG\nBCDE\nF");
         //Дополните эти тесты СВОИМИ более сложными примерами и проверьте их работоспособность.
         //Параметр метода run - это ввод. Параметр метода include - это вывод.
         //Общее число примеров должно быть не менее 8 (сейчас их 2).
