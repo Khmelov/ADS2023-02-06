@@ -26,18 +26,35 @@ public class MyLinkedHashSet<E> implements Set<E> {
     /////////////////////////////////////////////////////////////////////////
 
     public String toString() {
+
+        int checkSum = 0;
+        for (int i = 0; i < set.length; ++i) {
+            if (set[i] != null) {
+                checkSum += set[i].getSize();
+            }
+        }
+        System.out.print("CHECK_SUM_RES: ");
+        System.out.println(checkSum == size);
+        System.out.printf("CHECK_SUM: %d\n", checkSum);
+
         Node<E>[] buffer = toBuffer();
 
         radixSort(buffer);
+//        insertSort(buffer);
 
         StringBuilder sb = new StringBuilder();
         sb.append('[');
 
-        if (size != 0) {
-            sb.append(buffer[0].getValue().toString());
+        int startIndex = 0;
+        for (; startIndex < buffer.length && buffer[startIndex] == null; ) {
+            ++startIndex;
         }
 
-        for (int j = 1; j < size; ++j) {
+        if (buffer.length > startIndex) {
+            sb.append(buffer[startIndex].getValue().toString());
+        }
+
+        for (int j = startIndex + 1; j < buffer.length; ++j) {
             if (buffer[j] != null) {
                 sb.append(", ");
                 sb.append(buffer[j].getValue().toString());
@@ -58,6 +75,7 @@ public class MyLinkedHashSet<E> implements Set<E> {
     public void clear() {
         Arrays.fill(set, null);
         size = 0;
+        System.out.println("CLEARED");
     }
 
     @Override
@@ -71,14 +89,20 @@ public class MyLinkedHashSet<E> implements Set<E> {
         int index = e.hashCode() % set.length;
 
         if (set[index] != null && set[index].contains(e)) {
+            System.out.printf("x(%d) ", e);
             return false;
         }
 
         if (set[index] == null) {
             set[index] = new SLL<>();
         }
+        if (e.equals(200)) {
+            System.out.printf("{INDEX: %d} ", index);
+        }
         set[index].append(e, indexPointer++);
         ++size;
+
+        System.out.printf("e(%d) ", e);
         return true;
     }
 
@@ -88,26 +112,21 @@ public class MyLinkedHashSet<E> implements Set<E> {
         if (set[index] == null) {
             return false;
         }
-        if (!set[index].contains((E) o)) {
-            return false;
+
+        if (set[index].remove((E) o)) {
+            --size;
+            if (set[index].getSize() == 0) {
+                set[index] = null;
+            }
+            return true;
         }
 
-        E e = (E)o;
-
-        Node<E> prev = set[index].getPrev(e);
-        if (prev == null && !set[index].isHead(e)) {
-            return false;
+        if (set[index].getSize() == 0) {
+            set[index].setHead(null);
+            set[index].setTail(null);
         }
 
-        if (set[index].isHead(e)) {
-            set[index].setHead(set[index].getHead().getNext());
-        } else {
-            prev.setNext(prev.getNext().getNext());
-        }
-        --size;
-        set[index].setSize(set[index].getSize() - 1);
-
-        return true;
+        return false;
     }
 
     @Override
@@ -117,7 +136,7 @@ public class MyLinkedHashSet<E> implements Set<E> {
             return false;
         }
         E e = (E) o;
-        return set[index].getPrev(e) != null || set[index].isHead(e);
+        return set[index].contains(e);
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -170,6 +189,8 @@ public class MyLinkedHashSet<E> implements Set<E> {
                 result |= remove(e);
             }
         }
+        System.out.println("THIS: " +  this);
+        System.out.println(Arrays.toString(set));
         return result;
     }
 
@@ -181,6 +202,17 @@ public class MyLinkedHashSet<E> implements Set<E> {
             result |= remove(el);
         }
         return result;
+    }
+
+    private void insertSort(Node<E>[] buffer) {
+        for (int i = 1; i < buffer.length; ++i) {
+            Node<E> key = buffer[i];
+            int j = i - 1;
+            for (; j >= 0 && (key == null || (buffer[j] != null && buffer[j].getIndex() > key.getIndex())); --j) {
+                buffer[j+1] = buffer[j];
+            }
+            buffer[j+1] = key;
+        }
     }
 
     private void radixSort(Node<E>[] buffer) {
@@ -253,8 +285,6 @@ public class MyLinkedHashSet<E> implements Set<E> {
                 ++sizeCounter;
             }
         }
-
-        System.out.printf("%d\n%d\n", size, sizeCounter);
 
 //        if (sizeCounter < size) {
 //            Node<E>[] tmp = (Node<E>[]) new Node[sizeCounter];

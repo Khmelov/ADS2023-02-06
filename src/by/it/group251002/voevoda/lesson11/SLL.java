@@ -12,6 +12,8 @@ public class SLL<E> {
         return head;
     }
 
+    public void setTail(Node<E> n) { tail = n; }
+
     public void setSize(int size) { this.size = size; }
 
     public int getSize() { return size; }
@@ -34,39 +36,33 @@ public class SLL<E> {
             head = second;
             tail = second;
         } else {
-            tail.setNext(second);
-            tail = tail.getNext();
+            Node<E> ptr;
+            for (ptr = head; ptr.next != null; ptr = ptr.next);
+            ptr.next = second;
         }
         ++size;
     }
 
-    // getPrev returns null if value is either head or there are no such value
-    public Node<E> getPrev(E value) {
+    public boolean remove(E e) {
         if (size == 0) {
-            return null;
+            return false;
         }
 
-        int counter = 0;
-        Node<E> prev = null;
-        for (Node<E> ptr = head; ptr != null; ptr = ptr.getNext()) {
-            switch (counter) {
-                case 0:
-                    ++counter;
-                    break;
-                case 1:
-                    prev = head;
-                    ++counter;
-                    break;
-                case 2:
-                    prev = prev.getNext();
-                    break;
-            }
+        if (head.getValue().equals(e)) {
+//            head = head.getNext();
+            setHead(head.getNext());
+            --size;
+            return true;
+        }
 
-            if (ptr.getValue().equals(value)) {
-                return prev;
+        for (Node<E> ptr = head; ptr.getNext() != null; ptr = ptr.getNext()) {
+            if (ptr.getNext().getValue().equals(e)) {
+                ptr.setNext(ptr.getNext().getNext());
+                --size;
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
     public boolean contains(E e) {
@@ -78,11 +74,4 @@ public class SLL<E> {
         return false;
     }
 
-    public boolean isHead(E e) {
-        if (size == 0 || head == null) {
-            return false;
-        }
-
-        return head.getValue().equals(e);
-    }
 }

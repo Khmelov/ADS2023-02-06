@@ -91,21 +91,12 @@ public class MyHashSet<E> implements Set<E> {
             return false;
         }
 
-        E e = (E)o;
+       if (set[index].remove((E) o)) {
+           --size;
+           return true;
+       }
 
-        Node<E> prev = set[index].getPrev(e);
-        if (prev == null && !set[index].isHead(e)) {
-            return false;
-        }
-
-        if (set[index].isHead(e)) {
-            set[index].setHead(set[index].getHead().getNext());
-        } else {
-            prev.setNext(prev.getNext().getNext());
-        }
-        --size;
-
-        return true;
+        return false;
     }
 
     @Override
@@ -115,7 +106,7 @@ public class MyHashSet<E> implements Set<E> {
             return false;
         }
         E e = (E) o;
-        return set[index].getPrev(e) != null || set[index].isHead(e);
+        return set[index].contains(e);
     }
 
     /////////////////////////////////////////////////////////////////////////
