@@ -1,0 +1,32 @@
+    Задание на уровень А
+
+    Создайте class MyArrayDeque<E>, который реализует интерфейс Deque<E>
+    и работает на основе приватного массива типа E[]
+    БЕЗ использования других классов СТАНДАРТНОЙ БИБЛИОТЕКИ
+
+    /////////////////////////////////////////////////////////////////////////
+    //////               Обязательные к реализации методы             ///////
+    /////////////////////////////////////////////////////////////////////////
+
+                toString()
+                size()
+
+                add(E element)
+                addFirst(E element)
+                addLast(E element)
+
+                element()
+                getFirst()
+                getLast()
+
+                poll()
+                pollFirst()
+                pollLast()
+
+package by.it.group251001.smychek.lesson10;
+
+import java.util.*;
+
+public class MyArrayDeque<E>{
+
+}
