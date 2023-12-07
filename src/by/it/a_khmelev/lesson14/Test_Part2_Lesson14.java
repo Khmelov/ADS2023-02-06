@@ -89,18 +89,18 @@ public class Test_Part2_Lesson14 extends HomeWork {
 
 
     private <T> String calculateTestOut(List<T> elements, BiPredicate<T, T> checkUnion) {
-        List<Set<T>> dsu = new ArrayList<>();
+        List<Set<T>> fakeDsu = new ArrayList<>();
         for (T x : elements) {
             Set<T> set = new HashSet<>();
             set.add(x);
-            dsu.add(set);
+            fakeDsu.add(set);
         }
-        for (int i = 0; i < dsu.size(); i++) {
-            for (Set<T> set : dsu) {
+        for (int i = 0; i < fakeDsu.size(); i++) {
+            for (Set<T> set : fakeDsu) {
                 boolean union = false;
                 ok:
-                if (dsu.get(i) != set) {
-                    for (T x : dsu.get(i)) {
+                if (fakeDsu.get(i) != set) {
+                    for (T x : fakeDsu.get(i)) {
                         for (T y : set) {
                             if (x != y && checkUnion.test(x, y) && (union = true)) {
                                 break ok;
@@ -109,14 +109,14 @@ public class Test_Part2_Lesson14 extends HomeWork {
                     }
                 }
                 if (union) {
-                    dsu.get(i).addAll(set);
+                    fakeDsu.get(i).addAll(set);
                     set.clear();
                     i = 0;
                 }
             }
         }
-        dsu.removeIf(Set::isEmpty);
-        return dsu.stream()
+        fakeDsu.removeIf(Set::isEmpty);
+        return fakeDsu.stream()
                 .map(Set::size)
                 .sorted((n, m) -> m - n)
                 .map(String::valueOf)
