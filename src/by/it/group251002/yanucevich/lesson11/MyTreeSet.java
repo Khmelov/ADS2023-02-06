@@ -320,16 +320,9 @@ public class MyTreeSet<E extends Comparable<E>> implements Set<E> {
         return prevSize!=size;
     }
 
-    private void clearNext(CNode node){
-        if(node!=Nullode){
-            node.deleted=true;
-            clearNext(node.left);
-            clearNext(node.right);
-        }
-    }
     @Override
     public void clear() {
-        clearNext(head);
+        head=Nullode;
         size=0;
     }
 }
