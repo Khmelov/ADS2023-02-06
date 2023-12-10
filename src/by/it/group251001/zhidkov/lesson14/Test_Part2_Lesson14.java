@@ -122,6 +122,4 @@ public class Test_Part2_Lesson14 extends HomeWork {
                 .collect(Collectors.joining(" "))
                 .trim();
     }
-
-
 }
