@@ -370,7 +370,7 @@ public class MyRbMap implements SortedMap<Integer, String> {
         return (last != null) ? last.key : null;
     }
 
-    Node lastNode (Node node) {
+    Node lastNode(Node node) {
         while (node != null && node.right != null) {
             node = node.right;
         }

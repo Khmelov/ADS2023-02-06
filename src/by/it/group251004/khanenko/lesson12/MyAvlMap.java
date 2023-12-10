@@ -124,7 +124,7 @@ public class MyAvlMap implements Map<Integer, String> {
         return newRoot;
     }
 
-    AVLNode RotateLeft(MyAvlMap.AVLNode node)
+    AVLNode RotateLeft(AVLNode node)
     {
         AVLNode newRoot = node.Right;
         node.Right = newRoot.Left;
