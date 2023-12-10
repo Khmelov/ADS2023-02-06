@@ -63,5 +63,6 @@ public class GraphB {
         stack[vertex] = false;
         return false;
     }
+
 }
 
