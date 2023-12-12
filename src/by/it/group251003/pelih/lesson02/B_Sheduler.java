@@ -29,6 +29,7 @@ public class B_Sheduler {
 
     public static void main(String[] args) {
         B_Sheduler instance = new B_Sheduler();
+        //даны события
         Event[] events = {  new Event(0, 3),  new Event(0, 1), new Event(1, 2), new Event(3, 5),
                 new Event(1, 3),  new Event(1, 3), new Event(1, 3), new Event(3, 6),
                 new Event(2, 7),  new Event(2, 3), new Event(2, 7), new Event(7, 9),
@@ -41,6 +42,7 @@ public class B_Sheduler {
         System.out.println(starts);                                 //покажем рассчитанный график занятий
     }
 
+    //Сортируем по концу
     Event[] QuickSort(Event[] arr, int left, int right){
         if (right > left) {
             Event ideal = arr[(left + right) / 2];

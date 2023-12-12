@@ -26,6 +26,7 @@ import java.util.Scanner;
 
     Sample Input 2:
     short
+    //количество изменений, чтобы из 1 слова получить 2 (Удаление, переставление, вставка)
     ports
     Sample Output 2:
     3
