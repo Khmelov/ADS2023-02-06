@@ -24,7 +24,7 @@ public class FiboC {
         //Решение сложно найти интуитивно
         //возможно потребуется дополнительный поиск информации
         //см. период Пизано
-        long[] Arr = new long[10*m];
+        long[] Arr = new long[10 * m];
         Arr[0] = 0;
         Arr[1] = 1;
         Arr[2] = 1;
@@ -43,7 +43,4 @@ public class FiboC {
 
         return Arr[(int)num];
     }
-
-
 }
-
