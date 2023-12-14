@@ -43,7 +43,7 @@ public class Test_Part2_Lesson14 extends HomeWork {
     }
 
 
-    @Test(timeout = 5000000)
+    @Test(timeout = 5000)
     public void testStatesHanoiTowerC() {
         run("1").include("1");
         run("2").include("1 2");
