@@ -1,6 +1,7 @@
-package by.it.group251002.korti.lesson12;
+package by.it.group251003.nasevich.lesson12;
 
 import java.util.*;
+
 public class MySplayMap implements NavigableMap<Integer, String> {
     private static class Node {
         public int key;
@@ -257,7 +258,7 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         if (toKey == null)
             throw new NullPointerException("The key cannot be null");
 
-        SortedMap<Integer, String> sortedMap = new by.it.group251003.nasevich.lesson12.MySplayMap();
+        SortedMap<Integer, String> sortedMap = new MySplayMap();
         setToKey(root, toKey, sortedMap);
 
         return sortedMap;
@@ -279,7 +280,7 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         if (fromKey == null)
             throw new NullPointerException("The key cannot be null");
 
-        SortedMap<Integer, String> sortedMap = new by.it.group251003.nasevich.lesson12.MySplayMap();
+        SortedMap<Integer, String> sortedMap = new MySplayMap();
         setFromKey(root, fromKey, sortedMap);
 
         return sortedMap;

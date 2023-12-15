@@ -1,4 +1,4 @@
-package by.it.group251002.punko.lesson12;
+package by.it.group251003.nasevich.lesson12;
 
 import java.util.*;
 
@@ -137,7 +137,7 @@ public class MyRbMap implements SortedMap<Integer, String> {
 
     @Override
     public SortedMap<Integer, String> headMap(Integer toKey) {
-        SortedMap<Integer, String> sortedMap = new by.it.group251003.nasevich.lesson12.MyRbMap();
+        SortedMap<Integer, String> sortedMap = new MyRbMap();
         setToKey(root, toKey, sortedMap);
         return sortedMap;
     }
@@ -156,7 +156,7 @@ public class MyRbMap implements SortedMap<Integer, String> {
     @Override
     public SortedMap<Integer, String> tailMap(Integer fromKey) {
 
-        SortedMap<Integer, String> sortedMap = new by.it.group251003.nasevich.lesson12.MyRbMap();
+        SortedMap<Integer, String> sortedMap = new MyRbMap();
         setFromKey(root, fromKey, sortedMap);
 
         return sortedMap;
