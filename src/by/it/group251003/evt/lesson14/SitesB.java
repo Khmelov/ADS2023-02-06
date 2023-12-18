@@ -44,7 +44,7 @@ public class SitesB {
         }
 
         dsu.removeIf(Set::isEmpty);
-        String output = dsu.stream()
+        String  output = dsu.stream()
                 .map(Set::size)
                 .sorted((n, m) -> m - n)
                 .map(String::valueOf)

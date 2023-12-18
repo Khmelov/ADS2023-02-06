@@ -60,7 +60,7 @@ public class GraphA {
         topologicalOrder.add(vertex);
     }
     public static void main(String[] args) {
-        var scanner = new Scanner(System.in);
+        var scanner =  new Scanner(System.in);
         var graph = new GraphA(scanner.nextLine());
 
         var topologicalOrder = graph.getTopologicalOrder();

@@ -33,7 +33,7 @@ public class GraphB {private final Map<String, List<String>> adjacencyList = new
                 if (!marked.contains(neighbor))
                     checkCycle(neighbor, marked, onStack);
                 else if (onStack.contains(neighbor))
-                    hasCycle = true;
+                    hasCycle  = true;
             }
         onStack.remove(vertex);
     }

@@ -70,7 +70,7 @@ public class GraphC {private final Map<String, Set<String>> adjacencyList = new 
     }
     public static void main(String[] args) {
         var scanner = new Scanner(System.in);
-        var graph = new GraphC(scanner.nextLine());
+        var graph = new  GraphC(scanner.nextLine());
 
         var strongComponents = graph.getStrongComponents();
         for (var strongComponent : strongComponents) {
