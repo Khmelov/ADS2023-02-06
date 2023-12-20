@@ -22,7 +22,7 @@ public class PointsA {
     static point[] Points;
 
     private static boolean seen(point a, point b) {
-        return Math.hypot(Math.hypot(a.x - b.x, a.y - b.y), a.z - b.z) <= maxDst;
+        return ((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z) <= maxDst * maxDst);
     }
 
     private static int getParent(int x) {

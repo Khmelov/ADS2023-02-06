@@ -23,7 +23,7 @@ public class Test_Part2_Lesson14 extends HomeWork {
             String input = generatePointInput(points);
             String out = calculateTestOut(
                     points,
-                    (x, y) -> Math.hypot(Math.hypot(x[0] - y[0], x[1] - y[1]), x[2] - y[2]) <= distance
+                    (x, y) -> (x[0] - y[0]) * (x[0] - y[0]) + (x[1] - y[1]) * (x[1] - y[1]) + (x[2] - y[2]) * (x[2] - y[2]) <= distance * distance
             );
             run(input).include(out);
         }
@@ -78,7 +78,7 @@ public class Test_Part2_Lesson14 extends HomeWork {
         var zones = List.of("com org mobile net app io info ru by ua".split("\\s+"));
         StringJoiner out = new StringJoiner("");
         int pairCount = 5 + random.nextInt(50);
-        for (int i = 0; i < pairCount*2; i++) {
+        for (int i = 0; i < pairCount * 2; i++) {
             String site = words.get(random.nextInt(words.size())) + "." + zones.get(random.nextInt(words.size()));
             sites.add(site);
             out.add(site).add(i % 2 == 0 ? "+" : "\n");
