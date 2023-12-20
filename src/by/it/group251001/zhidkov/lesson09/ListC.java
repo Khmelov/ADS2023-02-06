@@ -105,7 +105,6 @@ public class ListC<E> implements List<E> {
         }
         return (index > -1);
     }
-
     public E set(int index, E element) {
         if (index < 0 || index >= Lsize)
         {
