@@ -1,4 +1,4 @@
-package by.it.group251004.krutko.lesson12;
+package by.it.group251004.mukhtasarov.lesson11;
 
 
 import by.it.HomeWork;
@@ -20,109 +20,92 @@ import static org.junit.Assert.fail;
 
 //поставьте курсор на следующую строку и нажмите Ctrl+Shift+F10
 //для корректной сборки теста добавьте библиотеку init.jar в проект (она находится в корне)
-public class Test_Part2_Lesson12Test extends HomeWork {
+public class Test_Part2_Lesson11Test extends HomeWork {
 
     private static final int RND_SEED = 123;
-    private static final int INVOCATION_COUNT_PER_METHOD = 10;
-    private static final int MAX_VALUE = 100;
-    private final Random rnd = new Random(RND_SEED);
-    private Map<Integer, String> eObject;
-    private Map<Integer, String> aObject;
+    public static final int INVOCATION_COUNT_PER_METHOD = 10;
+    public static final int MAX_VALUE = 100;
+    Random rnd = new Random(RND_SEED);
+    private Collection<Number> eObject;
+    private Collection<Number> aObject;
 
     private Map<Method, String> cache = new HashMap<>();
 
-    @Test(timeout = 500 * INVOCATION_COUNT_PER_METHOD)
+    @Test(timeout = 5000)
     public void testTaskA() throws Exception {
         String[] methods = """
-                toString()
-                put(Object,Object)
-                remove(Object)
-                get(Object)
-                containsKey(Object)
-
                 size()
                 clear()
                 isEmpty()
+                add(Object)
+                remove(Object)
+                contains(Object)
+
                 """.split("\\s+");
-        eObject = new TreeMap<>();
-        randomCheck("MyAvlMap", methods);
+        eObject = new HashSet<>();
+        randomCheck("MyHashSet", methods);
     }
 
-    @Test(timeout = 500 * INVOCATION_COUNT_PER_METHOD)
+    @Test(timeout = 5000)
     public void testTaskB() throws Exception {
         String[] methods = """
                 toString()
-                put(Object,Object)
-                remove(Object)
-                get(Object)
-                containsKey(Object)
-                containsValue(Object)
-                                
                 size()
                 clear()
                 isEmpty()
+                add(Object)
+                remove(Object)
+                contains(Object)
                                 
-                headMap(Object)
-                tailMap(Object)
-                firstKey()
-                lastKey()
+                containsAll(Collection)
+                addAll(Collection)
+                removeAll(Collection)
+                retainAll(Collection)
                 """.split("\\s+");
-        eObject = new TreeMap<>();
-        randomCheck("MyRbMap", methods);
+        eObject = new LinkedHashSet<>();
+        randomCheck("MyLinkedHashSet", methods);
     }
 
-    @Test(timeout = 500 * INVOCATION_COUNT_PER_METHOD)
+    @Test(timeout = 5000)
     public void testTaskC() throws Exception {
         String[] methods = """
-                put(Object,Object)
-                remove(Object)
-                get(Object)
-                containsKey(Object)
-                containsValue(Object)
-                                
+                toString()
                 size()
                 clear()
                 isEmpty()
+                add(Object)
+                remove(Object)
+                contains(Object)
                                 
-                headMap(Object)
-                tailMap(Object)
-                firstKey()
-                lastKey()
-                                
-                lowerKey(Object)
-                floorKey(Object)
-                ceilingKey(Object)
-                higherKey(Object)
+                containsAll(Collection)
+                addAll(Collection)
+                removeAll(Collection)
+                retainAll(Collection)
                 """.split("\\s+");
-        eObject = new TreeMap<>();
-        randomCheck("MySplayMap", methods);
+        eObject = new TreeSet<>();
+        randomCheck("MyTreeSet", methods);
     }
 
     private void randomCheck(String aClassName, String... methods) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         Set<String> methodNames = new TreeSet<>(Arrays.asList(methods));
         methodNames.removeIf(key -> key == null || key.isBlank());
-        methodNames.forEach(System.out::println);
         Class<?> aClass = findClass(aClassName);
         checkStructure(aClass);
         System.out.printf("\nStart test methods in class %s%n", aClass);
-        aObject = (Map<Integer, String>) aClass.getDeclaredConstructor().newInstance();
+        aObject = (Collection<Number>) aClass.getDeclaredConstructor().newInstance();
 
         Map<String, Method> methodsE = fill(eObject.getClass(), methodNames);
-        Map<String, Method> methodsA = fill(aClass, methodsE);
+        Map<String, Method> methodsA = fill(aClass, methodNames);
 
-        assertEquals("Not found methods for test in:\n" + methodsA.toString().replace("),", ")\n")
-                , methodNames.size()
-                , methodsA.size()
-        );
+        assertEquals("Not found methods for test in:\n" + getSignatures(aClass), methodNames.size(), methodsA.size());
 
         for (int testNumber = 0; testNumber < INVOCATION_COUNT_PER_METHOD * methodNames.size(); testNumber++) {
             int count = rnd.nextInt(INVOCATION_COUNT_PER_METHOD * 10);
             if (eObject.size() < 10) {
                 for (int i = 0; i <= count; i++) {
-                    Integer key = rnd.nextInt(MAX_VALUE) * (i + 1);
-                    String value = "generate" + key;
-                    eObject.put(key, value);
-                    aObject.put(key, value);
+                    Integer value = rnd.nextInt(MAX_VALUE) * (i + 1);
+                    eObject.add(value);
+                    aObject.add(value);
                 }
                 System.out.printf("%n==Add %d random values. %n", count);
             }
@@ -168,10 +151,6 @@ public class Test_Part2_Lesson12Test extends HomeWork {
                         .mapToObj(index -> randomInteger())
                         .collect(Collectors.toUnmodifiableSet());
                 parameters[i] = collect;
-            } else if (String.class.isAssignableFrom(parameterTypes[i])
-                       || i == 1 //for put(Object,Object)
-            ) {
-                parameters[i] = "str" + randomInteger();
             } else if (Integer.class.isAssignableFrom(parameterTypes[i])) {
                 parameters[i] = randomInteger();
             } else if (int.class.isAssignableFrom(parameterTypes[i])) {
@@ -190,7 +169,7 @@ public class Test_Part2_Lesson12Test extends HomeWork {
         if (rnd.nextBoolean()) {
             return i * eObject.size();
         }
-        Iterator<Integer> iterator = eObject.keySet().iterator();
+        Iterator<Number> iterator = eObject.iterator();
         while (i-- > 0) {
             iterator.next();
         }
@@ -215,8 +194,7 @@ public class Test_Part2_Lesson12Test extends HomeWork {
     }
 
     private void checkFieldAsCollection(Field field) {
-        Class<?> type = field.getType();
-        if (Collection.class.isAssignableFrom(type) || Map.class.isAssignableFrom(type)) {
+        if (Collection.class.isAssignableFrom(field.getType())) {
             fail("Incorrect field: " + field);
         }
     }
@@ -227,15 +205,6 @@ public class Test_Part2_Lesson12Test extends HomeWork {
                 .flatMap(Arrays::stream)
                 .distinct()
                 .filter(m -> methodNames.contains(getSignature(m).split(" ", 3)[1]))
-                .filter(this::notComparable)
-                .collect(Collectors.toMap(this::getSignature, m -> m));
-    }
-
-    private Map<String, Method> fill(Class<?> c, Map<String, Method> expectedMapMethods) {
-        return Stream.of(c.getMethods(), c.getDeclaredMethods())
-                .flatMap(Arrays::stream)
-                .distinct()
-                .filter(m -> expectedMapMethods.containsKey(getSignature(m)))
                 .filter(this::notComparable)
                 .collect(Collectors.toMap(this::getSignature, m -> m));
     }
@@ -279,5 +248,4 @@ public class Test_Part2_Lesson12Test extends HomeWork {
     private int checkSum(String someString) {
         return someString.chars().sum();
     }
-
 }
