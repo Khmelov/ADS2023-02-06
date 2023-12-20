@@ -1,88 +1,89 @@
 package by.it.group251002.korti.lesson14;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Scanner;
 
 public class PointsA {
 
+    private static class DSU {
+        int[] parent;
+        int[] rank;
+
+        DSU(int size){
+            parent = new int[size];
+            rank = new int[size];
+        }
+        public void make_set(int v) {
+            parent[v] = v;
+            rank[v] = 0;
+        }
+
+        int find_set(int v) {
+            if (v == parent[v])
+                return v;
+            return find_set(parent[v]);
+        }
+
+        void union_sets(int a, int b) {
+            a = find_set(a);
+            b = find_set(b);
+            if (a != b) {
+                if (rank[a] < rank[b]) {
+                    int temp = a;
+                    a = b;
+                    b = temp;
+                }
+                parent[b] = a;
+                if (rank[a] == rank[b])
+                    rank[a]++;
+            }
+        }
+    }
+
+    static boolean check(int[][] points, int a, int b, int max_dist){
+        return Math.hypot(Math.hypot(points[a][0] - points[b][0], points[a][1] - points[b][1]), points[a][2] - points[b][2])<=max_dist;
+    }
     public static void main(String[] args) {
+        int size = 0;
+        Scanner scanner = new Scanner(System.in);
+        int max_dist = scanner.nextInt();
+        int max_size = scanner.nextInt();
+        int[][] points = new int[max_size][3];
+        DSU dsu = new DSU(max_size);
 
-        List<Set<Point>> dsu = new ArrayList<>();
-        int distance, dotsAmount;
+        for(int i = 0; i < max_size; i++){
+            for(int j = 0; j < 3; j++)
+                points[size][j] = scanner.nextInt();
+            dsu.make_set(size);
 
-        try (Scanner scanner = new Scanner(System.in)) {
-
-            distance = scanner.nextInt();
-            dotsAmount = scanner.nextInt();
-
-            for (int i = 0; i < dotsAmount; i++) {
-                Point point = new Point(scanner.nextInt(), scanner.nextInt(), scanner.nextInt());
-                Set<Point> set = new HashSet<>();
-                set.add(point);
-                dsu.add(set);
-            }
+            size++;
         }
 
-        for (int i = 0; i < dsu.size(); i++) {
-            for (Set<Point> set : dsu) {
-                boolean union = false;
-                ok:
-                if (dsu.get(i) != set) {
-                    for (Point p1 : dsu.get(i)) {
-                        for (Point p2 : set) {
-                            if (p1 != p2 && checkDistance(p1, p2, distance)) {
-                                union = true;
-                                break ok;
-                            }
-                        }
-                    }
+        for(int i = 0; i < max_size; i++)
+            for(int j = i+1; j < max_size; j++)
+                if(check(points,i,j,max_dist)){
+                    dsu.union_sets(i,j);
                 }
 
-                if (union) {
-                    dsu.get(i).addAll(set);
-                    set.clear();
-                    i = 0;
-                }
-            }
+        int[] dsu_size_array = new int[max_size];
+        for(int i = 0; i < max_size; i++){
+            dsu_size_array[dsu.find_set(i)]++;
         }
 
-        dsu.removeIf(Set::isEmpty);
-        String output = dsu.stream()
-                .map(Set::size)
-                .sorted((n, m) -> m - n)
-                .map(String::valueOf)
-                .collect(Collectors.joining(" "))
-                .trim();
-
-        System.out.println(output);
-    }
-
-    private static boolean checkDistance(Point p1, Point p2, int distance) {
-        return Math.hypot(Math.hypot(p1.getX() - p2.getX(), p1.getY() - p2.getY()), p1.getZ() - p2.getZ()) <= distance;
-    }
-
-    private static class Point {
-
-        private final int x;
-        private final int y;
-        private final int z;
-
-        public Point(int x, int y, int z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < max_size; i++){
+            int max = i;
+            for(int j = i+1; j < max_size;j++)
+                if(dsu_size_array[max]<dsu_size_array[j])
+                    max = j;
+            if (dsu_size_array[max]==0)
+                break;
+            int temp = dsu_size_array[max];
+            dsu_size_array[max] = dsu_size_array[i];
+            dsu_size_array[i] = temp;
+            sb.append(dsu_size_array[i]);
+            sb.append(" ");
         }
-
-        public int getX() {
-            return x;
-        }
-
-        public int getY() {
-            return y;
-        }
-
-        public int getZ() {
-            return z;
-        }
+        sb.deleteCharAt(sb.length()-1);
+        System.out.println(sb);
     }
 }
