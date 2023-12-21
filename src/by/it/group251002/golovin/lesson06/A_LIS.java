@@ -37,14 +37,37 @@ public class A_LIS {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        //общая длина последовательности
         int n = scanner.nextInt();
         int[] m = new int[n];
         //читаем всю последовательность
         for (int i = 0; i < n; i++) {
             m[i] = scanner.nextInt();
         }
+        int[] k = new int[n];
+        for(int i=0;i<n;i++)
+        {
+            k[i]=1;
+            for(int j=0;j<i;j++)
+            {
+                if((m[i]>m[j]) && (k[i]<=k[j]))
+                {
+                    k[i]=k[j]+1;
+                }
+            }
+        }
         int result = 0;
+        for(int i=0;i<n;i++)
+        {
+            if(result<k[i])
+            {
+                result=k[i];
+            }
+        }
+
+
+
+
+
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }

@@ -43,6 +43,7 @@ public class C_LongNotUpSubSeq {
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         //общая длина последовательности
+        //общая длина последовательности
         int n = scanner.nextInt();
         int[] m = new int[n];
         //читаем всю последовательность
@@ -50,7 +51,26 @@ public class C_LongNotUpSubSeq {
             m[i] = scanner.nextInt();
         }
         //тут реализуйте логику задачи методами динамического программирования (!!!)
+        int[] k = new int[n];
+        for(int i=0;i<n;i++)
+        {
+            k[i]=1;
+            for(int j=0;j<i;j++)
+            {
+                if((m[i]<=m[j]) && (k[i]<=k[j]))
+                {
+                    k[i]=k[j]+1;
+                }
+            }
+        }
         int result = 0;
+        for(int i=0;i<n;i++)
+        {
+            if(result<k[i])
+            {
+                result=k[i];
+            }
+        }
 
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!

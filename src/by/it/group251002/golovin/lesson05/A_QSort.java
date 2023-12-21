@@ -38,47 +38,132 @@ import java.util.Scanner;
 public class A_QSort {
 
     //отрезок
-    private class Segment  implements Comparable<Segment>{
+    class Segment  implements Comparable<A_QSort.Segment>{
         int start;
         int stop;
 
         Segment(int start, int stop){
+            if (start > stop)
+            {
+                int tmp = start;
+                start = stop;
+                stop = tmp;
+            }
             this.start = start;
             this.stop = stop;
             //тут вообще-то лучше доделать конструктор на случай если
             //концы отрезков придут в обратном порядке
+            //доделал
         }
 
         @Override
-        public int compareTo(Segment o) {
+        public int compareTo(A_QSort.Segment o) {
             //подумайте, что должен возвращать компаратор отрезков
-
+            //извините, но мне нужно два компаратора(
             return 0;
         }
     }
 
 
+    private void swap(A_QSort.Segment[] arr, int i, int j)
+    {
+        A_QSort.Segment temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    private int partition(A_QSort.Segment[] arr, int low, int high, boolean mode)
+    {
+        A_QSort.Segment pivot = arr[high];
+        int i = (low-1);
+        for (int j=low; j<high; j++)
+        {
+            boolean usl = mode?arr[j].start <= pivot.start:arr[j].stop <= pivot.stop;
+            if (usl)
+            {
+                i++;
+                swap(arr,i,j);
+            }
+        }
+        swap(arr,i+1,high);
+        return i+1;
+    }
+
+    public void qsorte(A_QSort.Segment[] arr, int low, int high, boolean mode)
+    {
+        if (low < high)
+        {
+            int pi = partition(arr, low, high,mode);
+            qsorte(arr, low, pi-1,mode);
+            qsorte(arr, pi+1, high,mode);
+        }
+    }
+
+    public int upperbond(A_QSort.Segment[] A, int val)
+    {
+        int l = 0, r = A.length - 1,m;
+        while(l<r)
+        {
+            m = (l + r)/2;
+            if (A[m].start<=val)
+                l = m + 1;
+            else
+                r = m;
+        }
+        if (A[l].start<=val)
+            return l + 1;
+        return l;
+    }
+
+    public int upper2(A_QSort.Segment[] A, int val)
+    {
+        int l = 0, r = A.length - 1,m;
+        while(l<r)
+        {
+            m = (l + r)/2+(l+r)%2;
+            if (A[m].stop>=val)
+                r = m - 1;
+            else
+                l = m;
+        }
+        if (A[l].stop>=val)
+            return l - 1;
+        return l;
+    }
+
     int[] getAccessory(InputStream stream) throws FileNotFoundException {
+
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         //число отрезков отсортированного массива
         int n = scanner.nextInt();
-        Segment[] segments=new Segment[n];
+        A_QSort.Segment[] segments=new A_QSort.Segment[n], seg2=new A_QSort.Segment[n];
         //число точек
         int m = scanner.nextInt();
         int[] points=new int[m];
         int[] result=new int[m];
+        int res1,res2;
 
         //читаем сами отрезки
         for (int i = 0; i < n; i++) {
             //читаем начало и конец каждого отрезка
-            segments[i]=new Segment(scanner.nextInt(),scanner.nextInt());
+            segments[i]=new A_QSort.Segment(scanner.nextInt(),scanner.nextInt());
+            seg2[i]=new A_QSort.Segment(segments[i].start,segments[i].stop);
         }
         //читаем точки
         for (int i = 0; i < m; i++) {
             points[i]=scanner.nextInt();
         }
+
+        qsorte(segments,0,n-1,true);
+        qsorte(seg2,0,n-1,false);
+        for(int i=0;i<m;i++) {
+            res1 = upperbond(segments,points[i]);
+            res2 = upper2(seg2,points[i]);
+            result[i] = res1-res2-1;
+        }
+
         //тут реализуйте логику задачи с применением быстрой сортировки
         //в классе отрезка Segment реализуйте нужный для этой задачи компаратор
 

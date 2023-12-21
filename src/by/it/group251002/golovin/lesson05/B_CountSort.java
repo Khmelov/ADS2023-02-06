@@ -23,13 +23,21 @@ public class B_CountSort {
         Scanner scanner = new Scanner(stream);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         //размер массива
-        int n = scanner.nextInt();
-        int[] points=new int[n];
+        int n = scanner.nextInt(), cnt = 0;
+        int[] points=new int[n], counts = new int[11], result = new int[n];
 
         //читаем точки
+        for (int i=0;i<11;i++)
+            counts[i] = 0;
         for (int i = 0; i < n; i++) {
             points[i]=scanner.nextInt();
+            counts[points[i]]++;
         }
+        for (int i=0;i<11;i++)
+            for(int j=0;j<counts[i];j++) {
+                result[cnt]=i;
+                cnt++;
+            }
         //тут реализуйте логику задачи с применением сортировки подсчетом
 
 
@@ -37,7 +45,7 @@ public class B_CountSort {
 
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return points;
+        return result;
     }
 
 
