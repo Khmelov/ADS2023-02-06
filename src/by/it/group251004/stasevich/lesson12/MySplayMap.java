@@ -422,12 +422,12 @@ public class MySplayMap implements NavigableMap<Integer, String> {
 
     @Override
     public SortedMap<Integer, String> headMap(Integer toKey) {
-        by.it.group251004.krutko.lesson12.MySplayMap subMap = new by.it.group251004.krutko.lesson12.MySplayMap();
+        MySplayMap subMap = new MySplayMap();
         headMap(root, toKey, subMap);
         return subMap;
     }
 
-    void headMap(Node node, Integer toKey, by.it.group251004.krutko.lesson12.MySplayMap subMap) {
+    void headMap(Node node, Integer toKey, MySplayMap subMap) {
         if (node == null) {
             return;
         }
