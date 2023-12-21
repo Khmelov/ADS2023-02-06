@@ -1,7 +1,5 @@
 package by.it.group251001.brutskaya.lesson14;
 
-import by.it.group251001.levitskij.lesson09.ListC;
-
 import java.util.Scanner;
 
 public class StatesHanoiTowerC {

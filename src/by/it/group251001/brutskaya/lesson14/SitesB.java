@@ -1,7 +1,8 @@
 package by.it.group251001.brutskaya.lesson14;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-import by.it.group251001.levitskij.lesson09.ListC;
 public class SitesB {
 
     private static class DSU {
@@ -40,7 +41,7 @@ public class SitesB {
     }
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        ListC<String> points = new ListC<>();
+        List<String> points = new ArrayList<>();
         DSU dsu = new DSU(1000);
         String line = scanner.next();
         while(line.compareTo("end")!=0) {
