@@ -51,6 +51,15 @@ public class ListC<E> implements List<E> {
 
     @Override
     public E remove(int index) {
+        if (size == capacity)
+        {
+            capacity*=2;
+            E[] newList = (E[]) new Object[capacity];
+            for (int i=0;i<size;i++){
+                newList[i]=list[i];
+            }
+            list = newList;
+        }
         if (index > -1 && index < size)
         {
             E temp = list[index];

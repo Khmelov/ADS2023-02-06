@@ -1,178 +1,57 @@
 package by.it.group251004.a_nediakin.lesson11;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
+public class MyTreeSet<E> implements Set<E> {
+    E[] value = (E[]) new Object[]{};
+    int size = 0;
 
-public class MyTreeSet<E extends Comparable<E>> implements Set<E> {
-
-    class Node {
-        E data;
-        Node left;
-        Node right;
-
-        Node(E data) {
-            this.data = data;
-        }
+    private int binary_search_to_add(int l, int r, E val){
+        if(l >= r)
+            return l;
+        int c = (l + r) / 2;
+        if((Integer)value[c] > (Integer)val)
+            return binary_search_to_add(l ,c, val);
+        return binary_search_to_add(c + 1, r, val);
     }
+
+    private int binary_search_to_find(int l, int r, E val){
+        if(l >= r)
+            return l;
+        int c = (l + r) / 2;
+        if((Integer)value[c] >= (Integer)val)
+            return binary_search_to_find(l ,c, val);
+        return binary_search_to_find(c + 1, r, val);
+    }
+
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("[");
-        inOrderTraversal(_root, sb);
-        return sb.append("]").toString();
+        String s = "[";
+        for(int i = 0; i < size; ++i){
+            s += value[i].toString();
+            if(i != size - 1)
+                s += ", ";
+        }
+        s += "]";
+        return s;
     }
-
-    void inOrderTraversal(Node node, StringBuilder sb) {
-        if (node == null) return;
-        inOrderTraversal(node.left, sb);
-        if (sb.length() > 1)
-            sb.append(", ");
-        sb.append(node.data);
-        inOrderTraversal(node.right, sb);
-    }
-    Node _root;
-    int _count;
-
     @Override
     public int size() {
-        return _count;
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
-        return _count == 0;
-    }
-
-    boolean contains(Node node, E element) {
-        if (node == null) return false;
-        int compare = element.compareTo(node.data);
-        if (compare < 0)
-            return contains(node.left, element);
-        else if (compare > 0)
-            return contains(node.right, element);
-        else
-            return true;
+        return size == 0;
     }
 
     @Override
     public boolean contains(Object o) {
-        return contains(_root, (E) o);
+        return size != 0 && value[binary_search_to_find(0, size - 1, (E)o)].equals(o);
     }
-
-    Node insert(Node node, E element) {
-        if (node == null)
-            return new Node(element);
-        int compare = element.compareTo(node.data);
-        if (compare < 0)
-            node.left = insert(node.left, element);
-        else if (compare > 0)
-            node.right = insert(node.right, element);
-        return node;
-    }
-
-    @Override
-    public boolean add(E e) {
-        if (!contains(e)) {
-            _root = insert(_root, e);
-            _count++;
-            return true;
-        }
-        return false;
-    }
-
-    Node findMin(Node node) {
-        while (node.left != null) {
-            node = node.left;
-        }
-        return node;
-    }
-
-    Node delete(Node node, E element) {
-        if (node == null) return null;
-        int compare = element.compareTo(node.data);
-        if (compare < 0) {
-            node.left = delete(node.left, element);
-        } else if (compare > 0) {
-            node.right = delete(node.right, element);
-        } else {
-            if (node.left == null) {
-                return node.right;
-            } else if (node.right == null) {
-                return node.left;
-            }
-            node.data = findMin(node.right).data;
-            node.right = delete(node.right, node.data);
-        }
-        return node;
-    }
-
-    @Override
-    public boolean remove(Object o) {
-        if (contains(o)) {
-            _root = delete(_root, (E) o);
-            _count--;
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean containsAll(Collection<?> c) {
-        for (Object obj: c) {
-            if (!contains(obj))
-                return false;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends E> c) {
-        boolean isModified = false;
-        for (E element: c) {
-            if (add(element))
-                isModified = true;
-        }
-        return isModified;
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        if (c.isEmpty()) {
-            this.clear();
-            return true;
-        }
-        boolean isModified = false;
-        MyTreeSet<E> retainSet = new MyTreeSet<>();
-        for (Object obj : c) {
-            if (contains(obj)) {
-                retainSet.add((E) obj);
-                isModified = true;
-            }
-        }
-        _root = retainSet._root;
-        _count = retainSet._count;
-
-        return isModified;
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        boolean isModified = false;
-        for (Object obj: c) {
-            if (remove(obj))
-                isModified = true;
-        }
-        return isModified;
-    }
-
-    @Override
-    public void clear() {
-        _root = null;
-        _count = 0;
-    }
-
-    //////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public Iterator<E> iterator() {
@@ -187,5 +66,75 @@ public class MyTreeSet<E extends Comparable<E>> implements Set<E> {
     @Override
     public <T> T[] toArray(T[] a) {
         return null;
+    }
+
+    @Override
+    public boolean add(E e) {
+        if(contains(e))
+            return false;
+        if(size == value.length)
+            value = Arrays.copyOf(value, size * 3 / 2 + 1);
+        int index = binary_search_to_add(0, size, e);
+        for(int i = size; i > index; --i)
+            value[i] = value[i - 1];
+        value[index] = e;
+        ++size;
+        return true;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        if(!contains(o))
+            return false;
+        int index = binary_search_to_find(0, size - 1, (E)o);
+        for(int i = index; i < size - 1; ++i)
+            value[i] = value[i + 1];
+        --size;
+        return true;
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        E[] params = (E[]) new Object[c.size()];
+        params = c.toArray(params);
+        for(int i = 0; i < params.length; ++i)
+            if(!contains(params[i]))
+                return false;
+        return true;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        int prevSize = size;
+        E[] params = (E[]) new Object[c.size()];
+        params = c.toArray(params);
+        for(int i = 0; i < params.length; ++i)
+            add(params[i]);
+        return prevSize != size;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        int prevSize = size;
+        for(int i = size - 1; i >= 0; --i)
+            if(!c.contains(value[i]))
+                remove(value[i]);
+        return prevSize != size;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        int prevSize = size;
+        E[] params = (E[]) new Object[c.size()];
+        params = c.toArray(params);
+        for(int i = 0; i < params.length; ++i)
+            if(contains(params[i]))
+                remove(params[i]);
+        return prevSize != size;
+    }
+
+    @Override
+    public void clear() {
+        size = 0;
     }
 }
