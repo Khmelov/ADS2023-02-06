@@ -1,4 +1,4 @@
-package by.it.group251002.punko.lesson14;
+package by.it.group251004.ustsinovich.lesson14;
 
 import by.it.HomeWork;
 import org.junit.Test;
