@@ -1,4 +1,4 @@
-package by.it.group251004.mukhtasarov.lesson12;
+package by.it.group251004.krutko.lesson12;
 
 import java.util.*;
 
