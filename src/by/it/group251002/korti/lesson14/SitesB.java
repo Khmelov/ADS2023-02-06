@@ -32,14 +32,6 @@ public class SitesB{
         }
     }
 
-    public static int dist(int[] f, int[]s){
-        return (f[0] - s[0])*(f[0] - s[0]) + (f[1] - s[1])*(f[1] - s[1]) + (f[2] - s[2])*(f[2] - s[2]);
-    }
-
-    public static boolean less_dist(int d, int[] f, int[] s){
-        return dist(f, s) <= d * d;
-    }
-
     public static void main(String[] args) {
         String s;
         Scanner in = new Scanner(System.in);
