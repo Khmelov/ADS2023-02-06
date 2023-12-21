@@ -48,7 +48,7 @@ public class GraphA {
         TopologicalSort(graph, 0);
         int i = 0;
         for (String item : topological) {
-            System.out.print(i == topological.size() - 1 ? topological.get(i) : (topological.get(i) + " "));
+            System.out.print(i == topological.size() - 1 ? item : (item + " "));
             i++;
         }
         scan.close();
