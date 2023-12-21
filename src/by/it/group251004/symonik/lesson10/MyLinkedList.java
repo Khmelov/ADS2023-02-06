@@ -3,7 +3,6 @@ package by.it.group251004.symonik.lesson10;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 public class MyLinkedList<E> implements Deque<E> {
     Node head;
@@ -21,26 +20,101 @@ public class MyLinkedList<E> implements Deque<E> {
     }
 
     @Override
-    public String toString(){
-        Node currNode = this.head;
+    public void addFirst(E e) {
+        Node newNode = new Node(e);
 
-        StringBuilder string = new StringBuilder("[");
-
-        while (currNode != null){
-            string.append(currNode.data);
-            currNode = currNode.next;
-
-            if (currNode != null)
-                string.append(", ");
+        if (head == null)
+            tail = newNode;
+        else {
+            newNode.next = head;
+            head.prev = newNode.prev;
         }
+        head = newNode;
 
-        string.append("]");
-        return string.toString();
+        size++;
     }
 
     @Override
-    public boolean add(E element) {
-        Node newNode = new Node(element);
+    public void addLast(E e) {
+        add(e);
+    }
+
+    @Override
+    public boolean offerFirst(E e) {
+        return false;
+    }
+
+    @Override
+    public boolean offerLast(E e) {
+        return false;
+    }
+
+    @Override
+    public E removeFirst() {
+        return null;
+    }
+
+    @Override
+    public E removeLast() {
+        return null;
+    }
+
+    @Override
+    public E pollFirst() {
+        return poll();
+    }
+
+    @Override
+    public E pollLast() {
+        if (tail == null)
+            return null;
+
+        Node node = tail;
+        if (tail.prev == null){
+            tail = null;
+            head = null;
+        } else {
+            tail = tail.prev;
+            tail.next = null;
+        }
+
+        size--;
+        return node.data;
+    }
+
+    @Override
+    public E getFirst() {
+        return element();
+    }
+
+    @Override
+    public E getLast() {
+        return tail.data;
+    }
+
+    @Override
+    public E peekFirst() {
+        return null;
+    }
+
+    @Override
+    public E peekLast() {
+        return null;
+    }
+
+    @Override
+    public boolean removeFirstOccurrence(Object o) {
+        return false;
+    }
+
+    @Override
+    public boolean removeLastOccurrence(Object o) {
+        return false;
+    }
+
+    @Override
+    public boolean add(E e) {
+        Node newNode = new Node(e);
 
         if (tail == null)
             head = newNode;
@@ -54,6 +128,75 @@ public class MyLinkedList<E> implements Deque<E> {
         return true;
     }
 
+    @Override
+    public boolean offer(E e) {
+        return false;
+    }
+
+    @Override
+    public E remove() {
+        return null;
+    }
+
+    @Override
+    public E poll() {
+        if (head == null)
+            return null;
+
+        Node node = head;
+        if (head.next == null){
+            head = null;
+            tail = null;
+        } else {
+            head = head.next;
+            head.prev = null;
+        }
+
+        size--;
+        return node.data;
+    }
+
+    @Override
+    public E element() {
+        return head.data;
+    }
+
+    @Override
+    public E peek() {
+        return null;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        return false;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public void clear() {
+
+    }
+
+    @Override
+    public void push(E e) {
+
+    }
+
+    @Override
+    public E pop() {
+        return null;
+    }
+
+    @Override
     public boolean remove(Object o) {
         if (head == null)
             return false;
@@ -98,180 +241,6 @@ public class MyLinkedList<E> implements Deque<E> {
     }
 
     @Override
-    public int size() {
-        return size;
-    }
-
-    @Override
-    public void addFirst(E element) {
-        Node newNode = new Node(element);
-
-        if (head == null)
-            tail = newNode;
-        else {
-            newNode.next = head;
-            head.prev = newNode.prev;
-        }
-        head = newNode;
-
-        size++;
-    }
-
-    @Override
-    public void addLast(E element) {
-        add(element);
-    }
-
-    @Override
-    public E element() {
-        if (head == null)
-            throw new NoSuchElementException("Trying to get element from the empty list.");
-
-        return head.data;
-    }
-
-    @Override
-    public E getFirst() {
-        return element();
-    }
-
-    @Override
-    public E getLast() {
-        if (tail == null)
-            throw new NoSuchElementException("Trying to get element from the empty list.");
-
-        return tail.data;
-    }
-
-    @Override
-    public E poll() {
-        if (head == null)
-            return null;
-
-        Node node = head;
-        if (head.next == null){
-            head = null;
-            tail = null;
-        } else {
-            head = head.next;
-            head.prev = null;
-        }
-
-        size--;
-        return node.data;
-    }
-
-    @Override
-    public E pollFirst() {
-        return poll();
-    }
-
-    @Override
-    public E pollLast() {
-        if (tail == null)
-            return null;
-
-        Node node = tail;
-        if (tail.prev == null){
-            tail = null;
-            head = null;
-        } else {
-            tail = tail.prev;
-            tail.next = null;
-        }
-
-        size--;
-        return node.data;
-    }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
-    @Override
-    public boolean offerFirst(E e) {
-        return false;
-    }
-
-    @Override
-    public boolean offerLast(E e) {
-        return false;
-    }
-
-    @Override
-    public E removeFirst() {
-        return null;
-    }
-
-    @Override
-    public E removeLast() {
-        return null;
-    }
-
-    @Override
-    public E peekFirst() {
-        return null;
-    }
-
-    @Override
-    public E peekLast() {
-        return null;
-    }
-
-    @Override
-    public boolean removeFirstOccurrence(Object o) {
-        return false;
-    }
-
-    @Override
-    public boolean removeLastOccurrence(Object o) {
-        return false;
-    }
-
-    @Override
-    public boolean offer(E e) {
-        return false;
-    }
-
-    @Override
-    public E remove() {
-        return null;
-    }
-
-    @Override
-    public E peek() {
-        return null;
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends E> c) {
-        return false;
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        return false;
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        return false;
-    }
-
-    @Override
-    public void clear() {
-
-    }
-
-    @Override
-    public void push(E e) {
-
-    }
-
-    @Override
-    public E pop() {
-        return null;
-    }
-
-    @Override
     public boolean containsAll(Collection<?> c) {
         return false;
     }
@@ -282,6 +251,11 @@ public class MyLinkedList<E> implements Deque<E> {
     }
 
     @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
     public boolean isEmpty() {
         return false;
     }
@@ -289,6 +263,23 @@ public class MyLinkedList<E> implements Deque<E> {
     @Override
     public Iterator<E> iterator() {
         return null;
+    }
+
+    public String toString(){
+        Node currNode = this.head;
+
+        StringBuilder string = new StringBuilder("[");
+
+        while (currNode != null){
+            string.append(currNode.data);
+            currNode = currNode.next;
+
+            if (currNode != null)
+                string.append(", ");
+        }
+
+        string.append("]");
+        return string.toString();
     }
 
     @Override
