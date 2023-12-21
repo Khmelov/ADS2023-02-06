@@ -2,7 +2,7 @@ package by.it.group251003.skrylev.lesson14;
 
 import java.util.*;
 
-public class SitesB {
+public class  SitesB {
     private static class DSU {
         private int[] parent;
         private int[] size;

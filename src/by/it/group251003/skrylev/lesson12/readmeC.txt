@@ -1,4 +1,4 @@
-    Задание на уровень C
+     Задание на уровень C
 
     Создайте class MySplayMap, который реализует интерфейс NavigableMap<Integer, String>
     и работает на основе splay-дерева

@@ -134,6 +134,7 @@ public class StatesHanoiTowerC {
 
             int temp = sizes[max];
             sizes[max] = sizes[i];
+
             sizes[i] = temp;
             sb.insert(0, sizes[i] + " ");
         }

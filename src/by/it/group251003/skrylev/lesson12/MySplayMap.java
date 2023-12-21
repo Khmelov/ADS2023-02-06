@@ -3,7 +3,7 @@ package by.it.group251003.skrylev.lesson12;
 import java.util.*;
 
 @SuppressWarnings("unchecked")
-public class MySplayMap implements NavigableMap<Integer, String> {
+public class  MySplayMap implements NavigableMap<Integer, String> {
 
     private Node root;
     private int size;

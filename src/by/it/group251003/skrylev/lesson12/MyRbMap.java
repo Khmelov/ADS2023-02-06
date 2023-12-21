@@ -3,7 +3,7 @@ package by.it.group251003.skrylev.lesson12;
 import java.util.*;
 
 @SuppressWarnings("unchecked")
-public class MyRbMap implements SortedMap<Integer, String> {
+public class  MyRbMap implements SortedMap<Integer, String> {
 
     private Node root;
     private int size;

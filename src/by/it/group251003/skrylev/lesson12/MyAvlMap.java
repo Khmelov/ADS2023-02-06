@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 @SuppressWarnings("unchecked")
-public class MyAvlMap implements Map<Integer, String> {
+public class  MyAvlMap implements Map<Integer, String> {
 
     private Node root;
     private int size;

@@ -9,6 +9,7 @@ class PointsA {
         private int[] size;
         private DSU(int n){
             parent = new int[n];
+
             size = new int[n];
             for (int i = 0; i < n; i++) {
                 parent[i] = i;
