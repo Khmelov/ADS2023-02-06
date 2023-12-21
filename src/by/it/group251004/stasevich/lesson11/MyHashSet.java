@@ -4,47 +4,91 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
-class Node<E> {
-    E data;
-    Node<E> next;
+public class MyHashSet<E> implements Set<E>{
 
-    Node(E data) {
-        this.data = data;
-    }
-}
+    private class Node<E> {
+        Node next;
+        E value;
 
-public class MyHashSet <E> implements Set<E>{
-    int capacity = 32;
-    Node<E>[] set;
-    int size;
+        public Node(E e) {
+            this.value = e;
+            this.next = null;
+        }
 
-    public MyHashSet() {
-        size=0;
-        set = new Node[capacity];
-    }
-    @Override
-    public int size() {
-        return size;
     }
 
-    @Override
-    public boolean isEmpty() {
-        return size==0;
+    private int _size = 0;
+    private Node<E>[]_buf = (Node<E>[]) new Node[]{};
+
+    private void grow() {
+        Node<E>[] oldBuf = _buf;
+        _buf = (Node<E>[]) new Node[(_size * 3) / 2 + 1];
+        for(int i = 0; i < oldBuf.length; i++) {
+            Node<E> cur = oldBuf[i];
+            while(cur != null) {
+                int index = cur.value.hashCode() % _buf.length;
+                addToList(index, cur.value);
+                cur = cur.next;
+            }
+        }
     }
 
-    @Override
+    private boolean addToList(int index, E e) {
+        boolean ok = false;
+
+        if (_buf[index] == null) {
+            _buf[index] = new Node<E>(e);
+            ok = true;
+        } else {
+            Node<E> cur = _buf[index];
+            while (cur.next != null) {
+                if (e.equals(cur.value)) {
+                    return false;
+                }
+                cur = cur.next;
+            }
+            if (!e.equals(cur.value)) {
+                Node<E> newNode = new Node<E>(e);
+                cur.next = newNode;
+                ok = true;
+            }
+        }
+
+        return ok;
+    }
+
+    private boolean removeFromList(int index, Object o) {
+        boolean ok = false;
+        Node<E> cur = _buf[index];
+
+        if (cur != null) {
+            if (o.equals(cur.value)) {
+                _buf[index] = cur.next;
+                ok = true;
+            } else {
+                while (cur.next != null && !o.equals(cur.next.value)) {
+                    cur = cur.next;
+                }
+                if (cur.next != null) {
+                    Node<E> tmp = cur.next.next;
+                    cur.next = tmp;
+                    ok = true;
+                }
+            }
+        }
+
+        return ok;
+    }
+
     public String toString() {
         StringBuilder sb = new StringBuilder("[");
-        boolean first = true;
-        for (int i = 0; i < set.length; i++) {
-            Node<E> current = set[i];
-            while (current != null) {
-                if (!first) {
-                    sb.append(", ");
-                }
-                sb.append(current.data);
-                first = false;
-                current = current.next;
+        String delimiter = "";
+        for (int i = 0; i < _buf.length;  i++) {
+            Node<E> cur = _buf[i];
+            while (cur != null) {
+                sb.append(delimiter).append(cur.value);
+                delimiter = ", ";
+                cur = cur.next;
             }
         }
         sb.append("]");
@@ -52,15 +96,30 @@ public class MyHashSet <E> implements Set<E>{
     }
 
     @Override
+    public int size() {
+        return _size;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return _size == 0;
+    }
+
+    @Override
     public boolean contains(Object o) {
-        Node<E> current = set[GetHash(o)];
-        while (current != null) {
-            if (current.data.equals(o)) {
-                return true;
+        boolean ok = false;
+
+        int index = o.hashCode() % _buf.length;
+        Node<E> cur = _buf[index];
+        while (cur != null) {
+            if (o.equals(cur.value)) {
+                ok = true;
+                break;
             }
-            current = current.next;
+            cur = cur.next;
         }
-        return false;
+
+        return ok;
     }
 
     @Override
@@ -78,65 +137,31 @@ public class MyHashSet <E> implements Set<E>{
         return null;
     }
 
-    int GetHash(Object value) {
-        return (value.hashCode() & 0x7FFFFFFF) % set.length;
-    }
-
     @Override
     public boolean add(E e) {
-        int index = GetHash(e);
-        Node<E> current = set[index];
-        while (current != null) {
-            if (current.data.equals(e)) {
-                return false;
-            }
-            current = current.next;
+        if (_size == _buf.length) {
+            grow();
         }
-        Node<E> newNode = new Node<>(e);
-        newNode.next = set[index];
-        set[index] = newNode;
-        size++;
-        if (size > capacity*0.75) {
-            resize();
+        int index = e.hashCode() % _buf.length;
+        boolean ok = addToList(index, e);
+        if (ok) {
+            _size++;
         }
-        return true;
-    }
-
-    void resize() {
-        capacity*=2;
-        Node<E>[] newItems = new Node[capacity];
-        for (int i = 0; i < set.length; i++) {
-            Node<E> current = set[i];
-            while (current != null) {
-                Node<E> next = current.next;
-                int newIndex = current.data.hashCode() & 0x7FFFFFFF % newItems.length;
-                current.next = newItems[newIndex];
-                newItems[newIndex] = current;
-                current = next;
-            }
-        }
-        set = newItems;
+        return ok;
     }
 
     @Override
     public boolean remove(Object o) {
-        int index = GetHash(o);
-        Node<E> current = set[index];
-        Node<E> previous = null;
-        while (current != null) {
-            if (current.data.equals(o)) {
-                if (previous == null) {
-                    set[index] = current.next;
-                } else {
-                    previous.next = current.next;
-                }
-                size--;
-                return true;
-            }
-            previous = current;
-            current = current.next;
+        if (o == null) {
+            return false;
         }
-        return false;
+
+        int index = o.hashCode() % _buf.length;
+        boolean ok = removeFromList(index, o);
+        if (ok) {
+            _size--;
+        }
+        return ok;
     }
 
     @Override
@@ -161,8 +186,10 @@ public class MyHashSet <E> implements Set<E>{
 
     @Override
     public void clear() {
-        for (int i = 0; i < set.length; i++)
-            set[i] = null;
-        size = 0;
+        for(int i = 0; i < _buf.length; i++) {
+            _buf[i] = null;
+        }
+        _size = 0;
     }
 }
+
