@@ -3,433 +3,179 @@ package by.it.group251001.hatalskiy.lesson12;
 import java.util.*;
 
 public class MySplayMap implements NavigableMap<Integer, String> {
-    class Node {
-        Integer key;
-        String value;
+
+    private static class Node {
+        public int key;
+        public String data;
+        public Node left, right, parent;
+
+        public Node(int key, String data) {
+            this.key = key;
+            this.data = data;
+            left = right = parent = null;
+        }
+
+        public Node(Node n) {
+            this.key = n.key;
+            this.data = n.data;
+            this.left = n.left;
+            this.right = n.right;
+            this.parent = n.parent;
+        }
+
+        public Node findMin() {
+            if (left == null)
+                return this;
+            else
+                return left.findMin();
+        }
+    }
+
+    private Node head = null;
+    int size = 0;
+
+    private void rotate(Node parent, Node child) {
+        Node g = parent.parent;
+        if (g != null)
+            if (g.left == parent)
+                g.left = child;
+            else
+                g.right = child;
+        if (parent.left == child) {
+            parent.left = child.right;
+            child.right = parent;
+        } else {
+            parent.right = child.left;
+            child.left = parent;
+        }
+        keepParent(child);
+        keepParent(parent);
+        child.parent = g;
+    }
+
+    private void setParent(Node child, Node parent) {
+        if (child != null)
+            child.parent = parent;
+    }
+
+    private void keepParent(Node n) {
+        setParent(n.left, n);
+        setParent(n.right, n);
+    }
+
+    private Node splay(Node n) {
+        Node parent = n.parent;
+        if (parent == null)
+            return n;
+        Node g = parent.parent;
+        if (g == null) {
+            rotate(parent, n);
+            return n;
+        }
+        boolean isZigZig = (g.left == parent && parent.left == n) || (g.right == parent && parent.right == n);
+        if (isZigZig) {
+            rotate(g, parent);
+            rotate(parent, n);
+        } else {
+            rotate(parent, n);
+            rotate(g, n);
+        }
+        return splay(n);
+    }
+
+    private Node recGet(Node n, Integer key) {
+        if (n == null)
+            return null;
+        if (n.key == key) {
+            return splay(n);
+        }
+        if (key < n.key && n.left != null)
+            return recGet(n.left, key);
+        if (key > n.key && n.right != null)
+            return recGet(n.right, key);
+        return splay(n);
+    }
+
+    private static class SplitNode {
         Node left;
         Node right;
-        Node parent;
 
-        public Node(int key, String value) {
-            this.key = key;
-            this.value = value;
+        public SplitNode(Node l, Node r) {
+            left = l;
+            right = r;
         }
     }
 
-    private int size = 0;
-    private Node root = null;
-
-    private Node getMax(Node node) {
-        if (node == null) {
-            return null;
+    private SplitNode split(Node root, Integer key) {
+        if (root == null)
+            return new SplitNode(null, null);
+        root = recGet(root, key);
+        if (root.key == key) {
+            setParent(root.left, null);
+            setParent(root.right, null);
+            return new SplitNode(root.left, root.right);
         }
-        while (node.right != null) {
-            node = node.right;
+        if (root.key < key) {
+            Node r = null;
+            if (root.right != null)
+                r = root.right;
+            root.right = null;
+            setParent(r, null);
+            return new SplitNode(root, r);
+        } else {
+            Node l = null;
+            if (root.left != null)
+                l = root.left;
+            root.left = null;
+            setParent(l, null);
+            return new SplitNode(l, root);
         }
-        return node;
     }
 
-    private Node getMin(Node node) {
-        if (node == null) {
-            return null;
-        }
-        while (node.left != null) {
-            node = node.left;
-        }
-        return node;
+    private Node insert(Node root, Integer key, String data) {
+        SplitNode s = split(root, key);
+        root = new Node(key, data);
+        root.left = s.left;
+        root.right = s.right;
+        keepParent(root);
+        return root;
     }
 
-    private Node rotateLeft(Node node) {
-        Node x = node.right;
-        node.right = x.left;
-        x.left = node;
-        return x;
+    private Node merge(Node left, Node right) {
+        if (right == null)
+            return left;
+        if (left == null)
+            return right;
+        right = recGet(right, left.key);
+        right.left = left;
+        setParent(left, right);
+        return right;
     }
 
-    private Node rotateRight(Node node) {
-        Node x = node.left;
-        node.left = x.right;
-        x.right = node;
-        return x;
+    private Node delete(Node root, Integer key) {
+        root = recGet(root, key);
+        setParent(root.left, null);
+        setParent(root.right, null);
+        return merge(root.left, root.right);
+    }
+
+
+    private void toStr(Node n, StringBuilder res) {
+        if (n == null)
+            return;
+        toStr(n.left, res);
+        res.append(n.key).append("=").append(n.data).append(", ");
+        toStr(n.right, res);
     }
 
     @Override
     public String toString() {
-        if (isEmpty())
-            return "{}";
-        StringBuilder sb = new StringBuilder();
-        String delimiter = "";
-        sb.append("{");
-        Stack<Node> nodestack = new Stack<>();
-        Node current = root;
-        while (!nodestack.isEmpty() || current != null) {
-            if (current != null) {
-                nodestack.push(current);
-                current = current.left;
-            } else {
-                current = nodestack.pop();
-                sb.append(delimiter).append(current.key).append("=").append(current.value);
-                delimiter = ", ";
-                current = current.right;
-            }
-        }
-        sb.append("}");
-        return sb.toString();
-    }
-
-    @Override
-    public Integer lowerKey(Integer key) {
-        return getLowerKey(root, key).key;
-    }
-
-    private Node getLowerKey(Node node, Integer key) {
-        if (node == null) {
-            return null;
-        }
-        int cmp = key.compareTo(node.key);
-        if (cmp > 0) {
-            Node lowerInRight = getLowerKey(node.right, key);
-            return (lowerInRight != null) ? lowerInRight : node;
-        } else {
-            if (cmp < 0) {
-                return getLowerKey(node.left, key);
-            } else {
-                if (node.left != null) {
-                    return getMax(node.left);
-                } else {
-                    return null;
-                }
-            }
-        }
-    }
-
-    @Override
-    public Integer floorKey(Integer key) {
-       if (root == null) {
-           return null;
-       }
-        Node node = getFloorKey(root, key);
-        if (node != null) {
-            return node.key;
-        }
-        return null;
-    }
-
-    private Node getFloorKey(Node node, Integer key) {
-        if (node == null) {
-            return null;
-        }
-        int cmp = key.compareTo(node.key);
-        if (cmp >= 0) {
-            Node floorInLeft = getFloorKey(node.right, key);
-            return (floorInLeft != null) ? floorInLeft : node;
-        } else  {
-            return getFloorKey(node.left, key);
-        }
-    }
-
-    @Override
-    public Integer ceilingKey(Integer key) {
-        return getCeilingKey(root, key).key;
-    }
-
-    private Node getCeilingKey(Node node, Integer key) {
-        if (node == null) {
-            return null;
-        }
-        int cmp = key.compareTo(node.key);
-        if (cmp > 0) {
-            return getCeilingKey(node.right, key);
-        } else  {
-            Node ceilingInLeft = getCeilingKey(node.left, key);
-            return ceilingInLeft != null ? ceilingInLeft : node;
-        }
-    }
-
-    @Override
-    public Integer higherKey(Integer key) {
-        return getHigherKey(root, key).key;
-    }
-
-    private Node getHigherKey(Node node, Integer key) {
-        if (node == null) {
-            return null;
-        }
-        int cmp = key.compareTo(node.key);
-        if (cmp >= 0) {
-            return getHigherKey(node.right, key);
-        } else {
-            Node higherInLeft = getHigherKey(node.left, key);
-            return higherInLeft != null ? higherInLeft : node;
-        }
-    }
-
-    @Override
-    public SortedMap<Integer, String> headMap(Integer toKey) {
-        MySplayMap hm = new MySplayMap();
-        headMap(root, toKey, hm);
-        return hm;
-    }
-
-    private void headMap(Node node, Integer key, MySplayMap hm) {
-        if (node == null) {
-            return;
-        }
-        if (node.key.compareTo(key) < 0) {
-            hm.put(node.key, node.value);
-            headMap(node.right, key, hm);
-        }
-        headMap(node.left, key, hm);
-    }
-
-    @Override
-    public SortedMap<Integer, String> tailMap(Integer fromKey) {
-        MySplayMap tm = new MySplayMap();
-        tailMap(root, fromKey, tm);
-        return tm;
-    }
-
-    private void tailMap(Node node, Integer key, MySplayMap tm) {
-        if (node == null) {
-            return;
-        }
-        if (node.key.compareTo(key) >= 0) {
-            tm.put(node.key, node.value);
-            tailMap(node.left, key, tm);
-        }
-        tailMap(node.right, key, tm);
-    }
-
-    @Override
-    public Integer firstKey() {
-        return getMin(root).key;
-    }
-
-    @Override
-    public Integer lastKey() {
-        return getMax(root).key;
-    }
-
-    @Override
-    public int size() {
-        return size;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-    @Override
-    public void clear() {
-        size = 0;
-        root = null;
-
-    }
-
-    @Override
-    public boolean containsKey(Object key) {
-        return get(key)!=null;
-    }
-
-    @Override
-    public boolean containsValue(Object value) {
-        if (value == null || !(value instanceof String)) {
-            return false;
-        }
-        return containsValue(root, (String) value);
-    }
-
-    public boolean containsValue(Node node, String value) {
-        if (node == null) {
-            return false;
-        }
-        if (node.value.equals(value)) {
-            return true;
-        }
-        return containsValue(root.right, value) || containsValue(root.left, value);
-    }
-
-
-    private Node splay(Node node, Integer key) {
-        if (node == null) {
-            return null;
-        }
-        int cmp = key.compareTo(node.key);
-        if (cmp < 0) {
-            if (node.left == null) {
-                return node;
-            }
-            //ZIG _ ZIG
-            if (key.compareTo(node.left.key) < 0) {
-                node.left.left = splay(node.left.left, key);
-                node = rotateRight(node);
-                //ZIG_ZAG
-            } else if (key.compareTo(node.left.key) > 0) {
-                node.left.right = splay(node.left.right, key);
-                if (node.left.right != null) {
-                    node.left = rotateLeft(node.left);
-                }
-            }
-            return (node.left == null) ? node : rotateRight(node);
-        } else if (cmp > 0) {
-            if (node.right == null) {
-                return node;
-            }
-            //ZAG_ZAG
-            if (key.compareTo(node.right.key) < 0) {
-                node.right.left = splay(node.right.left, key);
-                if (node.right.left != null) {
-                    node.right = rotateRight(node.right);
-                }
-            } else if (key.compareTo(node.right.key) > 0) {
-                node.right.right = splay(node.right.right, key);
-                node = rotateLeft(node);
-            }
-            return (node.right == null) ? node : rotateLeft(node);
-        } else {
-            return node;
-        }
-    }
-
-    @Override
-    public String get(Object key) {
-        Node node = search(root, (Integer) key);
-        if (node == null) {
-            return null;
-        }
-        root = splay(root, node.key);
-        return node.value;
-    }
-
-    private Node search(Node node, Integer key) {
-        if (node == null) {
-            return null;
-        }
-        int cmp = key.compareTo(node.key);
-        if (cmp < 0) {
-            return search(node.left, key);
-        } else if (cmp > 0) {
-            return search(node.right, key);
-        } else {
-            return node;
-        }
-    }
-
-    @Override
-    public String put(Integer key, String value) {
-        if (key == null) {
-            throw new NullPointerException();
-        }
-        if (root == null) {
-            root = new Node(key, value);
-            size++;
-            return null;
-        }
-        String prev = get(key);
-        root = insert(root, key, value);
-        if (prev == null) {
-            size++;
-        }
-        return prev;
-    }
-
-    private Node insert(Node node, Integer key, String value) {
-        if (node == null) {
-            return new Node(key, value);
-        }
-        int cmp = key.compareTo(node.key);
-        if (cmp < 0) {
-            node.left = insert(node.left, key, value);
-        } else if (cmp > 0) {
-            node.right = insert(node.right, key, value);
-        } else {
-            node.value = value;
-            return node;
-        }
-        return splay(node, key);
-    }
-
-    @Override
-    public String remove(Object key) {
-        if (root == null || key == null || !(key instanceof Integer)) {
-            return null;
-        }
-        root = splay(root, (Integer) key);
-        int cmp = ((Integer) key).compareTo(root.key);
-        if (cmp != 0) {
-            return null;
-        }
-        String removedValue = root.value;
-        if (root.left == null) {
-            root = root.right;
-            if (root != null) {
-                root.parent = null;
-            }
-        } else {
-            Node newRoot = root.right;
-            if (newRoot != null) {
-                newRoot = splay(newRoot, (Integer) key);
-                newRoot.left = root.left;
-                newRoot.left.parent = newRoot;
-                root = newRoot;
-            } else {
-                root = root.left;
-                root.parent = null;
-            }
-        }
-        size--;
-        return removedValue;
-    }
-
-
-    private Node remove(Node node, Integer key) {
-        if (node == null) {
-            return null;
-        }
-        int cmp = key.compareTo(node.key);
-        if (cmp > 0) {
-            node.right = remove(node.right, key);
-        } else if (cmp < 0) {
-            node.left = remove(node.left, key);
-        } else {
-            if (node.left == null) {
-                return node.right;
-            } else if (node.right == null) {
-                return node.left;
-            }
-            Node minRight = getMin(node.right);
-            node.key = minRight.key;
-            node.value = minRight.value;
-            node.right = remove(node.right, minRight.key);
-        }
-        return node;
-    }
-
-    @Override
-    public void putAll(Map<? extends Integer, ? extends String> m) {
-
-    }
-
-
-    @Override
-    public Set<Integer> keySet() {
-        return null;
-    }
-
-    @Override
-    public Collection<String> values() {
-        return null;
-    }
-
-    @Override
-    public Set<Entry<Integer, String>> entrySet() {
-        return null;
-    }
-
-    @Override
-    public Entry<Integer, String> floorEntry(Integer key) {
-        return null;
+        StringBuilder res = new StringBuilder("{");
+        toStr(head, res);
+        if (head != null)
+            res = new StringBuilder(res.substring(0, res.length() - 2));
+        res.append("}");
+        return String.valueOf(res);
     }
 
     @Override
@@ -437,14 +183,95 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         return null;
     }
 
+    private Integer FMax = null;
+
+    private void recGetLower(Node n, Integer key) {
+        if (n == null)
+            return;
+        recGetLower(n.left, key);
+        if (FMax == null && n.key < key)
+            FMax = n.key;
+        else if (n.key < key && FMax < n.key)
+            FMax = n.key;
+        recGetLower(n.right, key);
+    }
+
     @Override
-    public Entry<Integer, String> higherEntry(Integer key) {
+    public Integer lowerKey(Integer key) {
+        FMax = null;
+        recGetLower(head, key);
+        return FMax;
+    }
+
+    @Override
+    public Entry<Integer, String> floorEntry(Integer key) {
         return null;
+    }
+
+    private void recGetFloor(Node n, Integer key) {
+        if (n == null)
+            return;
+        recGetFloor(n.left, key);
+        if (FMax == null && n.key <= key)
+            FMax = n.key;
+        else if (n.key <= key && FMax < n.key)
+            FMax = n.key;
+        recGetFloor(n.right, key);
+    }
+
+    @Override
+    public Integer floorKey(Integer key) {
+        FMax = null;
+        recGetFloor(head, key);
+        return FMax;
     }
 
     @Override
     public Entry<Integer, String> ceilingEntry(Integer key) {
         return null;
+    }
+
+    private void recGetCeiling(Node n, Integer key) {
+        if (n == null)
+            return;
+        recGetCeiling(n.left, key);
+        if (FMin == null && n.key >= key)
+            FMin = n.key;
+        else if (n.key >= key && FMin > n.key)
+            FMin = n.key;
+        recGetCeiling(n.right, key);
+    }
+
+    @Override
+    public Integer ceilingKey(Integer key) {
+        FMin = null;
+        recGetCeiling(head, key);
+        return FMin;
+    }
+
+    @Override
+    public Entry<Integer, String> higherEntry(Integer key) {
+        return null;
+    }
+
+    private Integer FMin;
+
+    private void recGetHigher(Node n, Integer key) {
+        if (n == null)
+            return;
+        recGetHigher(n.left, key);
+        if (FMin == null && n.key > key)
+            FMin = n.key;
+        else if (n.key > key && FMin > n.key)
+            FMin = n.key;
+        recGetHigher(n.right, key);
+    }
+
+    @Override
+    public Integer higherKey(Integer key) {
+        FMin = null;
+        recGetHigher(head, key);
+        return FMin;
     }
 
     @Override
@@ -487,6 +314,24 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         return null;
     }
 
+    public void fillUpper(Node n, Integer key) {
+        if (n == null)
+            return;
+        fillUpper(n.left, key);
+        if (n.key >= key)
+            this.put(n.key, n.data);
+        fillUpper(n.right, key);
+    }
+
+    public void fillLower(Node n, Integer key) {
+        if (n == null)
+            return;
+        fillLower(n.left, key);
+        if (n.key < key)
+            this.put(n.key, n.data);
+        fillLower(n.right, key);
+    }
+
     @Override
     public NavigableMap<Integer, String> headMap(Integer toKey, boolean inclusive) {
         return null;
@@ -507,6 +352,141 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         return null;
     }
 
+    @Override
+    public SortedMap<Integer, String> headMap(Integer toKey) {
+        MySplayMap tmp = new MySplayMap();
+        tmp.fillLower(head, toKey);
+        return tmp;
+    }
 
+    @Override
+    public SortedMap<Integer, String> tailMap(Integer fromKey) {
+        MySplayMap tmp = new MySplayMap();
+        tmp.fillUpper(head, fromKey);
+        return tmp;
+    }
+
+    @Override
+    public Integer firstKey() {
+        Node tmp = head;
+        Node tmp_p = null;
+        while (tmp != null) {
+            tmp_p = tmp;
+            tmp = tmp.left;
+        }
+        if(tmp_p != null)
+            return tmp_p.key;
+        return null;
+    }
+
+    @Override
+    public Integer lastKey() {
+        Node tmp = head;
+        Node tmp_p = null;
+        while (tmp != null) {
+            tmp_p = tmp;
+            tmp = tmp.right;
+        }
+        if(tmp_p != null)
+            return tmp_p.key;
+        return null;
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    @Override
+    public boolean containsKey(Object key) {
+        head = recGet(head, (Integer) key);
+        return key.equals(head.key);
+    }
+
+    private Boolean ContainsValueF;
+
+    private void recGetByValue(Node n, Object data) {
+        if (n == null)
+            return;
+        recGetByValue(n.left, data);
+        if (ContainsValueF)
+            return;
+        if (n.data.equals(data)) {
+            ContainsValueF = true;
+            splay(n);
+            return;
+        }
+        recGetByValue(n.right, data);
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        ContainsValueF = false;
+        recGetByValue(head, value);
+        return ContainsValueF;
+    }
+
+    @Override
+    public String get(Object key) {
+        head = recGet(head, (Integer) key);
+        if (key.equals(head.key))
+            return head.data;
+        return null;
+    }
+
+    @Override
+    public String put(Integer key, String value) {
+        head = recGet(head, key);
+        if (head == null || head.key != key) {
+            size++;
+            head = insert(head, key, value);
+            return null;
+        }
+        String pr = head.data;
+        head.data = value;
+        return pr;
+    }
+
+    @Override
+    public String remove(Object key) {
+        String res = get(key);
+        if (res != null) {
+            size--;
+            head = delete(head, (Integer) key);
+        }
+        return res;
+    }
+
+    @Override
+    public void putAll(Map<? extends Integer, ? extends String> m) {
+
+    }
+
+    @Override
+    public void clear() {
+        size = 0;
+        head = null;
+    }
+
+    @Override
+    public Set<Integer> keySet() {
+        return null;
+    }
+
+    @Override
+    public Collection<String> values() {
+        return null;
+    }
+
+    @Override
+    public Set<Entry<Integer, String>> entrySet() {
+        return null;
+    }
 }
+
 

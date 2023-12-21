@@ -6,260 +6,223 @@ import java.util.Set;
 import java.util.Stack;
 
 public class MyAvlMap implements Map<Integer, String> {
-    class Node {
-        int key;
-        String value;
-        int height;
-        Node left;
-        Node right;
+        private static class Node {
+            public int key;
+            public int height;
+            public String data;
+            public Node l, r;
 
-        public Node(int key, String value) {
-            this.key = key;
-            this.value = value;
-            this.height = 1;
-        }
-    }
+            public Node(int key, String data) {
+                this.key = key;
+                this.data = data;
+                l = r = null;
+                height = 1;
+            }
 
-    int size;
-  Node root;
+            public int height(Node n) {
+                return n != null ? n.height : 0;
+            }
 
-    int max(int a, int b) {
-        return Math.max(a, b);
-    }
+            public int getBFactor(Node n) {
+                if (n == null)
+                    return 0;
+                return height(n.r) - height(n.l);
+            }
 
-    int height(Node node) {
-        if (node == null)
-            return 0;
-        return node.height;
-    }
+            public void fixHeight() {
+                int hl = height(this.l);
+                int hr = height(this.r);
+                this.height = Math.max(hl, hr) + 1;
+            }
 
-    int getBalance(Node node) {
-        if (node == null)
-            return 0;
-        return height(node.left) - height(node.right);
-    }
+            public Node rotateRight() {
+                Node tmpLeft = l;
+                l = tmpLeft.r;
+                tmpLeft.r = this;
+                fixHeight();
+                tmpLeft.fixHeight();
+                return tmpLeft;
+            }
 
-   Node rightRotate(Node y) {
-        Node x = y.left;
-        Node T2 = x.right;
+            public Node rotateLeft() {
+                Node tmpRight = r;
+                r = tmpRight.l;
+                tmpRight.l = this;
+                fixHeight();
+                tmpRight.fixHeight();
+                return tmpRight;
+            }
 
-        x.right = y;
-        y.left = T2;
+            public Node balance() {
+                fixHeight();
+                if (getBFactor(this) == 2) {
+                    if (getBFactor(r) < 0)
+                        r = r.rotateRight();
+                    return rotateLeft();
+                }
+                if (getBFactor(this) == -2) {
+                    if (getBFactor(l) > 0)
+                        l = l.rotateLeft();
+                    return rotateRight();
+                }
+                return this;
+            }
 
-        y.height = max(height(y.left), height(y.right) + 1);
-        x.height = max(height(x.left), height(x.right) + 1);
+            public Node findMin() {
+                if (l == null)
+                    return this;
+                else
+                    return l.findMin();
+            }
 
-        return x;
-    }
-
-    Node leftRotation(Node x) {
-     Node y = x.right;
-     Node T2 = y.left;
-
-        y.left = x;
-        x.right = T2;
-
-        y.height = max(height(y.left), height(y.right) + 1);
-        x.height = max(height(x.left), height(x.right) + 1);
-        return y;
-    }
-
-    @Override
-    public String toString() {
-        if (isEmpty())
-            return "{}";
-        StringBuilder sb = new StringBuilder();
-        String delimiter = "";
-        sb.append("{");
-        Stack<Node> nodestack = new Stack<>();
-        Node current = root;
-        while (!nodestack.isEmpty() || current != null) {
-            if (current != null) {
-                nodestack.push(current);
-                current = current.left;
-            } else {
-                current = nodestack.pop();
-                sb.append(delimiter).append(current.key).append("=").append(current.value);
-                delimiter = ", ";
-                current = current.right;
+            public Node removeMin() {
+                if (l == null)
+                    return r;
+                l = l.removeMin();
+                return balance();
             }
         }
-        sb.append("}");
-        return sb.toString();
-    }
 
-    @Override
-    public int size() {
-        return size;
-    }
+        private Node recGet(Node n, Integer key) {
+            if (n == null)
+                return null;
+            else if (key < n.key)
+                return recGet(n.l, key);
+            else if (key > n.key)
+                return recGet(n.r, key);
+            else
+                return n;
+        }
 
-    @Override
-    public void clear() {
-        size = 0;
-        root = null;
-    }
+        private Node recInsert(Node n, Integer key, String data) {
+            if (n == null)
+                return new Node(key, data);
+            if (key < n.key)
+                n.l = recInsert(n.l, key, data);
+            else
+                n.r = recInsert(n.r, key, data);
+            return n.balance();
+        }
 
-    @Override
-    public boolean isEmpty() {
-        return size == 0;
-    }
+        private Node recRemove(Node n, Object key) {
+            if (n == null)
+                return null;
+            if ((Integer) key < n.key)
+                n.l = recRemove(n.l, key);
+            else if ((Integer) key > n.key)
+                n.r = recRemove(n.r, key);
+            else {
+                Node l = n.l;
+                Node r = n.r;
+                n = null;
+                if (r == null)
+                    return l;
+                Node min = r.findMin();
+                min.r = r.removeMin();
+                min.l = l;
+                min.balance();
+                return min;
+            }
+            return n.balance();
+        }
 
-    @Override
-    public String get(Object key) {
-        if (key == null || !(key instanceof Integer))
-            return null;
-        Integer searchKey = (Integer) key;
-        Node result = search(root, searchKey);
-        return (result != null) ? result.value : null;
-    }
+        private Node tree = null;
+        private int size = 0;
 
-    public Node search(Node node, int key) {
-        if (node == null || key == node.key) {
-            return node;
+        private void toStr(Node n, StringBuilder res) {
+            if (n == null)
+                return;
+            toStr(n.l, res);
+            res.append(n.key).append("=").append(n.data).append(", ");
+            toStr(n.r, res);
         }
-        if (key < node.key) {
-            return search(node.left, key);
-        } else {
-            return search(node.right, key);
-        }
-    }
 
-    @Override
-    public String put(Integer key, String value) {
-        if (key == null) {
-            throw new NullPointerException();
+        @Override
+        public String toString() {
+            StringBuilder res = new StringBuilder("{");
+            toStr(tree, res);
+            if (tree != null)
+                res = new StringBuilder(res.substring(0, res.length() - 2));
+            res.append("}");
+            return String.valueOf(res);
         }
-        String oldValue = get(key);
-        root = put(root, key, value);
-        return oldValue;
-    }
 
-    public Node put(Node node, Integer key, String value) {
-        if (node==null){
-            size++;
-            return new Node(key, value);
+        @Override
+        public int size() {
+            return size;
         }
-        if (key< node.key){
-            node.left = put(node.left, key, value);
-        } else if (key > node.key) {
-            node.right = put(node.right, key, value);
-        } else {
-            node.value = value;
-            return node;
-        }
-        updateHeight(node);
-        return balance(node);
-    }
 
-    public void updateHeight(Node node){
-        if (node!=null){
-            node.height = Math.max(height(node.left), height(node.right));
+        @Override
+        public boolean isEmpty() {
+            return size == 0;
         }
-    }
 
-    public Node balance(Node node){
-        int balance = getBalance(node);
-        if (balance > 1 && node.key<node.left.key)
-            return rightRotate(node);
-        if (balance <-1 && node.key > node.right.key)
-            return  leftRotation(node);
+        @Override
+        public boolean containsKey(Object key) {
+            Node res = recGet(tree, (Integer) key);
+            return res != null;
+        }
 
-        if (balance > 1 && node.key> node.left.key){
-            node.left=leftRotation(node.left);
-            return rightRotate(node);
-        }
-        if (balance< -1 && node.key< node.right.key){
-            node.right = rightRotate(node.right);
-            return leftRotation(node);
-        }
-        return node;
-    }
-
-    @Override
-    public String remove(Object key) {
-        if (! (key instanceof Integer))
-            return null;
-        int removeKey = (int) key;
-        String removedValue = get(removeKey);
-        root = remove(root,removeKey);
-        if (removedValue!=null){
-            size--;
-        }
-        return removedValue;
-    }
-
-    public Node remove(Node node, int key){
-        if (node==null){
-            return null;
-        }
-        if (key<node.key){
-            node.left = remove(node.left, key);
-        } else if (key>node.key) {
-            node.right=remove(node.right, key);
-        } else if (node.left==null || node.right==null){
-            node = (node.left!=null)? node.left : node.right;
-        } else {
-            Node successor = findMin(node.right);
-            node.key = successor.key;
-            node.value=successor.value;
-            node.right = remove(node.right, successor.key);
-        }
-        if (node!=null){
-            updateHeight(node);
-            return balance(node);
-        }
-        return null;
-    }
-
-    public Node findMin(Node node){
-        while (node.left!= null){
-            node=node.left;
-        }
-        return node;
-    }
-    @Override
-    public boolean containsKey(Object key) {
-        if (!(key instanceof Integer)) {
+        @Override
+        public boolean containsValue(Object value) {
             return false;
         }
-        Integer searchKey = (Integer) key;
-        return containsKey(root, searchKey);
+
+        @Override
+        public String get(Object key) {
+            Node tmp = recGet(tree, (Integer) key);
+            if (tmp == null)
+                return null;
+            return tmp.data;
+        }
+
+        @Override
+        public String put(Integer key, String value) {
+            Node retVal = recGet(tree, key);
+            if (retVal == null) {
+                size++;
+                tree = recInsert(tree, key, value);
+                return null;
+            }
+            String pr = retVal.data;
+            retVal.data = value;
+            return pr;
+        }
+
+
+        @Override
+        public String remove(Object key) {
+            String res = get(key);
+            if (res != null) {
+                size--;
+                tree = recRemove(tree, key);
+            }
+            return res;
+        }
+
+        @Override
+        public void putAll(Map<? extends Integer, ? extends String> m) {
+
+        }
+
+        @Override
+        public void clear() {
+            tree = null;
+            size = 0;
+        }
+
+        @Override
+        public Set<Integer> keySet() {
+            return null;
+        }
+
+        @Override
+        public Collection<String> values() {
+            return null;
+        }
+
+        @Override
+        public Set<Entry<Integer, String>> entrySet() {
+            return null;
+        }
     }
-
-    public boolean containsKey(Node node, int key) {
-        if (node == null)
-            return false;
-        if (key < node.key) {
-            return containsKey(node.left, key);
-        } else if (key > node.key) {
-            return containsKey(node.right, key);
-        } else return true;
-    }
-
-    /////////////////////////
-    @Override
-    public boolean containsValue(Object value) {
-        return false;
-    }
-
-
-    @Override
-    public void putAll(Map<? extends Integer, ? extends String> m) {
-
-    }
-
-    @Override
-    public Set<Integer> keySet() {
-        return null;
-    }
-
-    @Override
-    public Collection<String> values() {
-        return null;
-    }
-
-    @Override
-    public Set<Entry<Integer, String>> entrySet() {
-        return null;
-    }
-}
