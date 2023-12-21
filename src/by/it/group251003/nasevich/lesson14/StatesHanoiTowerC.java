@@ -152,7 +152,9 @@ public class StatesHanoiTowerC {
         }
 
         public int size(int v) {
+
             return size[find_set(v)];
+
         }
 
         public int find_set(int v) {
