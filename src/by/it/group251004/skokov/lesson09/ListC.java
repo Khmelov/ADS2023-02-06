@@ -153,7 +153,7 @@ public class ListC<E> implements List<E> {
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
+    public boolean containsAll(Collection<?> c) { //Возвращает true, если список содержит все элементы указанной коллекции.
         for (Object item : c)
                 if (!contains(item))
                     return false;
@@ -161,14 +161,16 @@ public class ListC<E> implements List<E> {
     }
 
     @Override
-    public boolean addAll(Collection<? extends E> c) {
+    public boolean addAll(Collection<? extends E> c) { //Добавляет все элементы из указанной коллекции в список. Возвращает true, если список изменился в результате вызова.
+
+
         for (E item : c)
             add(item);
         return true;
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends E> c) {
+    public boolean addAll(int index, Collection<? extends E> c) { //Вставляет все элементы из указанной коллекции в список, начиная с указанного индекса.
         boolean modified = false;
         for (E item : c) {
             if (index > -1 && index <= _current) {
@@ -182,7 +184,7 @@ public class ListC<E> implements List<E> {
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) {
+    public boolean removeAll(Collection<?> c) { //Удаляет из списка все его элементы, которые содержатся в указанной коллекции. Возвращает true, если список изменился в результате вызова.
         boolean deleted = false;
 
         for (int i = 0; i < _current; i++) {
@@ -196,7 +198,7 @@ public class ListC<E> implements List<E> {
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
+    public boolean retainAll(Collection<?> c) { //Удаляет из списка все его элементы, которые не содержатся в указанной коллекции. Возвращает true, если список изменился в результате вызова.
         boolean retained = false;
 
         for (int i = 0; i < _current; i++) {
@@ -216,7 +218,7 @@ public class ListC<E> implements List<E> {
     /////////////////////////////////////////////////////////////////////////
 
     @Override
-    public List<E> subList(int fromIndex, int toIndex) {
+    public List<E> subList(int fromIndex, int toIndex) { //Возвращает список, содержащий все элементы списка между указанными индексами, включая начальный индекс и исключая конечный индекс.
         if (fromIndex < 0 || toIndex > _current || fromIndex > toIndex) {
             ListC<E> subList = new ListC<>(toIndex - fromIndex);
             for (int i = fromIndex; i < toIndex; i++)
@@ -242,7 +244,7 @@ public class ListC<E> implements List<E> {
     }
 
     @Override
-    public Object[] toArray() {
+    public Object[] toArray() { //Возвращает массив, содержащий все элементы в этом списке в правильной последовательности.
         Object[] result = new Object[_current];
         for (int i = 0; i < _current; i++) {
             result[i] = _list[i];

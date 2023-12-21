@@ -40,7 +40,7 @@ public class ListB<E> implements List<E>  {
     }
 
     @Override
-    public boolean add(E e) {
+    public boolean add(E e) { //Добавляет элемент на указанный индекс в списке, сдвигая все последующие элементы.
         if (_current == _list.length) {
             E[] newList = (E[]) new Object[_list.length * 2];
             for (int i = 0; i < _list.length; i++) {
@@ -53,7 +53,7 @@ public class ListB<E> implements List<E>  {
     }
 
     @Override
-    public E remove(int index) {
+    public E remove(int index) {  //Удаляет первое вхождение указанного объекта из списка, если он там присутствует.
         if (index > -1 && index < _current) {
             E elem = _list[index];
             for (int i = index; i < _current - 1; i++)
@@ -99,7 +99,7 @@ public class ListB<E> implements List<E>  {
     }
 
     @Override
-    public E set(int index, E element) {
+    public E set(int index, E element) { //Заменяет элемент на указанном индексе на указанный элемент и возвращает старый элемент.
         E item = null;
         if (index > -1 && index < _current) {
             item = _list[index];
@@ -112,11 +112,12 @@ public class ListB<E> implements List<E>  {
     @Override
     public boolean isEmpty() {
         return _current == 0;
-    }
+    } //Возвращает true, если списке нет элементов.
 
 
     @Override
-    public void clear() {
+    public void clear() { //Удаляет все элементы из списка.
+
         for (int i = 0; i < _current; i++) {
             _list[i] = null;
         }
@@ -124,7 +125,7 @@ public class ListB<E> implements List<E>  {
     }
 
     @Override
-    public int indexOf(Object o) {
+    public int indexOf(Object o) { //Возвращает индекс первого вхождения указанного объекта в список, или -1, если объект не найден.
         for (int i = 0; i < _current; i++) {
             if (Objects.equals(_list[i], o)) {
                 return i;
@@ -134,7 +135,7 @@ public class ListB<E> implements List<E>  {
     }
 
     @Override
-    public E get(int index) {
+    public E get(int index) { //Возвращает элемент на указанном индексе.
         if (index > -1 && index < _current)
             return _list[index];
         return null;
@@ -143,10 +144,10 @@ public class ListB<E> implements List<E>  {
     @Override
     public boolean contains(Object o) {
         return indexOf(o) != -1;
-    }
+    } //Возвращает true, если этот список содержит указанный объект.
 
     @Override
-    public int lastIndexOf(Object o) {
+    public int lastIndexOf(Object o) { //Возвращает индекс последнего вхождения указанного объекта в этом списке или -1, если это вхождение не найдено.
         for (int i = _current - 1; i > -1; i--) {
             if (Objects.equals(o, _list[i]))
                 return i;

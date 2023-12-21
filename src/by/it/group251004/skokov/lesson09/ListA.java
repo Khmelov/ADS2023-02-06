@@ -25,11 +25,13 @@ public class ListA<E> implements List<E> {
 
     public ListA(int size) {
         _list = (E[]) new Object[size];
-    }
+    } //настраивает список с размером памяти по умолчанию, равным 8.
 
 
     @Override
-    public String toString() {
+    public String toString() { //Возвращает строковое представление списка вида [element1, element2, ..., elementN].
+
+
         StringBuilder sb = new StringBuilder();
         sb.append('[');
         for (int i = 0; i < _current; i++) {
@@ -43,7 +45,8 @@ public class ListA<E> implements List<E> {
     }
 
     @Override
-    public boolean add(E e) {
+    public boolean add(E e) { //Добавляет элемент в список. Если место в текущем массиве закончилось,
+        // он создает новый массив с удвоенным размером и копирует в него старые элементы.
         if (_current == _list.length) {
             E[] newList = (E[]) new Object[_list.length * 2];
             for (int i = 0; i < _list.length; i++) {
@@ -56,7 +59,8 @@ public class ListA<E> implements List<E> {
     }
 
     @Override
-    public E remove(int index) {
+    public E remove(int index) { //Удаляет элемент из списка по указанному индексу, сдвигая все последующие элементы на одну позицию влево. \
+        // Если индекс выходит за пределы текущего размера списка, функция возвращает null.
         if (index > -1 && index < _current) {
             E elem = _list[index];
             for (int i = index; i < _current - 1; i++)
@@ -70,7 +74,7 @@ public class ListA<E> implements List<E> {
     @Override
     public int size() {
         return _current;
-    }
+    } //Возвращает текущее количество элементов в списке.
 
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
