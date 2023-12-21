@@ -1,4 +1,4 @@
-package by.it.group251002.korti.lesson12;
+package by.it.group251004.tanov.lesson12;
 // каждый красный узел должен иметь 2 дочерних узла
 // пути должны содержать одинаковое количество черных узлов
 import java.util.*;
