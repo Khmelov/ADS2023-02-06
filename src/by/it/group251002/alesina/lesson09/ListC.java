@@ -44,9 +44,9 @@ public class ListC<E> implements List<E> {
     public boolean add(E e) {
         if(ListSize==capacity){
             capacity=(int)(capacity*1.5);
-            E[] MyList=(E[]) new Object[capacity];
-            System.arraycopy(this.MyList,0,MyList,0,ListSize);
-            this.MyList=MyList;
+            E[] List=(E[]) new Object[capacity];
+            System.arraycopy(this.MyList,0,List,0,ListSize);
+            this.MyList=List;
         }
         this.MyList[ListSize]=e;
         ListSize++;

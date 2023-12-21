@@ -7,103 +7,161 @@ import java.util.Iterator;
 
 public class MyArrayDeque<E> implements Deque<E> {
 
-    private E[] arr = (E[]) new Object[0];
+    static private int minCapacity = 4;
+    private E[] arr = (E[]) new Object[minCapacity];
+    private int headIndex = 0;
+    private int tailIndex = 0;
     private int size = 0;
-    private void incSize(){
-        if (size == arr.length){
-            E[] tmpArr = (E[]) new Object[size * 3 / 2 + 1];
-            System.arraycopy(arr, 0, tmpArr, 0, size);
-            arr = tmpArr;
+
+
+    private void growDeque() {
+        E[] newArr = (E[]) new Object[(size*3)/2+1];
+        int j = 0;
+        for(int i = headIndex; i != decrease(tailIndex); i = increase(i)) {
+            newArr[j] = arr[i];
+            arr[i] = null;
+            j++;
         }
+        newArr[j] = arr[decrease(tailIndex)];
+
+        headIndex = 0;
+        tailIndex = size;
+        arr = newArr;
+    }
+    private int decrease(int index) {
+        index--;
+        if (index < 0) {
+            index = arr.length - 1;;
+        }
+        return index;
     }
 
-
-    @Override
-    public String toString(){
-        StringBuilder str = new StringBuilder("[");
-        if (size > 0) {
-            str.append(arr[0]);
-
-            for (int i = 1; i < size; i++) {
-                str.append(", ").append(arr[i]);
-            }
+    private int increase(int index) {
+        index++;
+        if (index == arr.length) {
+            index = 0;
         }
-
-        str.append("]");
-        return str.toString();
+        return index;
+    }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("[");
+        String delimiter = "";
+        for (int i = headIndex; i != decrease(tailIndex);  i = increase(i)) {
+            sb.append(delimiter).append(arr[i]);
+            delimiter = ", ";
+        }
+        sb.append(delimiter).append(arr[decrease(tailIndex)]);
+        delimiter = ", ";
+        sb.append("]");
+        return sb.toString();
     }
 
     @Override
     public int size() {
         return size;
     }
+
     @Override
     public boolean add(E e) {
-        incSize();
+        if (size == arr.length) {
+            growDeque();
+        }
 
-        arr[size++] = e;
-
+        arr[tailIndex] = e;
+        tailIndex = increase(tailIndex);
+        size++;
         return true;
     }
 
     @Override
     public void addFirst(E e) {
-        incSize();
+        if (size == arr.length) {
+            growDeque();
+        }
 
-        System.arraycopy(arr, 0, arr, 1, size);
-        arr[0] = e;
+        headIndex = decrease(headIndex);
+        arr[headIndex] = e;
         size++;
     }
 
     @Override
     public void addLast(E e) {
+        if (size == arr.length) {
+            growDeque();
+        }
 
-        add(e);
-    }
-
-    @Override
-    public E element() {   //возвращает элемент, стоящий в начале списка
-        if (size != 0)
-            return arr[0];
-        return null;
+        arr[tailIndex] = e;
+        tailIndex = increase(tailIndex);
+        size++;
     }
 
     @Override
     public E getFirst() {
-        return element();
+        if (isEmpty()) {
+            return null;
+        }
+
+        return arr[headIndex];
     }
 
     @Override
     public E getLast() {
-        return arr[size-1];
+        if (isEmpty()) {
+            return null;
+        }
+
+        return arr[decrease(tailIndex)];
     }
 
     @Override
-    public E poll() {  //возвращаетт 1й элемент и удаляет его из массива
-
-        if (size-- != 0) {
-            E elem = arr[0];
-            System.arraycopy(arr, 1, arr, 0, size);
-            arr[size] = null;
-            return elem;
-        }
-        else
+    public E poll() {
+        if (isEmpty()) {
             return null;
+        }
+
+        size--;
+        E element = arr[headIndex];
+        arr[headIndex] = null;
+        headIndex = increase(headIndex);
+        return element;
     }
 
 
     @Override
     public E pollFirst() {
-       return poll();
+        if (isEmpty()) {
+            return null;
+        }
 
+        size--;
+        E element = arr[headIndex];
+        arr[headIndex] = null;
+        headIndex = increase(headIndex);
+        return element;
     }
 
     @Override
     public E pollLast() {
-//
-        return arr[size-- - 1];
+        if (isEmpty()) {
+            return null;
+        }
+
+        size--;
+        E element = arr[decrease(tailIndex)];
+        arr[decrease(tailIndex)] = null;
+        tailIndex = decrease(tailIndex);
+        return element;
     }
 
+    @Override
+    public E element() {
+        if (isEmpty()) {
+            return null;
+        }
+
+        return arr[headIndex];
+    }
 
 
     @Override

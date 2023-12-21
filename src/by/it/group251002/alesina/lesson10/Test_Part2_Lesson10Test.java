@@ -193,7 +193,6 @@ public class Test_Part2_Lesson10Test extends HomeWork {
         return iterator.next();
     }
 
-
     private int getRandomIndex() {
         return rnd.nextInt(eObject.size());
     }
@@ -204,18 +203,18 @@ public class Test_Part2_Lesson10Test extends HomeWork {
             assertEquals("Incorrect parent", Object.class, aClass.getSuperclass());
         }
         for (Field field : aClass.getDeclaredFields()) {
-           // checkFieldAsCollection(field);
+            checkFieldAsCollection(field);
             for (Field subField : field.getType().getDeclaredFields()) {
-                //checkFieldAsCollection(subField);
+                checkFieldAsCollection(subField);
             }
         }
     }
 
-//    private void checkFieldAsCollection(Field field) {
-//        if (Collection.class.isAssignableFrom(field.getType())) {
-//            fail("Incorrect field: " + field);
-//        }
-//    }
+    private void checkFieldAsCollection(Field field) {
+        if (Collection.class.isAssignableFrom(field.getType())) {
+            fail("Incorrect field: " + field);
+        }
+    }
 
 
     private Map<String, Method> fill(Class<?> c, Set<String> methodNames) {

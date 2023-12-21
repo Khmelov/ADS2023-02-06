@@ -74,7 +74,7 @@ public class MyAvlMap implements Map<Integer, String> {
     }
 
 
-    private void getSameHeight(Node n) {  //исправляем ситуацию, когда левый и правый потомок оказались на разном уровне
+    private void getSameHeight(Node n) {  //исправляем ситуацию, когда разница в высоте больше 1
         if (n == null) {
             return;
         }
