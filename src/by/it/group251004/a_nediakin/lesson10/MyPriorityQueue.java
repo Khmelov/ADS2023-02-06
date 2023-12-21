@@ -1,64 +1,65 @@
 package by.it.group251004.a_nediakin.lesson10;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Queue;
+import java.util.*;
 
-public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
-
-    final int defaultSize = 8;
-    E[] _items;
+public class MyPriorityQueue <E extends Comparable<E>>  implements Queue<E> {
     int size;
-
-    public MyPriorityQueue() {
-        _items = (E[]) new Comparable[defaultSize];
+    int maxSize;
+    E[] data;
+    MyPriorityQueue(){
+        maxSize = 5;
+        data = (E[]) new Comparable[maxSize];
     }
+    private void Swap (int indexA, int indexB){
+        E temp = data[indexA];
+        data[indexA] = data[indexB];
+        data[indexB] = temp;
+    }
+    private void SiftDown(int index){
+        int indexChild = index * 2 + 1;
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-        for (int i = 0; i < size; i++) {
-            sb.append(_items[i]);
-            if (i < size - 1) {
-                sb.append(", ");
-            }
+        if((indexChild + 1) < size && data[indexChild + 1].compareTo(data[indexChild]) < 0){
+            indexChild++;
         }
-        sb.append("]");
-        return sb.toString();
-    }
-
-    void heapifyUp(int index) {
-        int parent = (index - 1) / 2;
-
-        if (parent >= 0 && _items[index].compareTo(_items[parent]) < 0) {
-            E temp = _items[index];
-            _items[index] = _items[parent];
-            _items[parent] = temp;
-            heapifyUp(parent);
+        if (indexChild < size && data[indexChild].compareTo(data[index]) < 0) {
+            Swap(index, indexChild);
+            SiftDown(indexChild);
         }
     }
 
-    void heapifyDown(int index) {
-        int left = 2 * index + 1;
-        int right = 2 * index + 2;
-        int largest = left;
-
-        if (right < size && _items[right].compareTo(_items[largest]) < 0)
-            largest = right;
-
-        if (largest < size && _items[largest].compareTo(_items[index]) < 0) {
-            E temp = _items[index];
-            _items[index] = _items[largest];
-            _items[largest] = temp;
-            heapifyDown(largest);
+    private void SiftUp(int index){
+        int indexParent = (index - 1) / 2;
+        if (index != 0 && data[index].compareTo(data[indexParent]) < 0){
+            Swap(index, indexParent);
+            SiftUp(indexParent);
         }
+    }
+
+    private void grow(){
+        maxSize *= 2;
+        E[] newarray = (E[]) new Comparable[maxSize];
+        for (int i = 0; i < size; i++){
+            newarray[i] = data[i];
+        }
+        data = newarray;
     }
 
     @Override
     public int size() {
         return size;
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        String delimeter = "";
+        for (int i = 0; i < size; i++) {
+            sb.append(delimeter).append(data[i]);
+            delimeter = ", ";
+        }
+        sb.append("]");
+        return sb.toString();
     }
 
     @Override
@@ -68,132 +69,13 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
 
     @Override
     public boolean contains(Object o) {
-        for (int i = 0; i < size; i++) {
-            if (_items[i].equals(o)) {
+        for (int i = 0; i < size; i++){
+            if (data[i].equals(o)){
                 return true;
             }
         }
         return false;
     }
-
-    @Override
-    public boolean add(E e) {
-        if (size == _items.length) {
-            resize();
-        }
-        _items[size++] = e;
-        heapifyUp(size - 1);
-        return true;
-    }
-
-    void resize() {
-        int newCapacity = _items.length * 2;
-        E[] newItems = (E[]) new Comparable[newCapacity];
-        System.arraycopy(_items, 0, newItems, 0, size);
-        _items = newItems;
-    }
-
-    @Override
-    public boolean containsAll(Collection<?> c) {
-        for (Object item : c) {
-            if (!contains(item)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends E> c) {
-        boolean modified = false;
-        for (E item : c) {
-            if (add(item)) {
-                modified = true;
-            }
-        }
-        return modified;
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        boolean modified = false;
-        for (Object item : c) {
-            if (remove(item)) {
-                modified = true;
-            }
-        }
-        return modified;
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        boolean modified = false;
-        for (int i = size - 1; i >= 0; i--) {
-            if (!c.contains(_items[i])) {
-                remove(_items[i]);
-                modified = true;
-            }
-        }
-        return modified;
-    }
-
-    @Override
-    public boolean remove(Object o) {
-        for (int i = 0; i < size; i++) {
-            if (Objects.equals(o, _items[i])) {
-                _items[i] = _items[--size];
-                heapifyDown(i);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean offer(E e) {
-        return add(e);
-    }
-
-    @Override
-    public E remove() {
-        if (isEmpty()) {
-            throw new IllegalArgumentException("PriorityQueue is empty");
-        }
-        E root = _items[0];
-        _items[0] = _items[--size];
-        heapifyDown(0);
-        return root;
-    }
-
-    @Override
-    public E poll() {
-        if (isEmpty()) {
-            return null;
-        }
-        return remove();
-    }
-
-    @Override
-    public E element() {
-        if (isEmpty()) {
-            throw new IllegalStateException("PriorityQueue is empty");
-        }
-        return _items[0];
-    }
-
-    @Override
-    public E peek() {
-        if (isEmpty())
-            return null;
-        return element();
-    }
-
-    @Override
-    public void clear() {
-        size = 0;
-    }
-
-    ////////////////////////////////
 
     @Override
     public Iterator<E> iterator() {
@@ -210,4 +92,143 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
         return null;
     }
 
+    @Override
+    public boolean add(E e) {
+        if(size == maxSize){
+            grow();
+        }
+        data[size++] = e;
+        SiftUp(size - 1);
+        return true;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        for (int i = 0; i < size; i++) {
+            if (Objects.equals(o, data[i])) {
+                data[i] = data[--size];
+                data[size] = null;
+                SiftDown(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        for (Object item : c) {
+            if (!contains(item)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        boolean changed = false;
+        for (E i:c){
+            add(i);
+            changed = true;
+        }
+        return changed;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        boolean changed = false;
+        int i = 0;
+        int index = 0;
+        while (index < size) {
+            if (c.contains(data[i])) {
+                i++;
+                size--;
+                changed = true;
+            } else {
+                data[index] = data[i];
+                index++;
+                i++;
+            }
+        }
+        for (int k = size; k < data.length; k++){
+            data[k] = null;
+        }
+        for (int j = size / 2; j >= 0; j--)
+            SiftDown(j);
+        return changed;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        boolean changed = false;
+        int i = 0;
+        int index = 0;
+        while (index < size){
+            if (!c.contains(data[i])) {
+                i++;
+                size--;
+                changed = true;
+            } else {
+                data[index] = data[i];
+                index++;
+                i++;
+            }
+        }
+        for (int j = size / 2; j >= 0; j--)
+            SiftDown(j);
+        return changed;
+    }
+
+    @Override
+    public void clear() {
+        for (int i = 0; i < size; i++)
+            data[i] = null;
+        size = 0;
+    }
+
+    @Override
+    public boolean offer(E e) {
+        return add(e);
+    }
+
+    @Override
+    public E remove() {
+        if(isEmpty()){
+            throw new NoSuchElementException();
+        }
+        E result = data[0];
+        size--;
+        Swap(0,size);
+        SiftDown(0);
+        return result;
+    }
+
+    @Override
+    public E poll() {
+        if(isEmpty()){
+            return null;
+        }
+        E result = data[0];
+        size--;
+        Swap(0,size);
+        SiftDown(0);
+        return result;
+    }
+
+    @Override
+    public E element() {
+        if (isEmpty()){
+            throw new NoSuchElementException();
+        }
+        return data[0];
+    }
+
+    @Override
+    public E peek() {
+        if (isEmpty()){
+            return null;
+        }
+        return data[0];
+    }
 }
