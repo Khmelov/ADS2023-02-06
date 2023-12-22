@@ -3,63 +3,63 @@ package by.it.group251004.symonik.lesson10;
 import java.util.*;
 
 public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
-    private E[] array = (E[]) new Comparable[8];
-    private int size = 0;
+    int size;
+    int maxSize;
+    E[] data;
+    MyPriorityQueue(){
+        maxSize = 5;
+        data = (E[]) new Comparable[maxSize];
+    }
+    private void Swap (int indexA, int indexB){
+        E temp = data[indexA];
+        data[indexA] = data[indexB];
+        data[indexB] = temp;
+    }
+    private void SiftDown(int index){
+        int indexChild = index * 2 + 1;
 
-    public String toString() {
-        StringBuilder sb = new StringBuilder("[");
-        for (int i = 0; i < size; i++) {
-            sb.append(array[i]);
-            if (size - 1 != i) {
-                sb.append(", ");
-            }
+        if((indexChild + 1) < size && data[indexChild + 1].compareTo(data[indexChild]) < 0){
+            indexChild++;
         }
-        sb.append("]");
-        return sb.toString();
-    }
-
-    void swap(int index1, int index2) {
-        E buf = array[index1];
-        array[index1] = array[index2];
-        array[index2] = buf;
-    }
-
-    private void siftUp(int i) {
-        while (i != 0) {
-            int parentI = (i - 1) / 2;
-            if (array[parentI].compareTo(array[i]) > 0) {
-                swap(i, (i - 1) / 2);
-                i = (i - 1) / 2;
-            } else {
-                break;
-            }
+        if (indexChild < size && data[indexChild].compareTo(data[index]) < 0) {
+            Swap(index, indexChild);
+            SiftDown(indexChild);
         }
     }
 
-    private void siftDown(int i) {
-        while (i != size / 2) {
-            int left = 2 * i + 1;
-            int right = 2 * i + 2;
-            int min = i;
-
-            if (left < size && array[left].compareTo(array[min]) < 0) {
-                min = left;
-            }
-            if (right < size && array[right].compareTo(array[min]) < 0) {
-                min = right;
-            }
-            if (min != i) {
-                swap(i, min);
-                i = min;
-            } else {
-                break;
-            }
+    private void SiftUp(int index){
+        int indexParent = (index - 1) / 2;
+        if (index != 0 && data[index].compareTo(data[indexParent]) < 0){
+            Swap(index, indexParent);
+            SiftUp(indexParent);
         }
+    }
+
+    private void grow(){
+        maxSize *= 2;
+        E[] newarray = (E[]) new Comparable[maxSize];
+        for (int i = 0; i < size; i++){
+            newarray[i] = data[i];
+        }
+        data = newarray;
     }
 
     @Override
     public int size() {
         return size;
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        String delimeter = "";
+        for (int i = 0; i < size; i++) {
+            sb.append(delimeter).append(data[i]);
+            delimeter = ", ";
+        }
+        sb.append("]");
+        return sb.toString();
     }
 
     @Override
@@ -69,8 +69,8 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
 
     @Override
     public boolean contains(Object o) {
-        for (int i = 0; i < size; i++) {
-            if (Objects.equals(array[i], o)) {
+        for (int i = 0; i < size; i++){
+            if (data[i].equals(o)){
                 return true;
             }
         }
@@ -94,20 +94,21 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
 
     @Override
     public boolean add(E e) {
-        if (size == array.length) {
-            array = Arrays.copyOf(array, size * 2);
+        if(size == maxSize){
+            grow();
         }
-        array[size++] = e;
-        siftUp(size - 1);
+        data[size++] = e;
+        SiftUp(size - 1);
         return true;
     }
 
     @Override
     public boolean remove(Object o) {
         for (int i = 0; i < size; i++) {
-            if (Objects.equals(o, array[i])) {
-                array[i] = array[--size];
-                siftDown(i);
+            if (Objects.equals(o, data[i])) {
+                data[i] = data[--size];
+                data[size] = null;
+                SiftDown(i);
                 return true;
             }
         }
@@ -116,8 +117,8 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        for (Object element: c) {
-            if (!contains(element)) {
+        for (Object item : c) {
+            if (!contains(item)) {
                 return false;
             }
         }
@@ -126,85 +127,108 @@ public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E> {
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        for (E element: c) {
-            add(element);
+        boolean changed = false;
+        for (E i:c){
+            add(i);
+            changed = true;
         }
-        return true;
-    }
-
-    private void remove(int i) {
-        array[i] = array[--size];
-        siftDown(i);
+        return changed;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        boolean isRemove = false;
-        for (int i = size - 1; i >= 0; i--) {
-            if (c.contains(array[i])) {
-                remove(i);
-                isRemove = true;
+        boolean changed = false;
+        int i = 0;
+        int index = 0;
+        while (index < size) {
+            if (c.contains(data[i])) {
+                i++;
+                size--;
+                changed = true;
+            } else {
+                data[index] = data[i];
+                index++;
+                i++;
             }
         }
-        return isRemove;
+        for (int k = size; k < data.length; k++){
+            data[k] = null;
+        }
+        for (int j = size / 2; j >= 0; j--)
+            SiftDown(j);
+        return changed;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        boolean isRetain = false;
-        for (int i = size - 1; i >= 0; i--) {
-            if (!c.contains(array[i])) {
-                remove(array[i]);
-                isRetain = true;
+        boolean changed = false;
+        int i = 0;
+        int index = 0;
+        while (index < size){
+            if (!c.contains(data[i])) {
+                i++;
+                size--;
+                changed = true;
+            } else {
+                data[index] = data[i];
+                index++;
+                i++;
             }
         }
-
-        return isRetain;
+        for (int j = size / 2; j >= 0; j--)
+            SiftDown(j);
+        return changed;
     }
 
     @Override
     public void clear() {
-        for (int i = 0; i < size; i++) {
-            array[i] = null;
-        }
+        for (int i = 0; i < size; i++)
+            data[i] = null;
         size = 0;
     }
 
     @Override
     public boolean offer(E e) {
-        add(e);
-        return true;
+        return add(e);
     }
+
     @Override
     public E remove() {
-        E element = array[0];
-        array[0] = array[--size];
-        siftDown(0);
-        return element;
+        if(isEmpty()){
+            throw new NoSuchElementException();
+        }
+        E result = data[0];
+        size--;
+        Swap(0,size);
+        SiftDown(0);
+        return result;
     }
 
     @Override
     public E poll() {
-        E element = array[0];
-        remove();
-        return element;
+        if(isEmpty()){
+            return null;
+        }
+        E result = data[0];
+        size--;
+        Swap(0,size);
+        SiftDown(0);
+        return result;
     }
 
     @Override
     public E element() {
-        if (isEmpty()) {
-            return null;
-        } else {
-            return array[0];
+        if (isEmpty()){
+            throw new NoSuchElementException();
         }
+        return data[0];
     }
 
     @Override
     public E peek() {
-        if (isEmpty()) {
+        if (isEmpty()){
             return null;
-        } else {
-            return array[0];
         }
+        return data[0];
     }
 }
