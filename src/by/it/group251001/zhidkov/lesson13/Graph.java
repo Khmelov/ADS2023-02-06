@@ -1,6 +1,5 @@
 package by.it.group251001.zhidkov.lesson13;
 import java.util.Stack;
-
 public class Graph {
     public int V;
     private boolean hasCycle;
