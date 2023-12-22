@@ -19,6 +19,7 @@ public class DisJointSet<T> implements Iterable<T> {
 
     private final Map<T, DisJointSetNode> set = new HashMap<>();
     private int count = 0;
+    private int tmp = 0;
 
     public int getCount() {
         return count;
