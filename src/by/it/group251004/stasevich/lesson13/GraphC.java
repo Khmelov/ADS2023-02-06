@@ -2,106 +2,79 @@ package by.it.group251004.stasevich.lesson13;
 import java.util.*;
 
 public class GraphC {
-    static Integer depth = 0;
-
-    static class mapEntryComparator implements Comparator<Map.Entry<String, Integer>> {
-
-        @Override
-        public int compare(Map.Entry<String, Integer> set1, Map.Entry<String, Integer> set2) {
-            int cmp = set1.getValue().compareTo(set2.getValue());
-            if (cmp == 0) {
-                return set2.getKey().compareTo(set1.getKey());
-            }
-            return cmp;
+    public static class LexicalComparator implements Comparator<String> {
+        public int compare(String s1, String s2) {
+            return s2.compareTo(s1);
         }
-    }
-
-    private static void getGraph(Map<String, ArrayList<String>> graph, Map<String, ArrayList<String>> reversedGraph ) {
-        Scanner in = new Scanner(System.in);
-
-        boolean isEnd = false;
-        while (!isEnd) {
-            String vertexOut = in.next();
-            if (!graph.containsKey(vertexOut)) {
-                graph.put(vertexOut, new ArrayList<>());
-            }
-
-            String edge = in.next();
-
-            String vertexIn = in.next();
-            if (vertexIn.charAt(vertexIn.length() - 1) == ',') {
-                vertexIn = vertexIn.substring(0, vertexIn.length() - 1);
-            } else {
-                isEnd = true;
-            }
-            graph.get(vertexOut).add(vertexIn);
-            if (!reversedGraph.containsKey(vertexIn)){
-                reversedGraph.put(vertexIn, new ArrayList<>());
-            }
-            reversedGraph.get(vertexIn).add(vertexOut);
-        }
-    }
-
-    private static void getDepth(String node, Map<String, ArrayList<String>> graph, Set<String> visited, Map<String , Integer> depthMap){
-        visited.add(node);
-
-        if (graph.get(node)!=null){
-            for (String nextNode: graph.get(node)
-            ) {
-                if (!visited.contains(nextNode)){
-                    depth++;
-                    getDepth(nextNode, graph, visited, depthMap);
-                }
-            }
-        }
-        depthMap.put(node, depth++);
-    }
-
-    private static void getPath(String node, Map<String, ArrayList<String>> graph, Set<String> visited, List<String> path){
-        visited.add(node);
-        path.add(node);
-        if (graph.get(node) != null)
-            for (String next_node : graph.get(node)) {
-                if (!visited.contains(next_node)) {
-                    getPath(next_node, graph, visited, path);
-                }
-            }
     }
 
     public static void main(String[] args) {
-        Map<String, ArrayList<String>> graph = new HashMap<>();
-        Map<String, ArrayList<String>> reversedGraph = new HashMap<>();
-        getGraph(graph, reversedGraph);
+        Map<String, List<String>> neighbours = new HashMap<>();
+        Stack<String> st = new Stack<>();
+        Set<String> vis = new HashSet<>();
 
-        Set<String> visited = new HashSet<>();
-        Map<String, Integer> depthMap = new HashMap<>();
+        Scanner scanner = new Scanner(System.in);
+        String[] val = scanner.nextLine().split(",");
+        scanner.close();
 
-        for (String node : graph.keySet()
-        ) {
-            if (!visited.contains(node)){
-                getDepth(node, graph, visited, depthMap);
+        for (String s : val) {
+            String[] current = s.trim().split("");
+            String start = current[0];
+            String end = current[current.length - 1];
+
+            neighbours.computeIfAbsent(start, k -> new ArrayList<>()).add(end);
+        }
+
+        neighbours.forEach((k, v) -> v.sort(new LexicalComparator()));
+
+        for (String w : neighbours.keySet()) {
+            if (!vis.contains(w)) {
+                dfs(neighbours, w, vis, st);
             }
         }
 
-        List<Map.Entry<String, Integer>> array = new ArrayList<>(depthMap.entrySet());
-        array.sort(new mapEntryComparator());
-        String[] vertices = new String[array.size()];
-        for (int i = array.size() - 1; i > -1; i--) {
-            vertices[array.size() - 1 - i] = array.get(i).getKey();
+        Map<String, List<String>> transNeighbours = new HashMap<>();
+        for (String v : neighbours.keySet()) {
+            for (String child : neighbours.get(v)) {
+                transNeighbours.computeIfAbsent(child, k -> new ArrayList<>()).add(v);
+            }
         }
-        visited=new HashSet<>();
 
-        for (String node : vertices) {
-            if (!visited.contains(node)) {
-                List<String> paths = new ArrayList<>();
-                getPath(node, reversedGraph, visited, paths);
+        vis.clear();
+        while (!st.empty()) {
+            String v = st.pop();
+            if (!vis.contains(v)) {
+                StringBuilder sb = new StringBuilder();
+                dfs(transNeighbours, v, vis, sb);
+                char[] charArr = sb.toString().toCharArray();
+                Arrays.sort(charArr);
+                System.out.println(new String(charArr));
+            }
+        }
+    }
 
-                paths.sort(Comparator.naturalOrder());
-
-                for (String path : paths) {
-                    System.out.print(path);
+    private static void dfs(Map<String, List<String>> neighbours,
+                            String v, Set<String> vis, Stack<String> st) {
+        vis.add(v);
+        if (neighbours.containsKey(v)) {
+            for (String child : neighbours.get(v)) {
+                if (!vis.contains(child)) {
+                    dfs(neighbours, child, vis, st);
                 }
-                System.out.println();
+            }
+        }
+        st.push(v);
+    }
+
+    private static void dfs(Map<String, List<String>> neighbours,
+                            String v, Set<String> vis, StringBuilder sb) {
+        vis.add(v);
+        sb.append(v);
+        if (neighbours.containsKey(v)) {
+            for (String child : neighbours.get(v)) {
+                if (!vis.contains(child)) {
+                    dfs(neighbours, child, vis, sb);
+                }
             }
         }
     }

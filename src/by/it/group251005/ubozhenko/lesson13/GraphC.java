@@ -1,118 +1,84 @@
 package by.it.group251005.ubozhenko.lesson13;
-import javax.print.DocFlavor;
+
 import java.util.*;
+
 public class GraphC {
-    static int getMax(int[] startVertex, int[] endVertex) {
-        int size = Integer.MIN_VALUE;
-        for (int i = 0; i < startVertex.length; i++) {
-            if (startVertex[i] > size)
-                size = startVertex[i];
-            if (endVertex[i] > size)
-                size = endVertex[i];
+
+    public static class LexicalComparator implements Comparator<String> {
+        public int compare(String s1, String s2) {
+            return s2.compareTo(s1);
         }
-        return size;
     }
 
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        String[] arr = scan.nextLine().split(",");
+        Map<String, List<String>> neighbours = new HashMap<>();
+        Stack<String> st = new Stack<>();
+        Set<String> vis = new HashSet<>();
 
-        boolean isNumeric = arr[0].trim().matches(".*\\d.*");
+        Scanner scanner = new Scanner(System.in);
+        String[] val = scanner.nextLine().split(",");
+        scanner.close();
 
-        int[] startVertex = new int[arr.length];
-        int[] endVertex = new int[arr.length];
+        for (String s : val) {
+            String[] current = s.trim().split("");
+            String start = current[0];
+            String end = current[current.length - 1];
 
-        for (int i = 0; i < arr.length; i++) {
-            String[] current = arr[i].trim().split(" ");
-            startVertex[i] = isNumeric ? Integer.parseInt(current[0]) : current[0].charAt(0) - 'A';
-            endVertex[i] = isNumeric ? Integer.parseInt(current[current.length - 1]) : current[current.length - 1].charAt(0) - 'A';
+            neighbours.computeIfAbsent(start, k -> new ArrayList<>()).add(end);
         }
 
-        GraphUtil graph = new GraphUtil(getMax(startVertex, endVertex) + (isNumeric ? 0 : 1));
+        neighbours.forEach((k, v) -> v.sort(new LexicalComparator()));
 
-        for (int i = 0; i < arr.length; i++) {
-            int indexStart = isNumeric ? startVertex[i] - 1 : startVertex[i];
-            int indexEnd = isNumeric ? endVertex[i] - 1 : endVertex[i];
-            graph.addOrientedEdge(indexStart, indexEnd);
-            String temp = isNumeric ? String.valueOf(startVertex[i]) : String.valueOf((char) (startVertex[i] + 'A'));
-            graph.setVertexNames(indexStart, temp);
-            temp = isNumeric ? String.valueOf(endVertex[i]) : String.valueOf((char) (endVertex[i] + 'A'));
-            graph.setVertexNames(indexEnd, temp);
-        }
-
-        List<List<Integer>> stronglyConnectedComponents = getStronglyConnectedComponents(graph);
-        int counter = 0;
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < stronglyConnectedComponents.size(); i++) {
-            StringBuilder temp = new StringBuilder();
-            for (int vertex : stronglyConnectedComponents.get(i)) {
-                temp.append(graph.getVertexName(vertex));
+        for (String w : neighbours.keySet()) {
+            if (!vis.contains(w)) {
+                dfs(neighbours, w, vis, st);
             }
-            char[] charArray = temp.toString().toCharArray();
-            Arrays.sort(charArray);
-            sb.append(new String(charArray));
-            if (i != stronglyConnectedComponents.size() - 1)
-                sb.append("\n");
         }
-        System.out.println(sb);
+
+        Map<String, List<String>> transNeighbours = new HashMap<>();
+        for (String v : neighbours.keySet()) {
+            for (String child : neighbours.get(v)) {
+                transNeighbours.computeIfAbsent(child, k -> new ArrayList<>()).add(v);
+            }
+        }
+
+        vis.clear();
+        while (!st.empty()) {
+            String v = st.pop();
+            if (!vis.contains(v)) {
+                StringBuilder sb = new StringBuilder();
+                dfs(transNeighbours, v, vis, sb);
+                char[] charArr = sb.toString().toCharArray();
+                Arrays.sort(charArr);
+                System.out.println(new String(charArr));
+            }
+        }
     }
 
-    public static List<List<Integer>> getStronglyConnectedComponents(GraphUtil graph) {
-        List<List<Integer>> result = new ArrayList<>();
-
-        Stack<Integer> stack = new Stack<>();
-        boolean[] visited = new boolean[graph.vertexCount];
-        for (int i = 0; i < graph.vertexCount; i++) {
-            if (!visited[i]) {
-                dfs(i, visited, stack, graph);
+    private static void dfs(Map<String, List<String>> neighbours,
+                            String v, Set<String> vis, Stack<String> st) {
+        vis.add(v);
+        if (neighbours.containsKey(v)) {
+            for (String child : neighbours.get(v)) {
+                if (!vis.contains(child)) {
+                    dfs(neighbours, child, vis, st);
+                }
             }
         }
-
-        List<List<Integer>> transposedGraph = transposeGraph(graph);
-
-        Arrays.fill(visited, false);
-        while (!stack.isEmpty()) {
-            int vertex = stack.pop();
-            if (!visited[vertex]) {
-                List<Integer> component = new ArrayList<>();
-                dfsTransposed(vertex, visited, transposedGraph, component);
-                result.add(component);
-            }
-        }
-
-        return result;
+        st.push(v);
     }
 
-    static void dfs(int vertex, boolean[] visited, Stack<Integer> stack, GraphUtil graph) {
-        visited[vertex] = true;
-        for (int neighbor : graph.graph.get(vertex)) {
-            if (!visited[neighbor]) {
-                dfs(neighbor, visited, stack, graph);
-            }
-        }
-        stack.push(vertex);
-    }
-
-    static List<List<Integer>> transposeGraph(GraphUtil graph) {
-        List<List<Integer>> transposedGraph = new ArrayList<>();
-        for (int i = 0; i < graph.vertexCount; i++) {
-            transposedGraph.add(new ArrayList<>());
-        }
-        for (int i = 0; i < graph.vertexCount; i++) {
-            for (int neighbor : graph.graph.get(i)) {
-                transposedGraph.get(neighbor).add(i);
-            }
-        }
-        return transposedGraph;
-    }
-
-    static void dfsTransposed(int vertex, boolean[] visited, List<List<Integer>> transposedGraph, List<Integer> component) {
-        visited[vertex] = true;
-        component.add(vertex);
-        for (int neighbor : transposedGraph.get(vertex)) {
-            if (!visited[neighbor]) {
-                dfsTransposed(neighbor, visited, transposedGraph, component);
+    private static void dfs(Map<String, List<String>> neighbours,
+                            String v, Set<String> vis, StringBuilder sb) {
+        vis.add(v);
+        sb.append(v);
+        if (neighbours.containsKey(v)) {
+            for (String child : neighbours.get(v)) {
+                if (!vis.contains(child)) {
+                    dfs(neighbours, child, vis, sb);
+                }
             }
         }
     }
 }
+

@@ -121,7 +121,7 @@ public class MyPriorityQueue<E extends Comparable> implements Queue<E> {
         for (Object o : c)
             if (!contains(o))
                 return false;
-        return false;
+        return true;
     }
 
     @Override
