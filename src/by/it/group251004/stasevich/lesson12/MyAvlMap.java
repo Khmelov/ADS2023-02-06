@@ -3,42 +3,174 @@ package by.it.group251004.stasevich.lesson12;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 public class MyAvlMap implements Map<Integer, String> {
-    class Node {
-        int key;
+
+    private static class Node {
+        Integer key;
         String value;
         int height;
         Node left, right;
-
-        Node(int key, String value) {
+        public Node(Integer key, String value) {
             this.key = key;
             this.value = value;
+            this.left = this.right = null;
             height = 1;
         }
+
     }
-    Node root;
+    int _size = 0;
+    Node head = null;
+
+    private int height(Node n) {
+        return n == null ? 0 : n.height;
+    }
+
+    private int balanceHeight(Node n) {
+        return height(n.right) - height(n.left);
+    }
+
+    private void fixHeight(Node n) {
+        if (n == null) {
+            return;
+        }
+        int hl = height(n.left);
+        int hr = height(n.right);
+        n.height = (hl > hr ? hl : hr) + 1;
+    }
+
+    private Node rotateRight(Node parent) {
+        Node child = parent.left;
+        parent.left = child.right;
+        child.right = parent;
+        fixHeight(parent);
+        fixHeight(child);
+        return child;
+    }
+
+    private Node rotateLeft(Node parent) {
+        Node child = parent.right;
+        parent.right = child.left;
+        child.left = parent;
+        fixHeight(parent);
+        fixHeight(child);
+        return child;
+    }
+
+    private Node balanceNode(Node parent) {
+        if (parent == null) {
+            return null;
+        }
+        fixHeight(parent);
+        if (balanceHeight(parent) == 2) {
+            if (balanceHeight(parent.right) < 0) {
+                parent.right = rotateRight(parent.right);
+            }
+            return rotateLeft(parent);
+        }
+
+        if (balanceHeight(parent) == -2) {
+            if (balanceHeight(parent.left) > 0) {
+                parent.left = rotateLeft(parent.left);
+            }
+            return rotateRight(parent);
+        }
+        return parent;
+    }
+
+    private Node search(Node n, Integer key) {
+        while(n != null) {
+            if ((int)key < (int)n.key) {
+                n = n.left;
+            } else if ((int)key > (int)n.key) {
+                n = n.right;
+            } else {
+                return n;
+            }
+        }
+        return null;
+    }
+
+    private Node insert(Node n, Integer key, String value) {
+        if (n == null) return new Node(key, value);
+        if ((int)key < (int)n.key) {
+            n.left = insert(n.left, key, value);
+        } else {
+            n.right = insert(n.right, key, value);
+        }
+        return balanceNode(n);
+    }
+
+    private Node findMin(Node n) {
+        return n.left == null ? n : findMin(n.left);
+    }
+
+    private Node removeMin(Node n) {
+        if (n.left == null) {
+            return n.right;
+        }
+        n.left = removeMin(n.left);
+        return balanceNode(n);
+    }
+
+    private Node remove(Node n, Integer key) {
+        if (n == null) return null;
+        if ((int)key < (int)n.key) {
+            n.left = remove(n.left, key);
+        } else if ((int)key > (int)n.key) {
+            n.right = remove(n.right, key);
+        } else {
+            Node q = n.left;
+            Node r = n.right;
+            if (r == null) return q;
+            Node min = findMin(r);
+            min.right = removeMin(r);
+            min.left = q;
+            return balanceNode(min);
+        }
+
+        return balanceNode(n);
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder("{");
+        String delimiter = "";
+        Stack<Node> s = new Stack<Node>();
+        Node curNode = head;
+        while (!s.isEmpty() || curNode != null) {
+            if (curNode != null) {
+                s.push(curNode);
+                curNode = curNode.left;
+            } else {
+                curNode = s.pop();
+                sb.append(delimiter).append(curNode.key).append("=").append(curNode.value);
+                delimiter = ", ";
+                curNode = curNode.right;
+            }
+        }
+
+        sb.append("}");
+        return sb.toString();
+    }
 
     @Override
     public int size() {
-        return size(root);
-    }
-
-    private int size(Node node) {
-        if (node == null) {
-            return 0;
-        }
-        return 1 + size(node.left) + size(node.right);
+        return _size;
     }
 
     @Override
     public boolean isEmpty() {
-        return root==null;
+        return _size == 0;
     }
 
     @Override
     public boolean containsKey(Object key) {
-        return search((Integer) key) != null;
+        Node n = search(head, (Integer)key);
+        if (n == null) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -48,153 +180,36 @@ public class MyAvlMap implements Map<Integer, String> {
 
     @Override
     public String get(Object key) {
-        Node result = search((Integer) key);
-        return result == null ? null : result.value;
-    }
-
-    Node search(Integer key) {
-        Node node = root;
-        while (node != null) {
-            if (key < node.key)
-                node = node.left;
-            else if (key > node.key)
-                node = node.right;
-            else
-                return node;
+        Node n = search(head, (Integer)key);
+        if (n == null) {
+            return null;
         }
-        return null;
-    }
-
-    Node insert(Node node, int key, String value){
-
-        if(node == null) return new Node(key, value);
-        if(key < node.key)
-            node.left = insert(node.left, key, value);
-        else
-            node.right = insert(node.right,key, value);
-        return balance(node);
-
+        return n.value;
     }
 
     @Override
     public String put(Integer key, String value) {
-        Node node = search(key);
-
-        if (node == null){
-            root = insert(root, key, value);
-            return  null;
+        Node n = search(head, key);
+        if (n == null) {
+            head = insert(head, key, value);
+            _size++;
+            return null;
         }
-        else{
-            var res = node.value;
-            node.value = value;
-            return res;
-        }
-    }
-
-    Node balance(Node node)
-    {
-        if (node == null)
-            return node;
-        node.height = 1 + Math.max(height(node.left), height(node.right));
-        int balanceFactor = balanceFactor(node);
-        if (balanceFactor > 1)
-        {
-            if (balanceFactor(node.left) < 0)
-                node.left = rotateLeft(node.left);
-            return rotateRight(node);
-        }
-        if (balanceFactor < -1)
-        {
-            if (balanceFactor(node.right) > 0)
-                node.right = rotateRight(node.right);
-            return rotateLeft(node);
-        }
-        return node;
-    }
-
-    int height(Node node) {
-        return node == null ? 0 : node.height;
-    }
-
-    int balanceFactor(Node node) {
-        return node == null ? 0 : height(node.left) - height(node.right);
-    }
-
-
-    void updateHeight(Node node) {
-        int leftChildHeight = height(node.left);
-        int rightChildHeight = height(node.right);
-        node.height = Math.max(leftChildHeight, rightChildHeight) + 1;
-    }
-
-    Node rotateRight(Node node)
-    {
-        Node leftChild = node.left;
-
-        node.left = leftChild.right;
-        leftChild.right = node;
-
-        updateHeight(node);
-        updateHeight(leftChild);
-
-        return leftChild;
-    }
-
-    Node rotateLeft(Node node)
-    {
-        Node rightChild = node.right;
-
-        node.right = rightChild.left;
-        rightChild.left = node;
-
-        updateHeight(node);
-        updateHeight(rightChild);
-
-        return rightChild;
+        String prevValue = n.value;
+        n.value = value;
+        return prevValue;
     }
 
     @Override
     public String remove(Object key) {
-        var res = new StringBuilder();
-        root = remove(root, (Integer) key, res);
-        return res.isEmpty() ? null : res.toString();
-    }
-
-    Node remove(Node node, Integer key, StringBuilder res)
-    {
-        if (node == null)
-            return node;
-        int comparison = key.compareTo(node.key);
-        if (comparison < 0)
-            node.left = remove(node.left, key, res);
-        else if (comparison > 0)
-            node.right = remove(node.right, key, res);
-        else
-        {
-            res.append("generate" + key);
-            if (node.left == null)
-                return node.right;
-            if (node.right == null)
-                return node.left;
-
-            Node minNode = minValueNode(node.right);
-            node.value = minNode.value;
-            node.right = removeMinNode(node.right);
+        Node n = search(head, (Integer) key);
+        if (n == null) {
+            return null;
         }
-        return balance(node);
-    }
 
-
-    Node removeMinNode(Node node)
-    {
-        if (node.left == null)
-            return node.right;
-        node.left = removeMinNode(node.left);
-        return balance(node);
-    }
-
-    Node minValueNode(Node node) {
-        return node.left == null ? node : minValueNode(node.left);
+        head = remove(head, (Integer) key);
+        _size--;
+        return n.value;
     }
 
     @Override
@@ -204,31 +219,27 @@ public class MyAvlMap implements Map<Integer, String> {
 
     @Override
     public void clear() {
-        root = clear(root);
-    }
-
-    Node clear(Node node) {
-        if (node == null)
-            return null;
-        node.left = clear(node.left);
-        node.right = clear(node.right);
-        return null;
-    }
-
-    public String toString() {
-        if (root == null) return "{}";
-        StringBuilder sb = new StringBuilder().append('{');
-        print(root, sb);
-        sb.replace(sb.length() - 2, sb.length(), "}");
-        return sb.toString();
-    }
-
-    private void print(Node node, StringBuilder sb) {
-        if (node != null) {
-            print(node.left, sb);
-            sb.append(node.key + "=" + node.value + ", ");
-            print(node.right, sb);
+        Stack<Node> s = new Stack<Node>();
+        Node lastVisited = null, curNode = head;
+        while (!s.isEmpty() || curNode != null) {
+            if (curNode != null) {
+                s.push(curNode);
+                lastVisited = curNode;
+                curNode = curNode.left;
+            } else {
+                curNode = s.pop();
+                if (lastVisited != null && lastVisited != curNode) {
+                    lastVisited.right = null;
+                }
+                lastVisited = curNode;
+                curNode.left = null;
+                curNode = curNode.right;
+            }
         }
+        head.left = null;
+        head.right = null;
+        head = null;
+        _size = 0;
     }
 
     @Override
@@ -245,5 +256,4 @@ public class MyAvlMap implements Map<Integer, String> {
     public Set<Entry<Integer, String>> entrySet() {
         return null;
     }
-
 }

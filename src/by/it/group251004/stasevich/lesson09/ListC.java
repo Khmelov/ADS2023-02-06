@@ -3,6 +3,8 @@ package by.it.group251004.stasevich.lesson09;
 import java.util.*;
 
 public class ListC<E> implements List<E> {
+    private Object[] arr = new Object[1];
+    private int siz = 0;
 
     //Создайте аналог списка БЕЗ использования других классов СТАНДАРТНОЙ БИБЛИОТЕКИ
 
@@ -11,23 +13,14 @@ public class ListC<E> implements List<E> {
     //////               Обязательные к реализации методы             ///////
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
-    E[] list;
-    private int size;
-    private int capacity = 10;
-
-    public ListC(){
-        size = 0;
-        list= (E[]) new Object[capacity];
-    }
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append('[');
-        for (int i = 0; i < size; i++) {
-            sb.append(list[i]);
-            if (i < size - 1) {
-                sb.append(", ");
-            }
+
+        StringBuilder sb = new StringBuilder("[");
+        String razd = "";
+        for (int i = 0; i < size(); i++) {
+            sb.append(razd).append(arr[i]);
+            razd = ", ";
         }
         sb.append("]");
         return sb.toString();
@@ -35,199 +28,157 @@ public class ListC<E> implements List<E> {
 
     @Override
     public boolean add(E e) {
-        if (size == capacity)
-        {
-            capacity*=2;
-            E[] newList = (E[]) new Object[capacity];
-            for (int i=0;i<size;i++){
-                newList[i]=list[i];
-            }
-            list = newList;
-        }
-        list[size]=e;
-        size++;
+
+        if (arr.length == siz)
+            arr = Arrays.copyOf(arr, siz * 2);
+        arr[siz++] = e;
         return true;
     }
 
     @Override
     public E remove(int index) {
-        if (size == capacity)
-        {
-            capacity*=2;
-            E[] newList = (E[]) new Object[capacity];
-            for (int i=0;i<size;i++){
-                newList[i]=list[i];
-            }
-            list = newList;
-        }
-        if (index > -1 && index < size)
-        {
-            E temp = list[index];
-            for (int i=index;i<size;i++){
-                list[i]=list[i+1];
-            }
-            size--;
-            return temp;
-        }
-        return null;
+
+        if (index >= size())
+            return null;
+        E res = (E) arr[index];
+        for (int i = index; i < size() - 1; i++)
+            arr[i] = arr[i + 1];
+        siz--;
+        return res;
     }
 
     @Override
     public int size() {
-        return size;
+        return siz;
     }
 
     @Override
     public void add(int index, E element) {
-        if (size == capacity)
-        {
-            capacity*=2;
-            E[] newList = (E[]) new Object[capacity];
-            for (int i=0;i<size;i++){
-                newList[i]=list[i];
-            }
-            list = newList;
-        }
-        if (index>-1&&index<size){
-            for (int i = size; i > index; i--){
-                list[i]=list[i-1];
-            }
-            list[index]=element;
-            size++;
-        }
+        if (arr.length == siz)
+            arr = Arrays.copyOf(arr, siz * 2);
+        siz++;
+        for (int i = siz - 1; i > index; i--)
+            arr[i] = arr[i - 1];
+        arr[index] = element;
     }
 
     @Override
     public boolean remove(Object o) {
-        int index = indexOf(o);
-        if (index != -1) {
-            remove(index);
-            return true;
-        }
-        return false;
+        int cnt = 0;
+        while (cnt < size() && !arr[cnt].equals(o))
+            cnt++;
+        if (cnt == size())
+            return false;
+        remove(cnt);
+        return true;
     }
 
     @Override
     public E set(int index, E element) {
-        if (index >-1&&index<size)
-        {
-            E temp = list[index];
-            list[index]=element;
-            return temp;
-        }
-        return null;
+        E res = (E) arr[index];
+        arr[index] = element;
+        return res;
     }
 
 
     @Override
     public boolean isEmpty() {
-
-        return size==0;
+        return size() == 0;
     }
 
 
     @Override
     public void clear() {
-        for (int i=0;i<size;i++){
-            list[i]=null;
-        }
-        size=0;
+        arr = new Object[1];
+        siz = 0;
     }
 
     @Override
     public int indexOf(Object o) {
-        for (int i=0;i<size;i++){
-            if (Objects.equals(list[i], o)){
+        for (int i = 0; i < size(); i++)
+            if (arr[i].equals(o))
                 return i;
-            }
-        }
         return -1;
     }
 
     @Override
     public E get(int index) {
-
-        if (index>-1&&index<size)
-        {
-            return list[index];
-        }
-        return null;
+        return (E) arr[index];
     }
 
     @Override
     public boolean contains(Object o) {
-        return indexOf(o)!=-1;
+        for (int i = 0; i < size(); i++)
+            if (arr[i].equals(o))
+                return true;
+        return false;
     }
 
     @Override
     public int lastIndexOf(Object o) {
-
-        for (int i=size-1;i>-1;i--){
-            if (Objects.equals(o, list[i])){
+        for (int i = size() - 1; i >= 0; i--)
+            if (arr[i].equals(o))
                 return i;
-            }
-        }
         return -1;
     }
-
     @Override
     public boolean containsAll(Collection<?> c) {
-        for (Object o:c){
-            if (!contains(o)){
+        for (Object o : c)
+            if (!contains(o))
                 return false;
-            }
-        }
         return true;
     }
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        for(E e:c){
-            add(e);
-        }
-        return true;
+        for (Object o : c)
+            add((E) o);
+        return !c.isEmpty();
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        boolean f=false;
-        if (index>-1&& index<size){
-            for (E e:c){
-                add(index, e);
-                index++;
-                f = true;
-            }
+        if (arr.length - size() < c.size()) {
+            int newlen = arr.length;
+            while (newlen - size() < c.size())
+                newlen *= 2;
+            arr = Arrays.copyOf(arr, newlen);
         }
-        return f;
+        for (int i = size() - 1; i >= index; i--)
+            arr[i + c.size()] = arr[i];
+        Iterator<? extends E> it = c.iterator();
+        for (int i = 0; i < c.size(); i++)
+            arr[index + i] = it.next();
+        siz += c.size();
+        return !c.isEmpty();
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        boolean f = false;
-
-        for (int i = 0; i < size; i++) {
-            if (c.contains(list[i])) {
-                remove(i);
-                i--;
-                f = true;
-            }
-        }
-        return f;
+        ListC<E> nw = new ListC<E>();
+        for (int i = 0; i < size(); i++)
+            if (!c.contains(arr[i]))
+                nw.add((E) arr[i]);
+        if (size() == nw.size())
+            return false;
+        arr = nw.arr;
+        siz = nw.size();
+        return true;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        boolean f = false;
-
-        for (int i = 0; i < size; i++) {
-            if (!c.contains(list[i])) {
-                remove(i);
-                i--;
-                f= true;
-            }
-        }
-        return f;
+        ListC<E> nw = new ListC<E>();
+        for (int i = 0; i < size(); i++)
+            if (c.contains(arr[i]))
+                nw.add((E) arr[i]);
+        if (size() == nw.size())
+            return false;
+        arr = nw.arr;
+        siz = nw.size();
+        return true;
     }
+
 
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
