@@ -6,7 +6,6 @@ public class StatesHanoiTowerC {
     public static void main(String[] args) {
 
         int N;
-
         try (Scanner scanner = new Scanner(System.in)) {
             N = scanner.nextInt();
         }
@@ -17,7 +16,6 @@ public class StatesHanoiTowerC {
         for (int i = 0; i < N; i++) {
             steps_heights[i] = -1;
         }
-
         DSU dsu = new DSU(max_size);
         int[] heights = new int[3];
 
