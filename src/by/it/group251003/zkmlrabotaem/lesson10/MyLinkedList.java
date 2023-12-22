@@ -9,6 +9,7 @@ public class MyLinkedList<E> implements Deque<E> {
         public Elem<E> next;
         public Elem<E> prev;
         public E elem;
+
     }
 
     private Elem<E> head;
