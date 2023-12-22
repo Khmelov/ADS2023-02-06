@@ -22,7 +22,7 @@ import static org.junit.Assert.fail;
 //для корректной сборки теста добавьте библиотеку init.jar в проект (она находится в корне)
 public class Test_Part2_Lesson09Test extends HomeWork {
 
-    private static final int RND_SEED = 1234;
+    private static final int RND_SEED = 123;
     public static final int INVOCATION_COUNT_PER_METHOD = 10;
     public static final int MAX_VALUE = 100;
     Random rnd = new Random(RND_SEED);
