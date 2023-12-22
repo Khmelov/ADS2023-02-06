@@ -27,22 +27,30 @@ public class FiboC {
         //Решение сложно найти интуитивно
         //возможно потребуется дополнительный поиск информации
         //см. период Пизано
-        ArrayList<Integer> kek = new ArrayList<>();
-        kek.add(0);
-        kek.add(1);
+
+        int period = 1;
+        long[] array = {0, 1, 1};
+
+        int cur = 1;
+        int nxt = 1;
+
+        ArrayList<Integer> periodFib = new ArrayList<>(6 * 100000);
+        periodFib.add(0);
+
         int i = 2;
-        while (true) {
-            kek.add((kek.get(i - 1) + kek.get(i - 2)) % m);
-            if ((kek.get(i) == 1) && kek.get(i - 1) == 0) {
-                break;
-            }
+        do {
+            periodFib.add(cur);
+            period++;
+            array[0] = array[1];
+            array[1] = array[2];
+            array[2] = array[0] + array[1];
+
+            cur = nxt;
+            nxt = (int)(array[2] % m);
             i++;
-        }
+        } while (!(cur == 0 && nxt == 1) && i < n);
 
-
-        return kek.get((int) (n % i));
+        return periodFib.get((int)(n % period));
     }
 
-
 }
-
