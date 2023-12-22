@@ -5,228 +5,251 @@ import java.util.Map;
 import java.util.Set;
 
 public class MyAvlMap implements Map<Integer, String> {
+    public boolean isBalanced() {
+        return isBalanced(root);
+    }
 
-    class AVLNode {
-        int key;
-        String value;
-        int Height;
-        AVLNode Left, Right;
+    private boolean isBalanced(Node node) {
+        if (node == null)
+            return true;
 
-        AVLNode(int key, String value) {
+        int balance = getBalance(node);
+
+        if (Math.abs(balance) > 1)
+            return false;
+
+        return isBalanced(node.left) && isBalanced(node.right);
+    }
+
+    private void checkBalance() {
+        if (!isBalanced())
+            throw new IllegalStateException("The tree is unbalanced");
+    }
+
+    private static class Node {
+        public int key;
+        public String data;
+        public Node left = null;
+        public Node right = null;
+        public int height = 1;
+        public Node(int key, String data) {
             this.key = key;
-            this.value = value;
-            this.Height = 1;
+            this.data = data;
         }
     }
 
-    AVLNode Root;
-    StringBuilder result;
+    private Node root = null;
+    private int size = 0;
 
-    @Override
-    public int size() {
-        return size(Root);
+    private int getHeight(Node node) {
+        return node == null ? 0 : node.height;
     }
 
-    private int size(AVLNode node) {
-        if (node == null) {
-            return 0;
+    private void setHeight(Node node) {
+        node.height = 1 + Math.max(getHeight(node.left), getHeight(node.right));
+    }
+
+    private int getBalance(Node node) {
+        return getHeight(node.left) - getHeight(node.right);
+    }
+
+    private Node rightRotate(Node node) {
+        Node left = node.left;
+        node.left = left.right;
+        left.right = node;
+
+        setHeight(node);
+        setHeight(left);
+        return left;
+    }
+
+    private Node leftRotate(Node node) {
+        Node right = node.right;
+        node.right = right.left;
+        right.left = node;
+
+        setHeight(node);
+        setHeight(right);
+        return right;
+    }
+
+    private Node balance(Node node) {
+        int balance = getBalance(node);
+
+        if (balance > 1) {
+            if (getBalance(node.left) < 0)
+                node.left = leftRotate(node.left);
+            return rightRotate(node);
         }
-        return 1 + size(node.Left) + size(node.Right);
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return Root == null;
-    }
-
-    @Override
-    public String toString() {
-        if (Root == null)
-            return "{}";
-        StringBuilder sb = new StringBuilder().append('{');
-        InOrderTraversal(Root, sb);
-        sb.replace(sb.length() - 2, sb.length(), "}");
-        return sb.toString();
-    }
-
-    private void InOrderTraversal(AVLNode node, StringBuilder sb) {
-        if (node != null) {
-            InOrderTraversal(node.Left, sb);
-            sb.append(node.key + "=" + node.value + ", ");
-            InOrderTraversal(node.Right, sb);
-        }
-    }
-
-
-    @Override
-    public boolean containsKey(Object key) {
-        return Search((Integer) key, Root) != null;
-    }
-
-    AVLNode Search(Integer key, AVLNode node) {
-        if (node == null)
-            return null;
-        int comparison = key.compareTo(node.key);
-        if (comparison == 0)
-            return node;
-
-        return Search(key, comparison < 0 ? node.Left : node.Right);
-    }
-
-    @Override
-    public String get(Object key) {
-
-        AVLNode result = Search((Integer) key, Root);
-
-        return result == null ? null : result.value;
-    }
-
-    @Override
-    public String put(Integer key, String value) {
-        result = new StringBuilder();
-        Root = put(Root, key, value);
-        return result.isEmpty() ? null : result.toString();
-    }
-
-    AVLNode put(AVLNode node, Integer key, String value) {
-        if (node == null) {
-            return new AVLNode(key, value);
-        }
-        int comparison = key.compareTo(node.key);
-        if (comparison < 0)
-            node.Left = put(node.Left, key, value);
-        else if (comparison > 0)
-            node.Right = put(node.Right, key, value);
-        else {
-            if (!node.value.equalsIgnoreCase(value)) {
-                node.value = value;
-                result.append("generate" + key);
-            }
-        }
-        return Balance(node);
-    }
-
-    int Height(AVLNode node) {
-        return node == null ? 0 : node.Height;
-    }
-
-    int BalanceFactor(AVLNode node) {
-        return node == null ? 0 : Height(node.Left) - Height(node.Right);
-    }
-
-    AVLNode RotateRight(AVLNode node)
-    {
-        AVLNode newRoot = node.Left;
-        node.Left = newRoot.Right;
-        newRoot.Right = node;
-        node.Height = 1 + Math.max(Height(node.Left), Height(node.Right));
-        newRoot.Height = 1 + Math.max(Height(newRoot.Left), Height(newRoot.Right));
-        return newRoot;
-    }
-
-    AVLNode RotateLeft(AVLNode node)
-    {
-        AVLNode newRoot = node.Right;
-        node.Right = newRoot.Left;
-        newRoot.Left = node;
-        node.Height = 1 + Math.max(Height(node.Left), Height(node.Right));
-        newRoot.Height = 1 + Math.max(Height(newRoot.Left), Height(newRoot.Right));
-        return newRoot;
-    }
-
-    AVLNode Balance(AVLNode node)
-    {
-        if (node == null)
-            return node;
-
-        node.Height = 1 + Math.max(Height(node.Left), Height(node.Right));
-        int balanceFactor = BalanceFactor(node);
-
-        if (balanceFactor > 1)
-        {
-            if (BalanceFactor(node.Left) < 0)
-                node.Left = RotateLeft(node.Left);
-            return RotateRight(node);
-        }
-
-        if (balanceFactor < -1)
-        {
-            if (BalanceFactor(node.Right) > 0)
-                node.Right = RotateRight(node.Right);
-            return RotateLeft(node);
+        else if (balance < -1) {
+            if (getBalance(node.right) > 0)
+                node.right = rightRotate(node.right);
+            return leftRotate(node);
         }
 
         return node;
     }
 
-    @Override
-    public String remove(Object key) {
-        result = new StringBuilder();
-        Root = remove(Root, (Integer) key);
-        return result.isEmpty() ? null : result.toString();
+    private boolean isInvalidKeyType(Object o) {
+        return !(o instanceof Integer);
     }
 
-    AVLNode remove(AVLNode node, Integer key)
-    {
-        if (node == null)
-            return node;
-        int comparison = key.compareTo(node.key);
-        if (comparison < 0)
-            node.Left = remove(node.Left, key);
-        else if (comparison > 0)
-            node.Right = remove(node.Right, key);
-        else
-        {
-            result.append("generate" + key);
-            if (node.Left == null)
-                return node.Right;
-            if (node.Right == null)
-                return node.Left;
+    private Node getMin(Node node) {
+        while (node.left != null)
+            node = node.left;
+        return node;
+    }
 
-            AVLNode minNode = minValueNode(node.Right);
-            node.value = minNode.value;
-            node.Right = RemoveMinNode(node.Right);
+    private Node removeMin(Node node) {
+        if (node.left == null)
+            return node.right;
+
+        node.left = removeMin(node.left);
+        setHeight(node);
+
+        return balance(node);
+    }
+
+    @Override
+    public String toString() {
+        checkBalance();
+        if (root == null)
+            return "{}";
+
+        StringBuilder sb = new StringBuilder("{");
+        toString(root, sb);
+        sb.replace(sb.length() - 2, sb.length(), "}");
+        return sb.toString();
+    }
+
+    private void toString(Node node, StringBuilder sb) {
+        if (node != null) {
+            toString(node.left, sb);
+            sb.append(node.key).append("=").append(node.data).append(", ");
+            toString(node.right, sb);
         }
-
-        return Balance(node);
     }
 
-    AVLNode RemoveMinNode(AVLNode node)
-    {
-        if (node.Left == null)
-            return node.Right;
-
-        node.Left = RemoveMinNode(node.Left);
-        return Balance(node);
-    }
-
-    AVLNode minValueNode(AVLNode node) {
-        return node.Left == null ? node : minValueNode(node.Left);
-    }
     @Override
-    public void clear() {
-        Root = clear(Root);
+    public int size() {
+        return size;
     }
 
-    AVLNode clear(AVLNode node) {
-        if (node == null)
-            return null;
-        node.Left = clear(node.Left);
-        node.Right = clear(node.Right);
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    private Node search(int key) {
+        Node node = root;
+        while (node != null) {
+            if (key < node.key)
+                node = node.left;
+            else if (key > node.key)
+                node = node.right;
+            else
+                return node;
+        }
         return null;
     }
-
-    //////////////////////////////////////////////////////
+    @Override
+    public boolean containsKey(Object key) {
+        if (isInvalidKeyType(key))
+            throw new ClassCastException("The key is not of type Integer");
+        return search((int)key) != null;
+    }
 
     @Override
     public boolean containsValue(Object value) {
         return false;
     }
 
+    @Override
+    public String get(Object key) {
+        if (isInvalidKeyType(key))
+            throw new ClassCastException("The key is not of type Integer");
+        Node result = search((int)key);
+        return result == null ? null : result.data;
+    }
+
+    @Override
+    public String put(Integer key, String value) {
+        var node = search(key);
+        if (node == null) {
+            size++;
+            root = put(root, key, value);
+            return null;
+        }
+        else {
+            var oldValue = node.data;
+            node.data = value;
+            return oldValue;
+        }
+    }
+
+    private Node put(Node node, int key, String value) {
+        if (node == null)
+            return new Node(key, value);
+
+        if (key < node.key)
+            node.left = put(node.left, key, value);
+        else if (key > node.key)
+            node.right = put(node.right, key, value);
+        else
+            node.data = value;
+        setHeight(node);
+
+        return balance(node);
+    }
+
+    @Override
+    public String remove(Object key) {
+        var oldValue = get(key);
+        if (oldValue != null) {
+            size--;
+            root = remove(root, (int) key);
+        }
+        return oldValue;
+    }
+
+    private Node remove(Node node, int key) {
+        if (node == null)
+            return null;
+
+        if (key < node.key)
+            node.left = remove(node.left, key);
+        else if (key > node.key)
+            node.right = remove(node.right, key);
+        else {
+            if (node.left == null && node.right == null)
+                return null;
+            else if (node.left == null)
+                return node.right;
+            else if (node.right == null)
+                return node.left;
+            else {
+                var min = getMin(node.right);
+
+                node.key = min.key;
+                node.data = min.data;
+
+                node.right = removeMin(node.right);
+            }
+        }
+        setHeight(node);
+
+        return balance(node);
+    }
 
     @Override
     public void putAll(Map<? extends Integer, ? extends String> m) {
 
+    }
+
+    @Override
+    public void clear() {
+        size = 0;
+        root = null;
     }
 
     @Override

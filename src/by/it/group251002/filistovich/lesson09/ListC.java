@@ -169,9 +169,9 @@ public class ListC<E> implements List<E> {
     public boolean containsAll(Collection<?> c) {
         E[] arr = (E[]) new Object[]{};
         arr = c.toArray(arr);
-        if (arr.length < size){
+        if (arr.length <= size){
             for (int i = 0; i < arr.length; i++){
-                if (!arr[i].equals(elements[i])){
+                if (!contains(arr[i])){
                     return false;
                 }
             }
@@ -185,21 +185,28 @@ public class ListC<E> implements List<E> {
     public boolean addAll(Collection<? extends E> c) {
         E[] arr = (E[]) new Object[]{};
         arr = c.toArray(arr);
+        boolean flag = false;
 
         for (int i = 0; i < arr.length; i++){
             add(arr[i]);
+            flag = true;
         }
-        return true;
+        return flag;
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
+        if (c.size() == 0){
+            return false;
+        }
+
         E[] arr = (E[]) new Object[]{};
         arr = c.toArray(arr);
 
         for (int i = 0; i < arr.length; i++){
             add(index + i, arr[i]);
         }
+
         return true;
     }
 
@@ -218,6 +225,7 @@ public class ListC<E> implements List<E> {
                 i++;
             }
         }
+
         return flag;
     }
 

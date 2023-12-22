@@ -3,7 +3,7 @@ import java.util.Iterator;
 import java.util.Queue;
 import java.util.Collection;
 public class MyPriorityQueue<E extends Comparable<E>> implements Queue<E>{
-    private E[] elements = (E[]) new Comparable[1];
+    private E[] elements = (E[]) new Comparable[10];
     private int size = 0;
     /*
                 offer(E element)

@@ -16,7 +16,7 @@ public class GraphB {
         for (String d : destinations) {
             result = result || isThereALoop(d,graph,new HashSet<>(inProcess));
         }
-        inProcess.remove(key);
+        //inProcess.remove(key);
         return result;
     }
     public static void main(String[] args){
