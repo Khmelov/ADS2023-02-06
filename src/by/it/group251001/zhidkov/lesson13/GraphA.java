@@ -1,74 +1,115 @@
 package by.it.group251001.zhidkov.lesson13;
 import java.util.*;
+
 public class GraphA {
-    private static String[] digits = new String[26];
-    private static String[] letters = new String[26];
-    private static int iter = 0;
-    private static int len = 0;
-    public static boolean isLetter = false;
-    public static void fill() {
-        for (int i = 0; i < 26; i++) {
-            digits[i] = String.valueOf(i);
-            letters[i] = String.valueOf((char)('A' + i));
+
+    private static class Vector<T> {
+        private List<T> values = new ArrayList<>();
+
+        public boolean isEmpty() {
+            return values.isEmpty();
         }
-    }
-    public static boolean isDigit(String str) {
-        for (int i = 0; i < 26; i++)
-            if (digits[i].equals(str))
-                return true;
-        return false;
-    }
-    public static Integer getIndex(String str) {
-        for (int i = 0; i < 26; i++)
-            if (letters[i].equals(str) || digits[i].equals(str))
-                return i;
-        return -1;
-    }
-    public static String[] strAnalisys(Scanner in) {
-        String[] line = new String[256];
-        for (int i = 0; i < 256; i++) {
-            line[i] = "-1";
+
+        public void pushBack(T value) {
+            values.add(value);
         }
-        int i = 0;
-        while (in.hasNext()) {
-            String nextToken = in.next();
-            if (!("->".equals(nextToken))) {
-                if (nextToken.endsWith(","))
-                    nextToken = nextToken.substring(0, nextToken.length() - 1);
-                line[i] = nextToken;
-                i++;
+
+        public boolean contains(T val) {
+            return values.contains(val);
+        }
+
+        public int find(T val) {
+            return values.indexOf(val);
+        }
+
+        public void remove(int index) {
+            values.remove(index);
+        }
+
+        public void popBack() {
+            if (!values.isEmpty()) {
+                values.remove(values.size() - 1);
             }
         }
-        if (isDigit(line[0]))
-            isLetter = false;
-        else
-            isLetter = true;
-        len = 0;
-        iter = 0;
-        while (!line[iter].equals("-1")) {
-            int value= getIndex(line[iter]);
-            if (value > len)
-                len = value;
-            iter++;
+
+        public T front() {
+            return values.isEmpty() ? null : values.get(0);
         }
-        return line;
+
+        public T back() {
+            return values.isEmpty() ? null : values.get(values.size() - 1);
+        }
     }
-    public static Graph graphCreate(String[] line) {
-        Graph graph = new Graph(len + 1);
-        for (int i = 0; i < iter; i++)
-            if ((i + 1) % 2 == 0)
-                if (!isLetter)
-                    graph.addEdge(Integer.valueOf(line[i - 1]), Integer.valueOf(line[i]));
-                else
-                    graph.addEdge(getIndex(line[i - 1]), getIndex(line[i]));
-        return graph;
-    }
-        public static void main(String[] args) {
-            Scanner in = new Scanner(System.in);
-            fill();
-            while (in.hasNextLine()) {
-                Graph graph = graphCreate(strAnalisys(in));
-                graph.topologicalSort(isLetter);
+
+    public static void main(String[] args) {
+        List<Vector<Character>> G = new ArrayList<>();
+        Map<Character, Integer> indexes = new HashMap<>();
+        Map<Integer, Character> chars = new HashMap<>();
+        Map<Integer, Boolean> used = new HashMap<>();
+        Integer freeIndex = 0;
+
+        Scanner in = new Scanner(System.in);
+        boolean stopInput = false;
+
+        while (!stopInput) {
+            String a = in.next();
+            String c = in.next();
+            c = in.next();
+            if (c.charAt(c.length() - 1) != ',') {
+                stopInput = true;
+            } else {
+                c = c.substring(0, c.length() - 1);
             }
+
+            if (!indexes.containsKey(a.charAt(0))) {
+                indexes.put(a.charAt(0), freeIndex);
+                chars.put(freeIndex++, a.charAt(0));
+                G.add(new Vector<>());
+            }
+
+            if (!indexes.containsKey(c.charAt(0))) {
+                indexes.put(c.charAt(0), freeIndex);
+                chars.put(freeIndex++, c.charAt(0));
+                G.add(new Vector<>());
+            }
+
+            Vector<Character> temp = G.get(indexes.get(c.charAt(0)));
+            temp.pushBack(a.charAt(0));
+        }
+
+        int count = G.size();
+
+        while (count > 0) {
+            int min = count + 1;
+            int minIndex = 0;
+            Character minName = 0;
+
+            --count;
+
+            for (int i = 0; i < G.size(); ++i) {
+                if (!used.containsKey(i)) {
+                    Vector<Character> temp = G.get(i);
+                    if (min > temp.values.size() || (min == temp.values.size() && chars.get(i) < minName)) {
+                        min = temp.values.size();
+                        minIndex = i;
+                        minName = chars.get(i);
+                    }
+                }
+            }
+
+            System.out.print(minName);
+            System.out.print(' ');
+            used.put(minIndex, true);
+
+            for (int i = 0; i < G.size(); ++i) {
+                Vector<Character> temp = G.get(i);
+                int ind = temp.find(minName);
+                if (ind != -1) {
+                    temp.remove(ind);
+                }
+            }
+        }
+
+        in.close();
     }
 }

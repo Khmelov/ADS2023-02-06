@@ -1,96 +1,85 @@
 package by.it.group251001.zhidkov.lesson14;
 
 import java.util.*;
+import java.util.*;
+
+import java.util.*;
 
 class PointsA {
-    static class Point {
-        int x, y, z;
+    private static class UnionFind {
+        private int[] parent;
+        private int[] size;
 
-        Point(int x, int y, int z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+        private UnionFind(int n) {
+            parent = new int[n];
+            size = new int[n];
+            Arrays.fill(size, 1);
+            for (int i = 0; i < n; i++) {
+                parent[i] = i;
+            }
         }
 
-        int distanceTo(Point other) {
-            return Math.abs(x - other.x) + Math.abs(y - other.y) + Math.abs(z - other.z);
+        private int find(int v) {
+            return (v == parent[v]) ? v : (parent[v] = find(parent[v]));
+        }
+
+        private void union(int p, int q) {
+            int rootP = find(p);
+            int rootQ = find(q);
+
+            if (rootP == rootQ) {
+                return;
+            }
+
+            if (size[rootP] < size[rootQ]) {
+                parent[rootP] = rootQ;
+                size[rootQ] += size[rootP];
+            } else {
+                parent[rootQ] = rootP;
+                size[rootP] += size[rootQ];
+            }
         }
     }
 
-    static class DSU {
-        int[] parent;
-        int[] rank;
+    private static record Point(int x, int y, int z) { }
 
-        DSU(int n) {
-            parent = new int[n];
-            rank = new int[n];
-
-            for (int i = 0; i < n; i++) {
-                parent[i] = i;
-                rank[i] = 1;
-            }
-        }
-
-        int find(int x) {
-            if (parent[x] != x) {
-                parent[x] = find(parent[x]);
-            }
-            return parent[x];
-        }
-
-        void union(int x, int y) {
-            int rootX = find(x);
-            int rootY = find(y);
-
-            if (rootX != rootY) {
-                if (rank[rootX] > rank[rootY]) {
-                    parent[rootY] = rootX;
-                } else if (rank[rootX] < rank[rootY]) {
-                    parent[rootX] = rootY;
-                } else {
-                    parent[rootY] = rootX;
-                    rank[rootX]++;
-                }
-            }
-        }
+    private static boolean areWithinDistance(Point p1, Point p2, int distance) {
+        return Math.hypot(Math.hypot(p1.x - p2.x, p1.y - p2.y), p1.z - p2.z) <= distance;
     }
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
         int distanceThreshold = scanner.nextInt();
-        int numPoints = scanner.nextInt();
+        int pointsAmount = scanner.nextInt();
 
-        Point[] points = new Point[numPoints];
-        DSU dsu = new DSU(numPoints);
-
-        for (int i = 0; i < numPoints; i++) {
+        Point[] points = new Point[pointsAmount];
+        for (int i = 0; i < pointsAmount; i++) {
             int x = scanner.nextInt();
             int y = scanner.nextInt();
             int z = scanner.nextInt();
-
             points[i] = new Point(x, y, z);
         }
 
-        for (int i = 0; i < numPoints; i++) {
-            for (int j = i + 1; j < numPoints; j++) {
-                int distance = points[i].distanceTo(points[j]);
-                if (distance <= distanceThreshold) {
-                    dsu.union(i, j);
+        UnionFind uf = new UnionFind(pointsAmount);
+        for (int i = 0; i < pointsAmount; i++) {
+            for (int j = i + 1; j < pointsAmount; j++) {
+                if (areWithinDistance(points[i], points[j], distanceThreshold)) {
+                    uf.union(i, j);
                 }
             }
         }
 
-        Map<Integer, List<Integer>> clusters = new HashMap<>();
-
-        for (int i = 0; i < numPoints; i++) {
-            int root = dsu.find(i);
-            clusters.computeIfAbsent(root, k -> new ArrayList<>()).add(i + 1);
+        List<Integer> componentSizes = new ArrayList<>();
+        boolean[] visited = new boolean[pointsAmount];
+        for (int i = 0; i < pointsAmount; i++) {
+            int root = uf.find(i);
+            if (!visited[root]) {
+                visited[root] = true;
+                componentSizes.add(uf.size[root]);
+            }
         }
 
-        for (List<Integer> cluster : clusters.values()) {
-            Collections.sort(cluster);
-            System.out.print(cluster.size() + " ");
-        }
+        componentSizes.sort(Collections.reverseOrder());
+        componentSizes.forEach(size -> System.out.print(size + " "));
     }
 }

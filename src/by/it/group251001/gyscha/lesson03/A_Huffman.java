@@ -119,23 +119,47 @@ public class A_Huffman {
         //все комментарии от тестового решения были оставлены т.к. это задание A.
         //если они вам мешают их можно удалить
 
+        //1. переберем все символы по очереди и рассчитаем их частоту в Map count
+        //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
         Map<Character, Integer> count = new HashMap<>();
         //1. переберем все символы по очереди и рассчитаем их частоту в Map count
-            //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
+        //для каждого символа добавим 1 если его в карте еще нет или инкремент если есть.
+        for (int t = 0; t < s.length(); ++t) {
+            if (count.containsKey(s.charAt(t))) {
+                count.replace(s.charAt(t), count.get(s.charAt(t)) + 1);
+            } else {
+                count.put(s.charAt(t), 1);
+            }
+        }
+
 
         //2. перенесем все символы в приоритетную очередь в виде листьев
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
-
+        Iterator<Character> iterTable = count.keySet().iterator();
+        for (int t = 0; t < count.size(); ++t) {
+            Character temp = iterTable.next();
+            priorityQueue.offer(new LeafNode(count.get(temp), temp));
+        }
         //3. вынимая по два узла из очереди (для сборки родителя)
         //и возвращая этого родителя обратно в очередь
         //построим дерево кодирования Хаффмана.
         //У родителя частоты детей складываются.
+        Node parent;
+        while (priorityQueue.size() > 1) {
+            Node a = priorityQueue.poll(); Node b = priorityQueue.poll();
+            parent = new InternalNode(a, b);
+            priorityQueue.offer(parent);
+        }
+
 
         //4. последний из родителей будет корнем этого дерева
         //это будет последний и единственный элемент оставшийся в очереди priorityQueue.
         StringBuilder sb = new StringBuilder();
-        //.....
-
+        parent = priorityQueue.poll();
+        parent.fillCodes("");
+        for (char t : s.toCharArray()) {
+            sb.append(codes.get(t));
+        }
         return sb.toString();
         //01001100100111
         //01001100100111
