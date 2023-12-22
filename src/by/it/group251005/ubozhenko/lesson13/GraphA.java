@@ -1,71 +1,56 @@
 package by.it.group251005.ubozhenko.lesson13;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
+
+import java.util.*;
+
 public class GraphA {
 
-    static boolean[] visited;
-    static ArrayList<String> topological;
-
-    static int getMax(int[] startVertex, int[] endVertex) {
-        int size = Integer.MIN_VALUE;
-        for (int i = 0; i < startVertex.length; i++) {
-            if (startVertex[i] > size)
-                size = startVertex[i];
-            if (endVertex[i] > size)
-                size = endVertex[i];
+    private static void dfs(String node, Map<String, List<String>> graph, Set<String> visited, Stack<String> stack) {
+        visited.add(node);
+        if (graph.containsKey(node)) {
+            for (String next_node : graph.get(node)) {
+                if (!visited.contains(next_node)) {
+                    dfs(next_node, graph, visited, stack);
+                }
+            }
         }
-        return size;
+        stack.push(node);
     }
 
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        String[] arr = scan.nextLine().split(",");
+        Map<String, List<String>> graph = new HashMap<>();
+        Stack<String> stack = new Stack<>();
+        Set<String> visited = new HashSet<>();
 
-        boolean isNumeric = arr[0].trim().matches(".*\\d.*");
+        try (Scanner in = new Scanner(System.in)) {
+            boolean isEnd = false;
 
-        int[] startVertex = new int[arr.length];
-        int[] endVertex = new int[arr.length];
-
-        for (int i = 0; i < arr.length; i++) {
-            String[] current = arr[i].trim().split(" ");
-            startVertex[i] = isNumeric ? Integer.parseInt(current[0]) : current[0].charAt(0) - 'A';
-            endVertex[i] = isNumeric ? Integer.parseInt(current[current.length - 1]) : current[current.length - 1].charAt(0) - 'A';
+            while (!isEnd) {
+                String a = in.next();
+                String s = in.next();
+                String b = in.next();
+                if (b.charAt(b.length() - 1) == ',') {
+                    b = b.substring(0, b.length() - 1);
+                } else {
+                    isEnd = true;
+                }
+                graph.putIfAbsent(a, new ArrayList<>());
+                graph.get(a).add(b);
+            }
         }
 
-        GraphUtil graph = new GraphUtil(getMax(startVertex, endVertex) + 1);
-
-        for (int i = 0; i < arr.length; i++) {
-            graph.addOrientedEdge(startVertex[i], endVertex[i]);
-            String temp = isNumeric ? String.valueOf(startVertex[i]) : String.valueOf((char)(startVertex[i] + 'A'));
-            graph.setVertexNames(startVertex[i], temp);
-            temp = isNumeric ? String.valueOf(endVertex[i]) : String.valueOf((char)(endVertex[i] + 'A'));
-            graph.setVertexNames(endVertex[i], temp);
+        for (List<String> list : graph.values()) {
+            list.sort(Collections.reverseOrder());
         }
 
-        TopologicalSort(graph, 0);
-        int i = 0;
-        for (String item : topological) {
-            System.out.print(i == topological.size() - 1 ? topological.get(i) : (topological.get(i) + " "));
-            i++;
+        for (String node : graph.keySet()) {
+            if (!visited.contains(node)) {
+                dfs(node, graph, visited, stack);
+            }
         }
-        scan.close();
-    }
 
-    public static void TopologicalSort(GraphUtil graph, int start) {
-        visited = new boolean[graph.vertexCount];
-        topological = new ArrayList<>();
-        for (int i = start; i < graph.vertexCount; i++)
-            if (!visited[i])
-                DFS(graph, i);
-        Collections.reverse(topological);
-    }
-
-    public static void DFS(GraphUtil graph, int vertex) {
-        visited[vertex] = true;
-        for (int i : graph.getNeighbors(vertex))
-            if (!visited[i])
-                DFS(graph, i);
-        topological.add(graph.getVertexName(vertex));
+        while (!stack.empty()) {
+            System.out.print(stack.pop());
+            System.out.print(' ');
+        }
     }
 }
