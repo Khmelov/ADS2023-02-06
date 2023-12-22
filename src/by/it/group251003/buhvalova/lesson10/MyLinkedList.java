@@ -231,7 +231,7 @@ public class MyLinkedList<E> implements Deque<E> {
 
     @Override
     public boolean remove(Object o) {
-        by.it.group251003.ilysiakoff.lesson10.MyLinkedList.Node<E> cur = first;
+        by.it.group251003.buhvalova.lesson10.MyLinkedList.Node<E> cur = first;
         while (cur != null) {
             if (o.equals(cur.data)) {
                 if (cur == first)
