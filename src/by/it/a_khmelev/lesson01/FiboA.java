@@ -44,7 +44,6 @@ public class FiboA {
 
 
         return BigInteger.ZERO;
-
     }
 
 
