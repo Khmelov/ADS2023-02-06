@@ -49,7 +49,6 @@ public class ListB<E> implements List<E> {
         Lsize++;
         return true;
     }
-
     @Override
     public E remove(int index) {
         if (index < 0 || index >= Lsize)
