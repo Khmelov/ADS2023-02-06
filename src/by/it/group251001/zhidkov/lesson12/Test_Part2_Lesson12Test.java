@@ -1,4 +1,4 @@
-package by.it.group251003.kopytok_mikhail.lesson12;
+package by.it.group251001.zhidkov.lesson12;
 
 
 import by.it.HomeWork;
