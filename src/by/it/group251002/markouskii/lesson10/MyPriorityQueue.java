@@ -19,22 +19,23 @@ public class MyPriorityQueue<E> implements Queue<E> {
         return index * 2 + 2;
     }
 
-    private void siftDown(int index) {
+    private boolean siftDown(int index) {
         int l = leftChild(index), r = rightChild(index),goToChild = l;
         if (l >= size) {
-            return;
+            return false;
         }
         if (r < size && ((Comparable<E>)arr[r]).compareTo(arr[l]) < 0) {
             goToChild = r;
         }
         if (((Comparable<E>)arr[goToChild]).compareTo(arr[index]) >= 0) {
-            return;
+            return false;
         }
         E tmp = arr[goToChild];
         arr[goToChild] = arr[index];
         arr[index] = tmp;
 
         siftDown(goToChild);
+        return true;
     }
 
     private void siftUp(int index) {
@@ -137,7 +138,7 @@ public class MyPriorityQueue<E> implements Queue<E> {
             for (int i = 0; i < size; i++) {
                 if (arr[i] == null) {
                     arr[i] = arr[--size];
-                    siftDown(i);
+                    if (!siftDown(i)) siftUp(i);
                     return true;
                 }
             }
@@ -145,7 +146,7 @@ public class MyPriorityQueue<E> implements Queue<E> {
             for (int i = 0; i < size; i++) {
                 if (o.equals(arr[i])) {
                     arr[i] = arr[--size];
-                    siftDown(i);
+                    if (!siftDown(i)) siftUp(i);
                     return true;
                 }
             }
@@ -181,14 +182,48 @@ public class MyPriorityQueue<E> implements Queue<E> {
         return changed;
     }
 
+    public void heapify(){
+        int start=size-1;
+        while(start>=0){
+            siftDown(start);
+            start--;
+        }
+        return;
+    }
     @Override
     public boolean removeAll(Collection<?> c) {
-        return false;
+        int prevsize=size;
+        boolean changed = false;
+        int i=0,j=0;
+        while(i!=prevsize){
+            if(!c.contains(arr[i])) {
+                arr[j++] = arr[i];
+
+            } else changed = true;
+            i++;
+        }
+        size=j;
+        heapify();
+
+        return changed;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        int prevsize=size;
+        boolean changed = false;
+        int i=0,j=0;
+        while(i!=prevsize){
+            if(c.contains(arr[i])) {
+                arr[j++] = arr[i];
+                changed = true;
+            }  else changed = true;
+            i++;
+        }
+        size=j;
+        heapify();
+
+        return changed;
     }
 
     @Override
