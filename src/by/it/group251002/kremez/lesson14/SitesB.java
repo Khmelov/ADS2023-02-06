@@ -9,7 +9,7 @@ public class SitesB {
     public static class DSU{
         int[] parent = new int[0];
 
-        void inicialize_arr(int n){
+        void initialize_arr(int n){
             parent = Arrays.copyOf(parent, n);
         }
 
@@ -55,12 +55,12 @@ public class SitesB {
             String f = s.substring(0, temp), d = s.substring(temp + 1, s.length());
             if(!toInd.containsKey(f)) {
                 toInd.put(f, size++);
-                myDSU.inicialize_arr(size);
+                myDSU.initialize_arr(size);
                 myDSU.make_set(size - 1);;
             }
             if(!toInd.containsKey(d)) {
                 toInd.put(d, size++);
-                myDSU.inicialize_arr(size);
+                myDSU.initialize_arr(size);
                 myDSU.make_set(size - 1);
             }
             myDSU.union_sets(toInd.get(f), toInd.get(d));

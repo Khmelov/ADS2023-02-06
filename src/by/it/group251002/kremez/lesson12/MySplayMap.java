@@ -258,7 +258,7 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         if (toKey == null)
             throw new NullPointerException("The key cannot be null");
 
-        SortedMap<Integer, String> sortedMap = new by.it.group251003.Nasevich_Ilya.lesson12.MySplayMap();
+        SortedMap<Integer, String> sortedMap = new by.it.group251002.kremez.lesson12.MySplayMap();
         setToKey(root, toKey, sortedMap);
 
         return sortedMap;
@@ -280,7 +280,7 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         if (fromKey == null)
             throw new NullPointerException("The key cannot be null");
 
-        SortedMap<Integer, String> sortedMap = new by.it.group251003.Nasevich_Ilya.lesson12.MySplayMap();
+        SortedMap<Integer, String> sortedMap = new by.it.group251002.kremez.lesson12.MySplayMap();
         setFromKey(root, fromKey, sortedMap);
 
         return sortedMap;
