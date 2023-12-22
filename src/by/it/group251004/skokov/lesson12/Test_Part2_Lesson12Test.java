@@ -36,10 +36,10 @@ public class Test_Part2_Lesson12Test extends HomeWork {
         String[] methods = """
                 toString()
                 put(Object,Object)
+                remove(Object)
                 get(Object)
                 containsKey(Object)
-                remove(Object)
-                
+
                 size()
                 clear()
                 isEmpty()
@@ -61,9 +61,9 @@ public class Test_Part2_Lesson12Test extends HomeWork {
                 size()
                 clear()
                 isEmpty()
-                
+                                
                 headMap(Object)
-                tailMap(Object)                
+                tailMap(Object)
                 firstKey()
                 lastKey()
                 """.split("\\s+");
@@ -83,12 +83,12 @@ public class Test_Part2_Lesson12Test extends HomeWork {
                 size()
                 clear()
                 isEmpty()
-                
-                firstKey()
-                lastKey()
+                                
                 headMap(Object)
                 tailMap(Object)
-                               
+                firstKey()
+                lastKey()
+                                
                 lowerKey(Object)
                 floorKey(Object)
                 ceilingKey(Object)
@@ -150,8 +150,8 @@ public class Test_Part2_Lesson12Test extends HomeWork {
             int eChecksum = checkSum(eString);
             int aChecksum = checkSum(aString);
             assertEquals(("Erros state\n" +
-                          "expectred check sum=%d for %s\n" +
-                          "   actual check sum=%d for %s\n")
+                    "expectred check sum=%d for %s\n" +
+                    "   actual check sum=%d for %s\n")
                     .formatted(eChecksum, eString, aChecksum, aString), eChecksum, aChecksum);
         }
         System.out.println("=".repeat(100) + "\nCOMPLETE: " + methodNames);
@@ -169,7 +169,7 @@ public class Test_Part2_Lesson12Test extends HomeWork {
                         .collect(Collectors.toUnmodifiableSet());
                 parameters[i] = collect;
             } else if (String.class.isAssignableFrom(parameterTypes[i])
-                       || i == 1 //for put(Object,Object)
+                    || i == 1 //for put(Object,Object)
             ) {
                 parameters[i] = "str" + randomInteger();
             } else if (Integer.class.isAssignableFrom(parameterTypes[i])) {
@@ -216,7 +216,7 @@ public class Test_Part2_Lesson12Test extends HomeWork {
 
     private void checkFieldAsCollection(Field field) {
         Class<?> type = field.getType();
-        if (Collection.class.isAssignableFrom(type) || Map.class.isAssignableFrom(type)) {
+        if ((!field.isSynthetic()) && (Collection.class.isAssignableFrom(type) || Map.class.isAssignableFrom(type))) {
             fail("Incorrect field: " + field);
         }
     }
@@ -243,8 +243,8 @@ public class Test_Part2_Lesson12Test extends HomeWork {
 
     private boolean notComparable(Method m) {
         return m.getReturnType() != Comparable.class &&
-               Arrays.stream(m.getParameterTypes())
-                       .noneMatch(p -> p == Comparable.class);
+                Arrays.stream(m.getParameterTypes())
+                        .noneMatch(p -> p == Comparable.class);
     }
 
     private String getSignature(Method method) {

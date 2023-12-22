@@ -3,44 +3,58 @@ package by.it.group251004.skokov.lesson13;
 import java.util.*;
 
 public class GraphA {
-    static Set<String> used_nodes;
-    static Map<String, ArrayList<String>> graph_nodes;
-    static Stack<String> ans;
 
-    private static void dfs(String v) {
-        used_nodes.add(v);
-        ArrayList<String> arr = graph_nodes.get(v);
-        if (arr != null)
-            for (String str : arr)
-                if (!used_nodes.contains(str))
-                    dfs(str);
-        ans.push(v);
+    public static List<String> sortGraph(Map<String, ArrayList<String>> graph) {
+        Stack<String> stack = new Stack<>();
+        List<String> visited = new ArrayList<>();
+        List<String> sorted = new ArrayList<>();
+        for (ArrayList<String> array : graph.values()) {
+            array.sort(Comparator.reverseOrder());
+        }
+        for (String vert : graph.keySet())
+            if (!visited.contains(vert))
+                depthSearch(graph, visited, vert, stack);
+        while (!stack.empty())
+            sorted.add(stack.pop());
+        return sorted;
+    }
+
+    public static void depthSearch(Map<String, ArrayList<String>> graph, List<String> visited, String vertex, Stack<String> stack) {
+        visited.add(vertex);
+        if (graph.get(vertex) != null)
+            for (String neighbour : graph.get(vertex)) {
+                if (!visited.contains(neighbour))
+                    depthSearch(graph, visited, neighbour, stack);
+            }
+        stack.push(vertex);
+    }
+
+    public static Map<String, ArrayList<String>> makeGraph(String[] edges) {
+        Map<String, ArrayList<String>> graph = new HashMap<>();
+        for (int i = 0; i < edges.length; i++) {
+            String[] vertices = edges[i].split(" -> ");
+            if (!graph.containsKey(vertices[0])) {
+                graph.put(vertices[0], new ArrayList<>());
+            }
+        }
+        for (int i = 0; i < edges.length; i++) {
+            String[] vert = edges[i].split(" -> ");
+            graph.get(vert[0]).add(vert[1]);
+        }
+        return graph;
     }
 
     public static void main(String[] args) {
-        used_nodes = new HashSet<>();
-        graph_nodes = new HashMap<>();
-        ans = new Stack<>();
-        Scanner src = new Scanner(System.in);
-        boolean fl = false;
-        while (!fl) {
-            String a = src.next();
-            String st = src.next();
-            String b = src.next();
-            if (b.charAt(b.length() - 1) == ',')
-                b = b.substring(0, st.length() - 1);
-            else
-                fl = true;
-            if (!graph_nodes.containsKey(a))
-                graph_nodes.put(a, new ArrayList<>());
-            graph_nodes.get(a).add(b);
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String input = scanner.nextLine();
+            String[] edges = input.split(", ");
+            Map<String, ArrayList<String>> graph = makeGraph(edges);
+            List<String> sorted = sortGraph(graph);
+            for (String vert : sorted)
+                System.out.print(vert + " ");
+            System.out.println();
         }
-        for (ArrayList<String> arr : graph_nodes.values())
-            arr.sort(Comparator.reverseOrder());
-        for (String v : graph_nodes.keySet())
-            if (!used_nodes.contains(v))
-                dfs(v);
-        while (!ans.empty())
-            System.out.print(ans.pop() + ' ');
+        scanner.close();
     }
 }

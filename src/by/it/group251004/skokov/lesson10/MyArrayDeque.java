@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.Iterator;
 
-public class MyArrayDeque<E> implements Deque<E> { //Deque хранит свои элементы в массиве elements. Массив изначально пустой, и размер очереди (size) изначально установлен в 0.
+public class MyArrayDeque<E> implements Deque<E> {
     private E[] elements = (E[]) new Object[]{};
     private int size = 0;
 
@@ -33,15 +33,13 @@ public class MyArrayDeque<E> implements Deque<E> { //Deque хранит свои
     }
 
     @Override
-    public void addLast(E e) { //add(E e) и addLast(E e): добавляют элемент в конец очереди. Если очередь уже заполнена (т.е., размер равен длине массива),
-        // то размер массива удваивается, чтобы сделать место для нового элемента.
+    public void addLast(E e) {
         if (size == elements.length)
             elements = Arrays.copyOf(elements, elements.length * 2 + 1);
         elements[size++] = e;
     }
 
-    public void addFirst(E e) { //добавляет элемент в начало очереди. Здесь также может произойти расширение массива.
-        // Затем все существующие элементы сдвигаются на одну позицию вправо, чтобы сделать место для нового элемента на позиции 0.
+    public void addFirst(E e) {
         if (size == elements.length)
             elements = Arrays.copyOf(elements, elements.length * 2 + 1);
         System.arraycopy(elements, 0, elements, 1, size + 1);

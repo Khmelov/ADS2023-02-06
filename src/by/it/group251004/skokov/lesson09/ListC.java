@@ -11,85 +11,56 @@ public class ListC<E> implements List<E> {
     //////               Обязательные к реализации методы             ///////
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
-    static final int defaultSize = 8;
-    E[] _list;
-    int _current;
+    private E[] elements = (E[]) new Object[]{};
+    private int size = 0;
 
-    public ListC() {
-        this(defaultSize);
-    }
-
-
-    public ListC(int size) {
-        _list = (E[]) new Object[size];
-    }
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append('[');
-        for (int i = 0; i < _current; i++) {
-            sb.append(_list[i]);
-            if (i < _current - 1) {
-                sb.append(", ");
-            }
+        StringBuilder builder = new StringBuilder("[");
+        String delimiter = "";
+        for (int i = 0; i < size; i++) {
+            builder.append(delimiter).append(elements[i]);
+            delimiter = ", ";
         }
-        sb.append("]");
-        return sb.toString();
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override
     public boolean add(E e) {
-        if (_current == _list.length) {
-            E[] newList = (E[]) new Object[_list.length * 2];
-            for (int i = 0; i < _list.length; i++) {
-                newList[i] = _list[i];
-            }
-            _list = newList;
-        }
-        _list[_current++] = e;
+        if (size == elements.length)
+            elements = Arrays.copyOf(elements, elements.length * 2 + 1);
+        elements[size++] = e;
         return true;
+
     }
 
     @Override
     public E remove(int index) {
-        if (index > -1 && index < _current) {
-            E elem = _list[index];
-            for (int i = index; i < _current - 1; i++)
-                _list[i] = _list[i + 1];
-            _current--;
-            return elem;
-        }
-        return null;
+        E deletedElem = elements[index];
+        System.arraycopy(elements, index + 1, elements, index, size - index - 1);
+        size--;
+        return deletedElem;
     }
 
     @Override
     public int size() {
-        return _current;
+        return size;
     }
 
     @Override
     public void add(int index, E element) {
-        if (_current == _list.length) {
-            E[] newList = (E[]) new Object[_list.length * 2];
-            for (int i = 0; i < _list.length; i++) {
-                newList[i] = _list[i];
-            }
-            _list = newList;
-        }
-        if (index > -1 && index <= _current) {
-            for (int i = _current; i > index; i--) {
-                _list[i] = _list[i - 1];
-            }
-            _list[index] = element;
-            _current++;
-        }
+        if (size == elements.length)
+            elements = Arrays.copyOf(elements, elements.length * 2 + 1);
+        System.arraycopy(elements, index, elements, index + 1, size - index);
+        elements[index] = element;
+        size++;
     }
-
 
     @Override
     public boolean remove(Object o) {
         int index = indexOf(o);
-        if (index != -1) {
+        if (index > -1) {
             remove(index);
             return true;
         }
@@ -98,112 +69,102 @@ public class ListC<E> implements List<E> {
 
     @Override
     public E set(int index, E element) {
-        E item = null;
-        if (index > -1 && index < _current) {
-            item = _list[index];
-            _list[index] = element;
-        }
-        return item;
+        E replacedElem = elements[index];
+        elements[index] = element;
+        return replacedElem;
     }
 
 
     @Override
     public boolean isEmpty() {
-        return _current == 0;
+        return size == 0;
     }
 
 
     @Override
     public void clear() {
-        for (int i = 0; i < _current; i++) {
-            _list[i] = null;
-        }
-        _current = 0;
+        for (int i = 0; i < size; i++)
+            elements[i] = null;
+        size = 0;
     }
 
     @Override
     public int indexOf(Object o) {
-        for (int i = 0; i < _current; i++) {
-            if (Objects.equals(_list[i], o)) {
+        for (int i = 0; i < size; i++)
+            if (elements[i].equals(o))
                 return i;
-            }
-        }
         return -1;
     }
 
     @Override
     public E get(int index) {
-        if (index > -1 && index < _current)
-            return _list[index];
-        return null;
+        return elements[index];
     }
 
     @Override
     public boolean contains(Object o) {
-        return indexOf(o) != -1;
+        for (int i = 0; i < size; i++)
+            if (elements[i].equals(o))
+                return true;
+        return false;
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        for (int i = _current - 1; i > -1; i--) {
-            if (Objects.equals(o, _list[i]))
-                return i;
-        }
-        return -1;
+        int index = -1;
+        for (int i = 0; i < size; i++)
+            if (elements[i].equals(o))
+                index = i;
+        return index;
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) { //Возвращает true, если список содержит все элементы указанной коллекции.
-        for (Object item : c)
-                if (!contains(item))
-                    return false;
+    public boolean containsAll(Collection<?> c) {
+        int count = 0;
+        for (Object elem : c)
+            if (contains(elem))
+                count++;
+        return count == c.size();
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        for (E elem : c)
+            add(elem);
         return true;
     }
 
     @Override
-    public boolean addAll(Collection<? extends E> c) { //Добавляет все элементы из указанной коллекции в список. Возвращает true, если список изменился в результате вызова.
-
-
-        for (E item : c)
-            add(item);
+    public boolean addAll(int index, Collection<? extends E> c) {
+        if(c.size()==0)
+            return false;
+        for (E elem : c) {
+            add(index, elem);
+            index++;
+        }
         return true;
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends E> c) { //Вставляет все элементы из указанной коллекции в список, начиная с указанного индекса.
-        boolean modified = false;
-        for (E item : c) {
-            if (index > -1 && index <= _current) {
-                add(index, item);
-                index++;
-                modified = true;
+    public boolean removeAll(Collection<?> c) {
+        boolean wasRemoved = false;
+        for (int i = 0; i < size; i++) {
+            if(c.contains(elements[i]))
+            {
+                remove(elements[i]);
+                i--;
+                wasRemoved = true;
             }
         }
-
-        return modified;
+        return wasRemoved;
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) { //Удаляет из списка все его элементы, которые содержатся в указанной коллекции. Возвращает true, если список изменился в результате вызова.
-        boolean deleted = false;
-
-        for (int i = 0; i < _current; i++) {
-            if (c.contains(_list[i])) {
-                remove(i);
-                i--; // Уменьшаем счетчик, так как размер списка уменьшился
-                deleted = true;
-            }
-        }
-        return deleted;
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) { //Удаляет из списка все его элементы, которые не содержатся в указанной коллекции. Возвращает true, если список изменился в результате вызова.
+    public boolean retainAll(Collection<?> c) {
         boolean retained = false;
-
-        for (int i = 0; i < _current; i++) {
-            if (!c.contains(_list[i])) {
-                remove(i);
+        for (int i = 0; i < size; i++) {
+            if(!c.contains(elements[i])) {
+                remove(elements[i]);
                 i--;
                 retained = true;
             }
@@ -218,13 +179,7 @@ public class ListC<E> implements List<E> {
     /////////////////////////////////////////////////////////////////////////
 
     @Override
-    public List<E> subList(int fromIndex, int toIndex) { //Возвращает список, содержащий все элементы списка между указанными индексами, включая начальный индекс и исключая конечный индекс.
-        if (fromIndex < 0 || toIndex > _current || fromIndex > toIndex) {
-            ListC<E> subList = new ListC<>(toIndex - fromIndex);
-            for (int i = fromIndex; i < toIndex; i++)
-                subList.add(_list[i]);
-            return subList;
-        }
+    public List<E> subList(int fromIndex, int toIndex) {
         return null;
     }
 
@@ -244,12 +199,8 @@ public class ListC<E> implements List<E> {
     }
 
     @Override
-    public Object[] toArray() { //Возвращает массив, содержащий все элементы в этом списке в правильной последовательности.
-        Object[] result = new Object[_current];
-        for (int i = 0; i < _current; i++) {
-            result[i] = _list[i];
-        }
-        return result;
+    public Object[] toArray() {
+        return new Object[0];
     }
 
     /////////////////////////////////////////////////////////////////////////

@@ -1,80 +1,51 @@
 package by.it.group251004.skokov.lesson09;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class ListA<E> implements List<E> {
 
     //Создайте аналог списка БЕЗ использования других классов СТАНДАРТНОЙ БИБЛИОТЕКИ
+    private E[] elements = (E[]) new Object[]{};
+    private int size = 0;
 
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
     //////               Обязательные к реализации методы             ///////
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
-    static final int defaultSize = 8;
-    E[] _list;
-    int _current;
-
-    public ListA() {
-        this(defaultSize);
-    }
-
-
-    public ListA(int size) {
-        _list = (E[]) new Object[size];
-    } //настраивает список с размером памяти по умолчанию, равным 8.
-
-
     @Override
-    public String toString() { //Возвращает строковое представление списка вида [element1, element2, ..., elementN].
-
-
-        StringBuilder sb = new StringBuilder();
-        sb.append('[');
-        for (int i = 0; i < _current; i++) {
-            sb.append(_list[i]);
-            if (i < _current - 1) {
-                sb.append(", ");
-            }
+    public String toString() {
+        StringBuilder builder = new StringBuilder("[");
+        String delimiter = "";
+        for (int i = 0; i < size; i++) {
+            builder.append(delimiter).append(elements[i]);
+            delimiter = ", ";
         }
-        sb.append("]");
-        return sb.toString();
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override
-    public boolean add(E e) { //Добавляет элемент в список. Если место в текущем массиве закончилось,
-        // он создает новый массив с удвоенным размером и копирует в него старые элементы.
-        if (_current == _list.length) {
-            E[] newList = (E[]) new Object[_list.length * 2];
-            for (int i = 0; i < _list.length; i++) {
-                newList[i] = _list[i];
-            }
-            _list = newList;
-        }
-        _list[_current++] = e;
+    public boolean add(E e) {
+        if (size == elements.length)
+            elements = Arrays.copyOf(elements, elements.length * 2+1);
+        elements[size++] = e;
         return true;
+
     }
 
     @Override
-    public E remove(int index) { //Удаляет элемент из списка по указанному индексу, сдвигая все последующие элементы на одну позицию влево. \
-        // Если индекс выходит за пределы текущего размера списка, функция возвращает null.
-        if (index > -1 && index < _current) {
-            E elem = _list[index];
-            for (int i = index; i < _current - 1; i++)
-                _list[i] = _list[i + 1];
-            _current--;
-            return elem;
-        }
-        return null;
+    public E remove(int index) {
+        E deletedElem = elements[index];
+        System.arraycopy(elements,index+1,elements,index,size-index-1);
+        size--;
+        return deletedElem;
     }
 
     @Override
     public int size() {
-        return _current;
-    } //Возвращает текущее количество элементов в списке.
+        return size;
+    }
 
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////

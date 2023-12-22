@@ -1,61 +1,89 @@
 package by.it.group251004.skokov.lesson14;
 
-import java.util.*;
+import java.util.Scanner;
 
 public class PointsA {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+    private static class DisjointSetUnion {
+        int parent[];
+        int rank[];
 
-        int distance = scanner.nextInt();
-        int count = scanner.nextInt();
+        public void makeSet(int item) {
+            parent[item] = item;
+            rank[item] = 0;
+        }
 
-        DSU<Point> dsu = new DSU<Point>();
+        public int findSet(int item) {
+            if (parent[item] != item)
+                return findSet(parent[item]);
+            return item;
+        }
 
-        for (int i = 0; i < count; i++) {
-            int x = scanner.nextInt();
-            int y = scanner.nextInt();
-            int z = scanner.nextInt();
-            Point point = new Point(x, y, z);
-            dsu.makeSet(point);
-
-            for (Point existingPoint : dsu) {
-                if (point.distance(existingPoint) <= distance) {
-                    dsu.union(point, existingPoint);
+        public void combineSets(int a, int b) {
+            a = findSet(a);
+            b = findSet(b);
+            if (a != b) {
+                if (rank[a] < rank[b]) {
+                    int temp = a;
+                    a = b;
+                    b = temp;
                 }
+                parent[b] = a;
+                if (rank[a] == rank[b])
+                    rank[a]++;
             }
         }
 
-        List<Integer> clusterSizes = new ArrayList<>();
-        HashSet<Point> set = new HashSet<>();
-        for (Point existingPoint : dsu) {
-            Point root = dsu.findSet(existingPoint);
-            if (set.contains(root))
-                continue;
-            set.add(root);
-            int size = dsu.getClusterSize(root);
-            clusterSizes.add(size);
-        }
-
-        Collections.sort(clusterSizes);
-        Collections.reverse(clusterSizes);
-
-        for (int size : clusterSizes) {
-            System.out.print(size + " ");
+        DisjointSetUnion(int size) {
+            parent = new int[size];
+            rank = new int[size];
         }
     }
 
-    static class Point {
-        int x, y, z;
+    static boolean check(int[][] points, int a, int b, int max_dist) {
+        return Math.hypot(Math.hypot(points[a][0] - points[b][0], points[a][1] - points[b][1]), points[a][2] - points[b][2]) <= max_dist;
+    }
 
-        Point(int x, int y, int z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+    public static void main(String[] args) {
+        int size = 0;
+        Scanner scanner = new Scanner(System.in);
+        int max_dist = scanner.nextInt();
+        int max_size = scanner.nextInt();
+        int[][] points = new int[max_size][3];
+        DisjointSetUnion dsu = new DisjointSetUnion(max_size);
+
+        for (int i = 0; i < max_size; i++) {
+            for (int j = 0; j < 3; j++)
+                points[size][j] = scanner.nextInt();
+            dsu.makeSet(size);
+            size++;
+        }
+        scanner.close();
+        for (int i = 0; i < max_size; i++)
+            for (int j = i + 1; j < max_size; j++)
+                if (check(points, i, j, max_dist)) {
+                    dsu.combineSets(i, j);
+                }
+
+        int[] dsu_size_array = new int[max_size];
+        for (int i = 0; i < max_size; i++) {
+            dsu_size_array[dsu.findSet(i)]++;
         }
 
-        double distance(Point p) {
-            return Math.hypot(Math.hypot((p.x-x),(p.y-y)),(p.z-z));
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < max_size; i++) {
+            int max = i;
+            for (int j = i + 1; j < max_size; j++)
+                if (dsu_size_array[max] < dsu_size_array[j])
+                    max = j;
+            if (dsu_size_array[max] == 0)
+                break;
+            int temp = dsu_size_array[max];
+            dsu_size_array[max] = dsu_size_array[i];
+            dsu_size_array[i] = temp;
+            sb.append(dsu_size_array[i]);
+            sb.append(" ");
         }
-
+        sb.deleteCharAt(sb.length() - 1);
+        System.out.println(sb);
     }
 }

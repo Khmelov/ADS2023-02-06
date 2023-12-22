@@ -1,47 +1,90 @@
 package by.it.group251004.skokov.lesson14;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class SitesB {
+    private static class DisjointSetUnion {
+        int parent[];
+        int rank[];
+
+        public void makeSet(int item) {
+            parent[item] = item;
+            rank[item] = 0;
+        }
+
+        public int findSet(int item) {
+            if (parent[item] != item)
+                return findSet(parent[item]);
+            return item;
+        }
+
+        public void combineSets(int a, int b) {
+            a = findSet(a);
+            b = findSet(b);
+            if (a != b) {
+                if (rank[a] < rank[b]) {
+                    int temp = a;
+                    a = b;
+                    b = temp;
+                }
+                parent[b] = a;
+                if (rank[a] == rank[b])
+                    rank[a]++;
+            }
+        }
+
+        DisjointSetUnion(int size) {
+            parent = new int[size];
+            rank = new int[size];
+        }
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        DSU<String> disjointSet = new DSU<>();
+        DisjointSetUnion dsu = new DisjointSetUnion(100);
+        List<String> sites = new ArrayList<>();
+        String line = scanner.next();
+        while (line.compareTo("end") != 0) {
+            String[] pair = line.split("\\+");
+            int x1 = sites.indexOf(pair[0]);
+            if (x1 == -1) {
+                x1 = sites.size();
+                sites.add(pair[0]);
+                dsu.makeSet(x1);
+            }
+            int x2 = sites.indexOf(pair[1]);
+            if (x2 == -1) {
+                x2 = sites.size();
+                sites.add(pair[1]);
+                dsu.makeSet(x2);
+            }
+            dsu.combineSets(x1, x2);
+            line = scanner.next();
+        }
+        int max_size = sites.size();
+        int[] dsu_size_array = new int[max_size];
+        for (int i = 0; i < max_size; i++) {
+            dsu_size_array[dsu.findSet(i)]++;
+        }
 
-        while (true) {
-            String input = scanner.nextLine();
-
-            if (input.equals("end")) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < max_size; i++) {
+            int max = i;
+            for (int j = i + 1; j < max_size; j++)
+                if (dsu_size_array[max] < dsu_size_array[j])
+                    max = j;
+            if (dsu_size_array[max] == 0)
                 break;
-            }
-
-            String[] sites = input.split("\\+");
-
-            for (String site : sites) {
-                if (!disjointSet.contains(site)) {
-                    disjointSet.makeSet(site);
-                }
-            }
-            disjointSet.union(sites[0], sites[1]);
+            int temp = dsu_size_array[max];
+            dsu_size_array[max] = dsu_size_array[i];
+            dsu_size_array[i] = temp;
+            sb.append(dsu_size_array[i]);
+            sb.append(" ");
         }
-        scanner.close();
-
-        Map<String, Integer> clusterSizes = new HashMap<>();
-        HashSet<String> set = new HashSet<>();
-        for (String site : disjointSet) {
-            if (set.contains(site))
-                continue;
-            set.add(site);
-            String root = disjointSet.findSet(site);
-            clusterSizes.put(root, disjointSet.getClusterSize(site));
-        }
-        ArrayList<Integer> temp = new ArrayList<>();
-
-        temp.addAll(clusterSizes.values());
-
-        Collections.sort(temp);
-        Collections.reverse(temp);
-
-        for (int item : temp)
-            System.out.print(item + " ");
+        sb.deleteCharAt(sb.length() - 1);
+        System.out.println(sb);
     }
 }
+

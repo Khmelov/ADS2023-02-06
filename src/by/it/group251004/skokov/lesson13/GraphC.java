@@ -1,10 +1,11 @@
 package by.it.group251004.skokov.lesson13;
+
 import java.util.*;
 
 public class GraphC {
     static Integer depth = 0;
 
-    static class mapEntryComparator implements Comparator<Map.Entry<String, Integer>> {
+    static class mapComparator implements Comparator<Map.Entry<String, Integer>> {
 
         @Override
         public int compare(Map.Entry<String, Integer> set1, Map.Entry<String, Integer> set2) {
@@ -16,48 +17,35 @@ public class GraphC {
         }
     }
 
-    private static void getGraph(Map<String, ArrayList<String>> graph, Map<String, ArrayList<String>> reversedGraph ) {
-        Scanner in = new Scanner(System.in);
+    public static void getStrongComponents(Map<String, ArrayList<String>> graph, Map<String, ArrayList<String>> reversedGraph) {
+        List<String> visited = new ArrayList<>();
+        Map<String, Integer> depthMap = new HashMap<>();
+        for (String vert : graph.keySet())
+            if (!visited.contains(vert))
+                depthSearch(graph, visited, vert, depthMap);
 
-        boolean isEnd = false;
-        while (!isEnd) {
-            String vertexOut = in.next();
-            if (!graph.containsKey(vertexOut)) {
-                graph.put(vertexOut, new ArrayList<>());
-            }
-
-            String edge = in.next();
-
-            String vertexIn = in.next();
-            if (vertexIn.charAt(vertexIn.length() - 1) == ',') {
-                vertexIn = vertexIn.substring(0, vertexIn.length() - 1);
-            } else {
-                isEnd = true;
-            }
-            graph.get(vertexOut).add(vertexIn);
-            if (!reversedGraph.containsKey(vertexIn)){
-                reversedGraph.put(vertexIn, new ArrayList<>());
-            }
-            reversedGraph.get(vertexIn).add(vertexOut);
+        List<Map.Entry<String, Integer>> array = new ArrayList<>(depthMap.entrySet());
+        array.sort(new mapComparator());
+        String[] vertices = new String[array.size()];
+        for (int i = array.size() - 1; i > -1; i--) {
+            vertices[array.size() - 1 - i] = array.get(i).getKey();
         }
-    }
 
-    private static void getDepth(String node, Map<String, ArrayList<String>> graph, Set<String> visited, Map<String , Integer> depthMap){
-        visited.add(node);
+        visited = new ArrayList<>();
 
-        if (graph.get(node)!=null){
-            for (String nextNode: graph.get(node)
-            ) {
-                if (!visited.contains(nextNode)){
-                    depth++;
-                    getDepth(nextNode, graph, visited, depthMap);
+        for (String node : vertices) {
+            if (!visited.contains(node)) {
+                List<String> paths = new ArrayList<>();
+                getPath(node, reversedGraph, visited, paths);
+                paths.sort(Comparator.naturalOrder());
+                for (String path : paths) {
+                    System.out.print(path);
                 }
+                System.out.println();
             }
         }
-        depthMap.put(node, depth++);
     }
-
-    private static void getPath(String node, Map<String, ArrayList<String>> graph, Set<String> visited, List<String> path){
+    private static void getPath(String node, Map<String, ArrayList<String>> graph, List<String> visited, List<String> path){
         visited.add(node);
         path.add(node);
         if (graph.get(node) != null)
@@ -67,42 +55,57 @@ public class GraphC {
                 }
             }
     }
+    public static void depthSearch(Map<String, ArrayList<String>> graph, List<String> visited, String vertex, Map<String, Integer> depthMap) {
+        visited.add(vertex);
+        if (graph.get(vertex) != null)
+            for (String neighbour : graph.get(vertex)) {
+                if (!visited.contains(neighbour)) {
+                    depth++;
+                    depthSearch(graph, visited, neighbour, depthMap);
+                }
+            }
+        depthMap.put(vertex, depth++);
+    }
+
+    public static Map<String, ArrayList<String>> makeGraph(String[] edges) {
+        Map<String, ArrayList<String>> graph = new HashMap<>();
+        for (int i = 0; i < edges.length; i++) {
+            String[] vertices = edges[i].split("->");
+            if (!graph.containsKey(vertices[0])) {
+                graph.put(vertices[0], new ArrayList<>());
+            }
+        }
+        for (int i = 0; i < edges.length; i++) {
+            String[] vert = edges[i].split("->");
+            graph.get(vert[0]).add(vert[1]);
+        }
+        return graph;
+    }
+
+    public static Map<String, ArrayList<String>> makeReversedGraph(String[] edges) {
+        Map<String, ArrayList<String>> reversedGraph = new HashMap<>();
+        for (int i = 0; i < edges.length; i++) {
+            String[] vertices = edges[i].split("->");
+            if (!reversedGraph.containsKey(vertices[1])) {
+                reversedGraph.put(vertices[1], new ArrayList<>());
+            }
+        }
+        for (int i = 0; i < edges.length; i++) {
+            String[] vert = edges[i].split("->");
+            reversedGraph.get(vert[1]).add(vert[0]);
+        }
+        return reversedGraph;
+    }
 
     public static void main(String[] args) {
-        Map<String, ArrayList<String>> graph = new HashMap<>();
-        Map<String, ArrayList<String>> reversedGraph = new HashMap<>();
-        getGraph(graph, reversedGraph);
-
-        Set<String> visited = new HashSet<>();
-        Map<String, Integer> depthMap = new HashMap<>();
-
-        for (String node : graph.keySet()
-        ) {
-            if (!visited.contains(node)){
-                getDepth(node, graph, visited, depthMap);
-            }
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String input = scanner.nextLine();
+            String[] edges = input.split(", ");
+            Map<String, ArrayList<String>> graph = makeGraph(edges);
+            Map<String, ArrayList<String>> reversedGraph = makeReversedGraph(edges);
+            getStrongComponents(graph, reversedGraph);
         }
-
-        List<Map.Entry<String, Integer>> array = new ArrayList<>(depthMap.entrySet());
-        array.sort(new mapEntryComparator());
-        String[] vertices = new String[array.size()];
-        for (int i = array.size() - 1; i > -1; i--) {
-            vertices[array.size() - 1 - i] = array.get(i).getKey();
-        }
-        visited=new HashSet<>();
-
-        for (String node : vertices) {
-            if (!visited.contains(node)) {
-                List<String> paths = new ArrayList<>();
-                getPath(node, reversedGraph, visited, paths);
-
-                paths.sort(Comparator.naturalOrder());
-
-                for (String path : paths) {
-                    System.out.print(path);
-                }
-                System.out.println();
-            }
-        }
+        scanner.close();
     }
 }

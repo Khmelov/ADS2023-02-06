@@ -1,58 +1,95 @@
 package by.it.group251004.skokov.lesson11;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
+
 public class MyLinkedHashSet<E> implements Set<E> {
+    private static class Node<E> {
+        E value;
+        Node<E> next, previous;
 
-    private int capacity = 5;
-    private int size = 0;
-    private MyLinkedList<E>[] buckets = new MyLinkedList[5];
-
-    private E[] strarr = (E[]) new Object[5];
-    private int arrlen = 0;
-    MyLinkedHashSet(){
-        for (int i = 0; i < capacity; i++){
-            buckets[i] = new MyLinkedList<E>();
+        Node(E value) {
+            this.value = value;
+            this.next = null;
+            this.previous = null;
         }
     }
 
+    private class List<E> {
+        Node<E> head, tail;
 
-    /*
+        boolean contains(Object o) {
+            Node<E> currNode = head;
+            while (currNode != null) {
+                if (currNode.value.equals(o)) return true;
+                currNode = currNode.next;
+            }
+            return false;
+        }
 
-    removeAll(Collection)
-    retainAll(Collection)
-    */
+        boolean add(E elem) {
+            if (contains(elem)) return false;
+            Node<E> newElem = new Node<E>(elem);
+            if (head == null) head = newElem;
+            else {
+                newElem.previous = tail;
+                tail.next = newElem;
+            }
+            tail = newElem;
+            return true;
+        }
 
+        boolean remove(Object o) {
+            if (!contains(o)) return false;
+            else {
+                if (head.value.equals(o) && tail.value.equals(o)) head = tail = null;
+                else if (tail.value.equals(o)) {
+                    tail = tail.previous;
+                } else if (head.value.equals(o)) {
+                    head = head.next;
+                } else {
+                    Node<E> currNode = head;
+                    while (!currNode.value.equals(o)) currNode = currNode.next;
+                    Node<E> cPrev = currNode.previous, cNext = currNode.next;
+                    cPrev.next = cNext;
+                    cPrev.previous = cPrev;
 
+                }
+                return true;
+            }
+        }
 
+        boolean isEmpty() {
+            return head == null;
+        }
+    }
+
+    private int size = 0, capacity = 0;
+    private List<E>[] container = new List[capacity];
+    private E[] list_to_str = (E[]) new Object[]{};
 
     @Override
     public int size() {
         return size;
     }
 
-    public String toString(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-        for (int i = 0; i < arrlen - 1; i++){
-            sb.append(strarr[i]+", ");
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder("[");
+        String delimiter = "";
+        for (int i = 0; i < size; i++) {
+            builder.append(delimiter).append(list_to_str[i]);
+            delimiter = ", ";
         }
-        if (arrlen > 0){
-            sb.append(strarr[size-1]);
-        }
-        sb.append("]");
-        return sb.toString();
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override
     public boolean isEmpty() {
         return size == 0;
-    }
-
-    @Override
-    public boolean contains(Object o) {
-        return buckets[o.hashCode() % capacity].contains(o);
     }
 
     @Override
@@ -71,106 +108,93 @@ public class MyLinkedHashSet<E> implements Set<E> {
     }
 
     @Override
-    public boolean add(E e) {
-        if (contains(e)){
-            return false;
-        }
-        if (size == capacity){
-            int newcapacity = capacity * 2;
-            MyLinkedList<E>[] newarr = new MyLinkedList[newcapacity];
-            for (int i = 0; i < newcapacity; i++){
-                newarr[i] = new MyLinkedList<E>();
+    public boolean contains(Object o) {
+        return size != 0 && container[o.hashCode() % capacity].contains(o);
+    }
+
+    @Override
+    public boolean add(E elem) {
+        if (contains(elem)) return false;
+        int new_cap = capacity;
+        if (size == 0) new_cap = 16;
+        else if ((float) size / capacity == 0.75f) new_cap = capacity * 3;
+        List<E>[] temp = new List[new_cap];
+        for (int i = 0; i < new_cap; i++)
+            temp[i] = new List<>();
+        for (int i = 0; i < capacity; i++) {
+            while (!container[i].isEmpty()) {
+                E tempVal = container[i].head.value;
+                temp[tempVal.hashCode() % new_cap].add(tempVal);
+                container[i].remove(container[i].head.value);
             }
-            for (int i = 0; i < capacity; i++){
-                while (!buckets[i].isEmpty()){
-                    E temp = buckets[i].remove();
-                    newarr[temp.hashCode() % newcapacity].add(temp);
-                }
-            }
-            buckets = newarr;
-            capacity = newcapacity;
         }
-        buckets[e.hashCode() % capacity].add(e);
-        if (arrlen == strarr.length){
-            E[] newarr = (E[]) new Object[arrlen*3/2+1];
-            System.arraycopy(strarr, 0, newarr, 0, arrlen);
-            strarr = newarr;
-        }
-        strarr[arrlen++] = e;
-        size++;
+        List<E>[] tCont = container;
+        container = temp;
+        tCont = null;
+
+        capacity = new_cap;
+        container[elem.hashCode() % capacity].add(elem);
+        list_to_str = Arrays.copyOf(list_to_str, capacity);
+
+        list_to_str[size++] = elem;
         return true;
     }
 
     @Override
     public boolean remove(Object o) {
-        boolean result = buckets[o.hashCode() % capacity].remove(o);
-        if (result){
+        if (!contains(o)) return false;
+        else {
+            container[o.hashCode() % capacity].remove((E) o);
+            int i = 0;
+            while (i < size && !list_to_str[i].equals(o)) i++;
+            System.arraycopy(list_to_str, i + 1, list_to_str, i, size - i - 1);
             size--;
-            for (int i = 0; i < arrlen; i++){
-                if (strarr[i].equals(o)){
-                    System.arraycopy(strarr, i+1, strarr, i, arrlen-i-1);
-                    arrlen--;
-                    break;
-                }
-            }
+            return true;
         }
-        return result;
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        for (Object ci: c){
-            if (!contains(ci)){
-                return false;
-            }
-        }
+        if (size == 0) return false;
+        for (Object elem : c)
+            if (!contains(elem)) return false;
         return true;
     }
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        for (E ci: c){
-            add(ci);
-        }
-        return c.size() != 0;
+        int prevSize = size;
+        for (Object elem : c)
+            add((E) elem);
+        return prevSize != size;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        boolean result = false;
-        for (int i = 0; i < capacity; i++){
-            size -= buckets[i].retainAll(c);
-        }
-        int i = 0;
-        while (i < arrlen){
-            if (!c.contains(strarr[i])){
-                System.arraycopy(strarr, i+1, strarr, i, arrlen-i-1);
-                arrlen--;
-                result = true;
+        if (size == 0) return false;
+        boolean retained = false;
+        for (int i = 0; i < size; i++)
+            if (!c.contains(list_to_str[i])) {
+                remove(list_to_str[i--]);
+                retained = true;
             }
-            else{
-                i++;
-            }
-        }
-        return result;
+        return retained;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        boolean result = false;
-        for (Object ci: c){
-            remove(ci);
-            result = true;
-        }
-        return result;
+        if (size == 0) return false;
+        int prevSize = size;
+        for (Object elem : c)
+            if (contains(elem)) remove(elem);
+        return size != prevSize;
     }
 
     @Override
     public void clear() {
         for (int i = 0; i < capacity; i++) {
-            buckets[i].clear();
+            while (!container[i].isEmpty()) container[i].remove(container[i].head.value);
         }
         size = 0;
-        arrlen = 0;
     }
 }

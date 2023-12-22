@@ -2,29 +2,25 @@ package by.it.group251004.skokov.lesson12;
 
 import java.util.*;
 
-class RBNode{
-    public int Key;
-    public boolean Exist;
-    public String Value;
-    public RBNode Prev;
-    public RBNode Left;
-    public RBNode Right;
-    //Color - black-false,red-true
-    public boolean Color;
-    public RBNode(int K, String Val, RBNode P,RBNode roots) {
-        Key = K;
-        Value = Val;
-        Prev = P;
-        Left = roots;
-        Right = roots;
-        Color=(P!=null);
-        Exist=true;
+public class MyRbMap implements SortedMap<Integer, String> {
+    private class Node {
+        Integer key;
+        String value;
+        boolean color;
+        Node left, right, parent;
+
+        Node(Integer k) {
+            key = k;
+            value = null;
+            color = false;
+            left = right = parent = null;
+        }
     }
-}
-public class MyRbMap<Integer, String> implements SortedMap<Integer, String>{
-    public static final RBNode EmptyNode=new RBNode(0,null,null,null);
-    private RBNode head=EmptyNode;
-    private int size=0;
+
+
+    Node root = null;
+    int size = 0;
+
     @Override
     public Comparator<? super Integer> comparator() {
         return null;
@@ -35,68 +31,67 @@ public class MyRbMap<Integer, String> implements SortedMap<Integer, String>{
         return null;
     }
 
+    private void inOrder(Node node, StringBuilder s) {
+        if (node == null) return;
+        inOrder(node.left, s);
+        s.append(node.key).append("=").append(node.value).append(", ");
+        inOrder(node.right, s);
+    }
+
+    private void inOrderHeadMap(Node p, SortedMap<Integer, String> res, Integer toKey) {
+        if (p == null) return;
+        inOrderHeadMap(p.left, res, toKey);
+        if (p.key < toKey)
+            res.put(p.key, p.value);
+        inOrderHeadMap(p.right, res, toKey);
+    }
+
     @Override
     public SortedMap<Integer, String> headMap(Integer toKey) {
-        MyRbMap<Integer, String> Answer = new MyRbMap<Integer, String>();
-        int Key=(int)toKey;
-        RBNode pos=GetLeft(head);
-        RBNode end=GetRight(head);
-        boolean FromRight=false;
-        while (pos!=end) {
-            if (!FromRight && pos.Exist && Key>pos.Key) {
-                java.lang.Integer Key1=(java.lang.Integer)pos.Key;
-                Answer.put((Integer)Key1,(String)pos.Value);}
-            if (pos.Right.Value!=null  && !FromRight) {
-                pos=pos.Right;
-                pos=GetLeft(pos);
-            } else {FromRight=(pos.Prev.Right.equals(pos));pos=pos.Prev;}
-        }
-        if (pos!=null && pos.Value!=null && pos.Exist  && pos.Exist && Key>pos.Key) {
-            java.lang.Integer Key1=(java.lang.Integer)pos.Key;
-            Answer.put((Integer)Key1,(String)pos.Value);}
-        return Answer;
+        MyRbMap ans = new MyRbMap();
+        inOrderHeadMap(root, ans, toKey);
+        return ans;
+    }
+
+    private void inOrderTailMap(Node p, SortedMap<Integer, String> res, Integer fromKey) {
+        if (p == null) return;
+        inOrderTailMap(p.left, res, fromKey);
+        if (p.key >= fromKey)
+            res.put(p.key, p.value);
+        inOrderTailMap(p.right, res, fromKey);
     }
 
     @Override
     public SortedMap<Integer, String> tailMap(Integer fromKey) {
-        MyRbMap<Integer, String> Answer = new MyRbMap<Integer, String>();
-        int Key=(int)fromKey;
-        RBNode pos=GetLeft(head);
-        RBNode end=GetRight(head);
-        boolean FromRight=false;
-        while (pos!=end) {
-            if (!FromRight && pos.Exist && Key<=pos.Key) {
-                java.lang.Integer Key1=(java.lang.Integer)pos.Key;
-                Answer.put((Integer)Key1,(String)pos.Value);}
-            if (pos.Right.Value!=null  && !FromRight) {
-                pos=pos.Right;
-                pos=GetLeft(pos);
-            } else {FromRight=(pos.Prev.Right.equals(pos));pos=pos.Prev;}
-        }
-        if (pos!=null && pos.Value!=null && pos.Exist  && pos.Exist && Key<=pos.Key) {
-            java.lang.Integer Key1=(java.lang.Integer)pos.Key;
-            Answer.put((Integer)Key1,(String)pos.Value);}
-        return Answer;
+        MyRbMap ans = new MyRbMap();
+        inOrderTailMap(root, ans, fromKey);
+        return ans;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("{");
+        String res = "{";
+        inOrder(root, sb);
+        if (sb.length() > 2)
+            res = sb.toString().substring(0, sb.length() - 2);
+        return res + "}";
     }
 
     @Override
     public Integer firstKey() {
-        RBNode ans=head;
-        RBNode left=head;
-        if (left.Value==null) return null;
-        while (left.Left.Value!=null) {left=left.Left;ans=(left.Key<ans.Key && left.Exist? left: ans);}
-        java.lang.Integer answer=(java.lang.Integer)ans.Key;
-        return ((Integer)answer);
+        Node p = root;
+        while (p != null && p.left != null)
+            p = p.left;
+        return p != null ? p.key : null;
     }
 
     @Override
     public Integer lastKey() {
-        RBNode ans=head;
-        RBNode right=head;
-        if (right.Value==null) return null;
-        while (right.Right.Value!=null) {right=right.Right;ans=(right.Key>ans.Key && right.Exist? right: ans);}
-        java.lang.Integer answer=(java.lang.Integer)ans.Key;
-        return ((Integer)answer);
+        Node p = root;
+        while (p != null && p.right != null)
+            p = p.right;
+        return p != null ? p.key : null;
     }
 
     @Override
@@ -104,212 +99,293 @@ public class MyRbMap<Integer, String> implements SortedMap<Integer, String>{
         return size;
     }
 
+    private boolean getColor(Node p) {
+        return p == null ? false : p.color;
+    }
+
     @Override
     public boolean isEmpty() {
-        return (size==0);
+        return root == null;
     }
-    public RBNode GetLeft(RBNode pos) {
-        RBNode left=pos;
-        if (left.Value==null) return null;
-        while (left.Left.Value!=null) left=left.Left;
-        return left;
-    }
-    public RBNode GetRight(RBNode pos) {
-        RBNode right=pos;
-        if (right.Value==null) return null;
-        while (right.Right.Value!=null) right=right.Right;
-        return right;
-    }
-    @Override
-    public java.lang.String toString() {
-        StringBuilder sb=new StringBuilder("{");
-        java.lang.String delimiter = "";
-        RBNode pos=GetLeft(head);
-        RBNode end=GetRight(head);
-        boolean FromRight=false;
-        while (pos!=end) {
-            if (!FromRight && pos.Exist) {sb.append(delimiter).append(pos.Key).append("=").append(pos.Value);
-                delimiter = ", ";}
-            if (pos.Right.Value!=null  && !FromRight) {
-                pos=pos.Right;
-                pos=GetLeft(pos);
-            } else {FromRight=(pos.Prev.Right.equals(pos));pos=pos.Prev;}
+
+    private Node FindKey(Object key) {
+        Node p = root;
+        while (p != null && !p.key.equals(key)) {
+            if ((Integer) key < p.key)
+                p = p.left;
+            else
+                p = p.right;
         }
-        if (pos!=null && pos.Value!=null && pos.Exist) sb.append(delimiter).append(pos.Key).append("=").append(pos.Value);
-        sb.append("}");
-        return sb.toString();
+        return p;
     }
+
     @Override
     public boolean containsKey(Object key) {
-        RBNode pos=head;
-        int Key=(int)key;
-        while (pos.Value!=null && pos.Key!=Key) {
-            if (Key>pos.Key) pos=pos.Right; else
-                pos=pos.Left;
-        }
-        return (pos.Value!=null && pos.Exist);
+        return FindKey(key) != null;
     }
 
     @Override
     public boolean containsValue(Object value) {
-        RBNode pos=GetLeft(head);
-        RBNode end=GetRight(head);
-        boolean FromRight=false;
-        while (pos!=end) {
-            if (pos.Value.equals(value) && pos.Exist) return true;
-            if (pos.Right.Value!=null  && !FromRight) {
-                pos=pos.Right;
-                pos=GetLeft(pos);
-            } else {FromRight=(pos.Prev.Right.equals(pos));pos=pos.Prev;}
-        }
         return false;
     }
 
     @Override
     public String get(Object key) {
-        RBNode pos=head;
-        int Key=(int)key;
-        while (pos.Value!=null && pos.Key!=Key) {
-            if (Key>pos.Key) pos=pos.Right; else
-                pos=pos.Left;
-        }
-        if (pos.Value!=null && pos.Exist) return (String) pos.Value;
+        Node p = FindKey(key);
+        return p != null ? p.value : null;
+    }
+
+    private void rotateLeft(Node n) {
+        Node a = n, b = a.right, l = a.left, c = b.left, r = b.right;
+
+        a.right = c;
+        if (c != null)
+            c.parent = a;
+        b.parent = a.parent;
+        if (b.parent != null)
+            if (b.parent.left == a)
+                b.parent.left = b;
+            else
+                b.parent.right = b;
+        a.parent = b;
+        b.left = a;
+        if (root == a)
+            root = b;
+    }
+
+    private void rotateRight(Node n) {
+        Node a = n, b = a.left, l = b.left, c = b.right, r = a.right;
+        a.left = c;
+        if (c != null)
+            c.parent = a;
+        b.parent = a.parent;
+        if (b.parent != null)
+            if (b.parent.left == a)
+                b.parent.left = b;
+            else
+                b.parent.right = b;
+        a.parent = b;
+        b.right = a;
+        if (root == a)
+            root = b;
+    }
+
+    private Node getParent(Node n) {
+        return n.parent;
+    }
+
+    private Node getGrandparent(Node n) {
+        if (n.parent != null)
+            return n.parent.parent;
         return null;
     }
-    private String ReplaceValue(int key,String val){
-        RBNode pos=head;
-        while (pos.Value!=null && pos.Key!=key) {
-            if (key>pos.Key) pos=pos.Right; else
-                pos=pos.Left;
-        }
-        if (pos.Value!=null) {
-            if (!pos.Exist) {
-                pos.Exist=true;
-                pos.Value=(java.lang.String)val;
-                size++;
-                return null;
-            }
-            String answer=(String)pos.Value;
-            pos.Value=(java.lang.String)val;
-            return answer;
+
+    private Node getUncle(Node n) {
+        Node g = getGrandparent(n);
+        if (g != null) {
+            if (n.parent == g.left)
+                return g.right;
+            else
+                return g.left;
         }
         return null;
     }
-    private void LeftRotate(RBNode P){
-        RBNode R=P.Right;
-        if (R.Left!=EmptyNode)R.Left.Prev=P;
-        P.Right=(R!=EmptyNode?R.Left : EmptyNode);
-        if (R!=EmptyNode) R.Left=P;
-        if (P.Prev!=null) {
-            if (P.Prev.Left!=EmptyNode && P.Prev.Left.equals(P)) P.Prev.Left=R; else P.Prev.Right=R;}
-        else head=R;
-        if (R!=EmptyNode) R.Prev=P.Prev;
-        P.Prev=R;
-    }
 
-    private void RightRotate(RBNode P){
-        RBNode L=P.Left;
-        if (L.Right!=EmptyNode) L.Right.Prev=P;
-        P.Left=(L!=EmptyNode?L.Right : EmptyNode);
-        if (L!=EmptyNode) L.Right=P;
-        if (P.Prev!=null) {
-            if (P.Prev.Left!=EmptyNode && P.Prev.Left.equals(P)) P.Prev.Left=L; else P.Prev.Right=L;}
-        else head=L;
-        if (L!=EmptyNode) L.Prev=P.Prev;
-        P.Prev=L;
-    }
-    private void fixCase1(RBNode pos){
-        if (pos.equals(head)) {pos.Color=false;return;}
-        else fixCase2(pos);
-    }
-    private void fixCase2(RBNode pos){
-        if (!pos.Prev.Color) return;
-        else fixCase3(pos);
-    }
-    private void fixCase3(RBNode pos){
-        RBNode g=Grandparent(pos);
-        RBNode u=Uncle(pos);
-        if (pos.Prev.Color && u.Value!=null && u.Color) {
-            pos.Prev.Color=false;
-            u.Color=false;
-            g.Color=true;
-            fixCase1(g);
-        } else fixCase4(pos);
-    }
-    private void fixCase4(RBNode pos){
-        RBNode g=Grandparent(pos);
-        RBNode u=Uncle(pos);
-            if (pos==pos.Prev.Right && pos.Prev==g.Left) {
-                LeftRotate(pos.Prev);
-                pos.Color=false;
-                g.Color=true;
-                pos=pos.Left;
-
-            } else if (pos==pos.Prev.Left && pos.Prev==g.Right) {
-                RightRotate(pos.Prev);
-                pos.Color=false;
-                g.Color=true;
-                pos=pos.Right;
+    private void reorient(Node t) {
+        if (root == t) {
+            t.color = false;
+            return;
+        }
+        while (getColor(t.parent) == true) {
+            Node p = getParent(t), g = getGrandparent(t), u = getUncle(t);
+            if (getColor(p) == true && getColor(u) == true) {
+                p.color = false;
+                u.color = false;
+                g.color = true;
+                t = g;
+            } else {
+                if (p != null && p.right == t) {
+                    rotateLeft(p);
+                    Node temp = t;
+                    t = p;
+                    p = temp;
+                }
+                if (g != null && g.left == p)
+                    rotateRight(g);
+                else if (g != null && g.right == p)
+                    rotateLeft(g);
+                if (p != null)
+                    p.color = false;
+                if (g != null)
+                    g.color = true;
+                if (u != null)
+                    u.color = false;
+                t = root;
             }
-            fixCase5(pos);
-
+        }
+        root.color = false;
     }
-    private void fixCase5(RBNode pos){
-        RBNode g=Grandparent(pos);
-        pos.Prev.Color=false;
-        g.Color=true;
-        if (pos==pos.Prev.Right && pos.Prev==g.Right) {
-            LeftRotate(g);
-            fixCase1(g);
-        } else {RightRotate(g);fixCase1(g);}
 
+    private void insertKey(Integer key) {
+        Node t = new Node(key);
+        t.color = true;
+        if (isEmpty())
+            root = t;
+        else {
+            Node p = root;
+            Node q = null;
+            while (p != null) {
+                q = p;
+                if (p.key < t.key)
+                    p = p.right;
+                else
+                    p = p.left;
+            }
+            t.parent = q;
+            if (q.key < t.key)
+                q.right = t;
+            else
+                q.left = t;
+        }
+        reorient(t);
     }
+
     @Override
     public String put(Integer key, String value) {
-        int Key=(int)key;
-        int oldsize=size;
-        String Value=ReplaceValue(Key,value);
-        if (size!=oldsize) return null;
-        if (Value!=null) return Value;
-
-        RBNode Prev=null;
-        RBNode pos=head;
-        while (pos.Value!=null) {
-            Prev=pos;
-            if (Key>pos.Key) pos=pos.Right;
-            else pos=pos.Left;
+        String prev = get(key);
+        if (!containsKey(key)) {
+            insertKey(key);
+            size++;
         }
-        pos=new RBNode(Key,(java.lang.String)value,Prev,EmptyNode);
-        if (head.Value==null) head=pos; else
-        {if (Key>Prev.Key) Prev.Right=pos;
-        else Prev.Left=pos;}
-        fixCase1(pos);
-        size++;
+        FindKey(key).value = value;
+        return prev;
+    }
+
+    private void deleteLeafNode(Node del) {
+        if (del == root) {
+            root = null;
+            del = null;
+        } else {
+            if (del.parent.left == del)
+                del.parent.left = null;
+            else
+                del.parent.right = null;
+            del = null;
+        }
+    }
+
+    private Node findFirstGreater(Node p) {
+        p = p.right;
+        while (p.left != null)
+            p = p.left;
+        return p;
+    }
+
+    private Node getBrother(Node t) {
+        Node p = getParent(t);
+        if (p != null)
+            return p.right == t ? p.left : p.right;
         return null;
     }
-    private RBNode Grandparent(RBNode pos){
-        if ((pos!=null) && (pos.Prev!=null))
-            return pos.Prev.Prev;
-        else
-            return null;
+
+    private Node getLeftNephew(Node t) {
+        Node b = getBrother(t);
+        return b != null ? b.left : null;
     }
 
-    private RBNode Uncle(RBNode pos){
-        RBNode grandp=Grandparent(pos);
-        if (grandp==null) return null;
-        if (pos.Prev.equals(grandp.Left)) return grandp.Right;
-        else return grandp.Left;
+    private Node getRightNephew(Node t) {
+        Node b = getBrother(t);
+        return b != null ? b.right : null;
     }
+
+    private void fixDeleting(Node x) {
+        Node p = getParent(x), b = getBrother(x), ln = getLeftNephew(x), rn = getRightNephew(x);
+        if (b != null) {
+            if (!getColor(x) && !getColor(p) && getColor(b) && !getColor(ln) && !getColor(rn)) {
+                rotateLeft(p);
+                p = getParent(x);
+                b = getBrother(x);
+                ln = getLeftNephew(x);
+                rn = getRightNephew(x);
+                if (!getColor(x) && !getColor(b) && getColor(ln) && !getColor(rn)) {
+                    rotateRight(b);
+                    b.color = true;
+                    ln.color = false;
+                    p = getParent(x);
+                    b = getBrother(x);
+                    ln = getLeftNephew(x);
+                    rn = getRightNephew(x);
+                }
+                if (!getColor(x) && !getColor(b) && getColor(rn)) {
+                    rotateLeft(p);
+                    p.color = false;
+                    rn.color = false;
+                    p = getParent(x);
+                    b = getBrother(x);
+                    ln = getLeftNephew(x);
+                    rn = getRightNephew(x);
+                }
+            }
+            if (b != null && !getColor(x) && getColor(p) && !getColor(b) && !getColor(ln) && !getColor(rn)) {
+                p.color = false;
+                b.color = true;
+                fixDeleting(p);
+            }
+        }
+    }
+
     @Override
     public String remove(Object key) {
-        RBNode pos=head;
-        int Key=(int)key;
-        while (pos.Value!=null && pos.Key!=Key) {
-            if (Key>pos.Key) pos=pos.Right; else
-                pos=pos.Left;
+        return removeNode(FindKey(key));
+    }
+
+    private String removeNode(Node del) {
+        if (del == null)
+            return null;
+        String res = del.value;
+        if (del.left == null && del.right == null) {
+            deleteLeafNode(del);
+            --size;
+        } else if (del.left == null || del.right == null) {
+            --size;
+            if (del.right != null) {
+                del.right.parent = del.parent;
+                if (del.parent != null) {
+                    if (del.parent.left == del)
+                        del.parent.left = del.right;
+                    else
+                        del.parent.right = del.right;
+                } else
+                    root = del.right;
+                if (getColor(del.parent) && del.right.color)
+                    del.right.color = false;
+                del = null;
+            } else {
+                del.left.parent = del.parent;
+                if (del.parent != null) {
+                    if (del.parent.left == del)
+                        del.parent.left = del.left;
+                    else
+                        del.parent.right = del.left;
+                } else
+                    root = del.left;
+                if (getColor(del.parent) && del.left.color)
+                    del.left.color = false;
+                del = null;
+            }
+        } else {
+            Node x = findFirstGreater(del);
+            String tempStr = x.value;
+            Integer tempKey = x.key;
+            x.value = del.value;
+            x.key = del.key;
+            del.value = tempStr;
+            del.key = tempKey;
+            if (!x.color)
+                fixDeleting(x);
+            removeNode(x);
         }
-        if (pos.Value!=null && pos.Exist) {size--;pos.Exist=false;return (String) pos.Value;}
-        return null;
+        return res;
     }
 
     @Override
@@ -319,8 +395,8 @@ public class MyRbMap<Integer, String> implements SortedMap<Integer, String>{
 
     @Override
     public void clear() {
-        size=0;
-        head=EmptyNode;
+        while (!isEmpty())
+            remove(root.key);
     }
 
     @Override

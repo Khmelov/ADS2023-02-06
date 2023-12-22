@@ -3,62 +3,45 @@ package by.it.group251004.skokov.lesson12;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-class Node{
-    public int Key;
-    public int Height;
-    public boolean Exist;
-    public String Value;
-    public Node Prev;
-    public Node Left;
-    public Node Right;
-    public Node(int K, String Val, Node P) {
-        Key = K;
-        Value = Val;
-        Prev = P;
-        Height = 0;
-        Left = null;
-        Right = null;
-        Exist=true;
-    }
-}
-public class MyAvlMap<Integer,String> implements Map<Integer, String>{
-    private int size=0;
-    private Node head=null;
 
-    public int NHeight(Node pos){
-        return (pos!=null ? pos.Height : -1);
-    }
-    public Node GetLeft(Node pos) {
-        Node left=pos;
-        if (left==null) return null;
-        while (left.Left!=null) left=left.Left;
-        return left;
-    }
-    public Node GetRight(Node pos) {
-        Node right=pos;
-        if (right==null) return null;
-        while (right.Right!=null) right=right.Right;
-        return right;
-    }
-    @Override
-    public java.lang.String toString() {
-        StringBuilder sb=new StringBuilder("{");
-        java.lang.String delimiter = "";
-        Node pos=GetLeft(head);
-        Node end=GetRight(head);
-        boolean FromRight=false;
-        while (pos!=end) {
-            if (!FromRight && pos.Exist) {sb.append(delimiter).append(pos.Key).append("=").append(pos.Value);
-            delimiter = ", ";}
-            if (pos.Right!=null  && !FromRight) {
-                pos=pos.Right;
-                pos=GetLeft(pos);
-            } else {FromRight=(pos.Prev.Right!=null) && (pos.Prev.Right.equals(pos));pos=pos.Prev;}
+public class MyAvlMap implements Map<Integer, String> {
+    private class Node {
+        Integer key;
+        int height;
+        String value;
+        Node left, right;
+
+        Node(Integer _key) {
+            key = _key;
+            left = null;
+            right = null;
+            height = 1;
+            value = null;
         }
-        if (pos!=null && pos.Exist) sb.append(delimiter).append(pos.Key).append("=").append(pos.Value);
-        sb.append("}");
-        return sb.toString();
     }
+
+
+    private Node root = null;
+    private int size = 0;
+
+    private void inOrder(Node node, StringBuilder s) {
+        if (node == null) return;
+        inOrder(node.left, s);
+        s.append(node.key).append("=").append(node.value).append(", ");
+        inOrder(node.right, s);
+    }
+
+    private Node findNode(Object key) {
+        Node currNode = root;
+        while (currNode != null && !currNode.key.equals(key)) {
+            if ((Integer) key < currNode.key)
+                currNode = currNode.left;
+            else
+                currNode = currNode.right;
+        }
+        return currNode;
+    }
+
     @Override
     public int size() {
         return size;
@@ -66,18 +49,29 @@ public class MyAvlMap<Integer,String> implements Map<Integer, String>{
 
     @Override
     public boolean isEmpty() {
-        return (size==0);
+        return root == null;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("{");
+        String res = "{";
+        inOrder(root, sb);
+        if (sb.length() > 2)
+            res = sb.toString().substring(0, sb.length() - 2);
+        return res + "}";
     }
 
     @Override
     public boolean containsKey(Object key) {
-        Node pos=head;
-        int Key=(int)key;
-        while (pos!=null && pos.Key!=Key) {
-            if (Key>pos.Key) pos=pos.Right; else
-                pos=pos.Left;
+        Node currNode = root;
+        while (currNode != null && !currNode.key.equals(key)) {
+            if ((Integer) key < currNode.key)
+                currNode = currNode.left;
+            else
+                currNode = currNode.right;
         }
-        return (pos!=null && pos.Exist);
+        return currNode != null;
     }
 
     @Override
@@ -87,133 +81,40 @@ public class MyAvlMap<Integer,String> implements Map<Integer, String>{
 
     @Override
     public String get(Object key) {
-        Node pos=head;
-        int Key=(int)key;
-        while (pos!=null && pos.Key!=Key) {
-            if ((int)key>pos.Key) pos=pos.Right; else
-                pos=pos.Left;
+        Node currNode = root;
+        while (currNode != null && !currNode.key.equals(key)) {
+            if ((Integer) key < currNode.key)
+                currNode = currNode.left;
+            else
+                currNode = currNode.right;
         }
-        if (pos!=null && pos.Exist) return (String) pos.Value;
-        return null;
+        return currNode != null ? currNode.value : null;
     }
 
-    private String ReplaceValue(Integer key, String value){
-        Node pos=head;
-        int Key=(int)key;
-        while (pos!=null && pos.Key!=Key) {
-            if (Key>pos.Key) pos=pos.Right; else
-                pos=pos.Left;
-        }
-        if (pos!=null) {
-            if (!pos.Exist) {
-                pos.Exist=true;
-                String answer=(String) pos.Value;
-                pos.Value=(java.lang.String)value;
-                size++;
-                return null;
-            }
-            String answer=(String) pos.Value;
-            pos.Value=(java.lang.String)value;
-            return answer;
-        }
-        return null;
-    }
-    private void RebalanceTree(Node start){
-        //Rotate side 0 - left, 1 - right
-        Node pos=start.Prev;
-        int rotateStart=0;
-        int rotatePos=0;
-        if (pos!=null){
-        rotateStart=(pos.Left!=null && pos.Left.equals(start)? 0 : 1);
-        rotatePos=(pos.Left!=null && pos.Left.equals(start)? 0 : 1);}
-        while (pos!=null) {
-            int Left=NHeight(pos.Left)+1;
-            int Right=NHeight(pos.Right)+1;
-            if (Left-Right>1 || Left-Right<-1) {
-                if (rotateStart==0 && rotatePos==0) pos=RightRotate(pos);
-                if (rotateStart==1 && rotatePos==1) pos=LeftRotate(pos);
-                if (rotateStart==1 && rotatePos==0) pos=LeftRightRotate(pos);
-                if (rotateStart==0 && rotatePos==1) pos=RightLeftRotate(pos);
-            }
-            pos.Height=Math.max(NHeight(pos.Left),NHeight(pos.Right))+1;
-            rotateStart=rotatePos;
-            if (pos.Prev!=null) rotatePos=(pos.Prev.Left!=null && pos.Prev.Left.equals(pos)? 0 : 1);
-            pos=pos.Prev;
-        }
-        return;
-    }
-    private Node LeftRightRotate(Node P){
-        P.Left=LeftRotate(P.Left);
-        P=RightRotate(P);
-        return P;
-    }
-    private Node RightLeftRotate(Node P){
-        P.Right=RightRotate(P.Right);
-        P=LeftRotate(P);
-        return P;
-    }
-    private Node LeftRotate(Node P){
-        Node R=P.Right;
-        if (R.Left!=null)R.Left.Prev=P;
-        P.Right=(R!=null?R.Left : null);
-        if (R!=null) R.Left=P;
-        P.Height=Math.max(NHeight(P.Left),NHeight(P.Right))+1;
-        if (R!=null) R.Height=Math.max(NHeight(R.Right),P.Height)+1;
-        if (P.Prev!=null) {
-            if (P.Prev.Left!=null && P.Prev.Left.equals(P)) P.Prev.Left=R; else P.Prev.Right=R;}
-        else head=R;
-        if (R!=null) R.Prev=P.Prev;
-        P.Prev=R;
-        return R;
-    }
-
-    private Node RightRotate(Node P){
-        Node L=P.Left;
-        if (L.Right!=null)L.Right.Prev=P;
-        P.Left=(L!=null?L.Right : null);
-        if (L!=null) L.Right=P;
-        P.Height=Math.max(NHeight(P.Left),NHeight(P.Right))+1;
-        if (L!=null) L.Height=Math.max(NHeight(L.Left),P.Height)+1;
-        if (P.Prev!=null) {
-            if (P.Prev.Left!=null && P.Prev.Left.equals(P)) P.Prev.Left=L; else P.Prev.Right=L;}
-        else head=L;
-        if (L!=null) L.Prev=P.Prev;
-        P.Prev=L;
-        return L;
-    }
     @Override
     public String put(Integer key, String value) {
-        int Key=(int)key;
-        int oldSize=size;
-        String Value=ReplaceValue(key,value);
-        if (oldSize!=size) return null;
-        if (Value!=null) return Value;
-        size++;
-        Node Prev=null;
-        Node pos=head;
-        while (pos!=null) {
-            Prev=pos;
-            if (Key>pos.Key) pos=pos.Right;
-                else pos=pos.Left;
+        boolean exists = containsKey(key);
+        String prev = exists ? get(key) : null;
+        if (exists)
+            findNode(key).value = value;
+        else {
+            root = insert(root, key);
+            findNode(key).value = value;
+            size++;
         }
-        pos=new Node(Key,(java.lang.String)value,Prev);
-        if (head==null) head=pos; else
-        {if (Key>Prev.Key) Prev.Right=pos;
-            else Prev.Left=pos;}
-        RebalanceTree(pos);
-        return null;
+        return prev;
     }
 
     @Override
     public String remove(Object key) {
-        Node pos=head;
-        int Key=(int)key;
-        while (pos!=null && pos.Key!=Key) {
-            if ((int)key>pos.Key) pos=pos.Right; else
-                pos=pos.Left;
+        boolean exists = containsKey(key);
+        String res = exists ? findNode(key).value : null;
+        if (exists) {
+            root = removeNode(root, (Integer) key);
+            size--;
         }
-        if (pos!=null && pos.Exist) {size--;pos.Exist=false;return (String) pos.Value;}
-        return null;
+
+        return res;
     }
 
     @Override
@@ -223,8 +124,8 @@ public class MyAvlMap<Integer,String> implements Map<Integer, String>{
 
     @Override
     public void clear() {
-        head=null;
-        size=0;
+        while (!isEmpty())
+            remove(root.key);
     }
 
     @Override
@@ -241,4 +142,91 @@ public class MyAvlMap<Integer,String> implements Map<Integer, String>{
     public Set<Entry<Integer, String>> entrySet() {
         return null;
     }
+
+    private int balanceFactor(Node node) {
+        return node == null ? 0 : height(node.right) - height(node.left);
+    }
+
+    private int height(Node node) {
+        return node == null ? 0 : node.height;
+    }
+
+    private void fixHeight(Node node) {
+        int heightLeft = height(node.left);
+        int heightRight = height(node.right);
+        node.height = (heightLeft > heightRight ? heightLeft : heightRight) + 1;
+    }
+
+    private Node rotateRight(Node node) {
+        Node lNode = node.left;
+        node.left = lNode.right;
+        lNode.right = node;
+        fixHeight(node);
+        fixHeight(lNode);
+        return lNode;
+    }
+
+    private Node rotateLeft(Node node) {
+        Node rNode = node.right;
+        node.right = rNode.left;
+        rNode.left = node;
+        fixHeight(node);
+        fixHeight(rNode);
+        return rNode;
+    }
+
+    private Node findMin(Node node) {
+        return node.left != null ? findMin(node.left) : node;
+    }
+
+    private Node removeMin(Node node) {
+        if (node.left == null)
+            return node.right;
+        node.left = removeMin(node.left);
+        return balance(node);
+    }
+
+    private Node removeNode(Node node, int key) {
+        if (node == null) return null;
+        if (key < node.key)
+            node.left = removeNode(node.left, key);
+        else if (key > node.key)
+            node.right = removeNode(node.right, key);
+        else {
+            Node left = node.left;
+            Node right = node.right;
+            node = null;
+            if (right == null) return left;
+            Node min = findMin(right);
+            min.right = removeMin(right);
+            min.left = left;
+            return balance(min);
+        }
+        return balance(node);
+    }
+
+    private Node balance(Node node) {
+        fixHeight(node);
+        if (balanceFactor(node) == 2) {
+            if (balanceFactor(node.right) < 0)
+                node.right = rotateRight(node.right);
+            return rotateLeft(node);
+        }
+        if (balanceFactor(node) == -2) {
+            if (balanceFactor(node.left) > 0)
+                node.left = rotateLeft(node.left);
+            return rotateRight(node);
+        }
+        return node;
+    }
+
+    private Node insert(Node node, int key) {
+        if (node == null) return new Node(key);
+        if (key < node.key)
+            node.left = insert(node.left, key);
+        else
+            node.right = insert(node.right, key);
+        return balance(node);
+    }
+
 }

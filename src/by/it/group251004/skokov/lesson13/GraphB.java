@@ -1,56 +1,63 @@
 package by.it.group251004.skokov.lesson13;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class GraphB {
-    static Map<String, Integer> clr_match;
-    static Map<String, ArrayList<String>> graph_nodes;
 
-    private static boolean dfsB(String v) {
-        boolean fl = false;
-        if (clr_match.get(v) == 1)
-            return true;
-        clr_match.put(v, 1);
-        ArrayList<String> arr = graph_nodes.get(v);
-        if (arr != null)
-            for (String str : arr) {
-                if (clr_match.get(str) != 2)
-                    fl = dfsB(str);
-                if (fl)
-                    break;
+    public static boolean sortGraph(Map<String, ArrayList<String>> graph) {
+        for (ArrayList<String> array : graph.values()) {
+            array.sort(Comparator.reverseOrder());
+        }
+        Map<String, String> colors = new HashMap<>();
+        for (String vert : graph.keySet())
+            colors.put(vert, "white");
+        String predecessor = null;
+        List<String> vertices = new ArrayList<>();
+        for (String vert : graph.keySet())
+            if (!colors.get(vert).equals("grey"))
+                depthSearch(graph, colors, vert, predecessor, vertices);
+        return vertices.size() != 0;
+    }
+
+    public static void depthSearch(Map<String, ArrayList<String>> graph, Map<String, String> colors, String vertex, String predecessor, List<String> vertices) {
+        colors.put(vertex, "grey");
+        if (graph.get(vertex) != null)
+            for (String neighbour : graph.get(vertex)) {
+                if (colors.get(neighbour) != null && colors.get(neighbour).equals("white"))
+                    depthSearch(graph, colors, neighbour, vertex, vertices);
+                else if (colors.get(neighbour) != null && colors.get(neighbour).equals("grey"))
+                    vertices.add(neighbour);
             }
-        clr_match.put(v, 2);
-        return fl;
+        colors.put(vertex, "black");
+    }
+
+    public static Map<String, ArrayList<String>> makeGraph(String[] edges) {
+        Map<String, ArrayList<String>> graph = new HashMap<>();
+        for (int i = 0; i < edges.length; i++) {
+            String[] vertices = edges[i].split(" -> ");
+            if (!graph.containsKey(vertices[0])) {
+                graph.put(vertices[0], new ArrayList<>());
+            }
+        }
+        for (int i = 0; i < edges.length; i++) {
+            String[] vert = edges[i].split(" -> ");
+            graph.get(vert[0]).add(vert[1]);
+        }
+        return graph;
     }
 
     public static void main(String[] args) {
-        clr_match = new HashMap<>();
-        graph_nodes = new HashMap<>();
-        Scanner sc = new Scanner(System.in);
-        boolean fl = false;
-        while (!fl) {
-            String a = sc.next();
-            String st = sc.next();
-            String b = sc.next();
-            if (b.charAt(b.length() - 1) == ',')
-                b = b.substring(0, st.length() - 1);
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String input = scanner.nextLine();
+            String[] edges = input.split(", ");
+            Map<String, ArrayList<String>> graph = makeGraph(edges);
+            boolean hasCycles = sortGraph(graph);
+            if (hasCycles)
+                System.out.println("yes");
             else
-                fl = true;
-            if (!graph_nodes.containsKey(a))
-                graph_nodes.put(a, new ArrayList<>());
-            if (!clr_match.containsKey(a))
-                clr_match.put(a, 0);
-            if (!clr_match.containsKey(b))
-                clr_match.put(b, 0);
-            graph_nodes.get(a).add(b);
+                System.out.println("no");
         }
-        fl = false;
-        for (String v : graph_nodes.keySet())
-            if (clr_match.get(v) == 0)
-                fl = dfsB(v);
-        System.out.println(fl ? "yes" : "no");
+        scanner.close();
     }
 }

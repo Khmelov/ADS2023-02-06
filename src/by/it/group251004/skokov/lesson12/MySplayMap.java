@@ -2,42 +2,224 @@ package by.it.group251004.skokov.lesson12;
 
 import java.util.*;
 
-class SNode{
-    public int Key;
-    public String Value;
-    public SNode Prev;
-    public SNode Left;
-    public SNode Right;
-    public SNode(int K, String Val, SNode P) {
-        Key = K;
-        Value = Val;
-        Prev = P;
-        Left = null;
-        Right = null;
+public class MySplayMap implements NavigableMap<Integer, String> {
+    private class Node {
+        Integer key;
+        String value;
+        Node left, right, parent;
+
+        Node(Integer _key) {
+            key = _key;
+            value = null;
+            left = right = parent = null;
+        }
     }
-}
-public class MySplayMap <Integer, String> implements NavigableMap<Integer, String> {
-    private int size=0;
-    private SNode head=null;
+
+    private Node root = null;
+    private int size = 0;
+
+    private void rotateLeft(Node node) {
+        Node parent = node.parent;
+        Node nl = node.left;
+        if (parent != null) {
+            node.parent = parent.parent;
+            if (parent.parent != null) {
+                if (parent.parent.left == parent)
+                    parent.parent.left = node;
+                else
+                    parent.parent.right = node;
+            }
+            parent.right = nl;
+            if (nl != null) {
+                nl.parent = parent;
+            }
+            node.left = parent;
+            parent.parent = node;
+        }
+    }
+
+    private void rotateRight(Node node) {
+        Node parent = node.parent;
+        Node nr = node.right;
+        if (parent != null) {
+            node.parent = parent.parent;
+            if (parent.parent != null) {
+                if (parent.parent.left == parent)
+                    parent.parent.left = node;
+                else
+                    parent.parent.right = node;
+            }
+            parent.left = nr;
+            if (nr != null) {
+                nr.parent = parent;
+            }
+            node.right = parent;
+            parent.parent = node;
+        }
+
+    }
+
+    private Node splay(Node node) {
+        while (node.parent != null) {
+            if (node.parent.parent == null) {
+                if (node.parent.left == node)
+                    rotateRight(node);
+                else
+                    rotateLeft(node);
+            } else {
+                if (node.parent == node.parent.parent.left) {
+                    if (node == node.parent.left) {
+                        rotateRight(node.parent);
+                        rotateRight(node);
+                    } else {
+                        rotateLeft(node);
+                        rotateRight(node);
+                    }
+                } else {
+                    if (node.parent == node.parent.parent.right)
+                        if (node == node.parent.right) {
+                            rotateLeft(node.parent);
+                            rotateLeft(node);
+                        } else {
+                            rotateRight(node);
+                            rotateLeft(node);
+                        }
+                }
+            }
+        }
+        return node;
+    }
+
+    private Node findNode(Node root, Integer key) {
+        Node currNode = root;
+        Node prevNode = null;
+        while (currNode != null) {
+            prevNode = currNode;
+            if (currNode.key > key)
+                currNode = currNode.left;
+            else if (currNode.key < key)
+                currNode = currNode.right;
+            else if ((currNode.key.equals(key)))
+                break;
+        }
+        if (currNode != null)
+            return splay(currNode);
+        else
+            return splay(prevNode);
+    }
+
+    private Node findKey(Integer key) {
+        Node currNode = root;
+        while (currNode != null && !currNode.key.equals(key)) {
+            if (currNode.key > key)
+                currNode = currNode.left;
+            else
+                currNode = currNode.right;
+        }
+        return currNode;
+    }
+
+    private Node[] split(Integer key) {
+        if (root != null) {
+            root = findNode(root, key);
+            if (root.key == key) {
+                root.left.parent = null;
+                root.right.parent = null;
+                return new Node[]{root.left, root.right};
+            } else if (root.key < key) {
+                Node right = root.right;
+                if (right != null) right.parent = null;
+                root.right = null;
+                return new Node[]{root, right};
+            } else {
+                Node left = root.left;
+                if (left != null) left.parent = null;
+                root.left = null;
+                return new Node[]{left, root};
+            }
+        }
+        return new Node[]{null, null};
+    }
+
+    private Node insert(Integer key) {
+        Node[] parts = split(key);
+        Node right = parts[1];
+        Node left = parts[0];
+        Node newNode = new Node(key);
+        newNode.left = left;
+        newNode.right = right;
+        if (left != null) left.parent = newNode;
+        if (right != null) right.parent = newNode;
+        root = newNode;
+        return newNode;
+    }
+
+    private Node merge(Node left, Node right) {
+        if (right == null)
+            return left;
+        if (left == null)
+            return right;
+        right = findNode(right, left.key);
+        right.left = left;
+        left.parent = right;
+        return right;
+    }
+
+    private Node remove(Node root, Integer key) {
+        root = findNode(root, key);
+        size--;
+        if (root.left != null)
+            root.left.parent = null;
+        if (root.right != null)
+            root.right.parent = null;
+        return merge(root.left, root.right);
+    }
+
+    private void inOrder(Node node, StringBuilder s) {
+        if (node == null) return;
+        inOrder(node.left, s);
+        s.append(node.key).append("=").append(node.value).append(", ");
+        inOrder(node.right, s);
+    }
+
+    private void inOrderHeadMap(Node p, SortedMap<Integer, String> res, Integer toKey) {
+        if (p == null) return;
+        inOrderHeadMap(p.left, res, toKey);
+        if (p.key < toKey)
+            res.put(p.key, p.value);
+        inOrderHeadMap(p.right, res, toKey);
+    }
 
     @Override
-    public java.lang.String toString() {
-        StringBuilder sb=new StringBuilder("{");
-        java.lang.String delimiter = "";
-        SNode pos=GetLeft(head);
-        SNode end=GetRight(head);
-        boolean FromRight=false;
-        while (pos!=end) {
-            if (!FromRight) {sb.append(delimiter).append(pos.Key).append("=").append(pos.Value);
-                delimiter = ", ";}
-            if (pos.Right!=null  && !FromRight) {
-                pos=pos.Right;
-                pos=GetLeft(pos);
-            } else {FromRight=(pos.Prev.Right!=null) && (pos.Prev.Right.equals(pos));pos=pos.Prev;}
-        }
-        if (pos!=null) sb.append(delimiter).append(pos.Key).append("=").append(pos.Value);
-        sb.append("}");
-        return sb.toString();
+    public SortedMap<Integer, String> headMap(Integer toKey) {
+        MyRbMap ans = new MyRbMap();
+        inOrderHeadMap(root, ans, toKey);
+        return ans;
+    }
+
+    private void inOrderTailMap(Node p, SortedMap<Integer, String> res, Integer fromKey) {
+        if (p == null) return;
+        inOrderTailMap(p.left, res, fromKey);
+        if (p.key >= fromKey)
+            res.put(p.key, p.value);
+        inOrderTailMap(p.right, res, fromKey);
+    }
+
+    @Override
+    public SortedMap<Integer, String> tailMap(Integer fromKey) {
+        MyRbMap ans = new MyRbMap();
+        inOrderTailMap(root, ans, fromKey);
+        return ans;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("{");
+        String res = "{";
+        inOrder(root, sb);
+        if (sb.length() > 2)
+            res = sb.toString().substring(0, sb.length() - 2);
+        return res + "}";
     }
 
     @Override
@@ -47,196 +229,176 @@ public class MySplayMap <Integer, String> implements NavigableMap<Integer, Strin
 
     @Override
     public boolean isEmpty() {
-        return (size==0);
+        return root == null;
+    }
+
+    @Override
+    public String put(Integer key, String value) {
+        Node exist = findKey(key);
+        if (exist != null) {
+            String prev = exist.value;
+            exist.value = value;
+            return prev;
+        } else {
+            size++;
+            Node x = insert(key);
+            x.value = value;
+            return null;
+        }
+    }
+
+    @Override
+    public String remove(Object key) {
+        Node exist = findKey((Integer) key);
+        if (exist == null)
+            return null;
+        else {
+            String prev = exist.value;
+            root = remove(root, (Integer) key);
+            return prev;
+        }
+    }
+
+    @Override
+    public String get(Object key) {
+        Node x = findKey((Integer) key);
+        return x != null ? x.value : null;
     }
 
     @Override
     public boolean containsKey(Object key) {
-        SNode pos=head;
-        int Key=(int)key;
-        while (pos!=null && pos.Key!=Key) {
-            if (Key>pos.Key) pos=pos.Right; else
-                pos=pos.Left;
-        }
-        if (pos!=null) splay(pos);
-        return (pos!=null);
+        return findKey((Integer) key) != null;
     }
 
     @Override
-    public boolean containsValue(Object value) {
-        SNode pos=GetLeft(head);
-        SNode end=GetRight(head);
-        boolean FromRight=false;
-        while (pos!=end) {
-            if (pos.Value.equals(value)) {splay(pos); return true;}
-            if (pos.Right!=null  && !FromRight) {
-                pos=pos.Right;
-                pos=GetLeft(pos);
-            } else {FromRight=(pos.Prev.Right!=null && pos.Prev.Right.equals(pos));pos=pos.Prev;}
-        }
-        return false;
+    public Integer firstKey() {
+        Node p = root;
+        while (p != null && p.left != null)
+            p = p.left;
+        return p != null ? p.key : null;
     }
+
     @Override
-    public String get(Object key) {
-        SNode pos=head;
-        int Key=(int)key;
-        while (pos!=null && pos.Key!=Key) {
-            if ((int)key>pos.Key) pos=pos.Right; else
-                pos=pos.Left;
-        }
-        if (pos!=null) {splay(pos);return (String) pos.Value;}
-        return null;
-    }
-    private SNode p(SNode pos){
-        return pos.Prev;
-    }
-    private SNode g(SNode pos){
-        pos=p(pos);
-        if (pos==null) return null;
-        pos=p(pos);
-        return pos;
-    }
-    private void LeftRotate(SNode P){
-        SNode R=P.Right;
-        if (R!=null && R.Left!=null)  R.Left.Prev=P;
-        P.Right=(R!=null?R.Left : null);
-        if (R!=null) R.Left=P;
-        if (P.Prev!=null) {
-            if (P.Prev.Left!=null && P.Prev.Left.equals(P)) P.Prev.Left=R; else P.Prev.Right=R;}
-        if (R!=null) R.Prev=P.Prev;
-        P.Prev=R;
+    public Integer lastKey() {
+        Node p = root;
+        while (p != null && p.right != null)
+            p = p.right;
+        return p != null ? p.key : null;
     }
 
-    private void RightRotate(SNode P){
-        SNode L=P.Left;
-        if (L!=null && L.Right!=null)L.Right.Prev=P;
-        P.Left=(L!=null?L.Right : null);
-        if (L!=null) L.Right=P;
-        if (P.Prev!=null) {
-            if (P.Prev.Left!=null && P.Prev.Left.equals(P)) P.Prev.Left=L; else P.Prev.Right=L;}
-        if (L!=null) L.Prev=P.Prev;
-        P.Prev=L;
+    private Integer travelHigherKey(Node p, Integer key, boolean inclusion) {
+        Integer ans = (p.key > key) || (inclusion && p.key.equals(key)) ? p.key : null;
+        Integer l = p.left != null ? travelHigherKey(p.left, key, inclusion) : null;
+        Integer r = p.right != null ? travelHigherKey(p.right, key, inclusion) : null;
+        if (ans == null)
+            if (l != null)
+                ans = l;
+            else if (r != null)
+                ans = r;
+        if (ans != null & l != null && l < ans)
+            ans = l;
+        if (ans != null && r != null && r < ans)
+            ans = r;
+        return ans;
     }
-    private void splay(SNode pos){
-        while (pos!=null && p(pos)!=null){
-            if (pos==p(pos).Left){
-                if (g(pos)==null) RightRotate(pos.Prev);
-                else if (p(pos)==g(pos).Left) {
-                        //zig-zig left
-                        RightRotate(g(pos));
-                        RightRotate(p(pos));
-                } else {
-                    //zig-zag left
-                    RightRotate(p(pos));
-                    LeftRotate(p(pos));
-                }
-            } else {
-                if (g(pos)==null) LeftRotate(pos.Prev);
-                else if (p(pos)==g(pos).Right) {
-                    //zig-zig right
-                    LeftRotate(g(pos));
-                    LeftRotate(p(pos));
-                } else {
-                    //zig-zag right
-                    LeftRotate(p(pos));
-                    RightRotate(p(pos));
-                }
-            }
-        }
-        head=pos;
-    }
-    public SNode GetLeft(SNode pos) {
-        SNode left=pos;
-        if (left==null) return null;
-        while (left.Left!=null) left=left.Left;
-        return left;
-    }
-    public SNode GetRight(SNode pos) {
-        SNode right=pos;
-        if (right==null) return null;
-        while (right.Right!=null) right=right.Right;
-        return right;
-    }
-    private void split(int key){
-        SNode pos=GetLeft(head);
-        SNode end=GetRight(head);
-        SNode lowestPos=end;
-        boolean FromRight=false;
-        while (pos!=end) {
-            if (!FromRight) {if (pos.Key>=key && lowestPos.Key>pos.Key) lowestPos=pos;}
-            if (pos.Right!=null  && !FromRight) {
-                pos=pos.Right;
-                pos=GetLeft(pos);
-            } else {FromRight=(pos.Prev.Right!=null) && (pos.Prev.Right.equals(pos));pos=pos.Prev;}
-        }
-        if (pos!=null && pos.Key>=key && lowestPos.Key>pos.Key) lowestPos=pos;
-        if (lowestPos!=null && lowestPos.Key>=key) splay(lowestPos);
-    }
+
     @Override
-    public String put(Integer key, String value) {
-        int Key=(int)key;
-        String Value=ReplaceValue(key,value);
-        if (Value!=null) return Value;
-
-        split((int)key);
-        SNode pos = new SNode((int)key,(java.lang.String)value,null);
-        if (head!=null) pos.Left=head.Left;
-        if (head!=null && head.Key>=Key) pos.Right=head; else pos.Left=head;
-        if (pos.Left!=null) pos.Left.Prev=pos;
-        if (pos.Right!=null) {pos.Right.Left=null;pos.Right.Prev=pos;}
-        head=pos;
-        size++;
-
+    public Entry<Integer, String> lowerEntry(Integer key) {
         return null;
     }
 
-    private String ReplaceValue(Integer key, String value){
-        SNode pos=head;
-        int Key=(int)key;
-        while (pos!=null && pos.Key!=Key) {
-            if (Key>pos.Key) pos=pos.Right; else
-                pos=pos.Left;
-        }
-        if (pos!=null) {
-            String answer=(String) pos.Value;
-            pos.Value=(java.lang.String)value;
-            splay(pos);
-            return answer;
-        }
+    private Integer travelLowerKey(Node p, Integer key, boolean inclusion) {
+        Integer ans = (p.key < key) || (inclusion && p.key.equals(key)) ? p.key : null;
+        Integer l = p.left != null ? travelLowerKey(p.left, key, inclusion) : null;
+        Integer r = p.right != null ? travelLowerKey(p.right, key, inclusion) : null;
+        if (ans == null)
+            if (l != null)
+                ans = l;
+            else if (r != null)
+                ans = r;
+        if (ans != null & l != null && l > ans)
+            ans = l;
+        if (ans != null && r != null && r > ans)
+            ans = r;
+        return ans;
+    }
+
+    @Override
+    public Integer lowerKey(Integer key) {
+        if (isEmpty())
+            return null;
+        return travelLowerKey(root, key, false);
+    }
+
+    @Override
+    public Entry<Integer, String> floorEntry(Integer key) {
         return null;
     }
+
     @Override
-    public String remove(Object key) {
-        int Key=(int)key;
-        if (!containsKey(key)) return null;
-        SNode pos=head;
-        while (pos!=null && pos.Key!=Key) {
-            if ((int)key>pos.Key) pos=pos.Right; else
-                pos=pos.Left;
-        }
-        splay(pos);
-        SNode t2=head.Right;
-        head.Right=null;
-        String answer=(String)head.Value;
-        pos=head.Left;
-        while(pos.Right!=null) pos=pos.Right;
-        splay(pos);
-        size--;
-        pos.Right=t2;
-        pos.Right.Prev=pos;
-        head=pos;
-        return answer;
+    public Integer floorKey(Integer key) {
+        if (isEmpty())
+            return null;
+        return travelLowerKey(root, key, true);
     }
 
     @Override
-    public void putAll(Map<? extends Integer, ? extends String> m) {
+    public Entry<Integer, String> ceilingEntry(Integer key) {
+        return null;
+    }
 
+    @Override
+    public Integer ceilingKey(Integer key) {
+        if (isEmpty())
+            return null;
+        return travelHigherKey(root, key, true);
+    }
+
+    @Override
+    public Entry<Integer, String> higherEntry(Integer key) {
+        return null;
+    }
+
+    @Override
+    public Integer higherKey(Integer key) {
+        if (isEmpty())
+            return null;
+        return travelHigherKey(root, key, false);
     }
 
     @Override
     public void clear() {
-        size=0;
-        head=null;
+        while (!isEmpty())
+            root = remove(root, root.key);
+    }
+
+    @Override
+    public Comparator<? super Integer> comparator() {
+        return null;
+    }
+
+    @Override
+    public SortedMap<Integer, String> subMap(Integer fromKey, Integer toKey) {
+        return null;
+    }
+
+    @Override
+    public NavigableMap<Integer, String> headMap(Integer toKey, boolean inclusive) {
+        return null;
+    }
+
+    @Override
+    public NavigableMap<Integer, String> tailMap(Integer fromKey, boolean inclusive) {
+        return null;
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        return false;
+    }
+
+    @Override
+    public void putAll(Map<? extends Integer, ? extends String> m) {
     }
 
     @Override
@@ -252,100 +414,6 @@ public class MySplayMap <Integer, String> implements NavigableMap<Integer, Strin
     @Override
     public Set<Entry<Integer, String>> entrySet() {
         return null;
-    }
-    public Entry<Integer, String> lowerEntry(Integer key) {
-        return null;
-    }
-
-    @Override
-    public Integer lowerKey(Integer key) {
-        SNode pos=GetLeft(head);
-        SNode end=GetRight(head);
-        boolean FromRight=false;
-        SNode lowestKey=pos;
-        int Key=(int)key;
-        while (pos!=end) {
-            if (pos.Key<Key && pos.Key>lowestKey.Key) lowestKey=pos;
-            if (pos.Right!=null  && !FromRight) {
-                pos=pos.Right;
-                pos=GetLeft(pos);
-            } else {FromRight=(pos.Prev.Right!=null) && (pos.Prev.Right.equals(pos));pos=pos.Prev;}
-        }
-        if (pos.Key<Key && pos.Key>lowestKey.Key) lowestKey=pos;
-        java.lang.Integer answer=(java.lang.Integer) lowestKey.Key;
-        if (lowestKey.Key<Key) {splay(lowestKey);return (Integer)answer;} else return null;
-    }
-
-    @Override
-    public Entry<Integer, String> floorEntry(Integer key) {
-        return null;
-    }
-
-    @Override
-    public Integer floorKey(Integer key) {
-        SNode pos=GetLeft(head);
-        SNode end=GetRight(head);
-        boolean FromRight=false;
-        SNode lowestKey=pos;
-        int Key=(int)key;
-        while (pos!=end) {
-            if (pos.Key<=Key && pos.Key>lowestKey.Key) lowestKey=pos;
-            if (pos.Right!=null  && !FromRight) {
-                pos=pos.Right;
-                pos=GetLeft(pos);
-            } else {FromRight=(pos.Prev.Right!=null) && (pos.Prev.Right.equals(pos));pos=pos.Prev;}
-        }
-        if (pos.Key<=Key && pos.Key>lowestKey.Key) lowestKey=pos;
-        java.lang.Integer answer=(java.lang.Integer) lowestKey.Key;
-        if (lowestKey.Key<=Key) {splay(lowestKey);return (Integer)answer;} else return null;
-    }
-
-    @Override
-    public Entry<Integer, String> ceilingEntry(Integer key) {
-        return null;
-    }
-
-    @Override
-    public Integer ceilingKey(Integer key) {
-        SNode pos=GetLeft(head);
-        SNode end=GetRight(head);
-        boolean FromRight=false;
-        SNode lowestKey=end;
-        int Key=(int)key;
-        while (pos!=end) {
-            if (pos.Key>=Key && pos.Key<lowestKey.Key) lowestKey=pos;
-            if (pos.Right!=null  && !FromRight) {
-                pos=pos.Right;
-                pos=GetLeft(pos);
-            } else {FromRight=(pos.Prev.Right!=null) && (pos.Prev.Right.equals(pos));pos=pos.Prev;}
-        }
-        if (pos.Key>=Key && pos.Key<lowestKey.Key) lowestKey=pos;
-        java.lang.Integer answer=(java.lang.Integer) lowestKey.Key;
-        if (lowestKey.Key>=Key) {splay(lowestKey);return (Integer)answer;} else return null;
-    }
-
-    @Override
-    public Entry<Integer, String> higherEntry(Integer key) {
-        return null;
-    }
-
-    @Override
-    public Integer higherKey(Integer key) {
-        SNode pos=GetLeft(head);
-        SNode end=GetRight(head);
-        boolean FromRight=false;
-        SNode lowestKey=end;
-        int Key=(int)key;
-        while (pos!=end) {
-            if (pos.Key>Key && pos.Key<lowestKey.Key) lowestKey=pos;
-            if (pos.Right!=null  && !FromRight) {
-                pos=pos.Right;
-                pos=GetLeft(pos);
-            } else {FromRight=(pos.Prev.Right!=null) && (pos.Prev.Right.equals(pos));pos=pos.Prev;}
-        }
-        if (pos.Key>Key && pos.Key<lowestKey.Key) lowestKey=pos;
-        java.lang.Integer answer=(java.lang.Integer) lowestKey.Key;
-        if (lowestKey.Key>Key) {splay(lowestKey);return (Integer)answer;} else return null;
     }
 
     @Override
@@ -386,81 +454,5 @@ public class MySplayMap <Integer, String> implements NavigableMap<Integer, Strin
     @Override
     public NavigableMap<Integer, String> subMap(Integer fromKey, boolean fromInclusive, Integer toKey, boolean toInclusive) {
         return null;
-    }
-
-    @Override
-    public NavigableMap<Integer, String> headMap(Integer toKey, boolean inclusive) {
-        return null;
-    }
-
-    @Override
-    public NavigableMap<Integer, String> tailMap(Integer fromKey, boolean inclusive) {
-        return null;
-    }
-
-    @Override
-    public Comparator<? super Integer> comparator() {
-        return null;
-    }
-
-    @Override
-    public SortedMap<Integer, String> subMap(Integer fromKey, Integer toKey) {
-        return null;
-    }
-
-    @Override
-    public SortedMap<Integer, String> headMap(Integer toKey) {
-        MySplayMap<Integer, String> Answer = new MySplayMap<Integer, String>();
-        int Key=(int)toKey;
-        SNode pos=GetLeft(head);
-        SNode end=GetRight(head);
-        boolean FromRight=false;
-        while (pos!=end) {
-            if (!FromRight && Key>pos.Key) {
-                java.lang.Integer Key1=(java.lang.Integer)pos.Key;
-                Answer.put((Integer)Key1,(String)pos.Value);}
-            if (pos.Right!=null  && !FromRight) {
-                pos=pos.Right;
-                pos=GetLeft(pos);
-            } else {FromRight=(pos.Prev.Right!=null && pos.Prev.Right.equals(pos));pos=pos.Prev;}
-        }
-        if (pos!=null && Key>pos.Key) {
-            java.lang.Integer Key1=(java.lang.Integer)pos.Key;
-            Answer.put((Integer)Key1,(String)pos.Value);}
-        return Answer;
-    }
-
-    @Override
-    public SortedMap<Integer, String> tailMap(Integer fromKey) {
-        MySplayMap<Integer, String> Answer = new MySplayMap<Integer, String>();
-        int Key=(int)fromKey;
-        SNode pos=GetLeft(head);
-        SNode end=GetRight(head);
-        boolean FromRight=false;
-        while (pos!=end) {
-            if (!FromRight && Key<=pos.Key) {
-                java.lang.Integer Key1=(java.lang.Integer)pos.Key;
-                Answer.put((Integer)Key1,(String)pos.Value);}
-            if (pos.Right!=null  && !FromRight) {
-                pos=pos.Right;
-                pos=GetLeft(pos);
-            } else {FromRight=(pos.Prev.Right!=null && pos.Prev.Right.equals(pos));pos=pos.Prev;}
-        }
-        if (pos!=null && Key<=pos.Key) {
-            java.lang.Integer Key1=(java.lang.Integer)pos.Key;
-            Answer.put((Integer)Key1,(String)pos.Value);}
-        return Answer;
-    }
-
-    @Override
-    public Integer firstKey() {
-        java.lang.Integer answer=(java.lang.Integer)GetLeft(head).Key;
-        return (Integer)answer;
-    }
-
-    @Override
-    public Integer lastKey() {
-        java.lang.Integer answer=(java.lang.Integer)GetRight(head).Key;
-        return (Integer)answer;
     }
 }

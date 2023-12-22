@@ -2,96 +2,65 @@ package by.it.group251004.skokov.lesson09;
 
 import java.util.*;
 
-public class ListB<E> implements List<E>  {
+public class ListB<E> implements List<E> {
 
 
     //Создайте аналог списка БЕЗ использования других классов СТАНДАРТНОЙ БИБЛИОТЕКИ
+    private E[] elements = (E[]) new Object[]{};
+    private int size = 0;
 
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
     //////               Обязательные к реализации методы             ///////
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
-
-    static final int defaultSize = 8;
-    E[] _list;
-    int _current;
-
-    public ListB() {
-        this(defaultSize);
-    }
-
-
-    public ListB(int size) {
-        _list = (E[]) new Object[size];
-    }
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append('[');
-        for (int i = 0; i < _current; i++) {
-            sb.append(_list[i]);
-            if (i < _current - 1) {
-                sb.append(", ");
-            }
+        StringBuilder builder = new StringBuilder("[");
+        String delimiter = "";
+        for (int i = 0; i < size; i++) {
+            builder.append(delimiter).append(elements[i]);
+            delimiter = ", ";
         }
-        sb.append("]");
-        return sb.toString();
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override
-    public boolean add(E e) { //Добавляет элемент на указанный индекс в списке, сдвигая все последующие элементы.
-        if (_current == _list.length) {
-            E[] newList = (E[]) new Object[_list.length * 2];
-            for (int i = 0; i < _list.length; i++) {
-                newList[i] = _list[i];
-            }
-            _list = newList;
-        }
-        _list[_current++] = e;
+    public boolean add(E e) {
+        if (size == elements.length)
+            elements = Arrays.copyOf(elements, elements.length * 2 + 1);
+        elements[size++] = e;
         return true;
+
     }
 
     @Override
-    public E remove(int index) {  //Удаляет первое вхождение указанного объекта из списка, если он там присутствует.
-        if (index > -1 && index < _current) {
-            E elem = _list[index];
-            for (int i = index; i < _current - 1; i++)
-                _list[i] = _list[i + 1];
-            _current--;
-            return elem;
-        }
-        return null;
+    public E remove(int index) {
+        E deletedElem = elements[index];
+        System.arraycopy(elements, index + 1, elements, index, size - index - 1);
+        size--;
+        return deletedElem;
     }
 
     @Override
     public int size() {
-        return _current;
+        return size;
     }
 
     @Override
     public void add(int index, E element) {
-        if (_current == _list.length) {
-            E[] newList = (E[]) new Object[_list.length * 2];
-            for (int i = 0; i < _list.length; i++) {
-                newList[i] = _list[i];
-            }
-            _list = newList;
-        }
-        if (index > -1 && index <= _current) {
-            for (int i = _current; i > index; i--) {
-                _list[i] = _list[i - 1];
-            }
-            _list[index] = element;
-            _current++;
-        }
+        if (size == elements.length)
+            elements = Arrays.copyOf(elements, elements.length * 2 + 1);
+        System.arraycopy(elements, index, elements, index + 1, size - index);
+        elements[index] = element;
+        size++;
     }
-
 
     @Override
     public boolean remove(Object o) {
         int index = indexOf(o);
-        if (index != -1) {
+        if (index > -1) {
             remove(index);
             return true;
         }
@@ -99,60 +68,54 @@ public class ListB<E> implements List<E>  {
     }
 
     @Override
-    public E set(int index, E element) { //Заменяет элемент на указанном индексе на указанный элемент и возвращает старый элемент.
-        E item = null;
-        if (index > -1 && index < _current) {
-            item = _list[index];
-            _list[index] = element;
-        }
-        return item;
+    public E set(int index, E element) {
+        E replacedElem = elements[index];
+        elements[index] = element;
+        return replacedElem;
     }
 
 
     @Override
     public boolean isEmpty() {
-        return _current == 0;
-    } //Возвращает true, если списке нет элементов.
+        return size == 0;
+    }
 
 
     @Override
-    public void clear() { //Удаляет все элементы из списка.
-
-        for (int i = 0; i < _current; i++) {
-            _list[i] = null;
-        }
-        _current = 0;
+    public void clear() {
+        for (int i = 0; i < size; i++)
+            elements[i] = null;
+        size = 0;
     }
 
     @Override
-    public int indexOf(Object o) { //Возвращает индекс первого вхождения указанного объекта в список, или -1, если объект не найден.
-        for (int i = 0; i < _current; i++) {
-            if (Objects.equals(_list[i], o)) {
+    public int indexOf(Object o) {
+        for (int i = 0; i < size; i++)
+            if (elements[i].equals(o))
                 return i;
-            }
-        }
         return -1;
     }
 
     @Override
-    public E get(int index) { //Возвращает элемент на указанном индексе.
-        if (index > -1 && index < _current)
-            return _list[index];
-        return null;
+    public E get(int index) {
+        return elements[index];
     }
 
     @Override
     public boolean contains(Object o) {
-        return indexOf(o) != -1;
-    } //Возвращает true, если этот список содержит указанный объект.
+        for (int i = 0; i < size; i++)
+            if (elements[i].equals(o))
+                return true;
+        return false;
+    }
 
     @Override
-    public int lastIndexOf(Object o) { //Возвращает индекс последнего вхождения указанного объекта в этом списке или -1, если это вхождение не найдено.
-        for (int i = _current - 1; i > -1; i--) {
-            if (Objects.equals(o, _list[i]))
-                return i;
-        }
-        return -1;
+    public int lastIndexOf(Object o) {
+        int index = -1;
+        for (int i = 0; i < size; i++)
+            if (elements[i].equals(o))
+                index = i;
+        return index;
     }
 
 
