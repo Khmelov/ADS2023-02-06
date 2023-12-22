@@ -29,10 +29,12 @@ public class B_LongDivComSubSeq {
     int getDivSeqSize(InputStream stream) throws FileNotFoundException {
         //подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
+
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         //общая длина последовательности
         int n = scanner.nextInt();
         int[] PrevNumbers = new int[n];
+
         int[] m = new int[n];
         //читаем всю последовательность
         for (int i = 0; i < n; i++) {

@@ -10,10 +10,12 @@ public class MyLinkedHashSet<E> implements Set<E> {
         public ListNode<E> next;
         public ListNode<E> after, prev;
 
+
         ListNode(E e) {
             data = e;
         }
     }
+
 
     final private int defaultSize = 64;
 

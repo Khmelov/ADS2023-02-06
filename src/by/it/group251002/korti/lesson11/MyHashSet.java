@@ -7,7 +7,9 @@ import java.util.Set;
 public class MyHashSet<E> implements Set<E> {
     static class ListNode<E> {
         E data;
+
         public ListNode<E> next;
+
 
         ListNode(E e) {
             this.data = e;
