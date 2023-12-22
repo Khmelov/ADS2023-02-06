@@ -17,7 +17,7 @@ public class Test_Part2_Lesson14 extends HomeWork {
     private final Random random = new Random(123);
 
     @Test(timeout = 5000)
-    public void testPointsA() {
+    public void testPOINTSA() {
         for (int i = 0; i < TEST_COUNT; i++) {
             List<int[]> points = new ArrayList<>();
             String input = generatePointInput(points);
@@ -78,7 +78,7 @@ public class Test_Part2_Lesson14 extends HomeWork {
         var zones = List.of("com org mobile net app io info ru by ua".split("\\s+"));
         StringJoiner out = new StringJoiner("");
         int pairCount = 5 + random.nextInt(50);
-        for (int i = 0; i < pairCount*2; i++) {
+        for (int i = 0; i < pairCount * 2; i++) {
             String site = words.get(random.nextInt(words.size())) + "." + zones.get(random.nextInt(words.size()));
             sites.add(site);
             out.add(site).add(i % 2 == 0 ? "+" : "\n");
@@ -123,6 +123,4 @@ public class Test_Part2_Lesson14 extends HomeWork {
                 .collect(Collectors.joining(" "))
                 .trim();
     }
-
-
 }

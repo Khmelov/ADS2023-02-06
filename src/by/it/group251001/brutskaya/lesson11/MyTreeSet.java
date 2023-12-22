@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class MyTreeSet<E extends Comparable> implements Set<E> {
-    class Node<E> {
+    static class Node<E> {
         E item;
         Node<E> left, right;
 

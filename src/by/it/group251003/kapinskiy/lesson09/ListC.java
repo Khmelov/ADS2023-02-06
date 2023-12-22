@@ -157,38 +157,42 @@ public class ListC<E> implements List<E> {
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
+        int prevSize = size;
         for (E o: c)
            add(o);
-        return true;
+        return prevSize != size;
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
+        int prevSize = size;
         int i = 0;
         for (E o: c) {
             add(index + i, o);
             i++;
         }
-        return true;
+        return prevSize != size;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
+        int prevSize = size;
         for (Object o: c)
             while (contains(o))
                 remove(o);
-        return true;
+        return prevSize != size;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
+        int prevSize = size;
         int i = 0;
         while (i < size) {
             if (!c.contains(list[i]))
                 remove(i);
             else i++;
         }
-        return true;
+        return prevSize != size;
     }
 
     /////////////////////////////////////////////////////////////////////////

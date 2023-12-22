@@ -1,65 +1,68 @@
 package by.it.group251005.ubozhenko.lesson13;
-import java.util.Scanner;
-public class GraphB {
 
-    static boolean[] visited;
-    static boolean[] stack;
-    static int getMax(int[] startVertex, int[] endVertex) {
-        int size = Integer.MIN_VALUE;
-        for (int i = 0; i < startVertex.length; i++) {
-            if (startVertex[i] > size)
-                size = startVertex[i];
-            if (endVertex[i] > size)
-                size = endVertex[i];
+import java.util.*;
+
+public class GraphB {
+    private static boolean dfs(String node, Map<String, List<String>> graph, Set<String> visited, Set<String> recursionStack) {
+        if (recursionStack.contains(node)) {
+            return true;
         }
-        return size;
+
+        if (!visited.contains(node)) {
+            visited.add(node);
+            recursionStack.add(node);
+
+            if (graph.containsKey(node)) {
+                for (String nextNode : graph.get(node)) {
+                    if (dfs(nextNode, graph, visited, recursionStack)) {
+                        return true;
+                    }
+                }
+            }
+
+            recursionStack.remove(node);
+        }
+
+        return false;
     }
 
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        String[] arr = scan.nextLine().split(",");
+        Map<String, List<String>> graph = new HashMap<>();
 
-        int[] startVertex = new int[arr.length];
-        int[] endVertex = new int[arr.length];
-        for (int i = 0; i < arr.length; i++) {
-            String[] current = arr[i].trim().split(" ");
-            startVertex[i] = Integer.parseInt(current[0]);
-            endVertex[i] = Integer.parseInt(current[current.length - 1]);
-        }
+        try (Scanner in = new Scanner(System.in)) {
+            boolean isEnd = false;
 
-        GraphUtil graph = new GraphUtil(getMax(startVertex, endVertex) + 1);
-        for (int i = 0; i < arr.length; i++)
-            graph.addOrientedEdge(startVertex[i], endVertex[i]);
-        System.out.println(isCyclic(graph) ? "yes" : "no");
-        scan.close();
-    }
-
-    public static boolean isCyclic(GraphUtil graph) {
-        visited = new boolean[graph.vertexCount];
-        stack = new boolean[graph.vertexCount];
-
-        for (int i = 0; i < graph.vertexCount; i++) {
-            if (!visited[i] && isCyclicUtil(graph, i))
-                return true;
-        }
-
-        return false;
-    }
-
-    static boolean isCyclicUtil(GraphUtil graph, int vertex) {
-        if (!visited[vertex]) {
-            visited[vertex] = true;
-            stack[vertex] = true;
-
-            for (int neighbor : graph.getNeighbors(vertex)) {
-
-                if (!visited[neighbor] && isCyclicUtil(graph, neighbor)) return true;
-                if (stack[neighbor]) return true;
+            while (!isEnd) {
+                String a = in.next();
+                String s = in.next();
+                String b = in.next();
+                if (b.charAt(b.length() - 1) == ',') {
+                    b = b.substring(0, b.length() - 1);
+                } else {
+                    isEnd = true;
+                }
+                graph.putIfAbsent(a, new ArrayList<>());
+                graph.get(a).add(b);
             }
         }
 
-        stack[vertex] = false;
-        return false;
-    }
+        boolean hasCycle = false;
+        Set<String> visited = new HashSet<>();
+        Set<String> recursionStack = new HashSet<>();
 
+        for (String node : graph.keySet()) {
+            if (!visited.contains(node)) {
+                if (dfs(node, graph, visited, recursionStack)) {
+                    hasCycle = true;
+                    break;
+                }
+            }
+        }
+
+        if (hasCycle) {
+            System.out.println("yes");
+        } else {
+            System.out.println("no");
+        }
+    }
 }

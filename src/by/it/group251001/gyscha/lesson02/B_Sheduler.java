@@ -40,6 +40,21 @@ public class B_Sheduler {
         System.out.println(starts);                                 //покажем рассчитанный график занятий
     }
 
+    Event[] bubbleSort(Event[] events) {
+        Event temp;
+
+        for(int i = 0; i < events.length - 1; i++ ) {
+            for(int j = 0; j < events.length - i - 1; j++ ) {
+                if (events[j].stop > events[j + 1].stop) {
+                    temp = events[j];
+                    events[j] = events[j + 1];
+                    events[j + 1] = temp;
+                }
+            }
+        }
+        return events;
+    }
+
     List<Event> calcStartTimes(Event[] events, int from, int to) {
         //Events - события которые нужно распределить в аудитории
         //в период [from, int] (включительно).
@@ -49,11 +64,22 @@ public class B_Sheduler {
         result = new ArrayList<>();
         //ваше решение.
 
+        bubbleSort(events);
+
+        int i = 0;
+
+        while (events[i].start < from)
+            i++;
+
+        while ((i < events.length) && (events[i].stop <= to)) {
+            int stopTime = events[i].stop;
+            result.add(events[i]);
+            while ((i < events.length) && (events[i].stop <= to) && (events[i].start < stopTime)) {
+                i++;
+            }
+        }
 
 
-
-
-
-        return result;          //вернем итог
+       return result;          //вернем итог
     }
 }
