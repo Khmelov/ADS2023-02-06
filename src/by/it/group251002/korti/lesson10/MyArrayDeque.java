@@ -12,6 +12,7 @@ public class MyArrayDeque<E> implements Deque<E>{
             E[] Arr = (E[]) new Object[size*3/2+1];
             System.arraycopy(elements,0,Arr,0,size);
             elements = Arr;
+
         }
     }
 

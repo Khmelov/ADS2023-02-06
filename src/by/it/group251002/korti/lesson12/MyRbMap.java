@@ -268,30 +268,30 @@ public class MyRbMap implements SortedMap<Integer, String> {
         }
         return oldValue;
     }
-    private Node remove(Node node, int key) {
-        if (key < node.key) {
-            if (!isRed(node.left) && !isRed(node.left.left))
-                node = moveRedLeft(node);
-            node.left = remove(node.left, key);
+    private Node remove(Node treeNode, int key) {
+        if (key < treeNode.key) {
+            if (!isRed(treeNode.left) && !isRed(treeNode.left.left))
+                treeNode = moveRedLeft(treeNode);
+            treeNode.left = remove(treeNode.left, key);
         }
         else {
-            if (isRed(node.left))
-                node = rotateRight(node);
-            if (key == node.key && node.right == null)
+            if (isRed(treeNode.left))
+                treeNode = rotateRight(treeNode);
+            if (key == treeNode.key && treeNode.right == null)
                 return null;
-            if (!isRed(node.right) && !isRed(node.right.left))
-                node = moveRedRight(node);
+            if (!isRed(treeNode.right) && !isRed(treeNode.right.left))
+                treeNode = moveRedRight(treeNode);
 
-            if (key == node.key) {
-                Node min = getMin(node.right);
-                node.key = min.key;
-                node.value = min.value;
-                node.right = removeMin(node.right);
+            if (key == treeNode.key) {
+                Node min = getMin(treeNode.right);
+                treeNode.key = min.key;
+                treeNode.value = min.value;
+                treeNode.right = removeMin(treeNode.right);
             }
             else
-                node.right = remove(node.right, key);
+                treeNode.right = remove(treeNode.right, key);
         }
-        return balance(node);
+        return balance(treeNode);
     }
 
     @Override

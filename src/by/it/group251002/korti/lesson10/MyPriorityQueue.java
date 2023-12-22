@@ -10,6 +10,7 @@ public class MyPriorityQueue<E> implements Queue<E> {
     private int size = 0;
     private E[] arr = (E[]) new Object[minCapacity];
 
+
     private int parent(int index) {
         return (index - 1) / 2;
     }

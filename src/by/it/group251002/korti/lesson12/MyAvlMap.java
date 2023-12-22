@@ -46,6 +46,7 @@ public class MyAvlMap implements Map<Integer, String> {
         str.append(", ");
         if(parent.right!=null)
             addtostring(parent.right, str);
+
     }
 
     public String toString() {

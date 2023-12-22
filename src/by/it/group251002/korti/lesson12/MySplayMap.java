@@ -275,12 +275,12 @@ public class MySplayMap implements NavigableMap<Integer, String> {
     }
 
     @Override
-    public SortedMap<Integer, String> tailMap(Integer fromKey) {
-        if (fromKey == null)
+    public SortedMap<Integer, String> tailMap(Integer Key) {
+        if (Key == null)
             throw new NullPointerException("The key cannot be null");
 
         SortedMap<Integer, String> sortedMap = new by.it.group251002.korti.lesson12.MySplayMap();
-        setFromKey(root, fromKey, sortedMap);
+        setFromKey(root, Key, sortedMap);
 
         return sortedMap;
     }
@@ -339,9 +339,9 @@ public class MySplayMap implements NavigableMap<Integer, String> {
     }
 
     @Override
-    public boolean containsValue(Object value) {
-        if (!(value instanceof String)) return false;
-        return containsValue(root, (String)value);
+    public boolean containsValue(Object val) {
+        if (!(val instanceof String)) return false;
+        return containsValue(root, (String)val);
     }
 
     private boolean containsValue(Node node, String value) {
