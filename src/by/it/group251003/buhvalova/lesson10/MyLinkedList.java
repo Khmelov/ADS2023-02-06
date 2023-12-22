@@ -7,17 +7,17 @@ import java.util.Iterator;
 public class MyLinkedList<E> implements Deque<E> {
 
     private int size = 0;
-    private by.it.group251003.ilysiakoff.lesson10.MyLinkedList.Node<E> first = null;
-    private by.it.group251003.ilysiakoff.lesson10.MyLinkedList.Node<E> last = null;
+    private by.it.group251003.buhvalova.lesson10.MyLinkedList.Node<E> first = null;
+    private by.it.group251003.buhvalova.lesson10.MyLinkedList.Node<E> last = null;
     private static class Node<E> {
         public final E data;
-        public by.it.group251003.ilysiakoff.lesson10.MyLinkedList.Node<E> prev = null;
-        public by.it.group251003.ilysiakoff.lesson10.MyLinkedList.Node<E> next = null;
+        public by.it.group251003.buhvalova.lesson10.MyLinkedList.Node<E> prev = null;
+        public by.it.group251003.buhvalova.lesson10.MyLinkedList.Node<E> next = null;
         public Node(E data) { this.data = data; }
     }
 
-    private by.it.group251003.ilysiakoff.lesson10.MyLinkedList.Node<E> getNode(int index) {
-        by.it.group251003.ilysiakoff.lesson10.MyLinkedList.Node<E> cur = first;
+    private by.it.group251003.buhvalova.lesson10.MyLinkedList.Node<E> getNode(int index) {
+        by.it.group251003.buhvalova.lesson10.MyLinkedList.Node<E> cur = first;
         for (int i = 0; i < index; i++)
             cur = cur.next;
 
@@ -30,7 +30,7 @@ public class MyLinkedList<E> implements Deque<E> {
         else if (index == --size)
             res = removeLast();
         else {
-            by.it.group251003.ilysiakoff.lesson10.MyLinkedList.Node<E> cur = getNode(index);
+            by.it.group251003.buhvalova.lesson10.MyLinkedList.Node<E> cur = getNode(index);
             res = cur.data;
             cur.prev.next = cur.next;
             cur.next.prev = cur.prev;
@@ -42,7 +42,7 @@ public class MyLinkedList<E> implements Deque<E> {
     public String toString() {
         StringBuilder res = new StringBuilder("[");
         if (size > 0) {
-            by.it.group251003.ilysiakoff.lesson10.MyLinkedList.Node<E> cur = first;
+            by.it.group251003.buhvalova.lesson10.MyLinkedList.Node<E> cur = first;
             res.append(cur.data);
             cur = cur.next;
             for (int i = 1; i < size; i++) {
@@ -56,7 +56,7 @@ public class MyLinkedList<E> implements Deque<E> {
 
     @Override
     public void addFirst(E e) {
-        by.it.group251003.ilysiakoff.lesson10.MyLinkedList.Node<E> newNode = new by.it.group251003.ilysiakoff.lesson10.MyLinkedList.Node<E>(e);
+        by.it.group251003.buhvalova.lesson10.MyLinkedList.Node<E> newNode = new by.it.group251003.buhvalova.lesson10.MyLinkedList.Node<E>(e);
         if (last == null) {
             last = newNode;
         }
@@ -70,7 +70,7 @@ public class MyLinkedList<E> implements Deque<E> {
 
     @Override
     public void addLast(E e) {
-        by.it.group251003.ilysiakoff.lesson10.MyLinkedList.Node<E> newNode = new by.it.group251003.ilysiakoff.lesson10.MyLinkedList.Node<E>(e);
+        by.it.group251003.buhvalova.lesson10.MyLinkedList.Node<E> newNode = new by.it.group251003.buhvalova.lesson10.MyLinkedList.Node<E>(e);
         if (first == null) {
             first = newNode;
         }
