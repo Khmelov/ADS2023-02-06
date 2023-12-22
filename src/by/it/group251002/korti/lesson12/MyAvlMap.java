@@ -12,6 +12,7 @@ public class MyAvlMap implements Map<Integer, String> {
     static private class MyNode{
         Integer key;
         String value;
+
         int height;
         MyNode left, right;
         MyNode(Integer key,String value) {
