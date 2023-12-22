@@ -11,11 +11,11 @@ public class StatesHanoiTowerC {
             ans[s[0] > s[1] ? (s[0] > s[2] ? s[0] : s[2]) : (s[2] > s[1] ? s[2] : s[1])]++;
         } else {
             int temp = (fr == 0 ? to == 1 ? 2 : 1 : fr == 1 ? to == 0 ? 2 : 0 : to == 1 ? 0 : 1);
-            hanoi(s, h - 1, ans, fr, temp);
+            hanoi(s, h - 1, ans, fr, temp); // from h-1 to 2nd
             s[to]++;
             s[fr]--;
             ans[s[0] > s[1] ? (s[0] > s[2] ? s[0] : s[2]) : (s[2] > s[1] ? s[2] : s[1])]++;
-            hanoi(s, h - 1, ans, temp, to);
+            hanoi(s, h - 1, ans, temp, to); // from n-1 to 3rd
         }
     }
 
