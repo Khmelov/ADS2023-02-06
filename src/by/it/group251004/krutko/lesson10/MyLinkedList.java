@@ -154,7 +154,7 @@ public class MyLinkedList<E> implements Deque<E> {
         return false;
     }
 
-    public void remove(int index) {
+    public E remove(int index) {
         DoublyNode<E> tempHead = _head;
         if (index > -1 && index < Count) {
             int count = 0;
@@ -171,7 +171,9 @@ public class MyLinkedList<E> implements Deque<E> {
             else
                 _head = tempHead.Next;
             Count--;
+            return tempHead.Data;
         }
+        return null;
     }
 
     //////////////////////////////////////////

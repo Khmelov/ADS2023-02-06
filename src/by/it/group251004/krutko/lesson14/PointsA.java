@@ -57,9 +57,7 @@ public class PointsA {
         }
 
         double distanceTo(Point other) {
-            return Math.sqrt((x - other.x) * (x - other.x) +
-                    (y - other.y) * (y - other.y) +
-                    (z - other.z) * (z - other.z));
+            return Math.hypot(Math.hypot(x - other.x, y - other.y), z - other.z);
         }
 
     }
