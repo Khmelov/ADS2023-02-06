@@ -1,6 +1,7 @@
 package by.it.group251004.Ivannikova.lesson02;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 /*
 Даны интервальные события events
@@ -48,12 +49,25 @@ public class B_Sheduler {
         List<Event> result;
         result = new ArrayList<>();
         //ваше решение.
+        // Arrays.sort(events);
+        int startEvent = from;
+        while (startEvent <= to) {
+            Event minEvent= new Event(startEvent, to);
+            boolean isChosen = false;
+            for (Event currEvent : events) {
+                if ((startEvent == currEvent.start)
+                        && (currEvent.stop - currEvent.start) < (minEvent.stop - minEvent.start)) {
+                    isChosen = true;
+                    minEvent = currEvent;
+                }
+            }
 
-
-
-
-
-
+            if (isChosen) {
+                result.add(minEvent);
+                startEvent = minEvent.stop;
+            } else
+                startEvent++;
+        }
         return result;          //вернем итог
     }
 }
