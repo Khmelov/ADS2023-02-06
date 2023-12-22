@@ -1,6 +1,5 @@
 package by.it.group251004.a_nediakin.lesson10;
 
-
 import by.it.HomeWork;
 import org.junit.Test;
 
@@ -58,6 +57,7 @@ public class Test_Part2_Lesson10Test extends HomeWork {
         String[] methods = """
                 toString()
                 add(Object)
+                remove(int)
                 remove(Object)
                 size()
                                 
@@ -99,6 +99,13 @@ public class Test_Part2_Lesson10Test extends HomeWork {
                 """.split("\\s+");
         eObject = new PriorityQueue<>();
         randomCheck("MyPriorityQueue", methods);
+
+        // Подсказка! Вывод образцовой коллекции должен быть абсолютно идентичен вашей.
+        // Все методы имеют жестко заданное поведение, а уровень C не удается пройти скорее всего
+        // из-за того, что методы removeAll(Collection) и retainAll(Collection) вами сделаны наивно
+        // и имеют скорость O(n log n). Сторонним эффектом такого решения будет отличие в порядке элементов.
+        // Корректно написанные removeAll и retainAll должны работать за O(n), считая, что операции contains
+        // в переданной коллекции работают за O(1). See https://en.wikipedia.org/wiki/Heapsort
     }
 
     private void randomCheck(String aClassName, String... methods) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
@@ -135,7 +142,6 @@ public class Test_Part2_Lesson10Test extends HomeWork {
                     break;
                 }
             }
-
             int params = methodE.getParameterCount();
             Object[] parameters = getRandomParams(methodA.getParameterTypes());
             System.out.printf("Start %s. Parameters=%s%n", getSignature(methodA), Arrays.toString(parameters));
@@ -146,7 +152,6 @@ public class Test_Part2_Lesson10Test extends HomeWork {
             assertEquals("Error compare methods\n" + methodE + "\n" + methodA, expected, actual);
             assertEquals("Erros state after\n" + methodE + "\n" + methodA, eString, aString);
             System.out.printf("Size actual=%d expected=%d%n", aObject.size(), eObject.size());
-
         }
         System.out.println("=".repeat(100) + "\nCOMPLETE: " + methodNames);
         System.out.println("expected: " + eObject);
@@ -223,8 +228,8 @@ public class Test_Part2_Lesson10Test extends HomeWork {
 
     private boolean notComparable(Method m) {
         return m.getReturnType() != Comparable.class &&
-               Arrays.stream(m.getParameterTypes())
-                       .noneMatch(p -> p == Comparable.class);
+                Arrays.stream(m.getParameterTypes())
+                        .noneMatch(p -> p == Comparable.class);
     }
 
     private String getSignature(Method method) {
