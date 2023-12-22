@@ -3,403 +3,115 @@ package by.it.group251004.stasevich.lesson12;
 import java.util.*;
 
 public class MyRbMap implements SortedMap<Integer, String> {
-     Node root;
 
-    class Node {
+    private enum COLOR{RED, BLACK};
+
+    private static class Node {
         Integer key;
         String value;
-        Node parent, left, right;
-        boolean color;
-        public Node(boolean color, Integer key, String value) {
-            this.color = color;
+        COLOR color;
+        Node left, right;
+        public Node(Integer key, String value, COLOR color) {
             this.key = key;
             this.value = value;
+            this.color = color;
+            this.left = this.right = null;
         }
     }
 
-    @Override
-    public int size() {
-        return size(root);
+    int _size = 0;
+    Node head = null;
+
+    private boolean isRed(Node n) {
+        return n != null && n.color == COLOR.RED;
     }
 
-    int size( Node node) {
-        if (node == null) {
-            return 0;
+    private void swapColors(Node n) {
+        COLOR tmp = n.left.color;
+        n.left.color = n.color;
+        n.right.color = n.color;
+        n.color = tmp;
+    }
+    private Node leftRotate(Node n) {
+        Node child = n.right;
+        n.right = child.left;
+        child.left = n;
+        child.color = n.color;
+        n.color = COLOR.RED;
+        return child;
+    }
+
+    private Node rightRotate(Node n) {
+        Node child = n.left;
+        n.left = child.right;
+        child.right = n;
+        child.color = n.color;
+        n.color = COLOR.RED;
+        return child;
+    }
+
+    private Node balanceNode(Node n) {
+        if (isRed(n.right) && !isRed(n.left)) {
+            n = leftRotate(n);
         }
-        return size(node.left) + size(node.right) + 1;
+        if (isRed(n.left) && isRed(n.left.left)) {
+            n = rightRotate(n);
+        }
+        if (isRed(n.right) && isRed(n.left)) {
+            swapColors(n);
+        }
+
+        return n;
     }
 
-    @Override
-    public boolean isEmpty() {
-        return root == null;
-    }
 
-    @Override
-    public boolean containsKey(Object key) {
-        return searchNode((Integer) key) != null;
-    }
-
-    Node searchNode(int key) {
-        Node node = root;
-        while (node != null) {
-            if (key == node.key) {
-                return node;
-            } else if (key < node.key) {
-                node = node.left;
+    private Node search(Node n, Integer key) {
+        while(n != null) {
+            if ((int)key < (int)n.key) {
+                n = n.left;
+            } else if ((int)key > (int)n.key) {
+                n = n.right;
             } else {
-                node = node.right;
+                return n;
             }
         }
+
         return null;
     }
 
-    @Override
-    public boolean containsValue(Object value) {
-        return containsValue(root, value);
+    private Node put(Node n, Integer key, String value) {
+        if (n == null) {
+            return new Node(key, value, COLOR.RED);
+        }
+
+        if ((int)key < (int)n.key) {
+            n.left = put(n.left, key, value);
+        } else if ((int)key > (int)n.key) {
+            n.right = put(n.right, key, value);
+        }
+
+        return balanceNode(n);
     }
 
-    boolean containsValue( Node node, Object value) {
-        if (node == null) {
-            return false;
-        }
-        if (value.equals(node.value)) {
-            return true;
-        }
-        return containsValue(node.left, value) || containsValue(node.right, value);
-    }
-
-    @Override
-    public String get(Object key) {
-         Node node = searchNode((Integer) key);
-        return (node != null) ? node.value : null;
-    }
-
-    @Override
-    public String put(Integer key, String value) {
-        if (root == null) {
-            root = new Node(true, key, value);
-        } else {
-            Node newNode = new Node(false, key, value);
-            Node current = root;
-            while (true) {
-                newNode.parent = current;
-                if (key.compareTo(current.key) < 0) {
-                    if (current.left == null) {
-                        current.left = newNode;
-                        break;
-                    } else {
-                        current = current.left;
-                    }
-                } else if (key.compareTo(current.key) > 0) {
-                    if (current.right == null) {
-                        current.right = newNode;
-                        break;
-                    } else {
-                        current = current.right;
-                    }
-                } else {
-                    String old = current.value;
-                    current.value = value;
-                    return old;
-                }
-            }
-            balanceInsert(newNode);
-        }
-        return null;
-    }
-
-    Node getUncle(Node parent) {
-        Node grandparent = parent.parent;
-        if (grandparent.left == parent) {
-            return grandparent.right;
-        } else if (grandparent.right == parent) {
-            return grandparent.left;
-        } else {
-            throw new IllegalStateException("Parent is not a child of its grandparent");
-        }
-    }
-
-    void balanceInsert( Node node) {
-        Node parent = node.parent;
-        if (parent == null) {
-            return;
-        }
-
-        if (parent.color == true) {
-            return;
-        }
-
-        Node grandparent = parent.parent;
-
-        if (grandparent == null) {
-
-            parent.color = true;
-            return;
-        }
-
-        Node uncle = getUncle(parent);
-
-        if (uncle != null && uncle.color == false) {
-            parent.color = true;
-            grandparent.color = false;
-            uncle.color = true;
-
-            balanceInsert(grandparent);
-        }
-
-        else if (parent == grandparent.left) {
-
-            if (node == parent.right) {
-                rotateLeft(parent);
-
-                parent = node;
-            }
-
-            rotateRight(grandparent);
-
-            parent.color = true;
-            grandparent.color = false;
-        }
-
-        else {
-            if (node == parent.left) {
-                rotateRight(parent);
-
-                parent = node;
-            }
-            rotateLeft(grandparent);
-            parent.color = true;
-            grandparent.color = false;
-        }
-    }
-
-     Node getSuccessor( Node node) {
-         Node successor = null;
-         Node current = node.right;
-        while (current != null) {
-            successor = current;
-            current = current.left;
-        }
-        return successor;
-    }
-
-    void deleteNode( Node node) {
-         Node replace;
-        if (node.left != null && node.right != null) {
-             Node successor = getSuccessor(node);
-            node.key = successor.key;
-            node.value = successor.value;
-            node = successor;
-        }
-        replace = (node.left != null) ? node.left : node.right;
-        if (replace != null) {
-            replace.parent = node.parent;
-            if (node.parent == null) {
-                root = replace;
-            } else if (node == node.parent.left) {
-                node.parent.left = replace;
+    public String toString() {
+        StringBuilder sb = new StringBuilder("{");
+        String delimiter = "";
+        Stack<Node> s = new Stack<Node>();
+        Node curNode = head;
+        while (!s.isEmpty() || curNode != null) {
+            if (curNode != null) {
+                s.push(curNode);
+                curNode = curNode.left;
             } else {
-                node.parent.right = replace;
-            }
-
-            if (node.color ==  true) {
-                balanceDeletion(replace);
-            }
-        } else if (node.parent == null) {
-            root = null;
-        } else {
-            if (node.color ==  true) {
-                balanceDeletion(node);
-            }
-            if (node.parent != null) {
-                if (node == node.parent.left) {
-                    node.parent.left = null;
-                } else if (node == node.parent.right) {
-                    node.parent.right = null;
-                }
-                node.parent = null;
+                curNode = s.pop();
+                sb.append(delimiter).append(curNode.key).append("=").append(curNode.value);
+                delimiter = ", ";
+                curNode = curNode.right;
             }
         }
-    }
 
-    void rotateLeft( Node node)
-    {
-        Node parent = node.parent;
-        Node rightChild = node.right;
-
-        node.right = rightChild.left;
-        if (rightChild.left != null) {
-            rightChild.left.parent = node;
-        }
-
-        rightChild.left = node;
-        node.parent = rightChild;
-
-        replaceParentsChild(parent, node, rightChild);
-    }
-
-    void rotateRight( Node node)
-    {
-        Node parent = node.parent;
-        Node leftChild = node.left;
-
-        node.left = leftChild.right;
-        if (leftChild.right != null) {
-            leftChild.right.parent = node;
-        }
-
-        leftChild.right = node;
-        node.parent = leftChild;
-
-        replaceParentsChild(parent, node, leftChild);
-    }
-
-    void replaceParentsChild(Node parent, Node oldChild, Node newChild) {
-        if (parent == null) {
-            root = newChild;
-        } else if (parent.left == oldChild) {
-            parent.left = newChild;
-        } else if (parent.right == oldChild) {
-            parent.right = newChild;
-        } else {
-            throw new IllegalStateException("Node is not a child of its parent");
-        }
-
-        if (newChild != null) {
-            newChild.parent = parent;
-        }
-    }
-
-    void balanceDeletion( Node node) {
-        if (node == root) {
-            return;
-        }
-
-        Node sibling = getSibling(node);
-
-        // Case 2: Red sibling
-        if (sibling.color == false) {
-            handleRedSibling(node, sibling);
-            sibling = getSibling(node);
-        }
-
-        if (isBlack(sibling.left) && isBlack(sibling.right)) {
-            sibling.color = false;
-
-            if (node.parent.color == false) {
-                node.parent.color = true;
-            }
-            else {
-                balanceDeletion(node.parent);
-            }
-        }
-        else {
-            handleBlackSiblingWithAtLeastOneRedChild(node, sibling);
-        }
-    }
-
-    void handleBlackSiblingWithAtLeastOneRedChild(Node node, Node sibling) {
-        boolean nodeIsLeftChild = node == node.parent.left;
-        if (nodeIsLeftChild && isBlack(sibling.right)) {
-            sibling.left.color = true;
-            sibling.color = false;
-            rotateRight(sibling);
-            sibling = node.parent.right;
-        } else if (!nodeIsLeftChild && isBlack(sibling.left)) {
-            sibling.right.color = true;
-            sibling.color = false;
-            rotateLeft(sibling);
-            sibling = node.parent.left;
-        }
-        sibling.color = node.parent.color;
-        node.parent.color = true;
-        if (nodeIsLeftChild) {
-            sibling.right.color = true;
-            rotateLeft(node.parent);
-        } else {
-            sibling.left.color = true;
-            rotateRight(node.parent);
-        }
-    }
-
-    boolean isBlack(Node node) {
-        return node == null || node.color == true;
-    }
-
-    void handleRedSibling(Node node, Node sibling) {
-        sibling.color = true;
-        node.parent.color = false;
-        if (node == node.parent.left) {
-            rotateLeft(node.parent);
-        } else {
-            rotateRight(node.parent);
-        }
-    }
-
-    Node getSibling(Node node) {
-        Node parent = node.parent;
-        if (node == parent.left) {
-            return parent.right;
-        } else if (node == parent.right) {
-            return parent.left;
-        } else {
-            throw new IllegalStateException("Parent is not a child of its grandparent");
-        }
-    }
-
-    @Override
-    public String remove(Object key) {
-         Node node = searchNode((Integer) key);
-        if (node != null) {
-            String oldValue = node.value;
-            deleteNode(node);
-            return oldValue;
-        }
-        return null;
-    }
-
-    @Override
-    public void putAll(Map<? extends Integer, ? extends String> m) {
-
-    }
-
-    @Override
-    public void clear() {
-        root = clear(root);
-    }
-
-     Node clear( Node node) {
-        if (node == null)
-            return null;
-        node.left = clear(node.left);
-        node.right = clear(node.right);
-        return null;
-    }
-
-    @Override
-    public Integer firstKey() {
-         Node first = firstNode(root);
-        return (first != null) ? first.key : null;
-    }
-
-     Node firstNode( Node node) {
-        while (node != null && node.left != null) {
-            node = node.left;
-        }
-        return node;
-    }
-
-    @Override
-    public Integer lastKey() {
-         Node last = lastNode(root);
-        return (last != null) ? last.key : null;
-    }
-
-     Node lastNode( Node node) {
-        while (node != null && node.right != null) {
-            node = node.right;
-        }
-        return node;
+        sb.append("}");
+        return sb.toString();
     }
 
     @Override
@@ -412,64 +124,212 @@ public class MyRbMap implements SortedMap<Integer, String> {
         return null;
     }
 
-    @Override
-    public SortedMap<Integer, String> headMap(Integer toKey) {
-        by.it.group251004.krutko.lesson12.MyRbMap subMap = new by.it.group251004.krutko.lesson12.MyRbMap();
-        headMap(root, toKey, subMap);
-        return subMap;
-    }
-
-    void headMap( Node node, Integer toKey, by.it.group251004.krutko.lesson12.MyRbMap subMap) {
-        if (node == null) {
+    private void headToKey(SortedMap<Integer, String> newMap, Integer toKey, Node n) {
+        if (n == null) {
             return;
         }
 
-        if (node.key.compareTo(toKey) < 0) {
-            subMap.put(node.key, node.value);
-            headMap(node.right, toKey, subMap);
+        headToKey(newMap, toKey, n.left);
+        if (toKey > n.key) {
+            newMap.put(n.key, n.value);
+            headToKey(newMap, toKey, n.right);
         }
-
-        headMap(node.left, toKey, subMap);
     }
 
+    private void tailFromKey(SortedMap<Integer, String> newMap, Integer fromKey, Node n) {
+        if (n == null) {
+            return;
+        }
+
+        tailFromKey(newMap, fromKey, n.right);
+        if (fromKey <= n.key) {
+            newMap.put(n.key, n.value);
+            tailFromKey(newMap, fromKey, n.left);
+        }
+    }
+
+    @Override
+    public SortedMap<Integer, String> headMap(Integer toKey) {
+        SortedMap<Integer, String> newMap = new MyRbMap();
+        headToKey(newMap, toKey, head);
+        return newMap;
+    }
 
     @Override
     public SortedMap<Integer, String> tailMap(Integer fromKey) {
-        by.it.group251004.krutko.lesson12.MyRbMap subMap = new by.it.group251004.krutko.lesson12.MyRbMap();
-        tailMap(root, fromKey, subMap);
-        return subMap;
-    }
-
-    void tailMap(Node node, Integer fromKey, by.it.group251004.krutko.lesson12.MyRbMap subMap) {
-        if (node == null) {
-            return;
-        }
-
-        if (node.key.compareTo(fromKey) >= 0) {
-            subMap.put(node.key, node.value);
-            tailMap(node.left, fromKey, subMap);
-        }
-
-        tailMap(node.right, fromKey, subMap);
+        SortedMap<Integer, String> newMap = new MyRbMap();
+        tailFromKey(newMap, fromKey, head);
+        return newMap;
     }
 
     @Override
-    public String toString() {
-        if (root == null)
-            return "{}";
-        StringBuilder sb = new StringBuilder().append("{");
-        print(root, sb);
-        sb.replace(sb.length() - 2, sb.length(), "");
-        sb.append("}");
-        return sb.toString();
+    public Integer firstKey() {
+        if (head == null) {
+            return null;
+        }
+
+        Node n = head;
+        while (n.left != null) {
+            n = n.left;
+        }
+
+        return n.key;
     }
 
-    void print( Node node, StringBuilder sb) {
-        if (node != null) {
-            print(node.left, sb);
-            sb.append(node.key + "=" + node.value + ", ");
-            print(node.right, sb);
+    @Override
+    public Integer lastKey() {
+        if (head == null) {
+            return null;
         }
+
+        Node n = head;
+        while (n.right != null) {
+            n = n.right;
+        }
+
+        return n.key;
+    }
+
+    @Override
+    public int size() {
+        return _size;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return _size == 0;
+    }
+
+    @Override
+    public boolean containsKey(Object key) {
+        return search(head, (int)key) != null;
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        Stack<Node> s = new Stack<Node>();
+        Node curNode = head;
+        while (!s.isEmpty() || curNode != null) {
+            if (curNode != null) {
+                s.push(curNode);
+                curNode = curNode.left;
+            } else {
+                curNode = s.pop();
+                if (value.equals(curNode.value)) {
+                    return true;
+                }
+                curNode = curNode.right;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String get(Object key) {
+        Node n = search(head, (int)key);
+        return n == null ? null : n.value;
+    }
+
+    @Override
+    public String put(Integer key, String value) {
+        Node n = search(head, (int)key);
+        if (n == null) {
+            _size++;
+            head = put(head, key, value);
+            if (head.color == COLOR.RED) {
+                head.color = COLOR.BLACK;
+            }
+            return null;
+        }
+
+        String oldValue = n.value;
+        n.value = value;
+        return oldValue;
+    }
+
+
+    private Node findMin(Node n) {
+        while (n.left != null) {
+            n = n.left;
+        }
+
+        return n;
+    }
+
+    private Node removeMin(Node n) {
+        if (n.left == null) {
+            return n.right;
+        }
+
+        n.left = removeMin(n.left);
+        return balanceNode(n);
+    }
+
+
+    private Node remove(Node n, Integer key) {
+        if (key < n.key) {
+            n.left = remove(n.left, key);
+        } else {
+            if (isRed(n.left)) {
+                n = rightRotate(n);
+            }
+            if (n.key.equals(key) && n.right == null) {
+                return null;
+            }
+
+            if (n.key.equals(key)) {
+                Node minNode = findMin(n.right);
+                n.key = minNode.key;
+                n.value = minNode.value;
+                n.right = removeMin(n.right);
+            } else {
+                n.right = remove(n.right, key);
+            }
+        }
+        return balanceNode(n);
+    }
+    @Override
+    public String remove(Object key) {
+        String oldValue = get(key);
+        if (oldValue != null) {
+            _size--;
+            head = remove(head, (int)key);
+            if (head.color == COLOR.RED) {
+                head.color = COLOR.BLACK;
+            }
+        }
+
+        return oldValue;
+    }
+
+    @Override
+    public void putAll(Map<? extends Integer, ? extends String> m) {
+
+    }
+
+    @Override
+    public void clear() {
+        Stack<Node> s = new Stack<Node>();
+        Node lastVisited = null, curNode = head;
+        while (!s.isEmpty() || curNode != null) {
+            if (curNode != null) {
+                s.push(curNode);
+                lastVisited = curNode;
+                curNode = curNode.left;
+            } else {
+                curNode = s.pop();
+                if (lastVisited != null && lastVisited != curNode) {
+                    lastVisited.right = null;
+                }
+                lastVisited = curNode;
+                curNode.left = null;
+                curNode = curNode.right;
+            }
+        }
+        head.left = null;
+        head.right = null;
+        head = null;
+        _size = 0;
     }
 
     @Override

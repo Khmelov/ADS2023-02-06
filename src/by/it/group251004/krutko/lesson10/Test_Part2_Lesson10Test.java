@@ -59,6 +59,7 @@ public class Test_Part2_Lesson10Test extends HomeWork {
                 toString()
                 add(Object)
                 remove(Object)
+                remove(int)
                 size()
                                 
                 addFirst(Object)
