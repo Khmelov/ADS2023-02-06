@@ -1,94 +1,93 @@
 package by.it.group251004.krotsyuk.lesson11;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
-public class MyLinkedHashSet<E> implements Set<E> {
-    class Node<E> {
-        E data;
-        Node<E> next;
-        Node<E> after, previous;
+public class MyLinkedHashSet<E> implements Set<E>{
+    private class MyList<E>{
+        private class node<E>{
+            node<E> next;
+            E value;
+            node(E value) {
+                this.value = value;
+            }
+        }
 
-        Node(E data) {
-            this.data = data;
+        node<E> root = null;
+
+        void add(E x){
+            node<E> temp = new node<>(x);
+            temp.next = root;
+            root = temp;
+        }
+
+        boolean isEmpty(){
+            return root == null;
+        }
+
+        void remove(){
+            node<E> temp = root;
+            root = root.next;
+            temp = null;
+        }
+
+        void remove(E x){
+            if(contains(x)) {
+                if (root.value.equals(x))
+                    remove();
+                else {
+                    node<E> temp = root, delet;
+                    while (!temp.next.value.equals(x))
+                        temp = temp.next;
+                    delet = temp.next;
+                    temp.next = temp.next.next;
+                    delet = null;
+                }
+            }
+        }
+
+        boolean contains(E x){
+            node<E> temp = root;
+            while(temp != null){
+                if(temp.value.equals(x))
+                    return true;
+                temp = temp.next;
+            }
+            return false;
         }
     }
-    static final int defaultSize = 32;
-    Node<E>[] items;
 
-    Node<E> head, tail;
-
-    public MyLinkedHashSet() {
-        this(defaultSize);
-    }
-
-    public MyLinkedHashSet(int capacity) {
-        items = new Node[capacity];
-    }
-
-    int GetHash(Object value) {
-        return (value.hashCode() & 0x7FFFFFFF) % items.length;
-    }
-
-    int count;
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-        Node<E> current = head;
-        if (current != null) {
-            sb.append(current.data);
-            current = current.after;
-        }
-        while (current != null) {
-            sb.append(", ").append(current.data);
-            current = current.after;
-        }
-        return sb.append("]").toString();
-    }
-
-    void AddNode(Node<E> newNode) {
-        if (head == null) {
-            head = newNode;
-        } else {
-            tail.after = newNode;
-            newNode.previous = tail;
-        }
-        tail = newNode;
-    }
-
-    void RemoveNode(Node<E> newNode) {
-        if (newNode.after != null)
-            newNode.after.previous = newNode.previous;
-        else
-            tail = newNode.previous;
-
-        if (newNode.previous != null)
-            newNode.previous.after = newNode.after;
-        else
-            head = newNode.after;
-    }
+    int size = 0, capacity = 0;
+    MyList<E>[] basket = new MyList[0];
+    E[] to_str_arr = (E[]) new Object[]{};
 
     @Override
     public int size() {
-        return(count);
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
-        return(count == 0);
+        return size == 0;
+    }
+
+    @Override
+    public String toString() {
+        String s = "[";
+        for(int i = 0; i < size; ++i){
+            s += to_str_arr[i];
+            if(i != size - 1)
+                s += ", ";
+        }
+        s += "]";
+        return s;
     }
 
     @Override
     public boolean contains(Object o) {
-        Node<E> current = items[GetHash(o)];
-        while (current != null) {
-            if (current.data.equals(o)) {
-                return true;
-            }
-            current = current.next;
-        }
-        return false;
+        return size != 0 && basket[o.hashCode() % capacity].contains((E)o);
     }
 
     @Override
@@ -108,118 +107,99 @@ public class MyLinkedHashSet<E> implements Set<E> {
 
     @Override
     public boolean add(E e) {
-        int index = GetHash(e);
-        Node<E> current = items[index];
-        while (current != null) {
-            if (current.data.equals(e)) {
-                return false;
-            }
-            current = current.next;
-        }
-        Node<E> newNode = new Node<>(e);
-        newNode.next = items[index];
-        items[index] = newNode;
-        AddNode(newNode);
-        count++;
-        if (count > items.length * 0.75) {
-            Node<E>[] newItems = new Node[items.length * 2];
-            for (int i = 0; i < items.length; i++) {
-                Node<E> curr = items[i];
-                while (curr != null) {
-                    Node<E> next = curr.next;
-                    int newIndex = curr.data.hashCode() & 0x7FFFFFFF % newItems.length;
-                    curr.next = newItems[newIndex];
-                    newItems[newIndex] = curr;
-                    curr = next;
+        if (contains(e))
+            return false;
+        if(size == capacity){
+            int new_capacity = capacity * 2;
+            if(new_capacity == 0)
+                new_capacity = 5;
+            MyList<E>[] new_basket = new MyList[new_capacity];
+            for(int i = 0; i < new_capacity; ++i)
+                new_basket[i] = new MyList<>();
+            for(int i = 0; i < capacity; ++i){
+                while(!basket[i].isEmpty()){
+                    E temp = basket[i].root.value;
+                    new_basket[temp.hashCode() % new_capacity].add(temp);
+                    basket[i].remove();
                 }
             }
-            items = newItems;
+            MyList<E>[] temp = basket;
+            basket = new_basket;
+            temp = null;
+            capacity = new_capacity;
+            to_str_arr = Arrays.copyOf(to_str_arr, new_capacity);
         }
+        int index = e.hashCode() % capacity;
+        basket[index].add(e);
+        to_str_arr[size++] = e;
         return true;
     }
 
     @Override
     public boolean remove(Object o) {
-        int index = GetHash(o);
-        Node<E> current = items[index];
-        Node<E> previous = null;
-        while (current != null) {
-            if (current.data.equals(o)) {
-                RemoveNode(current);
-                if (previous == null) {
-                    items[index] = current.next;
-                } else {
-                    previous.next = current.next;
+        if(!contains(o))
+            return false;
+        else {
+            basket[o.hashCode() % capacity].remove((E)o);
+            for(int i = 0; i < size - 1; ++i)
+                if(to_str_arr[i].equals(o)){
+                    E temp = to_str_arr[i];
+                    to_str_arr[i] = to_str_arr[i + 1];
+                    to_str_arr[i + 1] = temp;
                 }
-                count--;
-                return true;
-            }
-            previous = current;
-            current = current.next;
+            --size;
+            return true;
         }
-        return false;
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        for (Object obj: c) {
-            if (!contains(obj))
+        E[] params = (E[]) new Object[c.size()];
+        params = c.toArray(params);
+        for(int i = 0; i < params.length; ++i)
+            if(!contains(params[i]))
                 return false;
-        }
         return true;
     }
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        boolean modified = false;
-        for (E item : c) {
-            if (add(item)) {
-                modified = true;
-            }
-        }
-        return modified;
+        int prevSize = size;
+        E[] params = (E[]) new Object[c.size()];
+        params = c.toArray(params);
+        for(int i = 0; i < params.length; ++i)
+            add(params[i]);
+        return prevSize != size;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        if (c.isEmpty()) {
-            this.clear();
-            return true;
-        }
-        boolean isModified = false;
-        MyLinkedHashSet<E> tempSet = new MyLinkedHashSet<>(items.length);
-        Node<E> current = head;
-        while (current != null) {
-            if (c.contains(current.data)) {
-                tempSet.add(current.data);
-                isModified = true;
-            }
-            current = current.after;
-        }
-        items = tempSet.items;
-        head = tempSet.head;
-        tail = tempSet.tail;
-        count = tempSet.count;
-
-        return isModified;
+        int prevSize = size;
+        E[] params = (E[]) new Object[c.size()];
+        params = c.toArray(params);
+        for(int i = 0; i < size; ++i)
+            if(!c.contains(to_str_arr[i]))
+                remove(to_str_arr[i--]);
+        return prevSize != size;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        boolean isModified = false;
-        for (Object obj: c) {
-            if (remove(obj))
-                isModified = true;
-        }
-        return isModified;
+        int prevSize = size;
+        E[] params = (E[]) new Object[c.size()];
+        params = c.toArray(params);
+        for(int i = 0; i < params.length; ++i)
+            if(contains(params[i]))
+                remove(params[i]);
+        return prevSize != size;
     }
 
     @Override
     public void clear() {
-        for (int i = 0; i < items.length; i++)
-            items[i] = null;
-        head = null;
-        tail = null;
-        count = 0;
+        for(int i = 0; i < capacity; ++i){
+            while(!basket[i].isEmpty())
+                basket[i].remove();
+        }
+        size = 0;
     }
 }

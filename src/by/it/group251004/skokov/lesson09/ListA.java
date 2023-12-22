@@ -1,75 +1,50 @@
 package by.it.group251004.skokov.lesson09;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class ListA<E> implements List<E> {
 
     //Создайте аналог списка БЕЗ использования других классов СТАНДАРТНОЙ БИБЛИОТЕКИ
+    private E[] elements = (E[]) new Object[]{};
+    private int size = 0;
 
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
     //////               Обязательные к реализации методы             ///////
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
-    static final int defaultSize = 8;
-    E[] _list;
-    int _current;
-
-    public ListA() {
-        this(defaultSize);
-    }
-
-
-    public ListA(int size) {
-        _list = (E[]) new Object[size];
-    }
-
-
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append('[');
-        for (int i = 0; i < _current; i++) {
-            sb.append(_list[i]);
-            if (i < _current - 1) {
-                sb.append(", ");
-            }
+        StringBuilder builder = new StringBuilder("[");
+        String delimiter = "";
+        for (int i = 0; i < size; i++) {
+            builder.append(delimiter).append(elements[i]);
+            delimiter = ", ";
         }
-        sb.append("]");
-        return sb.toString();
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override
     public boolean add(E e) {
-        if (_current == _list.length) {
-            E[] newList = (E[]) new Object[_list.length * 2];
-            for (int i = 0; i < _list.length; i++) {
-                newList[i] = _list[i];
-            }
-            _list = newList;
-        }
-        _list[_current++] = e;
+        if (size == elements.length)
+            elements = Arrays.copyOf(elements, elements.length * 2+1);
+        elements[size++] = e;
         return true;
+
     }
 
     @Override
     public E remove(int index) {
-        if (index > -1 && index < _current) {
-            E elem = _list[index];
-            for (int i = index; i < _current - 1; i++)
-                _list[i] = _list[i + 1];
-            _current--;
-            return elem;
-        }
-        return null;
+        E deletedElem = elements[index];
+        System.arraycopy(elements,index+1,elements,index,size-index-1);
+        size--;
+        return deletedElem;
     }
 
     @Override
     public int size() {
-        return _current;
+        return size;
     }
 
     /////////////////////////////////////////////////////////////////////////

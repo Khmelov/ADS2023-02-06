@@ -117,7 +117,7 @@ public class MyRbMap implements SortedMap<Integer, String> {
 
         if (size == 0) return "{}";
 
-        var stringBuilder = new StringBuilder("{");
+        StringBuilder stringBuilder = new StringBuilder("{");
 
         printTree(root, stringBuilder);
 
@@ -236,16 +236,16 @@ public class MyRbMap implements SortedMap<Integer, String> {
 
     @Override
     public String put(Integer key, String value) {
-        var node = search(key);
+        Node node = search(key);
         if (node == null) {
             size++;
             root = put(root, key, value);
             return null;
         }
         else {
-            var oldValue = node.info;
+            String prevValue = node.info;
             node.info = value;
-            return oldValue;
+            return prevValue;
         }
     }
     private Node put(Node node, int key, String value) {
@@ -264,12 +264,12 @@ public class MyRbMap implements SortedMap<Integer, String> {
 
     @Override
     public String remove(Object key) {
-        var oldValue = get(key);
-        if (oldValue != null) {
+        var prevValue = get(key);
+        if (prevValue != null) {
             size--;
             root = remove(root, (int) key);
         }
-        return oldValue;
+        return prevValue;
     }
     private Node remove(Node node, int key) {
         if (key < node.key) {
