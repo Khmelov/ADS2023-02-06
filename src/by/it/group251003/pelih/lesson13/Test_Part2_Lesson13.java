@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson13;
+package by.it.group251003.pelih.lesson13;
 
 import by.it.HomeWork;
 import org.junit.Test;
@@ -26,6 +26,7 @@ public class Test_Part2_Lesson13 extends HomeWork {
         run("0 -> 1", true).include("no").exclude("yes");
         run("0 -> 1, 1 -> 2", true).include("no").exclude("yes");
         run("0 -> 1, 1 -> 2, 2 -> 0", true).include("yes").exclude("no");
+        run("2 -> 1, 1 -> 3, 3 -> 5, 5 -> 6, 6 -> 3, 3 -> 4", true).include("yes").exclude("no");
         //Дополните эти тесты СВОИМИ более сложными примерами и проверьте их работоспособность.
         //Параметр метода run - это ввод. Параметр метода include - это вывод.
         //Общее число примеров должно быть не менее 12 (сейчас их 3).
@@ -33,10 +34,8 @@ public class Test_Part2_Lesson13 extends HomeWork {
 
     @Test
     public void testGraphC() {
-        run("1->2, 2->3, 3->1, 3->4, 4->5, 5->6, 6->4", true)
-                .include("123\n456");
-        run("C->B, C->I, I->A, A->D, D->I, D->B, B->H, H->D, D->E, H->E, E->G, A->F, G->F, F->K, K->G", true)
-                .include("C\nABDHI\nE\nFGK");
+        run("1 -> 2, 2 -> 3, 3 -> 1, 3 -> 4, 4 -> 5, 5 -> 6, 6 -> 4", true).include("123\n456");
+        run("C -> B, C -> I, I -> A, A -> D, D -> I, D -> B, B -> H, H -> D, D -> E, H -> E, E -> G, A -> F, G -> F, F -> K, K -> G", true).include("C\nABDHI\nE\nFGK");
         //Дополните эти тесты СВОИМИ более сложными примерами и проверьте их работоспособность.
         //Параметр метода run - это ввод. Параметр метода include - это вывод.
         //Общее число примеров должно быть не менее 8 (сейчас их 2).
