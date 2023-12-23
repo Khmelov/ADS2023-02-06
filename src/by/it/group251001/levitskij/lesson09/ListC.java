@@ -56,7 +56,7 @@ public class ListC<E> implements List<E> {
 
     @Override
     public void add(int index, E element) {
-        Objects.checkIndex(index, size);
+        Objects.checkIndex(index, size+1);
         if (size == data.length) {
             E[] temp = (E[]) new Object[size * 3 / 2 + 1];
             System.arraycopy(data, 0, temp, 0, index);
@@ -176,7 +176,7 @@ public class ListC<E> implements List<E> {
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        Objects.checkIndex(index, size);
+        Objects.checkIndex(index, size+1);
         Object []cArray = c.toArray();
         if(cArray.length == 0){
             return false;
@@ -252,7 +252,9 @@ public class ListC<E> implements List<E> {
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        Object[] res = new Object[size];
+        System.arraycopy(data, 0, res, 0, size);
+        return res;
     }
 
     /////////////////////////////////////////////////////////////////////////
