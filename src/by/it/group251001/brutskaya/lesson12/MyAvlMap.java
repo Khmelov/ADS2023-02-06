@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.Stack;
 
 public class MyAvlMap implements Map<Integer, String> {
-    class Node {
+    static class Node {
         int key;
         String value;
         int height;

@@ -1,286 +1,139 @@
 package by.it.group251001.zhidkov.lesson09;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-
+import java.util.*;
+import java.lang.StringBuilder;
 public class ListC<E> implements List<E> {
 
-    private Object[] ListElements; // Массив для хранения элементов списка
-    private int Lsize;          // Текущий размер списка
+    private Object[] data = new Object[0];
+    private int size = 0;
 
-    // Конструктор для создания пустого списка
-    public ListC() {
-        ListElements = new Object[10]; // Начальный размер списка
-        Lsize = 0;
-    }
-    //Создайте аналог списка БЕЗ использования других классов СТАНДАРТНОЙ БИБЛИОТЕКИ
-
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
-    //////               Обязательные к реализации методы             ///////
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        result.append("[");
-        for (int i = 0; i < Lsize; i++)
-        {
-            result.append(ListElements[i]);
-            if (i < Lsize - 1)
-                result.append(", ");
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < size; i++) {
+            sb.append(data[i]);
+            if (i == size - 1) {
+                sb.append("]");
+                return sb.toString();
+            }
+            sb.append(", ");
         }
-        result.append("]");
-        return result.toString();
+        sb.append("]");
+        return sb.toString();
     }
 
     @Override
     public boolean add(E e) {
-        if (Lsize == ListElements.length)
-        {
-            int newCapacity = Lsize * 2;
-            //Умножаю на 2, чтобы уменьшить частоту необходимости увеличения массива
-            Object[] newListEl = new Object[newCapacity];
-            for (int i = 0; i < Lsize; i++)
-            {
-                newListEl[i] = ListElements[i];
-            }
-            ListElements = newListEl;
-        }
-        ListElements[Lsize] = e;
-        Lsize++;
+        ensureCapacity(size + 1);
+        data[size++] = e;
         return true;
     }
 
     @Override
     public E remove(int index) {
-        if (index < 0 || index >= Lsize)
-        {
-            throw new IndexOutOfBoundsException("Index out of bounds");
+        if (index >= size) {
+            return null;
         }
-        E removedElement = (E) ListElements[index];
-
-        for (int i = index; i < Lsize - 1; i++)
-        {
-            ListElements[i] = ListElements[i + 1];
-        }
-        Lsize--;
-        return removedElement;
+        E rem = (E) data[index];
+        System.arraycopy(data, index + 1, data, index, size - 1 - index);
+        size--;
+        return rem;
     }
 
     @Override
     public int size() {
-        return Lsize;
+        return size;
     }
 
-
+    @Override
     public void add(int index, E element) {
-        int newCapacity = Lsize + 1;
-        Object[] newListEl = new Object[newCapacity];
-
-        // Копируем элементы до индекса index
-        for (int i = 0; i < index; i++) {
-            newListEl[i] = ListElements[i];
-        }
-
-// Вставляем новый элемент в позицию index
-        newListEl[index] = element;
-
-// Копируем остальные элементы после индекса index
-        for (int i = index + 1; i < Lsize + 1; i++) {
-            newListEl[i] = ListElements[i - 1];
-        }
-
-        ListElements = newListEl;
-        Lsize++;
+        ensureCapacity(size + 1);
+        System.arraycopy(data, index, data, index + 1, size - index);
+        data[index] = element;
+        size++;
     }
 
+    @Override
     public boolean remove(Object o) {
-        int index = indexOf(o);
-        if (index > -1)
-        {
-            remove(index);
+        for (int i = 0; i < size; i++) {
+            if (o.equals(data[i])) {
+                remove(i);
+                return true;
+            }
         }
-        return (index > -1);
+        return false;
     }
+
+    @Override
     public E set(int index, E element) {
-        if (index < 0 || index >= Lsize)
-        {
-            throw new IndexOutOfBoundsException("Index out of bounds");
+        if (index >= size) {
+            return null;
         }
-        E prevEl = (E)ListElements[index];
-        ListElements[index] = element;
-        return prevEl;
+        E tmp = (E) data[index];
+        data[index] = element;
+        return tmp;
     }
 
+    @Override
     public boolean isEmpty() {
-        return (Lsize == 0);
+        return size == 0;
     }
 
+    @Override
     public void clear() {
-        for (int i = 0; i < Lsize; i++) {
-            ListElements[i] = null;
-        }
-        Lsize = 0;
+        data = new Object[0];
+        size = 0;
     }
 
+    @Override
     public int indexOf(Object o) {
-        if (o == null)
-        {
-            for (int i = 0; i < Lsize; i++)
-            {
-                if (ListElements[i].equals(null))
-                {
-                    return  i;
-                }
-            }
+        for (int i = 0; i < size; i++) {
+            if (o.equals(data[i]))
+                return i;
         }
-        else
-        {
-            for (int i = 0; i < Lsize; i++)
-            {
-                if (o.equals(ListElements[i]))
-                {
-                    return  i;
-                }
-            }
-        }
-
         return -1;
     }
 
+    @Override
     public E get(int index) {
-        return (E)ListElements[index];
+        if (index >= size)
+            return null;
+        return (E) data[index];
     }
 
+    @Override
     public boolean contains(Object o) {
-        return (indexOf(o) > -1);
+        for (int i = 0; i < size; i++)
+            if (o.equals(data[i]))
+                return true;
+        return false;
     }
 
+    @Override
+    public Iterator<E> iterator() {
+        return null;
+    }
+
+    @Override
+    public Object[] toArray() {
+        return new Object[0];
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return null;
+    }
+
+    @Override
     public int lastIndexOf(Object o) {
-        if (o == null)
-        {
-            for (int i = Lsize - 1; i >= 0; i--)
-            {
-                if (ListElements[i].equals(null))
-                {
-                    return i;
-                }
-            }
-        }
-        else
-        {
-            for (int i = Lsize - 1; i >= 0; i--)
-            {
-                if (o.equals(ListElements[i]))
-                {
-                    return i;
-                }
-            }
-        }
+        for (int i = size - 1; i >= 0; i--)
+            if (o.equals(data[i]))
+                return i;
         return -1;
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
-        //Из-за того что 'c' может быть любым типом использую Object
-        for (Object El : c);
-        {
-            if (!contains(c))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends E> c)
-    {
-        Object[] newListEl = new Object[Lsize + c.size()];
-        for (int i = 0; i < Lsize; i++)
-        {
-            newListEl[i] = ListElements[i];
-        }
-        for (E Element : c)
-        {
-            newListEl[Lsize] = Element;
-            Lsize++;
-        }
-        ListElements = newListEl;
-        return !c.isEmpty();
-    }
-
-    @Override
-    public boolean addAll(int index, Collection<? extends E> c) {
-        if (index < 0 || index > Lsize) {
-            throw new IndexOutOfBoundsException("Index out of bounds");
-        }
-        Object[] newListEl = new Object[Lsize + c.size()];
-        int i;
-        for (i = 0; i < index; i++)
-        {
-            newListEl[i] = ListElements[i];
-        }
-
-        int j = index;
-
-        for (E Element : c)
-        {
-            newListEl[j] = Element;
-            j++;
-        }
-
-        for (j = i; j < Lsize; j++)
-        {
-            newListEl[j + c.size()] = ListElements[j];
-        }
-        Lsize += c.size();
-        ListElements = newListEl;
-        return !c.isEmpty();
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        boolean bool = false;
-        int i;
-        for (i = 0; i < Lsize; i++) {
-            if (c.contains(ListElements[i])) {
-                remove(i);
-                bool = true;
-                i--; // Уменьшаем индекс, так как после удаления элемента все элементы смещаются на одну позицию влево
-            }
-        }
-        Lsize = i;
-        return bool;
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
-
-        boolean bool = false;
-        int i;
-        for (i = 0; i < Lsize; i++) {
-            if (!c.contains(ListElements[i])) {
-                remove(i);
-                bool = true;
-                i--; // Уменьшаем индекс, так как после удаления элемента все элементы смещаются на одну позицию влево
-            }
-        }
-        Lsize = i;
-        return bool;
-    }
-
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
-    //////               Опциональные к реализации методы             ///////
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
-
-    @Override
-    public List<E> subList(int fromIndex, int toIndex) {
+    public ListIterator<E> listIterator() {
         return null;
     }
 
@@ -290,29 +143,78 @@ public class ListC<E> implements List<E> {
     }
 
     @Override
-    public ListIterator<E> listIterator() {
+    public List<E> subList(int fromIndex, int toIndex) {
         return null;
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
-        return null;
+    public boolean containsAll(Collection<?> c) {
+        Object[] tmp = c.toArray();
+        for (int i = 0; i < c.size(); i++) {
+            if (!this.contains(tmp[i]))
+                return false;
+        }
+        return true;
     }
 
     @Override
-    public Object[] toArray() {
-        return new Object[0];
+    public boolean addAll(Collection<? extends E> c) {
+        if (c.size() == 0)
+            return false;
+        ensureCapacity(size + c.size());
+        System.arraycopy(c.toArray(), 0, data, size, c.size());
+        size += c.size();
+        return true;
     }
 
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
-    ////////        Эти методы имплементировать необязательно    ////////////
-    ////////        но они будут нужны для корректной отладки    ////////////
-    /////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////
     @Override
-    public Iterator<E> iterator() {
-        return null;
+    public boolean addAll(int index, Collection<? extends E> c) {
+        if (c.size() == 0)
+            return false;
+        ensureCapacity(size + c.size());
+        System.arraycopy(data, index, data, index + c.size(), size - index);
+        System.arraycopy(c.toArray(), 0, data, index, c.size());
+        size += c.size();
+        return true;
     }
 
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        boolean edited = false;
+        int i = 0;
+        while (i < size) {
+            if (c.contains(data[i])) {
+                this.remove(i);
+                edited = true;
+            } else
+                i++;
+        }
+        return edited;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        boolean edited = false;
+        int i = 0;
+        while (i < size) {
+            if (!c.contains(data[i])) {
+                this.remove(i);
+                edited = true;
+            } else
+                i++;
+        }
+        return edited;
+    }
+
+    private void ensureCapacity(int minCapacity) {
+        if (minCapacity > data.length) {
+            int newCapacity = Math.max(data.length << 1, 10);
+            if (newCapacity < minCapacity)
+                newCapacity = minCapacity;
+            data = Arrays.copyOf(data, newCapacity);
+        }
+    }
+
+    // Остальные методы можно оставить неизменными
 }
+

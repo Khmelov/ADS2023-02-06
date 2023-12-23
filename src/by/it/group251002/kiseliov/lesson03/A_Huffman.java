@@ -1,4 +1,4 @@
-package by.it.group251002.Kiseliov.lesson03;
+package by.it.group251002.kiseliov.lesson03;
 
 import java.io.File;
 import java.io.FileNotFoundException;

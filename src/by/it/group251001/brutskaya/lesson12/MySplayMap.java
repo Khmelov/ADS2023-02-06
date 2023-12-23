@@ -3,7 +3,7 @@ package by.it.group251001.brutskaya.lesson12;
 import java.util.*;
 
 public class MySplayMap implements NavigableMap<Integer, String> {
-    class Node {
+    static class Node {
         Integer key;
         String value;
         Node left;
