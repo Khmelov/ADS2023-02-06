@@ -3,7 +3,7 @@ package by.it.group251001.brutskaya.lesson12;
 import java.util.*;
 
 public class MyRbMap implements SortedMap<Integer, String> {
-    class Node {
+    static class Node {
         Integer key;
         String value;
         Node left;
@@ -20,8 +20,8 @@ public class MyRbMap implements SortedMap<Integer, String> {
     int size;
     Node root;
 
-    private final boolean RED = true;
-    private final boolean BLACK = false;
+    private static final boolean RED = true;
+    private static final boolean BLACK = false;
 
     @Override
     public SortedMap<Integer, String> headMap(Integer toKey) {

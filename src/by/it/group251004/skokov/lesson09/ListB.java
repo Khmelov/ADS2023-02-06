@@ -2,96 +2,65 @@ package by.it.group251004.skokov.lesson09;
 
 import java.util.*;
 
-public class ListB<E> implements List<E>  {
+public class ListB<E> implements List<E> {
 
 
     //Создайте аналог списка БЕЗ использования других классов СТАНДАРТНОЙ БИБЛИОТЕКИ
+    private E[] elements = (E[]) new Object[]{};
+    private int size = 0;
 
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
     //////               Обязательные к реализации методы             ///////
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
-
-    static final int defaultSize = 8;
-    E[] _list;
-    int _current;
-
-    public ListB() {
-        this(defaultSize);
-    }
-
-
-    public ListB(int size) {
-        _list = (E[]) new Object[size];
-    }
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append('[');
-        for (int i = 0; i < _current; i++) {
-            sb.append(_list[i]);
-            if (i < _current - 1) {
-                sb.append(", ");
-            }
+        StringBuilder builder = new StringBuilder("[");
+        String delimiter = "";
+        for (int i = 0; i < size; i++) {
+            builder.append(delimiter).append(elements[i]);
+            delimiter = ", ";
         }
-        sb.append("]");
-        return sb.toString();
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override
     public boolean add(E e) {
-        if (_current == _list.length) {
-            E[] newList = (E[]) new Object[_list.length * 2];
-            for (int i = 0; i < _list.length; i++) {
-                newList[i] = _list[i];
-            }
-            _list = newList;
-        }
-        _list[_current++] = e;
+        if (size == elements.length)
+            elements = Arrays.copyOf(elements, elements.length * 2 + 1);
+        elements[size++] = e;
         return true;
+
     }
 
     @Override
     public E remove(int index) {
-        if (index > -1 && index < _current) {
-            E elem = _list[index];
-            for (int i = index; i < _current - 1; i++)
-                _list[i] = _list[i + 1];
-            _current--;
-            return elem;
-        }
-        return null;
+        E deletedElem = elements[index];
+        System.arraycopy(elements, index + 1, elements, index, size - index - 1);
+        size--;
+        return deletedElem;
     }
 
     @Override
     public int size() {
-        return _current;
+        return size;
     }
 
     @Override
     public void add(int index, E element) {
-        if (_current == _list.length) {
-            E[] newList = (E[]) new Object[_list.length * 2];
-            for (int i = 0; i < _list.length; i++) {
-                newList[i] = _list[i];
-            }
-            _list = newList;
-        }
-        if (index > -1 && index <= _current) {
-            for (int i = _current; i > index; i--) {
-                _list[i] = _list[i - 1];
-            }
-            _list[index] = element;
-            _current++;
-        }
+        if (size == elements.length)
+            elements = Arrays.copyOf(elements, elements.length * 2 + 1);
+        System.arraycopy(elements, index, elements, index + 1, size - index);
+        elements[index] = element;
+        size++;
     }
-
 
     @Override
     public boolean remove(Object o) {
         int index = indexOf(o);
-        if (index != -1) {
+        if (index > -1) {
             remove(index);
             return true;
         }
@@ -100,58 +69,53 @@ public class ListB<E> implements List<E>  {
 
     @Override
     public E set(int index, E element) {
-        E item = null;
-        if (index > -1 && index < _current) {
-            item = _list[index];
-            _list[index] = element;
-        }
-        return item;
+        E replacedElem = elements[index];
+        elements[index] = element;
+        return replacedElem;
     }
 
 
     @Override
     public boolean isEmpty() {
-        return _current == 0;
+        return size == 0;
     }
 
 
     @Override
     public void clear() {
-        for (int i = 0; i < _current; i++) {
-            _list[i] = null;
-        }
-        _current = 0;
+        for (int i = 0; i < size; i++)
+            elements[i] = null;
+        size = 0;
     }
 
     @Override
     public int indexOf(Object o) {
-        for (int i = 0; i < _current; i++) {
-            if (Objects.equals(_list[i], o)) {
+        for (int i = 0; i < size; i++)
+            if (elements[i].equals(o))
                 return i;
-            }
-        }
         return -1;
     }
 
     @Override
     public E get(int index) {
-        if (index > -1 && index < _current)
-            return _list[index];
-        return null;
+        return elements[index];
     }
 
     @Override
     public boolean contains(Object o) {
-        return indexOf(o) != -1;
+        for (int i = 0; i < size; i++)
+            if (elements[i].equals(o))
+                return true;
+        return false;
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        for (int i = _current - 1; i > -1; i--) {
-            if (Objects.equals(o, _list[i]))
-                return i;
-        }
-        return -1;
+        int index = -1;
+        for (int i = 0; i < size; i++)
+            if (elements[i].equals(o))
+                index = i;
+        return index;
     }
 
 

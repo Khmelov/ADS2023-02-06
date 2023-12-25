@@ -11,7 +11,7 @@ import java.util.List;
 Алгоритм жадный. Для реализации обдумайте надежный шаг.
 */
 
-public class A_VideoRegistrator {
+public class  A_VideoRegistrator {
 
     public static void main(String[] args) {
         A_VideoRegistrator instance=new A_VideoRegistrator();
@@ -25,26 +25,27 @@ public class A_VideoRegistrator {
         //timeWorkDuration время работы видеокамеры после старта
         List<Double> result;
         result = new ArrayList<>();
-        int i=0;                              //i - это индекс события events[i]
         //Комментарии от проверочного решения сохранены для подсказки, но вы можете их удалить.
         //Подготовка к жадному поглощению массива событий
         //hint: сортировка Arrays.sort обеспечит скорость алгоритма
         //C*(n log n) + C1*n = O(n log n)
-
         Arrays.sort(events);
-        while (events.length > i) {
-            double StartTime = i;
-            result.add(StartTime);
-            while (i < events.length && events[i] <= StartTime + workDuration)
-                i++;
-        }
-
         //пока есть незарегистрированные события
         //получим одно событие по левому краю
         //и запомним время старта видеокамеры
         //вычислим момент окончания работы видеокамеры
         //и теперь пропустим все покрываемые события
         //за время до конца работы, увеличивая индекс
+
+        double StartOfED = events[0];
+        result.add(StartOfED);
+        for (int i = 1; i<events.length;i++){
+            if (StartOfED + workDuration < events[i]){
+                StartOfED = events[i];
+                result.add(StartOfED);
+            }
+
+        }
 
 
 
