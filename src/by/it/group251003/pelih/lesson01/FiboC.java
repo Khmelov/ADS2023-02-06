@@ -7,6 +7,7 @@ package by.it.group251003.pelih.lesson01;
  */
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 public class FiboC {
 
@@ -25,41 +26,25 @@ public class FiboC {
     long fasterC(long n, int m) {
         //Решение сложно найти интуитивно
         //возможно потребуется дополнительный поиск информации
-        //см. период Пизано
 
-        long[] arr = new long[m*12];
-        BigInteger LastElem = BigInteger.ONE;
-        BigInteger LastElem2 = BigInteger.ONE;
-        BigInteger CurElem;
-        arr[0] = 1;
-        arr[1] = 1;
+        //см. период Пизано!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        ArrayList<Integer> Remainder = new ArrayList<>(100);
 
+        Remainder.add(0);
+        Remainder.add(1);
 
-        BigInteger bigInteger = BigInteger.valueOf(m);
-        for (int i = 2; i < m*12; i++) {
-            CurElem = LastElem.add(LastElem2);
-            LastElem = LastElem2;
-            LastElem2 = CurElem;
-            arr[i] = (CurElem.mod(bigInteger)).longValue();
+        for (int i = 2; i <= n; i++) {
+
+            Remainder.add((Remainder.get(i - 1) + Remainder.get(i - 2)) % m);
+
+            //Если найден период, то выводим результат
+            if ((Remainder.get(i - 1) == 0) && (Remainder.get(i) == 1))
+                return Remainder.get((int) (n % (i - 1)));
         }
 
-        int Period = 2;
-        boolean isFind = false;
-        boolean isThat;
-        while(!isFind) {
-            isThat = true;
-            for (int i = 0; i < Period; i++) {
-                if (arr[i] != arr[i + Period]) {
-                    isThat = false;
-                }
-            }
-            if (isThat) {
-                isFind = true;
-            }
-            else Period++;
-        }
-
-        return arr[((int)(n % Period)) - 1];
+        //Если найден период, то выводим результат
+        return Remainder.get( Remainder.size() - 1 );
     }
 }
 

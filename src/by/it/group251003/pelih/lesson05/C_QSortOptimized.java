@@ -29,6 +29,7 @@ import java.util.Scanner;
 
 */
 
+    //Решение с помощью рекурсии
 
 public class C_QSortOptimized {
 
