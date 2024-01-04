@@ -18,6 +18,8 @@ public class ListC<E> implements List<E> {
     private E[] list = (E[]) new Object[0];
     private int size = 0;
 
+    private int capacity = 10;
+
     private void resize() {
         E[] newList = (E[]) new Object[2 * list.length + 1];
         System.arraycopy(list, 0, newList, 0, size);
@@ -50,7 +52,7 @@ public class ListC<E> implements List<E> {
         return true;
     }
 
-    @Override
+    /*@Override
     public E remove(int index) {
         if (index < 0 || index >= size)
             throw new IndexOutOfBoundsException("index: " + index + "is out of bound");
@@ -64,7 +66,31 @@ public class ListC<E> implements List<E> {
         size--;
 
         return deleted;
+    }*/
+
+    @Override
+    public E remove(int index) {
+        if (size == capacity)
+        {
+            capacity*=2;
+            E[] newList = (E[]) new Object[capacity];
+            for (int i=0;i<size;i++){
+                newList[i]=list[i];
+            }
+            list = newList;
+        }
+        if (index > -1 && index < size)
+        {
+            E temp = list[index];
+            for (int i=index;i<size;i++){
+                list[i]=list[i+1];
+            }
+            size--;
+            return temp;
+        }
+        return null;
     }
+
 
     @Override
     public int size() {
@@ -89,7 +115,7 @@ public class ListC<E> implements List<E> {
         size++;
     }
 
-    @Override
+   @Override
     public boolean remove(Object o) {
         int idx = indexOf(o);
         if (idx < 0) {
