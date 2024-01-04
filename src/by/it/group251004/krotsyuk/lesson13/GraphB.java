@@ -54,7 +54,6 @@ public class GraphB {
             stack[vertex] = true;
 
             for (int neighbor : graph.getNeighbors(vertex)) {
-
                 if (!visited[neighbor] && isCyclicUtil(graph, neighbor)) return true;
                 if (stack[neighbor]) return true;
             }

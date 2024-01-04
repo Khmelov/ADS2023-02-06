@@ -1,6 +1,6 @@
 package by.it.group251004.krotsyuk.lesson13;
 
-import by.it.group251004.krutko.lesson13.GraphUtil;
+import by.it.group251004.krotsyuk.lesson13.GraphUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,7 +37,7 @@ public class GraphA {
             endVertex[i] = isNumeric ? Integer.parseInt(current[current.length - 1]) : current[current.length - 1].charAt(0) - 'A';
         }
 
-        by.it.group251004.krutko.lesson13.GraphUtil graph = new by.it.group251004.krutko.lesson13.GraphUtil(getMax(startVertex, endVertex) + 1);
+        GraphUtil graph = new GraphUtil(getMax(startVertex, endVertex) + 1);
 
         for (int i = 0; i < arr.length; i++) {
             graph.addOrientedEdge(startVertex[i], endVertex[i]);
@@ -56,7 +56,7 @@ public class GraphA {
         scan.close();
     }
 
-    public static void TopologicalSort(by.it.group251004.krutko.lesson13.GraphUtil graph, int start) {
+    public static void TopologicalSort(GraphUtil graph, int start) {
         visited = new boolean[graph.vertexCount];
         topological = new ArrayList<>();
         for (int i = start; i < graph.vertexCount; i++)
