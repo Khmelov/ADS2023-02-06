@@ -23,7 +23,7 @@ public class Test_Part2_Lesson14 extends HomeWork {
             String input = generatePointInput(points);
             String out = calculateTestOut(
                     points,
-                    (x, y) -> Math.hypot(Math.hypot(x[0] - y[0], x[1] - y[1]), x[2] - y[2]) < distance
+                    (x, y) -> Math.hypot(Math.hypot(x[0] - y[0], x[1] - y[1]), x[2] - y[2]) <= distance
             );
             run(input).include(out);
         }
