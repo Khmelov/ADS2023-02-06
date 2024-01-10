@@ -5,7 +5,7 @@ public class GraphB {private final Map<String, List<String>> adjacencyList = new
     private boolean hasCycle = false;
     public boolean hasCycle() { return hasCycle; }
     public GraphB(String input) {
-        var edges = input.split (", ");
+        var edges = input.split(", ");
         for (var edge : edges) {
             var vertices = edge.split(" -> ");
             var from = vertices[0];
