@@ -70,7 +70,7 @@ public class Test_Part2_Lesson14 extends HomeWork {
             points.add(point);
         }
         out.append('\n');
-        return   out.toString();
+        return  out.toString();
     }
 
     private String generateSiteInput(Set<String> sites) {

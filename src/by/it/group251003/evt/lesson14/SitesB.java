@@ -7,7 +7,7 @@ public class SitesB {
 
     public static void main(String[] args) {
 
-        List<Set<String>>  dsu = new ArrayList<>();
+        List<Set<String>> dsu = new ArrayList<>();
         Set<String> links = new HashSet<>();
 
         try (Scanner scanner = new Scanner(System.in)) {

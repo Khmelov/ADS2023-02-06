@@ -7,7 +7,7 @@ public class StatesHanoiTowerC {
 
         int N;
 
-        try  (Scanner scanner = new Scanner(System.in)) {
+        try (Scanner scanner = new Scanner(System.in)) {
             N = scanner.nextInt();
         }
 

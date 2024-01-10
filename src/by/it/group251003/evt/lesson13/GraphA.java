@@ -3,7 +3,7 @@ import java.util.*;
 public class GraphA {
     private final SortedMap<String, SortedSet<String>> adjacencyList = new TreeMap<>(Collections.reverseOrder());
     private List<String> topologicalOrder = null;
-    private boolean hasCycle =  false;
+    private boolean hasCycle = false;
     public List<String> getTopologicalOrder() { return topologicalOrder; }
     public boolean hasCycle() { return hasCycle; }
     public GraphA(String input) {
