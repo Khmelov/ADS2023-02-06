@@ -7,7 +7,7 @@ import org.junit.Test;
 public class Test_Part2_Lesson13 extends HomeWork {
 
     @Test
-    public void testGraphA() {
+    public void  testGraphA() {
         run("0 -> 1", true).include("0 1");
         run("0 -> 1, 1 -> 2", true).include("0 1 2");
         run("0 -> 2, 1 -> 2, 0 -> 1", true).include("0 1 2");

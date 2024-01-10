@@ -5,7 +5,7 @@ public class GraphC {private final Map<String, Set<String>> adjacencyList = new 
     private final List<List<String>> strongComponents = new ArrayList<>();
     public List<List<String>> getStrongComponents() { return strongComponents; }
     public GraphC(String input) {
-        var edges = input.split(", ");
+        var edges = input.split (", ");
         for (var edge : edges) {
             var vertices = edge.split("->");
             var from = vertices[0];

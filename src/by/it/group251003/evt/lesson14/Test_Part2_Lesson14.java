@@ -71,7 +71,7 @@ public class Test_Part2_Lesson14 extends HomeWork {
         }
         out.append('\n');
 
-        return  out.toString();
+        return   out.toString();
 
     }
 
