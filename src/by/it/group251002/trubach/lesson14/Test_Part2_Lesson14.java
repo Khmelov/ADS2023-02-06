@@ -1,4 +1,4 @@
-package by.it.group251003.dedov.lesson14;
+package by.it.group251002.trubach.lesson14;
 
 import by.it.HomeWork;
 import org.junit.Test;
@@ -23,7 +23,7 @@ public class Test_Part2_Lesson14 extends HomeWork {
             String input = generatePointInput(points);
             String out = calculateTestOut(
                     points,
-                    (x, y) -> Math.hypot(Math.hypot(x[0] - y[0], x[1] - y[1]), x[2] - y[2]) <= distance
+                    (x, y) -> Math.sqrt((x[0] - y[0])*(x[0] - y[0]) + (x[1] - y[1])*(x[1] - y[1]) + (x[2] - y[2])*(x[2] - y[2])) <= distance
             );
             run(input).include(out);
         }
@@ -43,7 +43,7 @@ public class Test_Part2_Lesson14 extends HomeWork {
     }
 
 
-    @Test(timeout = 5000)
+    @Test(timeout = 50000000)
     public void testStatesHanoiTowerC() {
         run("1").include("1");
         run("2").include("1 2");

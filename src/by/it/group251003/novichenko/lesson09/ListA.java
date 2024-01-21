@@ -14,6 +14,7 @@ public class ListA<E> implements List<E> {
     /////////////////////////////////////////////////////////////////////////
 
     private E[] elements = (E[]) new Object[]{};
+
     private int size=0;
     @Override
     public String toString() {
