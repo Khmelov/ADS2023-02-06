@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson09;
+package by.it.group251002.puchko.lesson09;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -14,24 +14,50 @@ public class ListA<E> implements List<E> {
     //////               Обязательные к реализации методы             ///////
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
+
+    private E[] list = (E[]) new Object[0];
+    private int size;
     @Override
     public String toString() {
-        return "";
+        StringBuilder str = new StringBuilder("[");
+        String temp = "";
+        for(int i = 0; i < size; i++){
+            str.append(temp).append(list[i]);
+            temp = ", ";
+        }
+        str.append("]");
+
+        return str.toString();
     }
 
     @Override
     public boolean add(E e) {
-        return false;
+        if(size==list.length){
+            E[] new_list = (E[]) new Object[(list.length*3)/2+1];
+            for (int i=0;i<list.length;i++)
+                new_list[i] = list[i];
+            list = new_list;
+        }
+        list[size++] = e;
+        return true;
     }
 
     @Override
     public E remove(int index) {
+        if (index>=0 && index<size)
+        {
+            E removed = list[index];
+            for (int i=index;i<size-1;i++)
+                list[i] = list[i+1];
+            size--;
+            return removed;
+        }
         return null;
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     /////////////////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-package by.it.a_khmelev.lesson09;
+package by.it.group251002.puchko.lesson09;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -14,96 +14,191 @@ public class ListC<E> implements List<E> {
     //////               Обязательные к реализации методы             ///////
     /////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////
+
+    private E[] list = (E[]) new Object[0];
+    private int size;
     @Override
     public String toString() {
-        return "";
+        StringBuilder str = new StringBuilder("[");
+        String temp = "";
+        for(int i = 0; i < size; i++){
+            str.append(temp).append(list[i]);
+            temp = ", ";
+        }
+        str.append("]");
+
+        return str.toString();
     }
 
     @Override
     public boolean add(E e) {
-        return false;
+        if(size == list.length){
+            E[] new_list = (E[]) new Object[ (list.length * 3) / 2 + 1 ];
+            for (int i = 0; i < list.length; i++)
+                new_list[i] = list[i];
+            list = new_list;
+        }
+        list[size] = e;
+        size++;
+        return true;
     }
 
     @Override
     public E remove(int index) {
+        if (index >= 0 && index < size)
+        {
+            E removed = list[index];
+            for (int i = index; i < size - 1; i++)
+                list[i] = list[i + 1];
+            size--;
+            return removed;
+        }
         return null;
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     public void add(int index, E element) {
+        if (size == list.length) {
+            E[] newList = (E[]) new Object[ list.length * 3 / 2 + 1 ];
+            for (int i = 0; i < list.length; i++) {
+                newList[i] = list[i];
+            }
+            list = newList;
+        }
 
+        if (index > -1 && index <= size) {
+            for (int i = size; i > index; i--) {
+                list[i] = list[i - 1];
+            }
+            list[index] = element;
+            size++;
+        }
     }
 
     @Override
     public boolean remove(Object o) {
+        int delMem = indexOf(o);
+        if (delMem > -1){
+            remove(delMem);
+            return true;
+        }
         return false;
     }
 
     @Override
     public E set(int index, E element) {
+        if (index >= 0 && index < size){
+            E replaced = list[index];
+            list[index] = element;
+            return replaced;
+        }
         return null;
     }
 
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
 
     @Override
     public void clear() {
-
+        for (int i = 0; i < size; i++)
+            list[i] = null;
+        size=0;
     }
 
     @Override
     public int indexOf(Object o) {
-        return 0;
+        for (int i = 0; i < size; i++)
+        {
+            if (o.equals(list[i]))
+                return i;
+        }
+        return -1;
     }
 
     @Override
     public E get(int index) {
+        if (index>=0 && index <size)
+            return list[index];
         return null;
     }
 
     @Override
     public boolean contains(Object o) {
-        return false;
+        return (indexOf(o) != -1);
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        for (int i = size - 1; i >= 0; i--)
+            if (o.equals(list[i])) return i;
+        return -1;
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return false;
+        for (Object temp_coll : c)
+            if (!contains(temp_coll))
+                return false;
+        return true;
     }
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        return false;
+        if (c.isEmpty())
+            return false;
+        else
+            for (E coll_elem: c)
+                add(coll_elem);
+        return true;
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        return false;
+        if (c.isEmpty())
+            return false;
+        else
+            for (E coll_elem:c){
+                add(index, coll_elem);
+                index++;
+            }
+        return true;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return false;
+        boolean removed = false;
+        int i=0;
+        while (i<size){
+            if (c.contains(get(i))) {
+                remove(i);
+                removed = true;
+            }
+            else i++;
+        }
+        return removed;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        boolean retained = false;
+        int i = 0;
+        while (i < size) {
+            if (!c.contains(get(i))) {
+                remove(i);
+                retained = true;
+            }
+            else i++;
+        }
+        return retained;
     }
 
     /////////////////////////////////////////////////////////////////////////
