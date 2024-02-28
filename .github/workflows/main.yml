@@ -1,7 +1,9 @@
+name: Check Package Files
+
 on:
   pull_request:
-    branches:
-    - master
+    paths:
+      - '**/*'
 
 jobs:
   check_package_files:
@@ -13,9 +15,8 @@ jobs:
 
     - name: Check package files
       run: |
-        PATTERN3="\/package\/[^\/]+\/[^\/]+\/[^\/]+\/"
-        PATTERN4="\/package\/[^\/]+\/[^\/]+\/[^\/]+\/[^\/]+\/"
-        FILES=$(git diff --name-only ${{ github.base_ref }} ${{ github.sha }} | grep -E "$PATTERN4")
+        PATTERN="\/package\/[^\/]+\/[^\/]+\/[^\/]+\/[^\/]+\/"
+        FILES=$(git diff --name-only ${{ github.base_ref }} ${{ github.sha }} | grep -E "$PATTERN")
         if [ -z "$FILES" ]; then
           echo "Error: PR contains files not belonging to the specified package structure"
           exit 1
