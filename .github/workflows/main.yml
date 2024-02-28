@@ -19,7 +19,7 @@ jobs:
         FILES=$(git diff --name-only ${{ github.base_ref }} ${{ github.sha }} | grep -E "$PATTERN")
         if [ -z "$FILES" ]; then
           echo "Error: PR contains files not belonging to the specified package structure"
-          exit 1
+          exit 2
         else
           echo "All files in PR belong to the specified package structure"
         fi
