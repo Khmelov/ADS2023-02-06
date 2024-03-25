@@ -11,24 +11,20 @@ on:
 jobs:
   validate_pr:
     runs-on: ubuntu-latest
-
+    outputs:
+      matrix: ${{ steps.changed-files.outputs.all_changed_files }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Validate PR
-        run: |
-
-          FILES=$(git status)
-          echo ${FILES}
-          echo branch--------------
-          git branch
-          
-          echo main------
-          git diff --name-only main
-          
-          echo main HEAD------
-          git diff --name-only main HEAD
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get changed files
+        id: changed-files
+        uses: ./
+        with:
+          matrix: true
+      - name: List all changed files
+        run: echo '${{ steps.changed-files.outputs.all_changed_files }}'
           
 
           
