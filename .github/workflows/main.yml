@@ -24,9 +24,11 @@ jobs:
           echo branch--------------
           git branch
           
-          echo add------
-          git diff --name-only add
-          
           echo main------
           git diff --name-only main
+          
+          echo main HEAD------
+          git diff --name-only main HEAD
+          
+
           
