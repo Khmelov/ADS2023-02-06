@@ -15,4 +15,12 @@ jobs:
 
           FILES=$(git status)
           echo ${FILES}
-
+          echo branch--------------
+          git branch
+          
+          echo add------
+          git diff --name-only add
+          
+          echo main------
+          git diff --name-only main
+          
