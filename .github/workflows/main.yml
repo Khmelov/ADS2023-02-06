@@ -12,7 +12,7 @@ jobs:
 
       - name: Validate PR
         run: |
-          LEVEL=4 # Замените <уровень_пакета> на требуемый уровень пакета
+          LEVEL=3 # Замените <уровень_пакета> на требуемый уровень пакета
 
           CHANGED_FILES=$(git diff --name-only master HEAD)
 
