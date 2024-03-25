@@ -18,7 +18,7 @@ jobs:
         with:
           format: space-delimited
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Printing
+      - name: Check Pull Request
         run: |
           echo "PR INFO"
           echo "All:"
@@ -34,5 +34,34 @@ jobs:
           echo "Added+Modified:"
           echo "${{ steps.abc.outputs.added_modified }}"
           
+          #!/bin/bash
 
+          # Переменная, содержащая список файлов с указанием полного пути
+          file_list="/path/to/file1.txt /path/to/file2.txt /path/to/file3.txt"
+  
+          # Инициализация переменной для хранения общего пути
+          common_path=""
+  
+          # Разделение списка файлов по пробелу и обработка каждого файла
+          for file in $file_list; do
+            # Если common_path пустой, то записываем в него путь текущего файла
+            if [[ -z "$common_path" ]]; then
+            common_path=$(dirname "$file")
+            fi
+
+            # Сравниваем common_path c путем текущего файла и обновляем общий путь
+            while [[ "$file" != "$common_path"* ]]; do
+              common_path=$(dirname "$common_path")
+            done
+          done
           
+          # Выводим общий путь
+          echo "Общий путь: $common_path"
+          
+          # Используем команду find для подсчёта числа подкаталогов в общем пути
+            num_subdirectories=$(find "$common_path" -type d | wc -l)
+          
+          # Выводим число подкаталогов
+          echo "Число подкаталогов: $num_subdirectories"
+          
+                    
