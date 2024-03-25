@@ -1,25 +1,49 @@
-name: Check Package Files
+name: PR Validation
 
-on:
-  pull_request:
-    paths:
-      - '**/*'
+on: [pull_request]
 
 jobs:
-  check_package_files:
+  validate_pr:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Check package files
-      run: |
-        PATTERN="\/package\/[^\/]+\/[^\/]+\/[^\/]+\/[^\/]+\/"
-        FILES=$(git diff --name-only ${{ github.base_ref }} ${{ github.sha }} | grep -E "$PATTERN")
-        if [ -z "$FILES" ]; then
-          echo "Error: PR contains files not belonging to the specified package structure"
-          exit 2
-        else
-          echo "All files in PR belong to the specified package structure"
-        fi
+      - name: Validate PR
+        run: |
+          LEVEL="4" # Замените <уровень_пакета> на требуемый уровень пакета
+
+          CHANGED_FILES=$(git diff --name-only origin/master HEAD)
+
+          for FILE in $CHANGED_FILES; do
+            if [[ $FILE =~ .*\/src\/main\/java\/.*\/.*\/.*\.java ]]; then
+              echo "Packages cannot be moved or renamed."
+              exit 1
+            fi
+          done
+
+          CHANGED_PACKAGES=$(grep -Po "(?<=^diff --git a/).*(?=/.*)" ${GITHUB_WORKSPACE}/pr.diff | cut -d/ -f$(( LEVEL + 2 )) | sort | uniq)
+
+          if [[ "$CHANGED_PACKAGES" != "" ]]; then
+            if [[ $(echo "$CHANGED_PACKAGES" | wc -l) -gt 1 ]]; then
+              echo "Pull requests can only modify one package at a time."
+              exit 1
+            else
+              CHANGED_PACKAGE=$(echo "$CHANGED_PACKAGES" | head -n1)
+
+              if [[ $CHANGED_PACKAGE =~ (.*\.[^.]+) ]]; then
+                echo "Changes are allowed only in the ${LEVEL} level package '$CHANGED_PACKAGE' and its subpackages."
+              else
+                echo "Pull requests can only modify one package at a time."
+                exit 1
+              fi
+            fi
+          fi
+
+          for FILE in $CHANGED_FILES; do
+            if [[ $FILE =~ .*\/src\/main\/java\/[A-Z].* ]]; then
+              echo "New packages cannot be created with a capital letter in the package name."
+              exit 1
+            fi
+          done
