@@ -13,5 +13,6 @@ jobs:
       - name: Validate PR
         run: |
 
-          CHANGED_FILES=$(git diff --name-only add HEAD)
+          FILES=$(git status)
+          echo ${FILES}
 
