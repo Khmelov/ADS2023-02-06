@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: action/checkout@v2.1.0
+        uses: action/checkout@v2
 
       - name: Check naming convention
         run: |
