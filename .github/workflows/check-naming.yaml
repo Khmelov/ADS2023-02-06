@@ -5,19 +5,16 @@ on:
 
 jobs:
   control-changed-files:
-    name: list6
+    name: List7
     runs-on: ubuntu-latest
     steps:
-    
+      
       - name: check-naming
         uses: actions/checkout@v3
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Get list changed files
         run: |
-          LEVEL=4
-          changed_files=$(git diff --name-only)
-          for file in $changed_files; do
-              echo "File path does not match start path: $file"
-          done
+          changed_files=$(git diff --name-only HEAD~1 HEAD | xargs)
+          echo "$changed_files"
