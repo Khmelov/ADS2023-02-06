@@ -5,7 +5,7 @@ on:
 
 jobs:
   control-changed-files:
-    name: List9
+    name: List10
 
     runs-on: ubuntu-latest
     steps:
@@ -17,5 +17,5 @@ jobs:
 
       - name: Get list changed files
         run: |
-          changed_files=$(git diff --name-only HEAD~1)
+          changed_files=$(git diff --name-only HEAD~1 | grep -v ".github/workflows/check-naming.yaml")
           echo "$changed_files"
