@@ -5,10 +5,11 @@ on:
 
 jobs:
   control-changed-files:
-    name: list6
+    name: List14
+
     runs-on: ubuntu-latest
     steps:
-    
+      
       - name: check-naming
         uses: actions/checkout@v3
         with:
@@ -16,8 +17,5 @@ jobs:
 
       - name: Get list changed files
         run: |
-          LEVEL=4
-          changed_files=$(git diff --name-only)
-          for file in $changed_files; do
-              echo "File path does not match start path: $file"
-          done
+          changed_files=$(git diff --name-only HEAD~1 | grep -v ".github/workflows/check-naming.yaml")
+          echo "$changed_files"
