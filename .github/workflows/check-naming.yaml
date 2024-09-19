@@ -1,46 +1,12 @@
-name: Structure Check
+- name: Checkout
+  uses: actions/checkout@v3
+  with:
+    fetch-depth: 2
 
-on:
-  pull_request:
-    branches: [ main ]
-
-
-jobs:
-  check_structure:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Initialize variables
-        id: init_vars
-        run: |
-          LEVEL=4
-          changed_files=$(git diff --name-only)
-
-      - name: Check first file
-        if: steps.init_vars.outputs.changed_files != ''
-        run: |
-          if [ -z "$changed_files" ]; then
-            echo "No changed files"
-            exit 1
-          fi
-          STARTPATH=$(echo $changed_files | head -n 1 | sed 's/[^\/]*$//')
-          LEVEL_PATH=$(echo $STARTPATH | tr '/' '\n' | wc -l)
-          
-          if [ $LEVEL_PATH -lt $LEVEL ]; then
-            echo "Start path level less than requested level"
-            exit 1
-          fi
-          
-          STARTPATH=$(echo $STARTPATH | sed "s/.*\/$LEVEL_PATH\///")
-          echo "STARTPATH=$STARTPATH"
-
-      - name: Check remaining files
-        if: steps.init_vars.outputs.changed_files != ''
-        run: |
-          for file in $changed_files; do
-            if [[ $file != STARTPATH* ]]; then
-              echo "File path does not match start path: $file"
-              exit 1
-            fi
-          done
+- name: Get changed files
+  run: |
+    if ${{ github.event_name == 'pull_request' }}; then
+      echo "changed_files=$(git diff --name-only -r HEAD^1 HEAD | xargs)" >> $GITHUB_OUTPUT
+    else
+      echo "changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | xargs)" >> $GITHUB_OUTPUT
+    fi
