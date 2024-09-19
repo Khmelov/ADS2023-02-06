@@ -5,7 +5,7 @@ on:
 
 jobs:
   control-changed-files:
-    name: List7
+    name: List8
 
     runs-on: ubuntu-latest
     steps:
@@ -13,7 +13,7 @@ jobs:
       - name: check-naming
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+          fetch-depth: 2
 
       - name: Get list changed files
         run: |
