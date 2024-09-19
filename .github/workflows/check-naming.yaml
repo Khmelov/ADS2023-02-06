@@ -5,7 +5,7 @@ on:
 
 jobs:
   control-changed-files:
-    name: List8
+    name: List9
 
     runs-on: ubuntu-latest
     steps:
@@ -17,5 +17,5 @@ jobs:
 
       - name: Get list changed files
         run: |
-          changed_files=$(git diff --name-only HEAD~1 HEAD | xargs)
+          changed_files=$(git diff --name-only HEAD~1)
           echo "$changed_files"
